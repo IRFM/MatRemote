@@ -1,4 +1,4 @@
-function [args_out,flag] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,dkedisplay,mode)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,dkedisplay,mode)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -113,8 +113,20 @@ if flag & mode & (nprocmax > 1),%distributed computing
     args_out = args_temp{:};
     %
 else,%sequential computing
-    for j = 1:length(arg_range),
-        args_in{arg_index} = arg_range{j};
-        args_out{j} = feval(fun,args_in{:});  
+    %
+    for j_range = 1:length(arg_range),
+        cmd = ['[arg_out{1,',int2str(j_range),'}'];
+        if nargout-1 > 1,
+            for j_nargout = 2:nargout-1,
+                cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
+            end
+        end
+        cmd = [cmd,'] = feval(fun,args_in{:});'];      
+        args_in{arg_index} = arg_range{j_range};
+        eval(cmd);
+    end
+    %
+    for j_nargout = 1:nargout-1,
+        varargout{j_nargout} = arg_out(j_nargout,:);
     end
 end
