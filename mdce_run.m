@@ -1,4 +1,4 @@
-function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,dkedisplay,mode)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,mdcedisplay,mode)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -55,11 +55,11 @@ if ~isempty(configmat),
 end
 %
 if ~flag,
-    if dkedisplay.display_mode,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
+    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
 elseif flag & mode
-    if dkedisplay.display_mode,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
+    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
 elseif flag & ~mode
-    if dkedisplay.display_mode,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
+    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
 end
 %
 if flag & mode & (nprocmax > 1),%distributed computing
