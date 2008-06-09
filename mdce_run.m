@@ -44,7 +44,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 		timeout = 60*5;%default timeout (s)
 	end
 	%
-	temppath = [dkepath.temppathroot,timeid_jd(clock)];
+	temppathref = '~/mdce_';
+	temppath = [temppathref,timeid_jd(clock)];
 	mkdir(temppath);%Create calculation directory
 	%
 	configmat = ver;
@@ -76,13 +77,15 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 	    	set(jm,'ClusterMatlabRoot',matlabroot);
 	    	set(jm,'SubmitFcn',@pbsSubmitFcn);
 	    	set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
+	        set(jm,'ClusterSize', nprocmax);
+%	        get(jm)
 		catch
 			jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
-	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since the scheduler is not available (MatLab version too old, limited number of licenses,...) ',func2str(fun),'.m']);    
+	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since the scheduler is not available (MatLab version too old, limited number of licenses,...) for ',func2str(fun),'.m']);    
 		end
 	end
 	%
-	if flag & mode & (nprocmax > 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
+	if flag & mode & (nprocmax >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
 	    %
 	    job = createJob(jm);
 	    %
@@ -92,8 +95,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 	    end
 		% 
 	    createTask(job, fun, nargout-1,arg_job);
-	    submit(job)
-	    waitForState(job, 'finished', timeout)
+	    submit(job);
+	    waitForState(job, 'finished', timeout);
 	    jobstate = get(job, 'State');
 	%
 	    if strcmp(jobstate,'finished'),
