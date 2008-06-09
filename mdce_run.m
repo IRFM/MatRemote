@@ -44,9 +44,8 @@ if nargin < 9,
 	timeout = 60*5;%default timeout (s)
 end
 %
-%temppath = [dkepath.temppathroot,timeid_jd(clock)];
-%mkdir(temppath);%Create calculation directory
-temppath = '/home/sccp/gsem/peysson/tmp';
+temppath = [dkepath.temppathroot,timeid_jd(clock)];
+mkdir(temppath);%Create calculation directory
 %
 configmat = ver;
 %
@@ -62,12 +61,16 @@ if ~isempty(configmat),
 end
 %
 if flag & mode,%Initiate the job server
-	jm = findResource('scheduler','type','generic');
-    set(jm,'DataLocation',temppath);
-    set(jm,'HasSharedFileSystem',true);
-    set(jm,'ClusterMatlabRoot',matlabroot);
-    set(jm,'SubmitFcn',@pbsSubmitFcn);
-    set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
+	try,
+		jm = findResource('scheduler','type','generic');
+		set(jm,'DataLocation',temppath);
+    	set(jm,'HasSharedFileSystem',true);
+    	set(jm,'ClusterMatlabRoot',matlabroot);
+    	set(jm,'SubmitFcn',@pbsSubmitFcn);
+    	set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
+	catch
+		jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses
+	end
 end
 %
 if ~flag,
@@ -112,7 +115,7 @@ else,%sequential computing
 	[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 end
 %
-%rmdir(temppath,'s');%Remove calculation directory
+rmdir(temppath,'s');%Remove calculation directory
 end
 
 function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
