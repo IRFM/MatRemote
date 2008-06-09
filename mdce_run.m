@@ -1,4 +1,4 @@
-function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,mdcedisplay,mode)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,mdcedisplay,mode,timeout)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -39,19 +39,35 @@ if arg_index > length(args_in),
 end        
 if isempty(arg_range)
     error('The argument ''arg_range'' in mdce_luke.m must be defined !');
-end       
+end
+if nargin < 9,
+	timeout = 60*5;%default timeout (s)
+end
 %
-configmat = ver('Distributed');
+%temppath = [dkepath.temppathroot,timeid_jd(clock)];
+%mkdir(temppath);%Create calculation directory
+temppath = '/home/sccp/gsem/peysson/tmp';
+%
+configmat = ver;
 %
 flag = 0;
 %
 if ~isempty(configmat),
     for is = 1:length(configmat),
-        if strfind(configmat(is),'Distributed Computing Toolbox'),
-            flag = 1;
+        if ~isempty(strfind(configmat(is).Name,'Distributed Computing Toolbox')),
+             flag = 1;
             break;
         end
     end
+end
+%
+if flag & mode,%Initiate the job server
+	jm = findResource('scheduler','type','generic');
+    set(jm,'DataLocation',temppath);
+    set(jm,'HasSharedFileSystem',true);
+    set(jm,'ClusterMatlabRoot',matlabroot);
+    set(jm,'SubmitFcn',@pbsSubmitFcn);
+    set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
 end
 %
 if ~flag,
@@ -62,62 +78,51 @@ elseif flag & ~mode
     if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
 end
 %
-if flag & mode & (nprocmax > 1),%distributed computing
-    %    
-    jm = findResource('scheduler','type','generic');
-    set(jm,'DataLocation',dkepath.temppath);
-    set(jm,'HasSharedFileSystem',true);
-    set(jm,'ClusterMatlabRoot',matlabroot);
-    set(jm,'SubmitFcn',@pbsSubmitFcn)
-    set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
-    %        
-    nfulldis = fix(length(arg_range)/nprocmax);%Number of cycles with nprocmax processors
-    npartialdis = length(arg_range) - nfulldis*nprocmax;%Number of cycles with less than nprocmax processors
+if flag & mode & (nprocmax > 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
     %
-    ifulldis = 0;
+    job = createJob(jm);
     %
-    for ifulldis = 1:nfulldis,
-        job = createJob(jm);
-        %
-        for j = 1:nprocmax,
-            args_in{arg_index} = arg_range{(ifulldis - 1)*nprocmax + j};
-            createTask(job,fun,length(args_in),args_in);
-        end
-        %
-        submit(job);
-        %
-        waitForState(job);
-        %
-        args_temp{ifulldis} = getAllOutputArguments(job);
-        %
-        destroy(job);
+    for ijob = 1:length(arg_range),
+        args_in{arg_index} = arg_range{ijob};
+        arg_job{ijob} = args_in;      
     end
-    %
-    for ipartialdis = ifulldis+1:npartialdis,
-        job = createJob(jm);
-        %
-        for j = 1:npartialdis,
-            args_in{arg_index} = arg_range{(ipartialdis - 1)*nprocmax + j};
-            createTask(job,fun,length(args_in),args_in);
-        end
-        %
-        submit(job);
-        %
-        waitForState(job);
-        %
-        args_temp{ipartialdis} = getAllOutputArguments(job);
-        %
-        destroy(job);
+	% 
+    createTask(job, fun, nargout-1,arg_job);
+    submit(job)
+    waitForState(job, 'finished', timeout)
+    jobstate = get(job, 'State');
+%
+    if strcmp(jobstate,'finished'),
+    	%
+    	args_out = getAllOutputArguments(job);
+    	%
+    	destroy(job);
+    	%
+    	for j_nargout = 1:nargout-1,
+        	varargout{j_nargout} = args_out(1:end,j_nargout);
+    	end
+    else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+    	destroy(job);
+    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out using ',func2str(fun),'.m']);    
+    	flag = -1;%timeout case
+    	[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
     end
-    %
-    args_out = args_temp{:};
     %
 else,%sequential computing
-    %
+	[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
+end
+%
+%rmdir(temppath,'s');%Remove calculation directory
+end
+
+function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
+%
+%
+%
     for j_range = 1:length(arg_range),
         cmd = ['[arg_out{1,',int2str(j_range),'}'];
-        if nargout-1 > 1,
-            for j_nargout = 2:nargout-1,
+        if nargout_in-1 > 1,
+            for j_nargout_in = 2:nargout_in-1,
                 cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
             end
         end
@@ -126,7 +131,9 @@ else,%sequential computing
         eval(cmd);
     end
     %
-    for j_nargout = 1:nargout-1,
-        varargout{j_nargout} = arg_out(j_nargout,:);
+    for j_nargout = 1:nargout_in-1,
+        results{j_nargout} = reshape(arg_out(j_nargout,:),length(arg_range),1);
     end
 end
+
+
