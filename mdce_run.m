@@ -109,8 +109,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    	%
 	    	for j_nargout = 1:nargout-1,
                 if isempty(args_out),
-                    varargout{j_nargout} = '';
-                    info_dke_yp(2,['WARNING: output is empty ! ']);    
+                    varargout{j_nargout} = {''};
+                    info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
                 else
                     varargout{j_nargout} = args_out(1:end,j_nargout);
                 end
