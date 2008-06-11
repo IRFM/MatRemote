@@ -83,7 +83,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 %	        get(jm)
 		catch
 			jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
-	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since the scheduler is not available (MatLab version too old, limited number of licenses,...) for ',func2str(fun),'.m']);    
+	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since the job scheduler is not available (MatLab version too old, limited number of licenses,...) for ',func2str(fun),'.m']);    
 		end
 	end
 	%
@@ -117,7 +117,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    	end
 	    else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    	destroy(job);
-	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out using ',func2str(fun),'.m']);    
+	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
 	    	flag = -1;%timeout case
 	    	[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 	    end
