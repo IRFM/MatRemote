@@ -108,7 +108,12 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    	destroy(job);
 	    	%
 	    	for j_nargout = 1:nargout-1,
-	        	varargout{j_nargout} = args_out(1:end,j_nargout);
+                if isempty(args_out),
+                    varargout{j_nargout} = '';
+                    info_dke_yp(2,['WARNING: output is empty ! ']);    
+                else
+                    varargout{j_nargout} = args_out(1:end,j_nargout);
+                end
 	    	end
 	    else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    	destroy(job);
