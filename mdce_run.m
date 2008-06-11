@@ -1,4 +1,4 @@
-function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,dkepath,mdcedisplay,mode,timeout)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersize,dkepath,mdcedisplay,mode,timeout)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -9,14 +9,16 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 %       - args_in: input arguments list of the function
 %       - arg_index: index in the argument list args_in which must be changed
 %       - arg_range: list of values to be calcualted for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
-%       - nprocmax: maximum number of processors on which the calculation is distributed
+%       - clustersize: maximum number of processors on which the calculation is distributed
 %       - dkepath: dkepath structure
+%       - mdcedisplay: display warning if TRUE
 %       - mode: if ~0, distributed computing can be performed if available
+%       - timeout: time out for distributed computing. If all jobs are not performed in a given time, sequential calculations are automatically done (s).
 %
 %   OUTPUT:
 %
-%       - args_out: output arguments list of the function
 %       - flag: if 0, the MatLab Distributed Computing Toolbox is not available for LUKE calculations
+%       - varargout: output arguments list of the function
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
@@ -77,7 +79,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 	    	set(jm,'ClusterMatlabRoot',matlabroot);
 	    	set(jm,'SubmitFcn',@pbsSubmitFcn);
 	    	set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
-	        set(jm,'ClusterSize', nprocmax);
+	        set(jm,'ClusterSize', clustersize);
 %	        get(jm)
 		catch
 			jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
@@ -85,7 +87,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 		end
 	end
 	%
-	if flag & mode & (nprocmax >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
+	if flag & mode & (clustersize >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
 	    %
 	    job = createJob(jm);
 	    %
@@ -123,13 +125,29 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,nprocmax,d
 end
 
 function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
+%LUKE - Sequential computing of the loop in case of failure of the Distributed Computing Environment
 %
+%   Sequential computing of the loop in case of failure of the Distributed
+%   Computing Environment
 %
+%   INPUT:
+%
+%       - fun: function handle
+%       - args_in: input arguments list of the function
+%       - arg_index: index in the argument list args_in which must be changed
+%       - arg_range: list of values to be calcualted for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
+%       - nargout_in: number of output arguments in the parent function
+%
+%   OUTPUT:
+%
+%       - results: output arguments list of the function
+%
+%   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
     for j_range = 1:length(arg_range),
         cmd = ['[arg_out{1,',int2str(j_range),'}'];
         if nargout_in-1 > 1,
-            for j_nargout_in = 2:nargout_in-1,
+            for j_nargout = 2:nargout_in-1,
                 cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
             end
         end
