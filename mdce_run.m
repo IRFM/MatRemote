@@ -140,6 +140,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    	%
 	    	arg_job = [];
 	    	%
+	    	if isempty(iloop_full),iloop_full = 0;end
+	    	%
 	    	for ijob = iloop_full*clustersize + 1:length(arg_range)
 	        	args_in{arg_index} = arg_range{ijob};
 	        	arg_job{ijob - iloop_full*clustersize} = args_in;      
