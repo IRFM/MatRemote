@@ -89,38 +89,94 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	%
 	if flag & mode & (clustersize >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
 	    %
-	    job = createJob(jm);
-	    %
-	    for ijob = 1:length(arg_range),
-	        args_in{arg_index} = arg_range{ijob};
-	        arg_job{ijob} = args_in;      
+	    for j_nargout = 1:nargout-1,
+	    	varargout{j_nargout} = {};
 	    end
-		% 
-	    createTask(job, fun, nargout-1,arg_job);
-	    submit(job);
-	    waitForState(job, 'finished', timeout);
-	    jobstate = get(job, 'State');
-	%
-	    if strcmp(jobstate,'finished'),
+	    %
+	    for iloop_full = 1:floor(length(arg_range)/clustersize),%to maximize chance to use the cluster in distributed computing mode
+	    	job = createJob(jm);
 	    	%
-	    	args_out = getAllOutputArguments(job);
+	    	arg_job = [];
 	    	%
-	    	destroy(job);
+	    	for ijob = (iloop_full-1)*clustersize + 1:(iloop_full-1)*clustersize + clustersize,
+	        	args_in{arg_index} = arg_range{ijob};
+	        	arg_job{ijob - (iloop_full-1)*clustersize} = args_in;      
+	    	end
+			% 
+	    	createTask(job, fun, nargout-1,arg_job);
+	    	submit(job);
+	    	waitForState(job, 'finished', timeout);
+	    	jobstate = get(job, 'State');
+			%
+	    	if strcmp(jobstate,'finished'),
+	    		%
+	    		args_out = getAllOutputArguments(job);
+	    		%
+	    		destroy(job);
+	    		%
+	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+	    		destroy(job);
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
+	    		flag = -1;%timeout case
+	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*clustersize + 1:(iloop_full-1)*clustersize + clustersize),nargout);		
+	    		args_out = '';
+	    		for iarg = 1:length(args_temp),
+	    			args_out = [args_out,args_temp{iarg}];
+	    		end
+	    	end
 	    	%
 	    	for j_nargout = 1:nargout-1,
-                if isempty(args_out),
-                    varargout{j_nargout} = {''};
-                    info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
-                else
-                    varargout{j_nargout} = args_out(1:end,j_nargout);
-                end
+				if isempty(args_out),
+					varargout{j_nargout} = {''};
+					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
+				else
+					varargout{j_nargout} = [varargout{j_nargout};args_out(1:end,j_nargout)];
+				end 
+             end	
+	   	end
+		%	
+	    if length(arg_range) - floor(length(arg_range)/clustersize)*clustersize,%to maximize chance to use the cluster in distributed computing mode, residual part
+	    	job = createJob(jm);
+	    	%
+	    	arg_job = [];
+	    	%
+	    	for ijob = iloop_full*clustersize + 1:length(arg_range)
+	        	args_in{arg_index} = arg_range{ijob};
+	        	arg_job{ijob - iloop_full*clustersize} = args_in;      
 	    	end
-	    else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
-	    	destroy(job);
-	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
-	    	flag = -1;%timeout case
-	    	[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
-	    end
+			% 
+	    	createTask(job, fun, nargout-1,arg_job);
+	    	submit(job);
+	    	waitForState(job, 'finished', timeout);
+	    	jobstate = get(job, 'State');
+			%
+	    	if strcmp(jobstate,'finished'),
+	    		%
+	    		args_out = getAllOutputArguments(job);
+	    		%
+	    		destroy(job);
+	    		%
+	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+	    		destroy(job);
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
+	    		flag = -1;%timeout case
+	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*clustersize + 1:length(arg_range)),nargout);
+	    		args_out = '';
+	    		for iarg = 1:length(args_temp),
+	    			args_out = [args_out,args_temp{iarg}];
+	    		end
+	    	end
+	    	%
+	    	for j_nargout = 1:nargout-1,
+				if isempty(args_out),
+					varargout{j_nargout} = {''};
+					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
+				else
+					varargout{j_nargout} = [varargout{j_nargout};args_out(1:end,j_nargout)];
+				end 
+             end	
+	    	
+	   	end	   	
 	    %
 	else,%sequential computing
 		[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
@@ -132,15 +188,14 @@ end
 function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
 %LUKE - Sequential computing of the loop in case of failure of the Distributed Computing Environment
 %
-%   Sequential computing of the loop in case of failure of the Distributed
-%   Computing Environment
+%   Sequential computing of the loop in case of failure of the Distributed Computing Environment
 %
 %   INPUT:
 %
 %       - fun: function handle
 %       - args_in: input arguments list of the function
 %       - arg_index: index in the argument list args_in which must be changed
-%       - arg_range: list of values to be calcualted for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
+%       - arg_range: list of values to be calculated for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
 %       - nargout_in: number of output arguments in the parent function
 %
 %   OUTPUT:
