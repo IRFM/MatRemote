@@ -1,4 +1,4 @@
-function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersize,dkepath,mdcedisplay,mode,timeout)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersize,mdcepath,mdcedisplay,mode,timeout)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -10,7 +10,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 %       - arg_index: index in the argument list args_in which must be changed
 %       - arg_range: list of values to be calcualted for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
 %       - clustersize: maximum number of processors on which the calculation is distributed
-%       - dkepath: dkepath structure
+%       - mdcepath: path to temporary files for calculations
 %       - mdcedisplay: display warning if TRUE
 %       - mode: if ~0, distributed computing can be performed if available
 %       - timeout: time out for distributed computing. If all jobs are not performed in a given time, sequential calculations are automatically done (s).
@@ -46,8 +46,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 		timeout = 60*5;%default timeout (s)
 	end
 	%
-	temppathref = '~/mdce_';
-	temppath = [temppathref,timeid_jd(clock)];
+	temppath = [mdcepath,timeid_jd(clock)];
 	mkdir(temppath);%Create calculation directory
 	%
 	configmat = ver;
