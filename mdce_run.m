@@ -1,4 +1,4 @@
-function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersize,mdcepath,mdcedisplay,mode,timeout)
+function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 %LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
 %
 %   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
@@ -9,11 +9,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 %       - args_in: input arguments list of the function
 %       - arg_index: index in the argument list args_in which must be changed
 %       - arg_range: list of values to be calcualted for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
-%       - clustersize: maximum number of processors on which the calculation is distributed
-%       - mdcepath: path to temporary files for calculations
-%       - mdcedisplay: display warning if TRUE
-%       - mode: if ~0, distributed computing can be performed if available
-%       - timeout: time out for distributed computing. If all jobs are not performed in a given time, sequential calculations are automatically done (s).
+%       - cluster: cluster parameters (structure)
 %
 %   OUTPUT:
 %
@@ -22,7 +18,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
-	if nargin < 8,error('');end
+	if nargin < 4,error('Wrong number of input arguments in mdce_luke.m !');end
 	%
 	if isempty(arg_index)
 	    error('The argument ''arg_index'' in mdce_luke.m must be defined !');
@@ -42,11 +38,11 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	if isempty(arg_range)
 	    error('The argument ''arg_range'' in mdce_luke.m must be defined !');
 	end
-	if nargin < 9,
-		timeout = 60*5;%default timeout (s)
+	if nargin < 5,
+        [cluster] = clustermode_luke;
 	end
 	%
-	temppath = [mdcepath,timeid_jd(clock)];
+	temppath = [cluster.path,timeid_jd(clock)];
 	mkdir(temppath);%Create calculation directory
 	%
 	configmat = ver;
@@ -63,14 +59,14 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	end
 	%
 	if ~flag,
-	    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
-	elseif flag & mode
-	    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
-	elseif flag & ~mode
-	    if mdcedisplay,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
+	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
+	elseif flag & cluster.mode
+	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
+	elseif flag & ~cluster.mode
+	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
 	end
 	%
-	if flag & mode,%Initiate the job server
+	if flag & cluster.mode,%Initiate the job server
 		try,
 			jm = findResource('scheduler','type','generic');
 			set(jm,'DataLocation',temppath);
@@ -78,7 +74,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    	set(jm,'ClusterMatlabRoot',matlabroot);
 	    	set(jm,'SubmitFcn',@pbsSubmitFcn);
 	    	set(jm,'ParallelSubmitFcn',@pbsParallelSubmitFcn);
-	        set(jm,'ClusterSize', clustersize);
+	        set(jm,'ClusterSize', cluster.size);
 %	        get(jm)
 		catch
 			jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
@@ -86,25 +82,25 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 		end
 	end
 	%
-	if flag & mode & (clustersize >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
+	if flag & cluster.mode & (cluster.size >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
 	    %
 	    for j_nargout = 1:nargout-1,
 	    	varargout{j_nargout} = {};
 	    end
 	    %
-	    for iloop_full = 1:floor(length(arg_range)/clustersize),%to maximize chance to use the cluster in distributed computing mode
+	    for iloop_full = 1:floor(length(arg_range)/cluster.size),%to maximize chance to use the cluster in distributed computing mode
 	    	job = createJob(jm);
 	    	%
 	    	arg_job = [];
 	    	%
-	    	for ijob = (iloop_full-1)*clustersize + 1:(iloop_full-1)*clustersize + clustersize,
+	    	for ijob = (iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size,
 	        	args_in{arg_index} = arg_range{ijob};
-	        	arg_job{ijob - (iloop_full-1)*clustersize} = args_in;      
+	        	arg_job{ijob - (iloop_full-1)*cluster.size} = args_in;      
 	    	end
 			% 
 	    	createTask(job, fun, nargout-1,arg_job);
 	    	submit(job);
-	    	waitForState(job, 'finished', timeout);
+	    	waitForState(job, 'finished', cluster.timeout);
 	    	jobstate = get(job, 'State');
 			%
 	    	if strcmp(jobstate,'finished'),
@@ -115,9 +111,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    		%
 	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		destroy(job);
-	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using ',func2str(fun),'.m']);    
 	    		flag = -1;%timeout case
-	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*clustersize + 1:(iloop_full-1)*clustersize + clustersize),nargout);		
+	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);		
 	    		args_out = '';
 	    		for iarg = 1:length(args_temp),
 	    			args_out = [args_out,args_temp{iarg}];
@@ -134,21 +130,21 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
              end	
 	   	end
 		%	
-	    if length(arg_range) - floor(length(arg_range)/clustersize)*clustersize,%to maximize chance to use the cluster in distributed computing mode, residual part
+	    if length(arg_range) - floor(length(arg_range)/cluster.size)*cluster.size,%to maximize chance to use the cluster in distributed computing mode, residual part
 	    	job = createJob(jm);
 	    	%
 	    	arg_job = [];
 	    	%
 	    	if isempty(iloop_full),iloop_full = 0;end
 	    	%
-	    	for ijob = iloop_full*clustersize + 1:length(arg_range)
+	    	for ijob = iloop_full*cluster.size + 1:length(arg_range)
 	        	args_in{arg_index} = arg_range{ijob};
-	        	arg_job{ijob - iloop_full*clustersize} = args_in;      
+	        	arg_job{ijob - iloop_full*cluster.size} = args_in;      
 	    	end
 			% 
 	    	createTask(job, fun, nargout-1,arg_job);
 	    	submit(job);
-	    	waitForState(job, 'finished', timeout);
+	    	waitForState(job, 'finished', cluster.timeout);
 	    	jobstate = get(job, 'State');
 			%
 	    	if strcmp(jobstate,'finished'),
@@ -159,9 +155,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,clustersiz
 	    		%
 	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		destroy(job);
-	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(timeout),' s) using ',func2str(fun),'.m']);    
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using ',func2str(fun),'.m']);    
 	    		flag = -1;%timeout case
-	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*clustersize + 1:length(arg_range)),nargout);
+	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*cluster.size + 1:length(arg_range)),nargout);
 	    		args_out = '';
 	    		for iarg = 1:length(args_temp),
 	    			args_out = [args_out,args_temp{iarg}];
