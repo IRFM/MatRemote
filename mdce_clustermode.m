@@ -74,11 +74,13 @@ function [cluster] = clustermode_luke(cdisp,param,ppath,fun);
        %cluster.path = ppath;     
     end
     %
-    try,%test if MDCE toolbox is available
-		jm = findResource('scheduler','type','generic');
-        flag_mdcetoolbox = 1;
-    catch
-        flag_mdcetoolbox = 0;
+    flag_mdcetoolbox = 0;
+    %
+    if cluster.mode,
+        try,%test if MDCE toolbox is available
+            jm = findResource('scheduler','type','generic');
+            flag_mdcetoolbox = 1;
+        end
     end
     %
     if isempty(cluster.path) & cluster.mode & flag_mdcetoolbox,
