@@ -1,7 +1,9 @@
 function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
-%LUKE - Distributed LUKE calculations on multiple processors if MatLab Distributed Computing Environment (toolbox) is available
+%LUKE - Distributed LUKE calculations on multiple processors
 %
-%   Distribute LUKE calculations on multiple processor if MatLab Distributed Computing Environment (toolbox) is available
+%   Function for distributing LUKE calculations on multiple processors:
+%		 - option 1) with MatLab Distributed Computing Environment (toolbox) if available
+%		 - option 2) if dcluke library is set up for LUKE (see ~/LUKE/Project_DKE/Packages/MDCE/dcluke/)
 %
 %   INPUT:
 %
@@ -39,34 +41,50 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    error('The argument ''arg_range'' in mdce_luke.m must be defined !');
 	end
 	if nargin < 5,
-        [cluster] = clustermode_luke;
+        [cluster] = clustermode_luke;%default values
 	end
 	%
 	temppath = [cluster.path,timeid_jd(clock)];
 	mkdir(temppath);%Create calculation directory
 	%
-	configmat = ver;
-	%
-	flag = 0;
-	%
-	if ~isempty(configmat),
-	    for is = 1:length(configmat),
-	        if ~isempty(strfind(configmat(is).Name,'Distributed Computing Toolbox')),
-	             flag = 1;
-	            break;
-	        end
-	    end
+	if cluster.mode == 1,
+		configmat = ver;
+		if ~isempty(configmat),
+	    	for is = 1:length(configmat),
+	        	if ~isempty(strfind(configmat(is).Name,'Distributed Computing Toolbox')),
+	             	flag = 1;
+	            	break;
+	           	else
+	           		flag = -1;
+	        	end
+	    	end
+		end
+	elseif cluster.mode == 2,
+		if exist('dcluke'),
+			[s,t] = unix('qsub xxxxxxxxxx');
+			if isempty(strfind(t,'command not found')),
+				flag = 2;
+			else
+				flag = -2;
+			end
+		end
+	else
+		flag = 0;
 	end
 	%
-	if ~flag,
-	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
-	elseif flag & cluster.mode
+	if flag == 0,
+		if cluster.display,info_dke_yp(2,'The distributed computing environment is not activated.');end  
+	elseif flag == 1 & cluster.mode == 1,
 	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
-	elseif flag & ~cluster.mode
-	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is not activated.');end    
+	elseif flag == -1 & ~cluster.mode == 1,
+	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
+	elseif flag == 2 & ~cluster.mode == 2,
+	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is available for LUKE calculations and can be used.');end 
+	elseif flag == -2 & ~cluster.mode == 2,
+	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is available for LUKE calculations but batch queuing is not operational (install openPBS first).');end 
 	end
 	%
-	if flag & cluster.mode,%Initiate the job server
+	if flag == 1 & cluster.mode == 1,%Initiate the job server
 		try,
 			jm = findResource('scheduler','type','generic');
 			set(jm,'DataLocation',temppath);
@@ -82,7 +100,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 		end
 	end
 	%
-	if flag & cluster.mode & (cluster.size >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
+	if flag == 1 & cluster.mode == 1 & (cluster.size >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
 	    %
 	    for j_nargout = 1:nargout-1,
 	    	varargout{j_nargout} = {};
@@ -175,6 +193,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    	
 	   	end	   	
 	    %
+	elseif flag == 2 & cluster.mode == 2 & (cluster.size >= 1) & (nargout >= 2),%distributed computing environment
+		[varargout] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout);
 	else,%sequential computing
 		[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 	end
@@ -218,4 +238,45 @@ function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
     end
 end
 
-
+function [results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout_in)
+%LUKE - LUKE distributed computing environment
+%
+%   Distributed computing using the LUKE distributed computing environment
+%
+%   INPUT:
+%
+%       - fun: function handle
+%       - args_in: input arguments list of the function
+%       - arg_index: index in the argument list args_in which must be changed
+%       - arg_range: list of values to be calculated for the input argument arg_index, length(arg_range) = number of times a calculation must be performed
+%       - nargout_in: number of output arguments in the parent function
+%
+%   OUTPUT:
+%
+%       - results: output arguments list of the function
+%
+%   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
+%
+    for j_range = 1:length(arg_range),
+        args_in{arg_index} = arg_range{j_range};
+        id(j_range) =  dcluke(func2str(fun),args_in{:});      
+    end
+    %
+    dcluke;
+    %
+    for j_range = 1:length(arg_range),
+        cmd = ['[arg_out{1,',int2str(j_range),'}'];
+        if nargout_in-1 > 1,
+            for j_nargout = 2:nargout_in-1,
+                cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
+            end
+        end
+        cmd = [cmd,'] = dcluke(',int2str(id(j_range)),');'];      
+        eval(cmd);
+    end
+    
+    %
+    for j_nargout = 1:nargout_in-1,
+        results{j_nargout} = reshape(arg_out(j_nargout,:),length(arg_range),1);
+    end
+end
