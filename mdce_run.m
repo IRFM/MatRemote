@@ -263,26 +263,26 @@ function [flag,results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargou
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
-	dirini = pwd;
-	if exist(fullfile(getenv('HOME'),'tmp'))
-		cd(fullfile(getenv('HOME'),'tmp'));
-		filelist = ls;
-		if isempty(filelist),
-			delete('*');
-		end
-	end
-	cd(dirini);
-	%
-	dcluke(0,'RESET');
-	%
-    for j_range = 1:length(arg_range),
-        args_in{arg_index} = arg_range{j_range};
-        id(j_range) =  dcluke(func2str(fun),args_in{:});      
-    end
-    %
-    dcluke;
-    %
     try,
+    	dirini = pwd;
+		if exist(fullfile(getenv('HOME'),'tmp'))
+			cd(fullfile(getenv('HOME'),'tmp'));
+			filelist = ls;
+			if isempty(filelist),
+				delete('*');
+			end
+		end
+		cd(dirini);
+		%
+		dcluke(0,'RESET');
+		%
+    	for j_range = 1:length(arg_range),
+        	args_in{arg_index} = arg_range{j_range};
+        	id(j_range) =  dcluke(func2str(fun),args_in{:});      
+    	end
+    	%
+    	dcluke;
+    	%
     	for j_range = 1:length(arg_range),
         	cmd = ['[arg_out{1,',int2str(j_range),'}'];
         	if nargout_in-1 > 1,
@@ -298,7 +298,7 @@ function [flag,results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargou
         	results{j_nargout} = reshape(arg_out(j_nargout,:),length(arg_range),1);
     	end
     	%
-    	flag = 0;
+    	flag = 2;
     catch
         for j_nargout = 1:nargout_in-1,
         	results{j_nargout} = '';
