@@ -70,21 +70,28 @@ function [cluster] = clustermode_luke(cdisp,param,ppath,fun);
     if isempty(ppath),
        cluster.path = '';
     else
-       cluster.path = '';
-       %cluster.path = ppath;     
+		cluster.path = ppath; 
+		cluster.path = '';
     end
     %
     flag_mdcetoolbox = 0;
     %
-    if cluster.mode,
+    if cluster.mode == 1,
         try,%test if MDCE toolbox is available
             jm = findResource('scheduler','type','generic');
             flag_mdcetoolbox = 1;
         end
+    elseif cluster.mode == 2,
+		if exist('dcluke'),
+			[s,t] = unix('qsub xxxxxxxxxx');
+			if isempty(strfind(t,'command not found')),
+				flag_mdcetoolbox = 1;
+			end
+		end    
     end
     %
-    if isempty(cluster.path) & cluster.mode & flag_mdcetoolbox,
-        cluster.path = '~/mdce_';
-        disp(['WARNING: temporary path directory name for distributed computing is ',cluster.path]);
+    if isempty(cluster.path) & cluster.mode == 1 & flag_mdcetoolbox,
+        cluster.path = fullfile(getenv('HOME'),'mdce_');
+        disp(['WARNING: Temporary path directory name for distributed computing is ',cluster.path]);
     end           
 end
