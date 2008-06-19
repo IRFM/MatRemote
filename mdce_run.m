@@ -193,8 +193,13 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    	
 	   	end	   	
 	    %
-	elseif flag == 2 & cluster.mode == 2 & (cluster.size >= 1) & (nargout >= 2),%distributed computing environment
-		[varargout] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout);
+	elseif flag == 2 & cluster.mode == 2 & (nargout >= 2),%distributed computing environment
+		[flag,varargout] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout);
+		if flag == -2,
+			info_dke_yp(2,['WARNING: calculations are performed on a single processor since LUKE distributed computing had a network problem while using ',func2str(fun),'.m']);    
+			info_dke_yp(2,['WARNING: see the diary files to identify it.']);    
+			[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
+		end
 	else,%sequential computing
 		[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 	end
@@ -238,7 +243,7 @@ function [results] = seqcomputing(fun,args_in,arg_index,arg_range,nargout_in)
     end
 end
 
-function [results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout_in)
+function [flag,results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout_in)
 %LUKE - LUKE distributed computing environment
 %
 %   Distributed computing using the LUKE distributed computing environment
@@ -253,10 +258,23 @@ function [results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout_in)
 %
 %   OUTPUT:
 %
+%		- flag: status of the computing (OK = 0, ERROR = 1)
 %       - results: output arguments list of the function
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
+	dirini = pwd;
+	if exist(fullfile(getenv('HOME'),'tmp'))
+		cd(fullfile(getenv('HOME'),'tmp'));
+		filelist = ls;
+		if isempty(filelist),
+			delete('*');
+		end
+	end
+	cd(dirini);
+	%
+	dcluke(0,'RESET');
+	%
     for j_range = 1:length(arg_range),
         args_in{arg_index} = arg_range{j_range};
         id(j_range) =  dcluke(func2str(fun),args_in{:});      
@@ -264,19 +282,28 @@ function [results] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout_in)
     %
     dcluke;
     %
-    for j_range = 1:length(arg_range),
-        cmd = ['[arg_out{1,',int2str(j_range),'}'];
-        if nargout_in-1 > 1,
-            for j_nargout = 2:nargout_in-1,
-                cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
-            end
-        end
-        cmd = [cmd,'] = dcluke(',int2str(id(j_range)),');'];      
-        eval(cmd);
+    try,
+    	for j_range = 1:length(arg_range),
+        	cmd = ['[arg_out{1,',int2str(j_range),'}'];
+        	if nargout_in-1 > 1,
+            	for j_nargout = 2:nargout_in-1,
+                	cmd = [cmd,',arg_out{',int2str(j_nargout),',',int2str(j_range),'}'];
+            	end
+        	end
+        	cmd = [cmd,'] = dcluke(',int2str(id(j_range)),');'];      
+        	eval(cmd);
+    	end
+    	%
+    	for j_nargout = 1:nargout_in-1,
+        	results{j_nargout} = reshape(arg_out(j_nargout,:),length(arg_range),1);
+    	end
+    	%
+    	flag = 0;
+    catch
+        for j_nargout = 1:nargout_in-1,
+        	results{j_nargout} = '';
+    	end
+    	flag = -2;
     end
-    
     %
-    for j_nargout = 1:nargout_in-1,
-        results{j_nargout} = reshape(arg_out(j_nargout,:),length(arg_range),1);
-    end
 end
