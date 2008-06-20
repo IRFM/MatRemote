@@ -44,9 +44,6 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
         [cluster] = clustermode_luke;%default values
 	end
 	%
-	temppath = [cluster.path,timeid_jd(clock)];
-	mkdir(temppath);%Create calculation directory
-	%
 	if cluster.mode == 1,
 		configmat = ver;
 		if ~isempty(configmat),
@@ -85,6 +82,10 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	end
 	%
 	if flag == 1 & cluster.mode == 1,%Initiate the job server
+		%
+		temppath = [cluster.path,timeid_jd(clock)];
+		mkdir(temppath);%Create calculation directory
+		%
 		try,
 			jm = findResource('scheduler','type','generic');
 			set(jm,'DataLocation',temppath);
@@ -95,8 +96,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	        set(jm,'ClusterSize', cluster.size);
 %	        get(jm)
 		catch
-			jm = [];%Number of users exceed number of DIstributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
+			jm = [];%Number of users exceed number of Distributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
 	    	info_dke_yp(2,['WARNING: calculations are performed on a single processor since the job scheduler is not available (MatLab version too old, limited number of licenses,...) for ',func2str(fun),'.m']);    
+			rmdir(temppath,'s');%Remove calculation directory
 		end
 	end
 	%
@@ -191,7 +193,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 				end 
              end	
 	    	
-	   	end	   	
+	   	end
+	   	%
+	    rmdir(temppath,'s');%Remove calculation directory
 	    %
 	elseif flag == 2 & cluster.mode == 2 & (nargout >= 2),%distributed computing environment
 		[flag,varargout] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout);
@@ -203,8 +207,6 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	else,%sequential computing
 		[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 	end
-	%
-	rmdir(temppath,'s');%Remove calculation directory
 end
 
 
