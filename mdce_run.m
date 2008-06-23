@@ -44,6 +44,10 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
         [cluster] = clustermode_luke;%default values
 	end
 	%
+	varargout = cell(1,nargout-1);
+	%
+    % Test cluster mode capabilities
+    %
 	if cluster.mode == 1,
 		configmat = ver;
 		if ~isempty(configmat),
@@ -102,13 +106,13 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 		end
 	end
 	%
-	if flag == 1 & cluster.mode == 1 & (cluster.size >= 1) & (nargout >= 2) & ~isempty(jm),%distributed computing environment
+	if flag == 1 & cluster.mode == 1 & (cluster.size >= 1) & (nargout >= 2) & ~isempty(jm),%Matlab toolbox distributed computing environment (mdce)
 	    %
 	    for j_nargout = 1:nargout-1,
 	    	varargout{j_nargout} = {};
 	    end
 	    %
-	    for iloop_full = 1:floor(length(arg_range)/cluster.size),%to maximize chance to use the cluster in distributed computing mode
+	    for iloop_full = 1:floor(length(arg_range)/cluster.size),%to adapt the calculations to the size of the cluster 
 	    	job = createJob(jm);
 	    	%
 	    	arg_job = [];
@@ -197,13 +201,52 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	   	%
 	    rmdir(temppath,'s');%Remove calculation directory
 	    %
-	elseif flag == 2 & cluster.mode == 2 & (nargout >= 2),%distributed computing environment
-		[flag,varargout] = dclukecomputing(fun,args_in,arg_index,arg_range,nargout);
-		if flag == -2,
-			info_dke_yp(2,['WARNING: calculations are performed on a single processor since LUKE distributed computing had a network problem while using ',func2str(fun),'.m']);    
-			info_dke_yp(2,['WARNING: see the diary files to identify it.']);    
-			[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
-		end
+	elseif flag == 2 & cluster.mode == 2 & (cluster.size >= 1) & (nargout >= 2),%distributed computing environment
+        %
+        for iloop_full = 1:floor(length(arg_range)/cluster.size),%to adapt the calculations to the size of the cluster  
+            %
+            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);
+            %
+ 	    	if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem occured on the cluster using the function ',func2str(fun),'.m']);    
+	    		args_out = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);		
+	    	end
+	    	%
+	    	for j_nargout = 1:nargout-1,
+				if isempty(args_out),
+					varargout{j_nargout} = {''};
+					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
+				else
+					varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
+				end 
+            end	
+            %
+ 	   	end
+		%	
+	    if length(arg_range) - floor(length(arg_range)/cluster.size)*cluster.size,%to adapt the calculations to the size of the cluster 
+	    	%
+	    	if isempty(iloop_full),iloop_full = 0;end
+            %
+            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range(iloop_full*cluster.size + 1:length(arg_range)),nargout);
+			%
+ 	    	if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem on the cluster using ',func2str(fun),'.m']);    
+	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*cluster.size + 1:length(arg_range)),nargout);
+	    		args_out = '';
+	    		for iarg = 1:length(args_temp),
+	    			args_out = [args_out,args_temp{iarg}];
+	    		end
+	    	end
+	    	%
+	    	for j_nargout = 1:nargout-1,
+				if isempty(args_out),
+					varargout{j_nargout} = {''};
+					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
+				else
+					varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
+				end 
+            end 
+	   	end           
 	else,%sequential computing
 		[varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout);
 	end
