@@ -1,7 +1,7 @@
 function [cluster] = clustermode_luke(cdisp,param,ppath,fun);
 %LUKE - Test cluster properties
 %
-% This function tests cluster properties
+% This function tests cluster properties and generate default values
 %
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and   Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
