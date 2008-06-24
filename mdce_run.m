@@ -135,13 +135,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    		%
 	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		destroy(job);
-	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using ',func2str(fun),'.m']);    
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using the function ',func2str(fun),'.m']);    
 	    		flag = -1;%timeout case
-	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);		
-	    		args_out = '';
-	    		for iarg = 1:length(args_temp),
-	    			args_out = [args_out,args_temp{iarg}];
-	    		end
+	    		args_out = seqcomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);		
 	    	end
 	    	%
 	    	for j_nargout = 1:nargout-1,
@@ -149,7 +145,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 					varargout{j_nargout} = {''};
 					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
 				else
-					varargout{j_nargout} = [varargout{j_nargout};args_out(1:end,j_nargout)];
+					varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
 				end 
              end	
 	   	end
@@ -179,13 +175,9 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    		%
 	    	else,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		destroy(job);
-	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using ',func2str(fun),'.m']);    
+	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor since distributed computing timed out (',int2str(cluster.timeout),' s) using the function ',func2str(fun),'.m']);    
 	    		flag = -1;%timeout case
-	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*cluster.size + 1:length(arg_range)),nargout);
-	    		args_out = '';
-	    		for iarg = 1:length(args_temp),
-	    			args_out = [args_out,args_temp{iarg}];
-	    		end
+	    		args_out = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*cluster.size + 1:length(arg_range)),nargout);
 	    	end
 	    	%
 	    	for j_nargout = 1:nargout-1,
@@ -193,7 +185,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 					varargout{j_nargout} = {''};
 					info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
 				else
-					varargout{j_nargout} = [varargout{j_nargout};args_out(1:end,j_nargout)];
+					varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
 				end 
              end	
 	    	
