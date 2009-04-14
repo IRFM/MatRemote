@@ -72,8 +72,8 @@ end
 %   
 % For LUKE distributed computing with batch queuing
 %
-if exist(['dcluke/',dkepath.hostname]),
-    cluster.scriptspath = [dkepath.luke_root,'Project_DKE/Packages/MDCE/dcluke/',dkepath.hostname];
+if exist([dkepath.luke_root,'Project_DKE/Packages/MDCE/dcluke/',dkepath.hostname]),
+    cluster.scriptspath = [dkepath.luke_root,'Project_DKE/Packages/MDCE/dcluke/',dkepath.hostname,'/'];
     [s,t] = unix('qsub xxxxxxxxxx');
     if isempty(strfind(t,'command not found')),
         flag_mdcetoolbox = 1;
