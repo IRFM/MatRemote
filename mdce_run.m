@@ -3,7 +3,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 %
 %   Function for distributing LUKE calculations on multiple processors:
 %		 - option 1) with MatLab Distributed Computing Environment (toolbox) if available
-%		 - option 2) if dcluke library is set up for LUKE (see ~/LUKE/Project_DKE/Packages/MDCE/dcluke/)
+%		 - option 2) if dcluke library is set up for LUKE on the cluster where calculations are done (see ~/LUKE/Project_DKE/Packages/MDCE/dcluke/)
 %
 %   INPUT:
 %
@@ -20,7 +20,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
-	if nargin < 4,error('Wrong number of input arguments in mdce_luke.m !');end
+	if nargin < 5,error('Wrong number of input arguments in mdce_luke.m !');end
 	%
 	if isempty(arg_index)
 	    error('The argument ''arg_index'' in mdce_luke.m must be defined !');
@@ -39,11 +39,8 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	end        
 	if isempty(arg_range)
 	    error('The argument ''arg_range'' in mdce_luke.m must be defined !');
-	end
-	if nargin < 5,
-        [cluster] = clustermode_luke;%default values
-	end
-	%
+    end
+    %
 	varargout = cell(1,nargout-1);
 	%
     % Test cluster mode capabilities
@@ -61,13 +58,15 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 	    	end
 		end
 	elseif cluster.mode == 2,
-		if exist('dcluke'),
+		if isfield(cluster,'scriptpath'),
 			[s,t] = unix('qsub xxxxxxxxxx');
 			if isempty(strfind(t,'command not found')),
 				flag = 2;
 			else
 				flag = -2;
-			end
+            end
+        else
+            flag = -3;
 		end
 	else
 		flag = 0;
@@ -77,17 +76,19 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
 		if cluster.display,info_dke_yp(2,'The distributed computing environment is not activated.');end  
 	elseif flag == 1 & cluster.mode == 1,
 	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is available for LUKE calculations and is activated.');end 
-	elseif flag == -1 & ~cluster.mode == 1,
+	elseif flag == -1 & cluster.mode == 1,
 	    if cluster.display,info_dke_yp(2,'The MatLab Distributed Computing Toolbox is not available for LUKE calculations.');end   
-	elseif flag == 2 & ~cluster.mode == 2,
+	elseif flag == 2 & cluster.mode == 2,
 	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is available for LUKE calculations and can be used.');end 
-	elseif flag == -2 & ~cluster.mode == 2,
-	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is available for LUKE calculations but batch queuing is not operational (install openPBS first).');end 
+	elseif flag == -2 & cluster.mode == 2,
+	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is available for LUKE calculations but batch queuing is not operational (install openPBS or equivalent first).');end 
+	elseif flag == -3 & cluster.mode == 2,
+	    if cluster.display,info_dke_yp(2,'The LUKE Distributed Computing Toolbox is not set-up for this machine (install scripts first).');end 
 	end
 	%
 	if flag == 1 & cluster.mode == 1,%Initiate the job server
 		%
-		temppath = [cluster.path,timeid_jd(clock)];
+		temppath = [cluster.temppath,timeid_jd(clock)];
 		mkdir(temppath);%Create calculation directory
 		%
 		try,
@@ -197,7 +198,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,cluster)
         %
         for iloop_full = 1:floor(length(arg_range)/cluster.size),%to adapt the calculations to the size of the cluster  
             %
-            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout);
+            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range((iloop_full-1)*cluster.size + 1:(iloop_full-1)*cluster.size + cluster.size),nargout,cluster);
             %
  	    	if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem occured on the cluster using the function ',func2str(fun),'.m']);    
