@@ -98,7 +98,7 @@ else
 end
 %
 if flag_mdcetoolbox,
-	cluster.temppath = [pwd,'mdce_',timeid_jd(clock)];
+	cluster.temppath = [pwd,'/mdce_',timeid_jd(clock)];
 	mkdir(cluster.temppath);
 end
 %
