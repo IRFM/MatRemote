@@ -1,4 +1,4 @@
-function [cluster] = clustermode_luke(cdisp,param,dkepath,fun);
+function [cluster] = clustermode_luke(param,fun,cdisp);
 %LUKE - Test cluster properties
 %
 % This function tests cluster properties and generate default values
@@ -6,7 +6,7 @@ function [cluster] = clustermode_luke(cdisp,param,dkepath,fun);
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and   Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
 %
-if nargin < 4,
+if nargin < 3,
     error('Wrong number of input arguments in clustermode_luke.m')
 end
 %
@@ -17,70 +17,88 @@ if isstruct(cdisp),
         cluster.display = cdisp.mdce;
     end
 else
-    cluster.display = 0;
+    cluster.display = cdisp;
 end
 %
 if isstruct(param),    
-    if isfield(param,'clustermode'),
-        if isfield(param.clustermode,fun),
-            if isfield(param.clustermode.(fun),'mode'),
-                cluster.mode = param.clustermode.(fun).mode;
-            else
-                cluster.mode = 0;
-            end
-            %
-            if isfield(param.clustermode.(fun),'timeout'),
-                cluster.timeout = param.clustermode.(fun).timeout;
-            else
-                cluster.timeout = 60*10;%(s) ten minutes time out
-            end
-            %
-            if isfield(param.clustermode.(fun),'size'),
-                cluster.size = param.clustermode.(fun).size;
-            else
-                cluster.size = 1;
-            end            
-        elseif isfield(param.clustermode,'multithreading'),
-            multithreading_luke(param.clustermode.multithreading);
+    if isfield(param,fun),
+        if isfield(param.(fun),'mode'),
+            cluster.mode = param.(fun).mode;
         else
             cluster.mode = 0;
-            cluster.timeout = 0;
-            cluster.size = 1;  
-            multithreading_luke('automatic');
         end
+        %
+        if isfield(param.(fun),'timeout'),
+            cluster.timeout = param.(fun).timeout;
+        else
+            cluster.timeout = 60*10;%(s) ten minutes time out
+        end
+        %
+        if isfield(param.(fun),'size'),
+            cluster.size = param.(fun).size;
+        else
+            cluster.size = 1;
+        end            
+    elseif isfield(param,'multithreading'),
+        multithreading_luke(param.multithreading);
     else
         cluster.mode = 0;
-        cluster.timeout = 0;
-        cluster.size = 1;
+    	cluster.timeout = 100;%Jump into sequential processing if distributed processing is blocked (s)
+        cluster.size = 1;  
         multithreading_luke('automatic');
     end
 else
-    cluster.mode = 0;
-    cluster.timeout = 0;
+    cluster.mode = param;
+    cluster.timeout = 100;%Jump into sequential processing if distributed processing is blocked (s)
     cluster.size = 1;
     multithreading_luke('automatic');              
 end
 %
-cluster.temppath = dkepath.temppathroot; 
-%
 flag_mdcetoolbox = 0;
+cluster.info = 'Sequential mode chosen.';
 %
-try,%test if MDCE toolbox is available
+try,%test the availability of the MatLab MDCE toolbox
     jm = findResource('scheduler','type','generic');
     flag_mdcetoolbox = 1;
+end
+%
+if cluster.mode == 1 & flag_mdcetoolbox,
+	cluster.info = 'Distributed computing mode with MatLab MDCE toolbox chosen.';
 end
 %   
 % For LUKE distributed computing with batch queuing
 %
-if exist([dkepath.luke_root,'Project_DKE/Packages/MDCE/dcluke/',dkepath.hostname]),
-    cluster.scriptspath = [dkepath.luke_root,'Project_DKE/Packages/MDCE/dcluke/',dkepath.hostname,'/'];
-    [s,t] = unix('qsub xxxxxxxxxx');
-    if isempty(strfind(t,'command not found')),
-        flag_mdcetoolbox = 1;
-    end
-end    
+if exist('dcluke_batch.sh') & exist('dcluke_etat.sh') & exist('dcluke_kill.sh') & exist('dcluke_kill.sh') & exist('dcluke.exe'),
+ 	[s,t] = unix('qsub --version');%test qsub command is recognized for batch queuing
+ 	if isempty(strfind(t,'command not found')),
+		if cluster.mode == 2,
+			cluster.info = 'Distributed computing mode with LUKE scripts chosen.';
+     	end
+     else	
+		if cluster.mode == 2,
+			if flag_mdcetoolbox,
+				cluster.mode == 1;
+				cluster.info = 'Batch queuing system for distributed computing not installed for this machine, but MatLab MDCE toolbox available. MDCE mode enforced.';
+			else
+				cluster.mode == 0;
+				cluster.info = 'No distributed computing capabilities. Sequential mode enforced.';
+			end
+		end       	
+	end
+else
+	if cluster.mode == 2,
+		if flag_mdcetoolbox,
+			cluster.mode == 1;
+			cluster.info = 'Batch queuing scripts for distributed computing not available for this machine, but MatLab MDCE toolbox available. MDCE mode enforced.';
+		else
+			cluster.mode == 0;
+			cluster.info = 'No distributed computing capabilities. Sequential mode enforced.';
+		end
+	end
+end
 %
-if isempty(cluster.temppath) & cluster.mode == 1 & flag_mdcetoolbox,
-    cluster.temppath = fullfile(getenv('HOME'),'mdce_');
-    disp(['WARNING: Temporary path directory name for distributed computing is ',cluster.path]);
-end           
+if flag_mdcetoolbox,
+	cluster.temppath = [pwd,'mdce_',timeid_jd(clock)];
+	mkdir(cluster.temppath);
+end
+%
