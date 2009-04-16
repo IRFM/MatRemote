@@ -53,13 +53,15 @@ end
 flag_mdcetoolbox = 0;
 dkecluster.info = 'Sequential mode chosen.';
 %
-try,%test the availability of the MatLab MDCE toolbox
-    jm = findResource('scheduler','type','generic');
-    flag_mdcetoolbox = 1;
-end
-%
-if dkecluster.mode == 1 & flag_mdcetoolbox,
-	dkecluster.info = 'Distributed computing mode with MatLab MDCE toolbox chosen.';
+if dkecluster.mode == 1,
+	try,%test the availability of the MatLab MDCE toolbox
+    	jm = findResource('scheduler','type','generic');
+    	flag_mdcetoolbox = 1;
+	end
+	%
+	if flag_mdcetoolbox,
+		dkecluster.info = 'Distributed computing mode with MatLab MDCE toolbox chosen.';
+	end
 end
 %   
 % For LUKE distributed computing with batch queuing
