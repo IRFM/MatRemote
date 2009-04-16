@@ -10,6 +10,7 @@ if nargin < 3,
     error('Wrong number of input arguments in clustermode_luke.m')
 end
 %
+keyboard
 if isstruct(cdisp),
     if ~isfield(cdisp,'mdce'),
         cluster.display = 0;
@@ -39,19 +40,15 @@ if isstruct(param),
         else
             cluster.size = 1;
         end            
-    elseif isfield(param,'multithreading'),
-        multithreading_luke(param.multithreading);
     else
         cluster.mode = 0;
     	cluster.timeout = 100;%Jump into sequential processing if distributed processing is blocked (s)
         cluster.size = 1;  
-        multithreading_luke('automatic');
     end
 else
     cluster.mode = param;
     cluster.timeout = 100;%Jump into sequential processing if distributed processing is blocked (s)
     cluster.size = 1;
-    multithreading_luke('automatic');              
 end
 %
 flag_mdcetoolbox = 0;
@@ -73,6 +70,7 @@ if exist('dcluke_batch.sh') & exist('dcluke_etat.sh') & exist('dcluke_kill.sh') 
  	if isempty(strfind(t,'command not found')),
 		if cluster.mode == 2,
 			cluster.info = 'Distributed computing mode with LUKE scripts chosen.';
+			flag_mdcetoolbox = 2;
      	end
      else	
 		if cluster.mode == 2,
