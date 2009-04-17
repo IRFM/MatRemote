@@ -96,8 +96,6 @@ else
 	end
 end
 %
-if flag_mdcetoolbox,
-	dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock),'/'];
-	mkdir(dkecluster.temppath);
-end
+dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock),'/'];
+mkdir(dkecluster.temppath);
 %

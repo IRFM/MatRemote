@@ -42,6 +42,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,dkecluster
     end
     %
 	varargout = cell(1,nargout-1);
+	flag = 0;
 	%
 	if dkecluster.mode == 1,%Initiate the job server
 		%
