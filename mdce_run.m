@@ -175,11 +175,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,dkecluster
 			%
  	    	if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem on the cluster using ',func2str(fun),'.m']);    
-	    		args_temp = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*dkecluster.size + 1:length(arg_range)),nargout);
-	    		args_out = '';
-	    		for iarg = 1:length(args_temp),
-	    			args_out = [args_out,args_temp{iarg}];
-	    		end
+	    		args_out = seqcomputing(fun,args_in,arg_index,arg_range(iloop_full*dkecluster.size + 1:length(arg_range)),nargout);
 	    	end
 	    	%
 	    	for j_nargout = 1:nargout-1,
