@@ -171,7 +171,7 @@ function [flag,varargout] = mdce_luke(fun,args_in,arg_index,arg_range,dkecluster
 	    	%
 	    	if isempty(iloop_full),iloop_full = 0;end
             %
-            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range(iloop_full*dkecluster.size + 1:length(arg_range)),nargout);
+            [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range(iloop_full*dkecluster.size + 1:length(arg_range)),nargout,dkecluster);
 			%
  	    	if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
 	    		info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem on the cluster using ',func2str(fun),'.m']);    
