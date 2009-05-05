@@ -49,7 +49,11 @@ end
 %
 if ~iscell(arg_range),
     if isnumeric(arg_range),
-        arg_range = num2cell(arg_range(:));
+        if size(arg_range,1) == 1 || size(arg_range,2) == 1,
+            arg_range = num2cell(arg_range(:));
+        else
+            arg_range = num2cell(arg_range,1);
+        end
     else
         error('The argument ''arg_range'' in mdce_luke.m must be a list or an array object');
     end
