@@ -1,4 +1,4 @@
-function [dkecluster] = clustermode_luke(param,fun,cdisp);
+function [dkecluster] = clustermode_luke(param,fun,cdisp,remote)
 %LUKE - Test cluster properties
 %
 % This function tests cluster properties and generate default values
@@ -6,9 +6,15 @@ function [dkecluster] = clustermode_luke(param,fun,cdisp);
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and   Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
 %
+if nargin < 4,
+    remote = '';
+end
 if nargin < 3,
     error('Wrong number of input arguments in clustermode_luke.m')
 end
+%
+dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock),'/'];
+dkecluster.info = '';
 %
 if isstruct(cdisp),
     if ~isfield(cdisp,'mdce'),
@@ -50,52 +56,79 @@ else
     dkecluster.size = 1;
 end
 %
-flag_mdcetoolbox = 0;
-dkecluster.info = 'Sequential mode chosen.';
-%
 if dkecluster.mode == 1,
-	try,%test the availability of the MatLab MDCE toolbox
-    	jm = findResource('scheduler','type','generic');
-    	flag_mdcetoolbox = 1;
-	end
-	%
-	if flag_mdcetoolbox,
-		dkecluster.info = 'Distributed computing mode with MatLab MDCE toolbox chosen.';
-	end
+    %
+    try %test the availability of the MatLab MDCE toolbox
+        %
+    	findResource('scheduler','type','generic');
+        dkecluster.info = 'Distributed computing mode with MatLab MDCE toolbox chosen.';
+        disp(['==> ',dkecluster.info])
+        %
+    catch 
+        %
+        dkecluster.info = 'No Matlab MDCE resource found. Try LUKE batch DC. ';
+        disp(['==> ',dkecluster.info])
+        dkecluster.mode = 2;
+        %
+    end
 end
 %   
 % For LUKE distributed computing with batch queuing
 %
-if exist('dcluke_batch.sh') & exist('dcluke_etat.sh') & exist('dcluke_kill.sh') & exist('dcluke_kill.sh') & exist('dcluke.exe'),
- 	[s,t] = unix('qsub --version');%test qsub command is recognized for batch queuing
- 	if isempty(strfind(t,'command not found')),
-		if dkecluster.mode == 2,
-			dkecluster.info = 'Distributed computing mode with LUKE scripts chosen.';
-			flag_mdcetoolbox = 2;
-     	end
-     else	
-		if dkecluster.mode == 2,
-			if flag_mdcetoolbox,
-				dkecluster.mode == 1;
-				dkecluster.info = 'Batch queuing system for distributed computing not installed for this machine, but MatLab MDCE toolbox available. MDCE mode enforced.';
-			else
-				dkecluster.mode == 0;
-				dkecluster.info = 'No distributed computing capabilities. Sequential mode enforced.';
-			end
-		end       	
-	end
-else
-	if dkecluster.mode == 2,
-		if flag_mdcetoolbox,
-			dkecluster.mode == 1;
-			dkecluster.info = 'Batch queuing scripts for distributed computing not available for this machine, but MatLab MDCE toolbox available. MDCE mode enforced.';
-		else
-			dkecluster.mode == 0;
-			dkecluster.info = 'No distributed computing capabilities. Sequential mode enforced.';
-		end
-	end
+if dkecluster.mode == 2,
+    %
+    if ~isstruct(remote),
+        %
+        dkecluster.info = [dkecluster.info,'No cluster information found. Sequential mode enforced.'];
+        disp(['==> ',dkecluster.info])
+        dkecluster.mode = 0;
+        return
+        %
+    end
+    %
+    nrem = length(remote);
+    rem_list = ones(1,nrem);
+    %
+    %  LUKE batch DC calculations on local host only
+    %
+    for irem = 1:nrem,
+        if ~isempty(remote(irem).host),
+            rem_list(irem) = 0;
+        end
+    end
+    %
+    if ~any(rem_list),
+        dkecluster.info = [dkecluster.info,'No local cluster. Sequential mode enforced.'];
+        disp(['==> ',dkecluster.info])
+        dkecluster.mode = 0;
+        return
+    end            
+    %
+    for irem = find(rem_list),
+        if isfield(remote(irem),'luke_root') && ~any(strfind(path,remote(irem).luke_root))
+            rem_list(irem) = 0;
+        end
+    end
+    %
+    if sum(rem_list) == 0,
+        dkecluster.info = [dkecluster.info,' Cluster LUKE path different from local one. Sequential mode enforced.'];
+        disp(['==> ',dkecluster.info])
+        dkecluster.mode = 0;
+        return
+    end
+    %
+    if sum(rem_list) > 1
+        dkecluster.info = [dkecluster.info,' Warning : more than one compatible cluster configuration for LUKE batch DC. First one selected.'];
+    else
+        dkecluster.info = 'Distributed computing mode with LUKE scripts chosen.';        
+    end
+    disp(['==> ',dkecluster.info])
+    %
+    remote = remote(find(rem_list,1,'first'));
+    %
+    dkecluster.cmd = remote.cmd;
+    dkecluster.get_jobid = remote.get_jobid;
+    dkecluster.set_jobid = remote.set_jobid;
+    %
 end
-%
-dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock),'/'];
-mkdir(dkecluster.temppath);
 %
