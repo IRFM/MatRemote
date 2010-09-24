@@ -176,7 +176,7 @@ elseif dkecluster.mode == 2 && dkecluster.size >= 1,%distributed computing envir
         %
         [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),nargout-1,dkecluster);
         %
-        if flag == - 2,%back to sequential computing (for robustness of the function in case of problems on the cluster)
+        if flag == - 2 && (~isfield(dkecluster,'enforce') || dkecluster.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
             info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem occured on the cluster using the function ',func2str(fun),'.m']);    
             args_out = seqcomputing(fun,args_in,arg_index,arg_range(range_index),nargout-1);		
         end

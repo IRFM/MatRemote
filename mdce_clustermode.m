@@ -1,4 +1,4 @@
-function [dkecluster] = clustermode_luke(param,fun,cdisp,remote)
+function [dkecluster] = clustermode_luke(param,fun,cdisp,remote,mem)
 %LUKE - Test cluster properties
 %
 % This function tests cluster properties and generate default values
@@ -127,6 +127,14 @@ if dkecluster.mode == 2,
     remote = remote(find(rem_list,1,'first'));
     %
     dkecluster.cmd = remote.cmd;
+    if isfield(remote,'mem'),%batch run memory allocation information
+        dkecluster.mem = remote.mem;
+        if nargin >= 5,%memory allocated specified by user
+            dkecluster.mem{3} = num2str(mem);
+        end
+    else
+        dkecluster.mem = '';
+    end
     dkecluster.get_jobid = remote.get_jobid;
     dkecluster.set_jobid = remote.set_jobid;
     %
