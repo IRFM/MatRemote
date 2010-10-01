@@ -174,27 +174,25 @@ elseif dkecluster.mode == 2 && dkecluster.size >= 1,%distributed computing envir
         %
         range_index = (iloop_full-1)*dkecluster.size + 1:min(iloop_full*dkecluster.size,narg_range);
         %
-        [flag,args_out] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),nargout-1,dkecluster);
+        [flag,varargout{:}] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),dkecluster);
         %
-        if flag == - 2 && (~isfield(dkecluster,'enforce') || dkecluster.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
-            info_dke_yp(2,['WARNING: calculations are performed on a single processor because of a problem occured on the cluster using the function ',func2str(fun),'.m']);    
-            args_out = seqcomputing(fun,args_in,arg_index,arg_range(range_index),nargout-1);		
+        mask_seq = (flag == -2);%flagged for sequential computing
+        %
+        if any(mask_seq) && (~isfield(dkecluster,'enforce') || dkecluster.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
+            varargout_seq = cell(1,nargout-1);
+            [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
+            %
+            for j_nargout = 1:nargout-1,
+                varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};
+            end	
+            %
         end
-        %
-        for j_nargout = 1:nargout-1,
-            if isempty(args_out),
-                varargout{j_nargout} = {''};
-                info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
-            else
-                varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
-            end 
-        end	
         %
     end
     %
 else %sequential computing
     %
-    [varargout] = seqcomputing(fun,args_in,arg_index,arg_range,nargout-1);
+    [flag,varargout{:}] = seqcomputing(fun,args_in,arg_index,arg_range);
     %
 end
 %
