@@ -174,7 +174,12 @@ elseif dkecluster.mode == 2 && dkecluster.size >= 1,%distributed computing envir
         %
         range_index = (iloop_full-1)*dkecluster.size + 1:min(iloop_full*dkecluster.size,narg_range);
         %
-        [flag,varargout{:}] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),dkecluster);
+        varargout_dcl = cell(1,nargout-1);
+        [flag,varargout_dcl{:}] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),dkecluster);
+        %
+        for j_nargout = 1:nargout-1,
+            varargout{j_nargout}(range_index) = varargout_dcl{j_nargout};
+        end	
         %
         mask_seq = (flag == -2);%flagged for sequential computing
         %
