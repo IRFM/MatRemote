@@ -13,7 +13,7 @@ if nargin < 3,
     error('Wrong number of input arguments in clustermode_luke.m')
 end
 %
-dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock),'/'];
+dkecluster.temppath = [pwd,'/mdce_',timeid_jd(clock,3),'/'];
 dkecluster.info = '';
 %
 if isstruct(cdisp),
