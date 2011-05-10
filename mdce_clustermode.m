@@ -6,6 +6,9 @@ function [dkecluster] = clustermode_luke(param,fun,cdisp,remote,mem)
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and   Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
 %
+if nargin < 5,
+    mem = [];
+end
 if nargin < 4,
     remote = '';
 end
@@ -44,6 +47,10 @@ if isstruct(param),
             dkecluster.size = param.(fun).size;
         else
             dkecluster.size = 1;
+        end            
+        %
+        if isfield(param.(fun),'mem'),
+            mem = param.(fun).mem;
         end            
     else
         dkecluster.mode = 0;
@@ -128,8 +135,8 @@ if dkecluster.mode == 2,
     %
     dkecluster.cmd = remote.cmd;
     if isfield(remote,'mem'),%batch run memory allocation information
-        dkecluster.mem = remote.mem;
-        if nargin >= 5,%memory allocated specified by user
+        dkecluster.mem = remote.mem(1:3);
+        if ~isempty(mem),%memory allocated specified by user
             dkecluster.mem{3} = num2str(mem);
         end
     else
