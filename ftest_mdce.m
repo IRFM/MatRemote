@@ -6,6 +6,8 @@ if c == 5 && force_error >= 1,
     end
 end
 %
+pause(10)
+%
 a = c+d;
 b = c-d;
 %
