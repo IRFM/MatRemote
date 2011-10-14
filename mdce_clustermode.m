@@ -1,4 +1,4 @@
-function [dkecluster] = clustermode_luke(param,fun,dkepath,configname)
+function [dkecluster] = clustermode_luke(param,fun,dkepath,schedulertype)
 %LUKE - Test cluster properties
 %
 % This function tests cluster properties and generate default values
@@ -10,12 +10,8 @@ if nargin < 3,
     error('Wrong number of input arguments in clustermode_luke.m')
 end
 %
-if nargin < 4,
-    configname = [];
-end
-%
-if isempty(configname),
-    configname = 'local';
+if nargin < 4 || isempty(schedulertype),
+    schedulertype = 'local';
 end
 %
 % Temp folder
@@ -24,12 +20,13 @@ temppath = ['mdce_',timeid_jd(clock),filesep];
 %
 % Parameters from dkepath
 %
-if isfield(dkepath,'temppathroot');
+if isfield(dkepath,'temppathroot'),
     temppath = [dkepath.temppathroot,temppath];
 else
     temppath = [pwd,filesep,temppath];% Local folder
 end
-if isfield(dkepath,'remote');
+%
+if isfield(dkepath,'remote'),
     remote = dkepath.remote;
 else
     remote = '';% no dcluke information
@@ -39,10 +36,10 @@ end
 %
 dkecluster.scheduler.mode = 0;%No parallel computing
 dkecluster.scheduler.timeout = 100;%100 s time out for job submission
-dkecluster.scheduler.size = 1;%One core or processor
+dkecluster.scheduler.clustersize = 1;%One core or processor
 dkecluster.scheduler.memory = NaN;%no memory requirements
 dkecluster.scheduler.temppath = temppath;
-dkecluster.scheduler.type = configname;
+dkecluster.scheduler.schedulertype = schedulertype;
 dkecluster.scheduler.display = 0;
 dkecluster.scheduler.info = 'No parallel computation.';
 %
@@ -60,30 +57,17 @@ else% only the DC mode is provided
     dkecluster.scheduler.mode = param;
 end
 %
-% Close pool of matlab sessions for parallel computations 
-%
-if dkecluster.scheduler.mode <= 2,
-    %
-    [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
-    %
-    if vmatlab >= 77 && testtoolbox,
-        if matlabpool('size'),%Close existing pool of matlab sessions for parallel computations
-            matlabpool close force
-        end
-    end
-    %
-end
-%
 % Specific operations depending on DC mode
 %
 if dkecluster.scheduler.mode == 1,%MDCE mode
     %
+	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,dkepath);
+	%
     try %test the availability of the MatLab MDCE toolbox
         %
-        out = findResource('scheduler','type',dkecluster.scheduler.type);
-        dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the scheduler <',dkecluster.scheduler.type,'>'];
+        scheduler = findResource('scheduler','configuration',dkecluster.scheduler.configuration);
+        dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
         disp(['==> ',dkecluster.scheduler.info])
-        dkecluster.scheduler.size = out.ClusterSize;
         %
     catch 
         %
@@ -100,7 +84,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
     %  LUKE batch DC calculations on local host only
     %
-    for irem = 1:nrem,
+    for irem = 1:nrem,% reject remote hosts
         if ~isempty(remote(irem).host),
             rem_list(irem) = 0;
         end
@@ -113,7 +97,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
         return
     end            
     %
-    for irem = find(rem_list),
+    for irem = find(rem_list),% test LUKE path
         if isfield(remote(irem),'luke_root') && ~isempty(remote(irem).luke_root) && ~any(strfind(path,remote(irem).luke_root))
             rem_list(irem) = 0;
         end
@@ -138,8 +122,8 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     dkecluster.scheduler.cmd = remote.cmd;
     dkecluster.scheduler.get_jobid = remote.get_jobid;
     dkecluster.scheduler.set_jobid = remote.set_jobid;
-    if dkecluster.scheduler.size == 1 || dkecluster.scheduler.size > remote.nproc,
-        dkecluster.scheduler.size = remote.nproc;%maximum number of processors on cluster
+    if dkecluster.scheduler.clustersize == 1 || dkecluster.scheduler.clustersize > remote.nproc,
+        dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster
     end
     if isfield(remote,'mem'),%batch run memory allocation information
         dkecluster.scheduler.mem = remote.mem(1:3);
@@ -152,14 +136,25 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
 elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
+	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,dkepath);
+    %
     [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
     %
     if vmatlab >= 77 && testtoolbox,
-        if ~matlabpool('size'),%Open pool of matlab sessions for parallel computations if not already existing
-            matlabpool('open',configname);%Automatic number of workers
-        end
-        %
-        dkecluster.scheduler.size = matlabpool('size');
+		try %test the availability of the MatLab MDCE toolbox
+			%
+			matlabpool('open',dkecluster.scheduler.configuration,1)
+			matlabpool close
+			dkecluster.scheduler.info = ['Matlab PARFOR mode operational for the scheduler <',dkecluster.scheduler.configuration,'>'];
+			disp(['==> ',dkecluster.scheduler.info])
+			%
+		catch 
+			%
+			dkecluster.scheduler.info = 'No operational resources found for PARFOR Environment. Sequential mode enforced.';
+			disp(['==> ',dkecluster.scheduler.info])
+			dkecluster.scheduler.mode = 0;
+			%
+		end
     else
         disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab > R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
         dkecluster.scheduler.mode = 0;

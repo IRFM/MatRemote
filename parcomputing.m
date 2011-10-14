@@ -1,4 +1,4 @@
-function [flag,varargout] = parcomputing(fun,args_in,arg_index,arg_range)
+function [flag,varargout] = parcomputing(fun,args_in,arg_index,arg_range,scheduler)
 % LUKE - Parallel computing of the loop
 %
 %   parfor computing of the loop
@@ -10,10 +10,11 @@ function [flag,varargout] = parcomputing(fun,args_in,arg_index,arg_range)
 %       - arg_index: index in the argument list args_in which must be changed [1,1]
 %       - arg_range: list of values for the input argument arg_index [1,nrange]
 %           => nrange = length(arg_range) = number of iterations 
+%       - scheduler: scheduler information
 %
 %   OUTPUT:
 %
-%       - flag: status of the computation : 0 (OK) or -1 (failed) [1,nrange]
+%       - flag: status of the computation : scheduler.mode (OK with parcomputing) or -2 (failed) [1,nrange]
 %       - varargout: output arguments list of the function {1,nargout-1}.
 %           => Each element is a list of size {nrange,1}
 %
@@ -22,7 +23,13 @@ function [flag,varargout] = parcomputing(fun,args_in,arg_index,arg_range)
 nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
-flag = zeros(1,nrange);
+flag = scheduler.mode*ones(1,nrange);
+%
+%try
+    matlabpool('open',scheduler.configuration,scheduler.clustersize);
+%catch
+%    info_dke_yp(2,['WARNING: calculations are performed on a single processor since the job scheduler is not available (MatLab version too old, limited number of licenses, dkepath inconsistently set...) for ',func2str(fun),'.m (mode 1).']);
+%end
 %
 parfor j_range = 1:nrange,
     %
@@ -34,7 +41,7 @@ parfor j_range = 1:nrange,
     catch me_seq
         disp(['Error executing the iteration ',int2str(j_range),'/',int2str(nrange),'.']);
         disp(['===> Error : ',getReport(me_seq)]);
-        flag(j_range) = -1;
+        flag(j_range) = -2;
     end
     varargout_array{j_range} = varargout_loc;
     %
@@ -46,10 +53,13 @@ varargout = cell(1,nargout_in);
 %
 parfor j_argout = 1:nargout_in,
     %
-    varargout{j_argout} = cell(1,nrange);
+    varargout{j_argout} = cell(nrange,1);
     for j_range = 1:nrange,
         varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
     end
     %
 end
+%
+matlabpool close force
+%
       

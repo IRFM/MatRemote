@@ -69,7 +69,7 @@ varargout = cell(1,nargout-1);
 flag = 0;
 %
 for j_nargout = 1:nargout-1,
-    varargout{j_nargout} = {};
+    varargout{j_nargout} = cell(narg_range,1);
 end
 %
 if isempty(dkecluster),
@@ -99,8 +99,8 @@ if isfield(dkecluster,'scheduler'),
             dkecluster.scheduler.display = 0;%No display
         end
         %
-        if ~isfield(dkecluster.scheduler,'size'),
-            dkecluster.scheduler.size = 1;%One core or processor
+        if ~isfield(dkecluster.scheduler,'clustersize'),
+            dkecluster.scheduler.clustersize = 1;%One core or processor
         end
         %
         if ~isfield(dkecluster.scheduler,'timeout'),
@@ -121,183 +121,65 @@ if isfield(dkecluster,'scheduler'),
     %
     if dkecluster.scheduler.mode == 1,%General matlab toolbox distributed computing environment (mdce), calculations may be local or not local
         %
-        if ~strcmp(dkecluster.scheduler.type,'local') && ~strcmp(dkecluster.scheduler.type,'generic') && ~strcmp(dkecluster.scheduler.type,'jobmanager') && ~strcmp(dkecluster.scheduler.type,'hpcserver') && ~strcmp(dkecluster.scheduler.type,'lsf') && ~strcmp(dkecluster.scheduler.type,'pbspro') && ~strcmp(dkecluster.scheduler.type,'torque') && ~strcmp(dkecluster.scheduler.type,'mpiexec'), 
-            dkecluster.scheduler.type = 'local';
-            disp('WARNING: the local scheduler has been enforced for distributed calculations because no scheduler type supported by Matlab has been recognized (mode 1).');
-        end
-        %
-        try
-            jm = findResource('scheduler','type',dkecluster.scheduler.type);%Initiate the job server for Matlab Distributed Computing Environment  
-        catch
-            jm = [];%Number of users exceed number of Distributed Computing Toolbox licenses or the toolbox is not available or MatLab version is less than 7.5 (R2007B)
-            info_dke_yp(2,['WARNING: calculations are performed on a single processor since the job scheduler is not available (MatLab version too old, limited number of licenses, dkepath inconsistently set...) for ',func2str(fun),'.m (mode 1).']);
-        end
-        %
-        if isfield(dkecluster.scheduler,'temppath'),
-            if ~exist(dkecluster.scheduler.temppath, 'dir'),
-               mkdir(dkecluster.scheduler.temppath);
-               fileattrib(dkecluster.scheduler.temppath,'+w');
-            end
-        end
-        %
-        if isfield(dkecluster.scheduler,'temppath'),set(jm,'DataLocation',dkecluster.scheduler.temppath);end
-        %
-        ClusterSize = get(jm,'ClusterSize');
-        %
-        if isfield(dkecluster.scheduler,'size'),            
-            if strcmp(dkecluster.scheduler.type,'local') && dkecluster.scheduler.size > 8,
-                set(jm,'ClusterSize',8);
-            else
-                set(jm,'ClusterSize',dkecluster.scheduler.size);
-            end
-        end
-        %
-        if isfield(dkecluster.scheduler,'HasSharedFileSystem'),set(jm,'HasSharedFileSystem',dkecluster.scheduler.HasSharedFileSystem);end
-        if isfield(dkecluster.scheduler,'ClusterMatlabRoot'),set(jm,'ClusterMatlabRoot',dkecluster.scheduler.ClusterMatlabRoot);end
-        if isfield(dkecluster.scheduler,'SubmitFcn'),set(jm,'SubmitFcn',dkecluster.scheduler.SubmitFcn);end
-        if isfield(dkecluster.scheduler,'ParallelSubmitFcn'),set(jm,'ParallelSubmitFcn',dkecluster.scheduler.ParallelSubmitFcn);end
-        %
-        if (nargout >= 2) && ~isempty(jm),
-            %
-            args_out = cell(narg_range,nargout-1);
-            %
-            for iloop_full = 1:narg_range,
-                job{iloop_full} = createParallelJob(jm);
-                %
-                arg_job = args_in;  
-                %
-                arg_job{arg_index} = arg_range{iloop_full};
-                %
-                createTask(job{iloop_full}, fun, nargout-1,arg_job);
-                %
-                set(job{iloop_full},'MinimumNumberOfWorkers',1);
-                set(job{iloop_full},'MaximumNumberOfWorkers',1);
-                %
-                %set(job{iloop_full},'FileDependencies',{'main_C3PO_jd.m'})
-                %
-                submit(job{iloop_full});
-            end
-            %
-            flag_tot = 0;
-            %
-            while 1,
-                for iloop_full = 1:narg_range,
-                    flag_tot = flag_tot + waitForState(job{iloop_full},'finished');
-                end
-                %
-                if flag_tot == narg_range,
-                    break;
-                else
-                    flag_tot = 0;
-                end
-            end      
-            %
-            
-            %
-            for iloop_full = 1:narg_range,
-                %
-                if dkecluster.scheduler.display,
-                    getDebugLog(jm,job{iloop_full})
-                end
-                %
-                jobstate(iloop_full) = strcmp(get(job{iloop_full}, 'State'),'finished');
-                %
-                if jobstate(iloop_full),
-                    out = getAllOutputArguments(job{iloop_full});
-                    if ~isempty(out)
-                        args_out(iloop_full,:) = out;
-                    end
-                    %
-                    flag = -1;%timeout case
-                end
-            end       
-            %       
-            for iloop_full = 1:narg_range, 
-                destroy(job{iloop_full});
-            end                      
-            %
-            for iloop_full = 1:narg_range, 
-                if ~jobstate(iloop_full),
-                	args_out(iloop_full,:) = seqcomputing(fun,args_in,arg_index,{arg_range{iloop_full}},nargout-1);
-                end
-            end
-            %
-            for iloop_full = 1:narg_range, 
-                if jobstate(iloop_full) && isempty(args_out{iloop_full}),
-                	args_out(iloop_full,:) = seqcomputing(fun,args_in,arg_index,{arg_range{iloop_full}},nargout-1);
-                    flag = -2;%Empty output
-                end
-            end
-            %
-            set(jm,'ClusterSize',ClusterSize);%back to the initial cluster size
-        end
-    	%
-    	% Data output
-    	%
-    	for j_nargout = 1:nargout-1,
-            if isempty(args_out),
-                varargout{j_nargout} = {''};
-                info_dke_yp(2,['WARNING: output is empty using ',func2str(fun),'.m']);    
-            else
-                varargout{j_nargout} = [varargout{j_nargout};args_out{1:end,j_nargout}];
-            end 
-        end
+        [flag,varargout{:}] = process_loop_jd(@jobcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
     elseif dkecluster.scheduler.mode == 2,%LUKE distributed computing environment (ldce)
-        %
-        mkdir(dkecluster.scheduler.temppath);
-        fileattrib(dkecluster.scheduler.temppath,'+w');
     	%
-    	for iloop_full = 1:ceil(narg_range/dkecluster.scheduler.size),%to adapt the calculations to the size of the dkecluster  
+    	for iloop_full = 1:ceil(narg_range/dkecluster.scheduler.clustersize),%to adapt the calculations to the size of the dkecluster  
             %
-            range_index = (iloop_full-1)*dkecluster.scheduler.size + 1:min(iloop_full*dkecluster.scheduler.size,narg_range);
+            range_index = (iloop_full-1)*dkecluster.scheduler.clustersize + 1:min(iloop_full*dkecluster.scheduler.clustersize,narg_range);
             %
             varargout_dcl = cell(1,nargout-1);
-            [flag,varargout_dcl{:}] = dclukecomputing(fun,args_in,arg_index,arg_range(range_index),dkecluster.scheduler);
+            %
+            [flag,varargout_dcl{:}] = process_loop_jd(@dclukecomputing,fun,args_in,arg_index,arg_range(range_index),dkecluster.scheduler);
             %
             for j_nargout = 1:nargout-1,
                 varargout{j_nargout}(range_index) = varargout_dcl{j_nargout};
             end	
             %
-            mask_seq = (flag == -2);%flagged for sequential computing
-            %
-            if any(mask_seq) && (~isfield(dkecluster.scheduler,'enforce') || dkecluster.scheduler.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
-                varargout_seq = cell(1,nargout-1);
-                [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
-                %
-                for j_nargout = 1:nargout-1,
-                    varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};
-                end	
-                %
-            end
     	end
         %
     elseif dkecluster.scheduler.mode == 3,
-        if dkecluster.scheduler.display,disp(['---> ''parfor'' loop for the function ',func2str(fun),'.m']);end
-        [flag,varargout{:}] = parcomputing(fun,args_in,arg_index,arg_range);
         %
-        mask_seq = (flag == -2);%flagged for sequential computing
+        [flag,varargout{:}] = process_loop_jd(@parcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
-        if any(mask_seq) && (~isfield(dkecluster.scheduler,'enforce') || dkecluster.scheduler.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
-            varargout_seq = cell(1,nargout-1);
-            [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
-            %
-            for j_nargout = 1:nargout-1,
-                varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};
-            end	
-            %
-        end
     else
         if dkecluster.scheduler.display,disp(['---> ''for'' loop for the function ',func2str(fun),'.m']);end
     	[flag,varargout{:}] = seqcomputing(fun,args_in,arg_index,arg_range);
     end
     %
-    if exist(dkecluster.scheduler.temppath, 'dir'),
-        rmdir(dkecluster.scheduler.temppath,'s');
-    end
-    %
 elseif isfield(dkecluster,'batch'),
     % not yet implemented
+end
+end
+%
+function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_range,scheduler)
+%
+if scheduler.display,
+    disp(['---> Method ''',func2str(method),''' to process loop for the function ',func2str(fun),'.m']);
+end
+%
+mkdir(scheduler.temppath);
+fileattrib(scheduler.temppath,'+w');
+%
+varargout = cell(1,nargout-1);
+%
+[flag,varargout{:}] = method(fun,args_in,arg_index,arg_range,scheduler);
+%
+rmdir(scheduler.temppath,'s');
+%
+mask_seq = (flag < 0);%flagged for sequential computing
+%
+if any(mask_seq) && (~isfield(scheduler,'enforce') || scheduler.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
+    varargout_seq = cell(1,nargout-1);
+    [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
+    %
+    for j_nargout = 1:nargout-1,
+        varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};
+    end	
+    %
+end
+%
 end
 
 

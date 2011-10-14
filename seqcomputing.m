@@ -13,7 +13,7 @@ function [flag,varargout] = seqcomputing(fun_handle,args_in,arg_index,arg_range)
 %
 %   OUTPUT:
 %
-%       - flag: status of the computation : 0 (OK) or -1 (failed) [1,nrange]
+%       - flag: status of the computation : 0 (OK) or -2 (failed) [1,nrange]
 %       - varargout: output arguments list of the function {1,nargout-1}.
 %           => Each element is a list of size {nrange,1}
 %
@@ -32,7 +32,7 @@ for j_range = 1:nrange,
     catch me_seq
         disp(['Error executing the iteration ',int2str(j_range),'/',int2str(nrange),'.']);
         disp(['===> Error : ',getReport(me_seq)]);
-        flag(j_range) = -1;
+        flag(j_range) = -2;
     end
     %
 end
