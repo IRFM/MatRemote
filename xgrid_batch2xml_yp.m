@@ -1,4 +1,4 @@
-function [filename] = xgrid_batch2xml_yp(luketimeid,appid,jobname,userid,matlabroot,lukepath,lukedatapath,hostname,key)
+function [filename] = xgrid_batch2xml_yp(luketimeid,appid,jobname,userid,matlabroot,remoteprefdir,lukepath,lukedatapath,hostname,key)
 %
 %LUKE - This function creates dynamically the xml batch file for remote
 %calculations on a Mac cluster with Xgrid scheduler (can generate multiple
@@ -6,9 +6,9 @@ function [filename] = xgrid_batch2xml_yp(luketimeid,appid,jobname,userid,matlabr
 %
 %by Y.Peysson CEA-IRFM <yves.peysson@cea.fr> and Joan Decker CEA-IRFM (joan.decker@cea.fr)
 %
-if nargin < 8,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
+if nargin < 9,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
 %
-if nargin < 9,
+if nargin < 10,
     key = 0;%first job
 end
 %
@@ -52,6 +52,8 @@ fprintf(fileid,['					<key>LUKE_hostname</key>','\n']);
 fprintf(fileid,['					<string>',hostname,'</string>','\n']);
 fprintf(fileid,['					<key>LUKE_xgrid</key>','\n']);
 fprintf(fileid,['					<string>1</string>','\n']);
+fprintf(fileid,['					<key>MATLAB_PREFDIR</key>','\n']);
+fprintf(fileid,['					<string>',remoteprefdir,'</string>','\n']);
 fprintf(fileid,['				</dict>','\n']);
 fprintf(fileid,['			</dict>','\n']);
 fprintf(fileid,['		</dict>','\n']);
