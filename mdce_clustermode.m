@@ -85,8 +85,14 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %  LUKE batch DC calculations on local host only
     %
     for irem = 1:nrem,% reject remote hosts
-        if ~isempty(remote(irem).host),
-            rem_list(irem) = 0;
+        if ~isempty(remote(irem).host)
+            if length(remote(irem).host) == 1,
+                rem_list(irem) = 0;
+            else
+                if ~strcmp(remote(irem).host{1},remote(irem).host{2})
+                    rem_list(irem) = 0;
+                end
+            end
         end
     end
     %
@@ -120,15 +126,33 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     remote = remote(find(rem_list,1,'first'));
     %
     dkecluster.scheduler.cmd = remote.cmd;
+    %
+    xgridsearch = strfind(remote.cmd{1},'xgrid');%find if the xgrid task scheduler is used (mac,...)
+    %
+    if ~isempty(xgridsearch),
+        dkecluster.scheduler.cluster = remote.cluster;
+        dkecluster.scheduler.matlabroot = remote.matlabroot;
+        dkecluster.scheduler.luke_root = remote.luke_root;
+        dkecluster.scheduler.prefdir = remote.prefdir;
+        dkecluster.scheduler.password = remote.password; 
+        remotefields = fieldnames(remote);
+        dkecluster.scheduler.logname = remote.(remotefields{end});  
+    end
+    %
     dkecluster.scheduler.get_jobid = remote.get_jobid;
     dkecluster.scheduler.set_jobid = remote.set_jobid;
     if dkecluster.scheduler.clustersize == 1 || dkecluster.scheduler.clustersize > remote.nproc,
         dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster
     end
+    %
     if isfield(remote,'mem'),%batch run memory allocation information
-        dkecluster.scheduler.mem = remote.mem(1:3);
-        if ~isnan(dkecluster.scheduler.memory),%memory allocated specified by dkecluster
-            dkecluster.scheduler.mem{3} = num2str(dkecluster.scheduler.memory);
+        if ~isempty(remote.mem),
+            dkecluster.scheduler.mem = remote.mem(1:3);
+            if ~isnan(dkecluster.scheduler.memory),%memory allocated specified by dkecluster
+                dkecluster.scheduler.mem{3} = num2str(dkecluster.scheduler.memory);
+            end
+        else
+            dkecluster.scheduler.mem = '';
         end
     else
         dkecluster.scheduler.mem = '';
