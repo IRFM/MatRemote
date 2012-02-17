@@ -32,16 +32,30 @@ else
     remote = '';% no dcluke information
 end
 %
-% Minimum set of for parallel computing 
+if isfield(dkepath,'scheduler'),
+    scheduler = dkepath.scheduler;
+    if isfield(scheduler,schedulertype),
+        dkecluster.scheduler = scheduler.(schedulertype);
+    else
+        dkecluster.scheduler = '';
+    end
+else
+    dkecluster.scheduler = '';% no dcluke information
+end
 %
-dkecluster.scheduler.mode = 0;%No parallel computing
-dkecluster.scheduler.timeout = 100;%100 s time out for job submission
-dkecluster.scheduler.clustersize = 1;%One core or processor
-dkecluster.scheduler.memory = NaN;%no memory requirements
-dkecluster.scheduler.temppath = temppath;
-dkecluster.scheduler.schedulertype = schedulertype;
-dkecluster.scheduler.display = 0;
-dkecluster.scheduler.info = 'No parallel computation.';
+if isempty(dkecluster.scheduler),
+    %
+    % Minimum set of for parallel computing 
+    %
+    dkecluster.scheduler.mode = 0;%No parallel computing
+    dkecluster.scheduler.timeout = 100;%100 s time out for job submission
+    dkecluster.scheduler.clustersize = 1;%One core or processor
+    dkecluster.scheduler.memory = NaN;%no memory requirements
+    dkecluster.scheduler.temppath = temppath;
+    dkecluster.scheduler.schedulertype = schedulertype;
+    dkecluster.scheduler.display = 0;
+    dkecluster.scheduler.info = 'No parallel computation.';
+end
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
