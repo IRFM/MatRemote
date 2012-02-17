@@ -45,16 +45,13 @@ end
 %
 if isempty(dkecluster.scheduler),
     %
-    % Minimum set of for parallel computing 
-    %
-    dkecluster.scheduler.mode = 0;%No parallel computing
+    dkecluster.scheduler.configfile = '';
     dkecluster.scheduler.timeout = 100;%100 s time out for job submission
-    dkecluster.scheduler.clustersize = 1;%One core or processor
+    dkecluster.scheduler.clustersize = Inf;%One core or processor
     dkecluster.scheduler.memory = NaN;%no memory requirements
     dkecluster.scheduler.temppath = temppath;
-    dkecluster.scheduler.schedulertype = schedulertype;
     dkecluster.scheduler.display = 0;
-    dkecluster.scheduler.info = 'No parallel computation.';
+    dkecluster.scheduler.info = '';
 end
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
@@ -75,7 +72,7 @@ end
 %
 if dkecluster.scheduler.mode == 1,%MDCE mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,dkepath);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler,schedulertype);
 	%
     try %test the availability of the MatLab MDCE toolbox
         %
@@ -103,7 +100,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
             if length(remote(irem).host) == 1,
                 rem_list(irem) = 0;
             else
-                if ~strcmp(remote(irem).host{1},remote(irem).host{2})
+                if iscell(remote(irem).host) && ~strcmp(remote(irem).host{1},remote(irem).host{2})
                     rem_list(irem) = 0;
                 end
             end
@@ -178,7 +175,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
 elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,dkepath);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler,schedulertype);
     %
     [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
     %
