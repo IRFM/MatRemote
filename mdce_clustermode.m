@@ -127,7 +127,11 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
     dkecluster.scheduler.cmd = remote.cmd;
     %
-    xgridsearch = strfind(remote.cmd{1},'xgrid');%find if the xgrid task scheduler is used (mac,...)
+    if iscell(remote.cmd),
+        xgridsearch = strfind(remote.cmd{1},'xgrid');%find if the xgrid task scheduler is used (mac,...)
+    else
+        xgridsearch = '';
+    end
     %
     if ~isempty(xgridsearch),
         dkecluster.scheduler.cluster = remote.cluster;
