@@ -21,9 +21,9 @@ temppath = ['mdce_',timeid_jd(clock),filesep];
 % Parameters from dkepath
 %
 if isfield(dkepath,'temppathroot'),
-    temppath = [dkepath.temppathroot,temppath];
+    temppathroot = dkepath.temppathroot;
 else
-    temppath = [pwd,filesep,temppath];% Local folder
+    temppathroot = [pwd,filesep];% Local folder
 end
 %
 if isfield(dkepath,'remote'),
@@ -43,16 +43,18 @@ else
     dkecluster.scheduler = '';% no dcluke information
 end
 %
-if isempty(dkecluster.scheduler),
+if isempty(dkecluster.scheduler),%local configuration
     %
     dkecluster.scheduler.configfile = '';
     dkecluster.scheduler.timeout = 100;%100 s time out for job submission
-    dkecluster.scheduler.clustersize = Inf;%One core or processor
+    dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
     dkecluster.scheduler.memory = NaN;%no memory requirements
-    dkecluster.scheduler.temppath = temppath;
+    dkecluster.scheduler.temppathroot = temppathroot;
     dkecluster.scheduler.display = 0;
     dkecluster.scheduler.info = '';
 end
+%
+dkecluster.scheduler.temppath = [dkecluster.scheduler.temppathroot,filesep,temppath];
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
@@ -96,14 +98,8 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %  LUKE batch DC calculations on local host only
     %
     for irem = 1:nrem,% reject remote hosts
-        if ~isempty(remote(irem).host)
-            if length(remote(irem).host) == 1,
-                rem_list(irem) = 0;
-            else
-                if iscell(remote(irem).host) && ~strcmp(remote(irem).host{1},remote(irem).host{2})
-                    rem_list(irem) = 0;
-                end
-            end
+        if ~(isempty(remote(irem).host) || (iscell(remote(irem).host) && strcmp(remote(irem).host{1},remote(irem).host{2}))),
+            rem_list(irem) = 0;
         end
     end
     %

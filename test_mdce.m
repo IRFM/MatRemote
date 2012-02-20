@@ -1,4 +1,4 @@
-function test_mdce(mdce_mode,dkepath)
+function test_mdce(mdce_mode,dkepath,schedulertype)
 %
 if nargin < 1,
     mdce_mode = 0;%MatLab distributed computing environment disabled (0), enabled with the dedicated toolbox (1), enabled with a private method (2) for the function coll_dke_jd.m (MDC toolbox must be installed for option 1)
@@ -6,8 +6,10 @@ end
 if nargin < 2,
     dkepath = load_structures_yp('dkepath','','');
 end
+if nargin < 3,
+    schedulertype = 'local';%'pbspro';%
+end
 %
-schedulertype = 'pbspro';%'pbspro';%
 force_error = 1;% 0 (no error), (1) error in batch run only for arg = 5 [cephee only], (2) error in any run for arg = 5,
 %
 mdce_size = 8;%MatLab distributed computing environment cluster size. Can be Inf is all the processors of the cluster are free for distributed calculations

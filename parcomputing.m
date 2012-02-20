@@ -24,6 +24,9 @@ nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
 flag = scheduler.mode*ones(1,nrange);
+if strcmp(scheduler.configuration,'local') && scheduler.clustersize > 8,
+    scheduler.clustersize = 8;
+end
 %
 %try
     matlabpool('open',scheduler.configuration,scheduler.clustersize);

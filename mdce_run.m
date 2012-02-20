@@ -87,9 +87,9 @@ if isfield(dkecluster,'scheduler'),
             dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];%Local calculation
         end
         %
-        if ~isfield(dkecluster.scheduler,'type'),         
-            dkecluster.scheduler.type = 'local';%Local calculations
-        end
+        %if ~isfield(dkecluster.scheduler,'type'),         
+        %    dkecluster.scheduler.type = 'local';%Local calculations
+        %end
         %    
         if ~isfield(dkecluster.scheduler,'info'),
             dkecluster.scheduler.info = 'Default parallel computing set-up by mdce_luke.m function.';
