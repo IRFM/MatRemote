@@ -156,7 +156,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
     dkecluster.scheduler.get_jobid = remote.get_jobid;
     dkecluster.scheduler.set_jobid = remote.set_jobid;
-    if dkecluster.scheduler.clustersize == 1 || dkecluster.scheduler.clustersize > remote.nproc,
+    if dkecluster.scheduler.clustersize == 1 | dkecluster.scheduler.clustersize > remote.nproc,
         dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster
     end
     %
