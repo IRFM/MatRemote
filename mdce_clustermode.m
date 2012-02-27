@@ -98,9 +98,15 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %  LUKE batch DC calculations on local host only
     %
     for irem = 1:nrem,% reject remote hosts
-        if ~(isempty(remote(irem).host) || (iscell(remote(irem).host) && strcmp(remote(irem).host{1},remote(irem).host{2}))),
-            rem_list(irem) = 0;
-        end
+        if ~isempty(remote(irem).host)
+            if length(remote(irem).host) == 1,
+                rem_list(irem) = 0;
+            else
+                if iscell(remote(irem).host) && ~strcmp(remote(irem).host{1},remote(irem).host{2})
+                    rem_list(irem) = 0;
+                end
+            end
+        end  
     end
     %
     if ~any(rem_list),
