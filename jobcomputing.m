@@ -49,8 +49,8 @@ if isfield(scheduler,'temppath'),
 end
 %
 if isfield(scheduler,'clustersize'),            
-    if strcmp(scheduler.configuration,'local') && scheduler.clustersize > 8,
-        set(jm,'clustersize',8);
+    if strcmp(scheduler.configuration,'local') && scheduler.clustersize > feature('numCores'),
+        set(jm,'clustersize',feature('numCores'));
     else
         set(jm,'clustersize',scheduler.clustersize);
     end

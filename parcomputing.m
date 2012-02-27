@@ -24,8 +24,8 @@ nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
 flag = scheduler.mode*ones(1,nrange);
-if strcmp(scheduler.configuration,'local') && scheduler.clustersize > 8,
-    scheduler.clustersize = 8;
+if strcmp(scheduler.configuration,'local') && scheduler.clustersize > feature('numCores'),
+    scheduler.clustersize = feature('numCores');%set the clustersize to the number of hardware cores (recommended by Matlab
 end
 %
 %try
