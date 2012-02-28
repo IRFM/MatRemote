@@ -101,6 +101,7 @@ if strcmp(get(job,'State'),'finished')
 	end
 else
     flag(:) = -2;%error in job process
+    return
 end
 %   
 destroy(job);
