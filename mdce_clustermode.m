@@ -58,13 +58,19 @@ dkecluster.scheduler.temppath = [dkecluster.scheduler.temppathroot,filesep,tempp
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
-if isstruct(param),% when function-specific DC parameters are present 
-    if isfield(param,fun),% DC parameters found for the specific function
-        if isfield(param.(fun),'scheduler'),
-            dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param.(fun).scheduler);
-        elseif isfield(param.(fun),'batch'),
-            %not yet implemented
-        end        
+if isstruct(param),
+    if ~isempty(fun)% when function-specific DC parameters are present 
+        if isfield(param,fun),% DC parameters found for the specific function
+            if isfield(param.(fun),'scheduler'),
+                dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param.(fun).scheduler);
+            elseif isfield(param.(fun),'batch'),
+                %not yet implemented
+            end        
+        else
+            dkecluster.scheduler.mode = 0;%function not referenced in param, sequential mode enforced
+        end
+    else%when param contains overriding scheduler fields
+        dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param);
     end
 else% only the DC mode is provided
     dkecluster.scheduler.mode = param;
@@ -158,7 +164,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
     dkecluster.scheduler.get_jobid = remote.get_jobid;
     dkecluster.scheduler.set_jobid = remote.set_jobid;
-    if dkecluster.scheduler.clustersize == 1 | dkecluster.scheduler.clustersize > remote.nproc,
+    if dkecluster.scheduler.clustersize > remote.nproc,
         dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster
     end
     %
