@@ -49,11 +49,7 @@ if isfield(scheduler,'temppath'),
 end
 %
 if isfield(scheduler,'clustersize'),            
-    if strcmp(scheduler.configuration,'local') && scheduler.clustersize > feature('numCores'),
-        set(jm,'clustersize',feature('numCores'));
-    else
-        set(jm,'clustersize',scheduler.clustersize);
-    end
+    set(jm,'clustersize',min([scheduler.clustersize,jmfields.ClusterSize]));
 	jminit.clustersize = jmfields.ClusterSize;
 end
 %
