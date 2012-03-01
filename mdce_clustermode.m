@@ -32,34 +32,30 @@ else
     remote = '';% no dcluke information
 end
 %
-if isfield(dkepath,'scheduler'),
-    scheduler = dkepath.scheduler;
-    if isfield(scheduler,schedulertype),
-        dkecluster.scheduler = scheduler.(schedulertype);
-    else
-        dkecluster.scheduler = '';
-    end
+if isfield(dkepath,'configurations'),
+    configurations = dkepath.configurations;
 else
-    dkecluster.scheduler = '';% no dcluke information
+    configurations = struct;% no dcluke information
 end
 %
-if isempty(dkecluster.scheduler),%local configuration
-    %
-    dkecluster.scheduler.configfile = '';
-    dkecluster.scheduler.timeout = 100;%100 s time out for job submission
-    dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
-    dkecluster.scheduler.memory = NaN;%no memory requirements
-    dkecluster.scheduler.temppathroot = temppathroot;
-    dkecluster.scheduler.display = 0;
-    dkecluster.scheduler.info = '';
-end
+% default scheduler properties
+%
+dkecluster.scheduler.configfile = '';
+dkecluster.scheduler.timeout = 100;%100 s time out for job submission
+dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
+dkecluster.scheduler.memory = NaN;%no memory requirements
+dkecluster.scheduler.temppathroot = temppathroot;
+dkecluster.scheduler.display = 0;
+dkecluster.scheduler.info = '';
 %
 dkecluster.scheduler.temppath = [dkecluster.scheduler.temppathroot,filesep,temppath];
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
 if isstruct(param),
+    %
     if ~isempty(fun)% when function-specific DC parameters are present 
+        %
         if isfield(param,fun),% DC parameters found for the specific function
             if isfield(param.(fun),'scheduler'),
                 dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param.(fun).scheduler);
@@ -69,8 +65,11 @@ if isstruct(param),
         else
             dkecluster.scheduler.mode = 0;%function not referenced in param, sequential mode enforced
         end
-    else%when param contains overriding scheduler fields
+        %
+    else% when param contains overriding scheduler fields
+        %
         dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param);
+        %
     end
 else% only the DC mode is provided
     dkecluster.scheduler.mode = param;
@@ -80,7 +79,7 @@ end
 %
 if dkecluster.scheduler.mode == 1,%MDCE mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler,schedulertype);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,configurations);
 	%
     try %test the availability of the MatLab MDCE toolbox
         %
@@ -183,7 +182,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
 elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler,schedulertype);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,configurations);
     %
     [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
     %
