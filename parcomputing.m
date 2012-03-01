@@ -27,11 +27,13 @@ flag = scheduler.mode*ones(1,nrange);
 configuration = findResource('scheduler','configuration',scheduler.configuration);
 scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
 %
-%try
+try
     matlabpool('open',scheduler.configuration,scheduler.clustersize);
-%catch
-%    info_dke_yp(2,['WARNING: calculations are performed on a single processor since the job scheduler is not available (MatLab version too old, limited number of licenses, dkepath inconsistently set...) for ',func2str(fun),'.m (mode 1).']);
-%end
+catch err
+    info_dke_yp(2,['WARNING: exiting parcomputing for function ',func2str(fun),'.m (mode 3) because of error: ',err.message]);
+    flag(:) = -2;
+    return
+end
 %
 parfor j_range = 1:nrange,
     %

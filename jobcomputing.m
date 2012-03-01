@@ -37,8 +37,8 @@ try
     %
     jmfields = get(jm);%save original scheduler properties
 	jminit = struct;
-catch
-    info_dke_yp(2,['WARNING: exiting jobcomputing since the job scheduler is not available (MatLab version too old, limited number of licenses, dkepath inconsistently set...) for ',func2str(fun),'.m (mode 1).']);
+catch err
+    info_dke_yp(2,['WARNING: exiting jobcomputing for ',func2str(fun),'.m (mode 1) because of error: ',err.message]);
     flag(:) = -2;
     return
 end
