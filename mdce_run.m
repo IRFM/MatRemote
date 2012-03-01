@@ -121,23 +121,11 @@ if isfield(dkecluster,'scheduler'),
     %
     if dkecluster.scheduler.mode == 1,%General matlab toolbox distributed computing environment (mdce), calculations may be local or not local
         %
-        [flag,varargout{:}] = process_loop_jd(@jobcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
+        [flag,varargout{:}] = create_loop_jd(@jobcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
     elseif dkecluster.scheduler.mode == 2,%LUKE distributed computing environment (ldce)
-    	%
-    	for iloop_full = 1:ceil(narg_range/dkecluster.scheduler.clustersize),%to adapt the calculations to the size of the dkecluster  
-            %
-            range_index = (iloop_full-1)*dkecluster.scheduler.clustersize + 1:min(iloop_full*dkecluster.scheduler.clustersize,narg_range);
-            %
-            varargout_dcl = cell(1,nargout-1);
-            %
-            [flag,varargout_dcl{:}] = process_loop_jd(@dclukecomputing,fun,args_in,arg_index,arg_range(range_index),dkecluster.scheduler);
-            %
-            for j_nargout = 1:nargout-1,
-                varargout{j_nargout}(range_index) = varargout_dcl{j_nargout};
-            end	
-            %
-    	end
+        %
+        [flag,varargout{:}] = create_loop_jd(@dclukecomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
     elseif dkecluster.scheduler.mode == 3,
         %
@@ -152,6 +140,37 @@ elseif isfield(dkecluster,'batch'),
     % not yet implemented
 end
 end
+%
+% This function divides the MDCE calculation in groups for the methods that require it (DCLUKE, JOB MDCE)
+%
+function [flag,varargout] = create_loop_jd(method,fun,args_in,arg_index,arg_range,scheduler)
+%
+narg_range = length(arg_range);
+flag = NaN(1,narg_range);
+%
+varargout = cell(1,nargout-1);
+%
+for j_nargout = 1:nargout-1,
+    varargout{j_nargout} = cell(narg_range,1);
+end
+%
+for iloop_full = 1:ceil(narg_range/scheduler.clustersize),%to adapt the calculations to the size of the dkecluster  
+    %
+    range_index = (iloop_full-1)*scheduler.clustersize + 1:min(iloop_full*scheduler.clustersize,narg_range);
+    %
+    varargout_dcl = cell(1,nargout-1);
+    %
+    [flag(range_index),varargout_dcl{:}] = process_loop_jd(method,fun,args_in,arg_index,arg_range(range_index),scheduler);
+    %
+    for j_nargout = 1:nargout-1,
+        varargout{j_nargout}(range_index) = varargout_dcl{j_nargout};
+    end	
+    %
+end
+%
+end
+%
+% This function calls the chosen MDCE method and reverts to sequential computing in case of failure
 %
 function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_range,scheduler)
 %
