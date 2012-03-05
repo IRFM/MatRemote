@@ -4,7 +4,7 @@ function test_mdce(mdce_mode,force_error,mdce_enforce,schedulertype,mdce_size,md
 %
 %   INPUT :
 %
-%       - mdce_mode: distributed computing environment state: (0) disabled, (1) enabled with the dedicated Matlab toolbox which must be installed (2), enabled with a private method (LDCE) [1,1]
+%       - mdce_mode: distributed computing environment state: (0) disabled, (1) enabled with the dedicated Matlab toolbox which must be installed, (2) enabled with a private method (LDCE), (3) parfor parallel computing [1,1]
 %           (default = 1)
 %       - force_error: force an error to check how a possible error in calculation is managed, 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5 [1,1]
 %           (default = 1)
