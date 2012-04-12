@@ -41,6 +41,7 @@ end
 % default scheduler properties
 %
 dkecluster.scheduler.mode = 0;
+dkecluster.scheduler.type = schedulertype;
 dkecluster.scheduler.configfile = '';
 dkecluster.scheduler.timeout = 100;%100 s time out for job submission
 dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
@@ -83,7 +84,7 @@ end
 %
 if dkecluster.scheduler.mode == 1,%MDCE mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,configurations);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,configurations);
 	%
     try %test the availability of the MatLab MDCE toolbox and set clustersize
         %
@@ -109,15 +110,11 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %  LUKE batch DC calculations on local host only
     %
     for irem = 1:nrem,% reject remote hosts
-        if ~isempty(remote(irem).host)
-            if length(remote(irem).host) == 1,
-                rem_list(irem) = 0;
-            else
-                if iscell(remote(irem).host) && ~strcmp(remote(irem).host{1},remote(irem).host{2})
-                    rem_list(irem) = 0;
-                end
-            end
-        end  
+        if ~iscell(remote(irem).host) && ~isempty(remote(irem).host),
+            rem_list(irem) = 0;
+        elseif iscell(remote(irem).host) && (length(remote(irem).host) == 1 || ~strcmp(remote(irem).host{1},remote(irem).host{2}))
+            rem_list(irem) = 0;
+        end
     end
     %
     if ~any(rem_list),
@@ -188,7 +185,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
 elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(schedulertype,configurations);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,configurations);
     %
     [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
     %
