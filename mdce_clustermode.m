@@ -211,3 +211,7 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
     end
 end
 %
+if dkecluster.scheduler.mode == 0,
+    dkecluster.scheduler.clustersize = 1;% enforce one iteration by default if mode = 0,
+end
+    
