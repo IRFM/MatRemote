@@ -150,8 +150,10 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     %
     if iscell(remote.cmd),
         xgridsearch = strfind(remote.cmd{1},'xgrid');%find if the xgrid task scheduler is used (mac,...)
+        condorsearch = strfind(remote.cmd{1},'condor');%find if the condor task scheduler is used (mac,...)
     else
         xgridsearch = '';
+        condorsearch = '';
     end
     %
     if ~isempty(xgridsearch),
@@ -162,6 +164,15 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
         dkecluster.scheduler.password = remote.password; 
         remotefields = fieldnames(remote);
         dkecluster.scheduler.logname = remote.(remotefields{end});  
+    elseif ~isempty(condorsearch),
+        dkecluster.scheduler.cluster = remote.cluster;
+        dkecluster.scheduler.matlabroot = remote.matlabroot;
+        dkecluster.scheduler.home = remote.home;
+        dkecluster.scheduler.luke_root = remote.luke_root;
+        dkecluster.scheduler.prefdir = remote.prefdir;
+        dkecluster.scheduler.password = ''; 
+        dkecluster.scheduler.logname = ''; 
+        dkecluster.scheduler.path = remote.path;
     end
     %
     dkecluster.scheduler.get_jobid = remote.get_jobid;
