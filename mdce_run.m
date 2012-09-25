@@ -185,7 +185,11 @@ varargout = cell(1,nargout-1);
 %
 [flag,varargout{:}] = method(fun,args_in,arg_index,arg_range,scheduler);
 %
-rmdir(scheduler.temppath,'s');
+try
+    rmdir(scheduler.temppath,'s');
+catch
+    disp(['WARNING : tmp directory ',scheduler.temppath,' could not be removed.'])
+end
 %
 mask_seq = (flag < 0);%flagged for sequential computing
 %
