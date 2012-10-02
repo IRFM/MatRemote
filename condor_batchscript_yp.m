@@ -6,14 +6,14 @@ function filename = condor_batchscript_yp(job,data,debugmode)
 %
 % by Y.Peysson CEA-IRFM <yves.peysson@cea.fr> and Joan Decker CEA-IRFM (joan.decker@cea.fr)
 %
-if nargin < 6,error('Not enough input arguments in condor_batchscript_yp.m');end
+if nargin < 2,error('Not enough input arguments in condor_batchscript_yp.m');end
 %
-if nargin < 7,
+if nargin < 3,
     debugmode = 0;%no debug mode
 end
 %
 filename = ['batch_matlab_',job.timeid,'.condor'];
-fileid = fopen(job.localdatapath,job.condor_dir,filename,'w');
+fileid = fopen([job.localdatapath,job.condor_dir,filesep,filename],'w');
 %
 fprintf(fileid,['####################','\n']);
 fprintf(fileid,['##','\n']);
@@ -36,15 +36,15 @@ fprintf(fileid,['Universe = vanilla','\n']);
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['InputDir = ',job.remotedatapath,job.condor_dir,'\n']);%CONDOR simulation input dir
+fprintf(fileid,['InputDir = ',job.remotedatapath,job.condor_dir,filesep,'\n']);%CONDOR simulation input dir
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['OutputDir = ',job.remotedatapath,job.condor_dir,'\n']);%CONDOR simulation output dir
+fprintf(fileid,['OutputDir = ',job.remotedatapath,job.condor_dir,filesep,'\n']);%CONDOR simulation output dir
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['Executable = ',job.remotedatapath,job.condor_dir,'condor_matlab.sh','\n']);%matlab shell script
+fprintf(fileid,['Executable = ',job.script,'\n']);%matlab shell script
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
@@ -87,9 +87,9 @@ fprintf(fileid,[' ','\n']);
 fprintf(fileid,['#','\n']);
 if isempty(data),%remote computing
     if debugmode,
-        fprintf(fileid,['Arguments = runluke(',job.timeid,',1)\n']);
+        fprintf(fileid,['Arguments = remotetest(',job.timeid,',1)\n']);
     else
-        fprintf(fileid,['Arguments = runluke(',job.timeid,')\n']);
+        fprintf(fileid,['Arguments = remotetest(',job.timeid,')\n']);
     end
 else%dcluke
     fprintf(fileid,['Arguments = load(''input_dcluke_',job.timeid,'.mat'');noms = fieldnames(data.appdata);for  k = 1:length(noms),setappdata(0,noms{k},data.appdata.(noms{k}));end;cd(data.dir);diary(data.diaryfile);clear resultat;try,[resultat{1:nargout(data.commande)}] =  feval(data.commande,data.entrees{:});etat_sortie = 0;catch,etat_sortie = 1;resultat = [];end;etat_error = lasterr;save(data.outputdata,''resultat'',''etat_sortie'',''etat_error'');diary off;\n']);

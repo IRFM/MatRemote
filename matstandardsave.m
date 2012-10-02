@@ -15,13 +15,16 @@ if job.pbssearch,
 elseif job.condorsearch,
     %
     job.condor_dir = ['/condor_',job.timeid];
-    localdatapath = [job.localdatapath,job.condor_dir];% job directory for condor
+    localdatapath = [job.localdatapath,job.condor_dir,filesep];% job directory for condor
+    mkdir(localdatapath);
     %
     % save condor batch file into job directory 
     %
     job.condor_script = condor_batchscript_yp(job,'',1);
     %
-    job.save_id = localdatapath;% entire directory to be transfered
+    job.save_id = job.condor_dir;% entire directory to be transfered
+    %
+    job.load_id = [job.condor_dir,filesep,job.load_id];
     %
 elseif job.xgridsearch,
     %%%% TO DO

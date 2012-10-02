@@ -227,7 +227,7 @@ elseif job.condorsearch,
         end
     end
     %
-    remotecmd = [remenvstr,' ',remote.cmd,' ',job.remotedatapath,job.condor_dir,job.condor_script,' -v'];
+    remotecmd = [remenvstr,' ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
         %%%% TO DO

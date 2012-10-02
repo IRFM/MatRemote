@@ -144,13 +144,13 @@ if ~isempty(job.load_id),
     if ~isempty(remotehost),
         %
         locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,'from remote host ',remotehost,':',job.remotedatapath,...
-            ' as user ',remotelogname,' to location ',job.localdatapath])  
-        [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath]);
+            ' as user ',remotelogname,' to location ',job.localdatapath,job.load_id])  
+        [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath])
-        [res,err] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath]);        
+        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])
+        [res,err] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);        
         %
     else
         res = 0;
