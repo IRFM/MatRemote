@@ -7,9 +7,7 @@ function soutput = remotegetbatch(remote,job,displaymode)
 %       - remote : cluster information structure
 %           o host : host name (leave empty for local host). ex : 'saturne1.partenaires.cea.fr'
 %           o cmd : batch command. ex: qsub
-%           o get_jobid : syntax to read the job id : get_jobid{1},jobid,get_jobid{2}
 %           o set_jobid : syntax to read the job status : set_jobid{1},jobid,set_jobid{2}
-%           o mem (optional) : syntax for memory allocation : remote.mem{1},num2str(job.memory),remote.mem{2}
 %           o (logname) : user name correspondance. ex : remote.joan = 'JD211098' (same as local user if empty or missing)
 %
 %
@@ -17,12 +15,10 @@ function soutput = remotegetbatch(remote,job,displaymode)
 %           o id : cluster id for the job
 %           o timeid : time id for the job
 %           o remotelogname : user name on cluster
-%           o save_id : input file/folder (leave empty if no input file)
 %           o load_id : output file/folder expected (leave empty if no output file)
-%           o script : name of the remote script
 %           o clean : (0) keep all local and remote files; (1) clean all remote and batch files; (2) clean all local and remote files (default)
-%           o localdatapath (optional) : location of local data
-%           o remotedatapath (optional) : location of remote data
+%           o localdatapath : location of local data
+%           o remotedatapath : location of remote data
 %
 %       - displaymode : display mode : (0) no display; (1) operation display (default : 0)
 %
@@ -61,7 +57,29 @@ end
 %
 % test job status
 %
-remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
+if job.pbssearch,
+    %
+    remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
+    %
+elseif job.condorsearch,
+    %
+    % scheduler environment variables
+    %
+    remenvstr = '';
+    if isfield(remote,'env') && isstruct(remote.env),
+        envnames = fieldnames(remote.env);
+        for ienv = 1:length(envnames),
+            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),';',remenvstr];
+        end
+    end
+    %
+    remotecmd = [remenvstr,remoteset_jobid{1},job.id,remoteset_jobid{2}];
+    %
+elseif job.xgridsearch,  
+    %%%% TO DO
+end
+%
+locdisp(displaymode,['    --> Checking status of job # ',remotecmd]);
 %
 if ~isempty(remotehost),
     %
@@ -76,34 +94,48 @@ end
 %
 txt(double(txt) == 10) = [];
 %
-if res == 0,% job still running
-    %
-    locdisp(displaymode,['Job # ',job.id,' still running...']);
-    return
-    %
-elseif isempty(strfind(txt,remoteset_jobid{3})),% run check failed
-    %
-    locdisp(displaymode,['Run check failed : ',txt]);
-    soutput.err = txt;
-    %
-    return
-    %
-end
+% process job status cases
 %
-% local data location
-%
-if isfield(job,'localdatapath') && ~isempty(job.localdatapath),% remote data location
-    localdatapath = [job.localdatapath,filesep];
-else
-    localdatapath = './';
-end
-%
-% remote data location
-%
-if isfield(job,'remotedatapath') && ~isempty(job.remotedatapath),% remote data location
-    remotedatapath = [job.remotedatapath,filesep];
-else
-    remotedatapath = './';
+if job.pbssearch,
+    %
+    if res == 0,% job still running
+        %
+        locdisp(displaymode,['Job # ',job.id,' still running...']);
+        return
+        %
+    elseif isempty(strfind(txt,remoteset_jobid{3})),% run check failed
+        %
+        locdisp(displaymode,['Run check failed : ',txt]);
+        soutput.err = txt;
+        %
+        return
+        %
+    end
+    %
+elseif job.condorsearch,
+    %
+    i_job = strfind(txt,job.id);
+    i_running = strfind(txt(i_job:end),'R');
+    i_pending = strfind(txt(i_job:end),'I');
+    %
+    if ~isempty(i_job),% job not completed
+        if ~isempty(i_running)
+            locdisp(displaymode,['Job # ',job.id,' still running...']);
+        elseif ~isempty(i_pending),
+            locdisp(displaymode,['Job # ',job.id,' still pending...']);
+        else
+            %
+            locdisp(displaymode,['Run check failed : ',txt]);
+            soutput.err = txt;
+            %
+        end
+        %
+        return
+        %
+    end
+    %
+elseif job.xgridsearch,  
+    %%%% TO DO
 end
 %
 % data transfer
@@ -111,14 +143,14 @@ end
 if ~isempty(job.load_id),
     if ~isempty(remotehost),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,'from remote host ',remotehost,':',remotedatapath,...
-            ' as user ',remotelogname,' to location ',localdatapath])  
-        [res,err] = unix(['scp -R ',remotelogname,'@',remotehost,':',remotedatapath,job.load_id,' ',localdatapath]);
+        locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,'from remote host ',remotehost,':',job.remotedatapath,...
+            ' as user ',remotelogname,' to location ',job.localdatapath])  
+        [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath]);
         %
-    elseif ~strcmp(localdatapath,remotedatapath),
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',remotedatapath,job.load_id,' to location ',localdatapath])
-        [res,err] = unix(['cp -R ',remotedatapath,job.load_id,' ',localdatapath]);        
+        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath])
+        [res,err] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath]);        
         %
     else
         res = 0;
@@ -161,18 +193,17 @@ end
 %
 if job.clean >= 1,%clean remote and batch files
     %
-    rminputcmd = ['rm -fr ',remotedatapath,job.save_id];
-    rmoutputcmd = ['rm -fr ',remotedatapath,job.load_id];
-    rmbatchcmd = ['rm -f ',job.script,'.e',job.id,' ',job.script,'.o',job.id];
+    rminputcmd = ['rm -fr ',job.remotedatapath,job.save_id];
+    rmoutputcmd = ['rm -fr ',job.remotedatapath,job.load_id];
     %
     if ~isempty(remotehost)
         %
-        locdisp(displaymode,['    --> Removing remote input file/folder ',remotehost,':',remotedatapath,job.save_id,' as user ',remotelogname,' ...'])
+        locdisp(displaymode,['    --> Removing remote input file/folder ',remotehost,':',job.remotedatapath,job.save_id,' as user ',remotelogname,' ...'])
         [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',rminputcmd,'''']);
         %
-    elseif ~strcmp(localdatapath,remotedatapath),
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Removing remote input file/folder ',remotedatapath,job.save_id,' ...'])
+        locdisp(displaymode,['    --> Removing remote input file/folder ',job.remotedatapath,job.save_id,' ...'])
         [res,err] = unix(rminputcmd);
         %
     end        
@@ -185,12 +216,12 @@ if job.clean >= 1,%clean remote and batch files
     %
     if ~isempty(remotehost)
         %
-        locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',remotedatapath,job.load_id,' as user ',remotelogname,' ...'])
+        locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remotelogname,' ...'])
         [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',rmoutputcmd,'''']);
         %
-    elseif ~strcmp(localdatapath,remotedatapath),
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Removing remote output file/folder ',remotedatapath,job.load_id,' ...'])
+        locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
         [res,err] = unix(rmoutputcmd);
         %
     end        
@@ -201,17 +232,27 @@ if job.clean >= 1,%clean remote and batch files
         locdisp(displaymode,' ... done');          
     end
     %
-    if ~isempty(remotehost)
+    if job.pbssearch,
         %
-        locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remotelogname,' ...'])
-        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',rmbatchcmd,'''']);
+        batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
+        rmbatchcmd = ['rm -f ',batchfileroot,'.e',job.id,' ',batchfileroot,'.o',job.id];
         %
-    elseif ~strcmp(localdatapath,remotedatapath),
-        %
-        locdisp(displaymode,'    --> Removing batch output files ...')
-        [res,err] = unix(rmbatchcmd);
-        %
-    end        
+        if ~isempty(remotehost)
+            %
+            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remotelogname,' ...'])
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',rmbatchcmd,'''']);
+            %
+        else
+            %
+            locdisp(displaymode,'    --> Removing batch output files ...')
+            [res,err] = unix(rmbatchcmd);
+            %
+        end        
+    elseif job.condorsearch,
+        %%%% TO DO
+    elseif job.xgridsearch,
+        %%%% TO DO
+    end
     %
     if res ~= 0,
         locdisp(displaymode,['Warning, batch files delete failed : ',err])
@@ -223,10 +264,10 @@ end
 %
 if job.clean >= 2,%clean local files
     %
-    rminputcmd = ['rm -fr ',localdatapath,job.save_id];
-    rmoutputcmd = ['rm -fr ',localdatapath,job.load_id];
+    rminputcmd = ['rm -fr ',job.localdatapath,job.save_id];
+    rmoutputcmd = ['rm -fr ',job.localdatapath,job.load_id];
     %
-    locdisp(displaymode,['    --> Removing local input file/folder ',localdatapath,job.save_id,' ...'])
+    locdisp(displaymode,['    --> Removing local input file/folder ',job.localdatapath,job.save_id,' ...'])
     [res,err] = unix(rminputcmd);
     %
     if res ~= 0,
@@ -235,7 +276,7 @@ if job.clean >= 2,%clean local files
         locdisp(displaymode,' ... done');          
     end
     %
-    locdisp(displaymode,['    --> Removing local output file/folder ',localdatapath,job.load_id,' ...'])
+    locdisp(displaymode,['    --> Removing local output file/folder ',job.localdatapath,job.load_id,' ...'])
     [res,err] = unix(rmoutputcmd);
     %
     if res ~= 0,

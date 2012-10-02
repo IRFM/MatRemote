@@ -8,20 +8,26 @@ function job = remoterunbatch(remote,job,sinput,displaymode)
 %           o host : host name (leave empty for local host). ex : 'saturne1.partenaires.cea.fr'
 %           o cmd : batch command. ex: qsub
 %           o get_jobid : syntax to read the job id : get_jobid{1},jobid,get_jobid{2}
-%           o mem (optional) : syntax for memory allocation : remote.mem{1},num2str(job.memory),remote.mem{2}
 %           o (logname) : user name correspondance. ex : remote.joan = 'JD211098' (same as local user if empty or missing)
 %
 %
 %       - job : job parameters structure
-%           o script : name of the remote script
+%           o script : name (with full path) of the remote script
 %           o savefcn (optional) : matlab function to process sinput with the syntax : save_id = savefcn(sinput,logname,timeid)
-%           o root (optional) : location of remote script
-%           o memory (optional) : memory allocated to the job (in mb)
 %           o localdatapath (optional) : location of local data
 %           o remotedatapath (optional) : location of remote data
-%           o env(optional) : structure of additional environment variables (strings)
+%           o env (optional) : structure of additional environment variables (strings). 
+%               ex : 
+%               - remotebatch_matlabroot : path to matlab (optional)
+%               - remotebatch_path : matlab path (optional)
+%               - ...
+%           o wait (optional) : (0) return hand (1) wait for result
+%           o nodes (optional) : number of nodes required)
+%           o nproc (optional) : number of cores required
+%           o memory (optional) : memory allocated to the job (in mb)
+%           o walltime (optional) :  time required (in hours) - leave empty if no requirement
 %
-%       - sinput : input data structure (optional)
+%       - sinput (optional) : input data structure
 %       - displaymode : display mode : (0) no display; (1) operation display (default : 0)
 %
 %   OUTPUTS : 
@@ -47,6 +53,15 @@ job.timeid = timeid_jd(clock);
 remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
 %
+job.pbssearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'qsub'));
+%job.condorsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'condor')));
+job.condorsearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'condor'));
+job.xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+%
+if job.condorsearch + job.xgridsearch + job.pbssearch ~= 1,
+    error('scheduler type identification problem')
+end
+%
 % get local user name
 %
 [res,logname] = unix('whoami');
@@ -66,26 +81,56 @@ else
 end
 job.remotelogname = remotelogname;
 %
-% remote script
+% local data location
 %
-if isfield(job,'root') 
-    remoteroot = job.root;% location of remote script
-else
-    remoteroot = '';
+if ~isfield(job,'localdatapath') || isempty(job.localdatapath),% remote data location
+    job.localdatapath = [pwd,filesep];
+elseif ~strcmp(job.localdatapath(end),filesep),
+    job.localdatapath = [job.localdatapath,filesep];
 end
 %
-% memory allocation
+% create local data folder if needed
 %
-if isfield(job,'memory') && ~isempty(job.memory),% memory allocation if applicable
-    if isfield(remote,'mem') && ~isempty(remote.mem),
-        remotemem = [remote.mem{1},num2str(job.memory),remote.mem{2}];
+if ~exist(job.localdatapath,'dir'),
+    locdisp(displaymode,['    --> Creating local data folder ',job.localdatapath])  
+    mkdir(job.localdatapath)
+    locdisp(displaymode,' ... done');
+end
+%
+% remote data location
+%
+if ~isfield(job,'remotedatapath') || isempty(job.remotedatapath),% remote data location
+    if ~isempty(remotehost),
+        job.remotedatapath = './';
     else
-        locdisp(displaymode,'Warning : no memory syntax provided, allocation dismissed')
-        remotemem = '';
+        job.remotedatapath = job.localdatapath;
     end
-else
-    remotemem = '';
+elseif ~strcmp(job.remotedatapath(end),filesep),
+    job.remotedatapath = [job.remotedatapath,filesep];
 end
+%
+% create remote data folder if needed
+%
+remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
+if ~isempty(remotehost),
+    [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+else
+    [res,err] = unix(remotecmd);
+end
+%
+if res == 1,% remote directory does not exist
+    remotecmd = ['mkdir ',job.remotedatapath];%create remote directory
+    locdisp(displaymode,['    --> Creating remote data folder ',job.remotedatapath])  
+    if ~isempty(remotehost),
+        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+    else
+        [res,err] = unix(remotecmd);
+    end
+    if res ~= 0,
+        error(['Remote data folder creation failed : ',err])
+    end
+    locdisp(displaymode,' ... done');
+end   
 %
 % process data
 %
@@ -94,43 +139,25 @@ if isstruct(sinput),% data transfer to job,
     if ~isfield(job,'savefcn') || ~exist(job.savefcn,'file'),
         error('No existing process function provided to save data')
     else
-        [save_id,load_id] = feval(job.savefcn,sinput,job);% save_id is the data file/folder location
+        job = feval(job.savefcn,sinput,job);% save_id is the data file/folder location
     end
     %
 else
-    save_id = sinput;% file/folder prepared externally, location given
-end
-%
-% local data location
-%
-if isfield(job,'localdatapath') && ~isempty(job.localdatapath),% remote data location
-    localdatapath = [job.localdatapath,filesep];
-else
-    localdatapath = [pwd,filesep];
-end
-%
-% remote data location
-%
-if isfield(job,'remotedatapath') && ~isempty(job.remotedatapath),% remote data location
-    remotedatapath = [job.remotedatapath,filesep];
-elseif ~isempty(remotehost),
-    remotedatapath = './';
-else
-    remotedatapath = [pwd,filesep];
+    job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
 % data transfer
 %
-if ~isempty(save_id),
+if ~isempty(job.save_id),
     if ~isempty(remotehost),%remote calculation 
         %
-        locdisp(displaymode,['    --> Copying data file/folder ',localdatapath,save_id,' to remote host ',remotehost,':',remotedatapath,' as user ',remotelogname,' ...'])  
-        [res,err] = unix(['scp -R ',localdatapath,save_id,' ',remotelogname,'@',remotehost,':',remotedatapath]);
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remotelogname,' ...'])  
+        [res,err] = unix(['scp -r ',job.localdatapath,job.save_id,' ',remotelogname,'@',remotehost,':',job.remotedatapath]);
         %
-    elseif ~strcmp(localdatapath,remotedatapath),
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Copying data file/folder ',localdatapath,save_id,' to location ',remotedatapath])  
-        [res,err] = unix(['cp -R ',localdatapath,save_id,' ',remotedatapath]);
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
+        [res,err] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);
         %
     else
         res = 0;
@@ -143,19 +170,68 @@ if ~isempty(save_id),
     %
 end
 %
-% additional environment variables
-%
-envstr = '';
-if isfield(job,'env') && isstruct(job.env),
-    envnames = fieldnames(job.env);
-    for ienv = 1:length(envnames),
-        envstr = [envstr,',',envnames{ienv},'=',job.env.(envnames{ienv})];
-    end
-end
+pause(5)
 %
 % start job
 %
-remotecmd = [remote.cmd,remotemem,' -v jobtimeid=',job.timeid,',remotedatapath=',remotedatapath,envstr,' ',remoteroot,job.script];% batch command
+if job.pbssearch,
+    %
+    % command options
+    %
+    comopts = '';
+    if isfield(job,'wait') && job.wait == 1,
+        comopts = [comopts,' -W block=true'];
+    end
+    %
+    if isfield(job,'nodes') && ~isempty(job.nodes),
+        comopts = [comopts,' -l nodes=',num2str(job.nodes)];
+    else
+        comopts = [comopts,' -l nodes=1'];
+    end
+    %
+    if isfield(job,'nproc') && ~isempty(job.nproc),
+        comopts = [comopts,':ppn=',num2str(job.nproc)];
+    else
+        comopts = [comopts,':ppn=1'];
+    end
+    %
+    if isfield(job,'memory') && ~isempty(job.memory),
+        comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
+    end
+    %
+    if isfield(job,'walltime') && ~isempty(job.walltime),
+        comopts = [comopts,' -l walltime=',num2str(job.walltime),':00:00'];
+    end
+    %
+    % job environment variables
+    %
+    jobenvstr = '';
+    if isfield(job,'env') && isstruct(job.env),
+        envnames = fieldnames(job.env);
+        for ienv = 1:length(envnames),
+            jobenvstr = [jobenvstr,',',envnames{ienv},'=',job.env.(envnames{ienv})];    
+        end
+    end
+    %
+    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',remotedatapath=',job.remotedatapath,jobenvstr,' ',job.script];% batch command
+    %
+elseif job.condorsearch,
+    %
+    % scheduler environment variables
+    %
+    remenvstr = '';
+    if isfield(remote,'env') && isstruct(remote.env),
+        envnames = fieldnames(remote.env);
+        for ienv = 1:length(envnames),
+            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),';',remenvstr];
+        end
+    end
+    %
+    remotecmd = [remenvstr,' ',remote.cmd,' ',job.remotedatapath,job.condor_dir,job.condor_script,' -v'];
+    %
+elseif job.xgridsearch,
+        %%%% TO DO
+end
 %
 locdisp(displaymode,['    --> Starting run with command ',remotecmd]) 
 %
@@ -195,8 +271,6 @@ else
 end
 %
 job.id = txt(istr0:istr1);
-job.load_id = load_id;
-job.save_id = save_id;
 %
 locdisp(displaymode,[' ... started with Job id ',job.id]);
 %
