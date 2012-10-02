@@ -48,7 +48,9 @@ if nargin < 3,
     sinput = '';
 end
 %
-job.timeid = timeid_jd(clock);
+if ~isfield(job,'timeid') || isempty(job.timeid),
+    job.timeid = timeid_jd(clock);
+end
 %
 remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
