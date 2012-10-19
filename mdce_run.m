@@ -58,6 +58,13 @@ if ~iscell(arg_range),
         else
             arg_range = num2cell(arg_range,1);
         end
+    elseif isstruct(arg_range),
+        narg_range = length(arg_range);
+        new_arg_range = cell(1,narg_range);
+        for i_range = 1:narg_range,
+            new_arg_range{i_range} = arg_range(i_range);
+        end
+        arg_range = new_arg_range;
     else
         error('The argument ''arg_range'' in mdce_luke.m must be a list or an array object');
     end
