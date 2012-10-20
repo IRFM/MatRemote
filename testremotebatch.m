@@ -5,7 +5,7 @@
 %
 clear all
 %
-remnum = -4;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
+remnum = 1;%-4;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
 %                                   (1,2,3,...) profile number in dkepath.remote
 %
 if remnum > 0,
@@ -62,7 +62,7 @@ elseif remnum == -3,
     %
 elseif remnum == -4,
     %
-    % local run on yves laptop with condor
+    % remote run on yves desktop with condor
     %
     remote.host = 'tolbachik.hd.free.fr';
     remote.cmd = 'condor_submit';
@@ -71,40 +71,24 @@ elseif remnum == -4,
     %
     remote.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
     remote.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-    remote.env.remotebatch_matlabroot = '/Applications/MATLAB_R2012a.app/bin/';
+    remote.matlabroot.mat712 = '/Applications/MATLAB_R2012a.app/bin/';
+    remote.matlabroot.default = laptopjoan.joan(1).remote(1).matlabroot.mat712;
     %
     remote.yves = 'yvespeysson';
+    remote.joan = 'yvespeysson';%'joandecker';
+    remote.JD211098 = 'yvespeysson';%'joandecker';
     %
 end
 %
 remotehome = reminstall(remote);
 %
-pbssearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'qsub'));
-%condorsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'condor')));
-condorsearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'condor'));
-xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
-%
-if condorsearch + xgridsearch + pbssearch ~= 1,
-    error('scheduler type identification problem')
-end
-if pbssearch,
-    test_job.script = [remotehome,'/remotebatchtest/bin/remotebatch'];% script to be run by scheduler on remote cluster
-elseif condorsearch,
-    test_job.script = [remotehome,'/remotebatchtest/bin/condor_matlab.sh'];% script to be run by scheduler on remote cluster
-elseif xgridsearch,
-    %***TODO***
-end
-%
+test_job.script = [remotehome,'/remotebatchtest/bin/matlabbatch.sh'];% script to be run by scheduler on remote cluster
 test_job.savefcn = 'matstandardsave';% function saving the data locally 
 test_job.loadfcn = 'matstandardload';% function reading the data locally
 test_job.localdatapath = 'data/';%'';%forder where local data is stored - leave empty for local data folder
 test_job.remotedatapath = [remotehome,'/remotebatchtest/run'];%'';%folder where remote data is stored
-test_job.env.remotebatch_matlabroot = '';%  path to matlab (optional)
+test_job.args = 'remotebatch_path = getenv(''remotebatch_path'');addpath(remotebatch_path);disp(['' Path set to '',remotebatch_path]);remotetest';%argument to be passed into script
 test_job.env.remotebatch_path = [remotehome,'/remotebatchtest/mat/']; % matlab path for remotetest.m (to test path transfer)
-%
-if isempty(test_job.env.remotebatch_matlabroot) && isfield(remote,'env') && isfield(remote.env,'remotebatch_matlabroot')
-    test_job.env.remotebatch_matlabroot = remote.env.remotebatch_matlabroot;
-end
 %
 test_job.wait = 1;%0;% (0) return hand (1) wait for result
 test_job.nodes = 1;%number of nodes required
@@ -113,6 +97,7 @@ test_job.memory = 2000;% memory required (in mb) - leave empty if no requirement
 test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
 %
 test_job.env.TESTVAR = 'luke'; % test variable
+test_job.debugmode = 1;
 %
 sinput.strin = 'The best code is : ';
 %
@@ -123,14 +108,18 @@ displaymode = 1;
 %
 test_job = remoterunbatch(remote,test_job,sinput,displaymode);
 %
-for it = 1:nit,
-    %
-    pause(time_step)
-    %
-    soutput = remotegetbatch(remote,test_job,displaymode);
-    %
-    if ~isempty(soutput),
-        break
+if isfield(test_job,'err'),
+    soutput = test_job.err;
+else
+    for it = 1:nit,
+        %
+        pause(time_step)
+        %
+        soutput = remotegetbatch(remote,test_job,displaymode);
+        %
+        if ~isempty(soutput),
+            break
+        end
     end
 end
 %
