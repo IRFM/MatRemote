@@ -2,8 +2,11 @@ function remotetest(timeid,debugmode)
 %
 try
     %
-    if nargin == 0,
+    if nargin < 1,
         timeid = getenv('jobtimeid');
+        if isempty(timeid),
+            error('timeid not prescribed')
+        end
     else
         stimeid = whos('timeid');
         if ~strcmp(stimeid.class,'char'),
@@ -12,7 +15,10 @@ try
     end
     %
     if nargin < 2,
-        debugmode = 0;
+        debugmode = str2double(getenv('debugmode'));
+        if isempty(debugmode),
+            debugmode = 0;
+        end
     end
     %
     if debugmode,

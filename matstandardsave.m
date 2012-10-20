@@ -20,7 +20,7 @@ elseif job.condorsearch,
     %
     % save condor batch file into job directory 
     %
-    job.condor_script = condor_batchscript_yp(job,'',1);
+    job.condor_script = condor_batchscript_yp(job,'');
     %
     job.save_id = job.condor_dir;% entire directory to be transfered
     %
