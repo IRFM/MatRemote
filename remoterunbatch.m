@@ -52,6 +52,27 @@ if ~isfield(job,'timeid') || isempty(job.timeid),
     job.timeid = timeid_jd(clock);
 end
 %
+if ~isfield(job,'debugmode'),
+    job.debugmode = 0;
+end
+%
+% path to matlab if applicable
+%
+if any(strfind(job.script,'matlabbatch.sh')) && (~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot')),%matlab called remotely and not prescribed
+    [dummy,matver] = LUKEversion_jd;
+    if isempty(remote.host),% same version for local calculations
+        job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
+    elseif isfield(remote,'matlabroot') && isfield(remote.matlabroot,['mat',matver]),
+        % same version on remote cluster, if available
+        job.env.remotebatch_matlabroot = remote.matlabroot.(['mat',matver]);
+    elseif isfield(remote,'matlabroot') && isfield(remote.matlabroot,'default'),
+        % default version on remote cluster, if available
+        job.env.remotebatch_matlabroot = remote.matlabroot.default;
+    else% default version on remote cluster
+        job.env.remotebatch_matlabroot = '';%  path to matlab (optional)
+    end
+end
+%
 remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
 %
@@ -111,7 +132,7 @@ elseif ~strcmp(job.remotedatapath(end),filesep),
     job.remotedatapath = [job.remotedatapath,filesep];
 end
 %
-% create remote data folder if needed
+% create remote data folder if needed - this also tests remote connection
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
 if ~isempty(remotehost),
@@ -129,9 +150,21 @@ if res == 1,% remote directory does not exist
         [res,err] = unix(remotecmd);
     end
     if res ~= 0,
-        error(['Remote data folder creation failed : ',err])
+        %
+        locdisp(displaymode,['Remote data folder creation failed : ',err]);
+        job.err = err;
+        %
+        return
+        %
     end
     locdisp(displaymode,' ... done');
+elseif res ~= 0,
+    %
+    locdisp(displaymode,['Remote directory check failed : ',err]);
+    job.err = err;
+    %
+    return
+    %
 end   
 %
 % process data
@@ -166,7 +199,12 @@ if ~isempty(job.save_id),
     end
     %
     if res ~= 0,
-        error(['File transfer failed : ',err])
+        %
+        locdisp(displaymode,['File transfer failed : ',err]);
+        job.err = err;
+        %
+        return
+        %
     end
     locdisp(displaymode,' ... done');
     %
@@ -215,7 +253,7 @@ if job.pbssearch,
         end
     end
     %
-    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',remotedatapath=',job.remotedatapath,jobenvstr,' ',job.script];% batch command
+    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotedatapath=',job.remotedatapath,jobenvstr,' ',job.script];% batch command
     %
 elseif job.condorsearch,
     %
@@ -225,11 +263,11 @@ elseif job.condorsearch,
     if isfield(remote,'env') && isstruct(remote.env),
         envnames = fieldnames(remote.env);
         for ienv = 1:length(envnames),
-            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),';',remenvstr];
+            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),'; ',remenvstr];
         end
     end
     %
-    remotecmd = [remenvstr,' ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
+    remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
         %%%% TO DO
@@ -248,7 +286,12 @@ else
 end
 %
 if res ~= 0,
-    error(['Remote run start failed : ',err])
+    %
+    locdisp(displaymode,['Remote run start failed : ',txt]);
+    job.err = txt;
+    %
+    return
+    %
 end
 %
 txt(double(txt) == 10) = [];
