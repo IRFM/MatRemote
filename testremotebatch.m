@@ -87,8 +87,9 @@ test_job.savefcn = 'matstandardsave';% function saving the data locally
 test_job.loadfcn = 'matstandardload';% function reading the data locally
 test_job.localdatapath = 'data/';%'';%forder where local data is stored - leave empty for local data folder
 test_job.remotedatapath = [remotehome,'/remotebatchtest/run'];%'';%folder where remote data is stored
-test_job.args = 'remotebatch_path = getenv(''remotebatch_path'');addpath(remotebatch_path);disp(['' Path set to '',remotebatch_path]);remotetest';%argument to be passed into script
+test_job.args = 'remotebatch_path = getenv(''remotebatch_path'');addpath(remotebatch_path);disp(['' Path set to '',remotebatch_path]);remotematrun;';%argument to be passed into script
 test_job.env.remotebatch_path = [remotehome,'/remotebatchtest/mat/']; % matlab path for remotetest.m (to test path transfer)
+test_job.env.remotematfnc = 'remotetest'; % remote matlab function to be called
 %
 test_job.wait = 1;%0;% (0) return hand (1) wait for result
 test_job.nodes = 1;%number of nodes required
