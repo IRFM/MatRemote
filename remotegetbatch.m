@@ -79,7 +79,7 @@ elseif job.xgridsearch,
     %%%% TO DO
 end
 %
-locdisp(displaymode,['    --> Checking status of job # ',remotecmd]);
+locdisp(displaymode,['    --> Checking status of job # ',job.id]);
 %
 if ~isempty(remotehost),
     %
@@ -143,7 +143,7 @@ end
 if ~isempty(job.load_id),
     if ~isempty(remotehost),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,'from remote host ',remotehost,':',job.remotedatapath,...
+        locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,' from remote host ',remotehost,':',job.remotedatapath,...
             ' as user ',remotelogname,' to location ',job.localdatapath,job.load_id])  
         [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
         %
