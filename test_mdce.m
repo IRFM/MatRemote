@@ -1,10 +1,12 @@
-function test_mdce(mdce_mode,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,dkepath)
+function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,dkepath)
 %
 %Test function of the distributed computing calculation 
 %
 %   INPUT :
 %
 %       - mdce_mode: distributed computing environment state: (0) disabled, (1) enabled with the dedicated Matlab toolbox which must be installed, (2) enabled with a private method (LDCE), (3) parfor parallel computing [1,1]
+%           (default = 0)
+%       - mdce_remnum: remote index (0 for local cluster calculations) [1,1]
 %           (default = 0)
 %       - force_error: force an error to check how a possible error in calculation is managed, 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5 [1,1]
 %           (default = 1)
@@ -27,26 +29,30 @@ if nargin < 1,
 end
 %
 if nargin < 2,
-    force_error = 1;% 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5,
+    mdce_remnum = 0;
 end
 %
 if nargin < 3,
-    mdce_enforce = 1;
+    force_error = 1;% 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5,
 end
 %
 if nargin < 4,
-    schedulertype = 'local';%'' or 'local','pbspro','xgrid','condor',...
+    mdce_enforce = 1;
 end
 %
 if nargin < 5,
-	mdce_size = 8;
+    schedulertype = 'local';%'' or 'local','pbspro','xgrid','condor',...
 end
 %
 if nargin < 6,
-    mdce_memory = 200;
+	mdce_size = 8;
 end
 %
 if nargin < 7,
+    mdce_memory = 200;
+end
+%
+if nargin < 8,
     dkepath = load_structures_yp('dkepath','','');
 end
 %
@@ -55,7 +61,7 @@ clustermode.ftest_mdce.scheduler.clustersize = mdce_size;
 clustermode.ftest_mdce.scheduler.memory = mdce_memory;
 clustermode.ftest_mdce.scheduler.enforce = mdce_enforce;
 %
-dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype);
+dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype,mdce_remnum);
 %
 [flag,a,b] = mdce_luke(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
