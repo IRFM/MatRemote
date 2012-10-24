@@ -1,4 +1,4 @@
-function [dkecluster] = clustermode_luke(param,fun,dkepath,schedulertype)
+function [dkecluster] = clustermode_luke(param,fun,dkepath,schedulertype,remnum)
 %LUKE - Test cluster properties
 %
 % This function tests cluster properties and generate default values
@@ -13,6 +13,33 @@ end
 if nargin < 4 || isempty(schedulertype),
     schedulertype = 'local';
 end
+%
+if nargin < 5 || isempty(remnum),
+    remnum = 0;
+end
+%
+% remote calculation  : remnum provides the profile number in dkepath.remote
+%
+if remnum > 0,
+    %
+    if remnum <= length(dkepath.remote),
+        %
+        dkecluster.remnum = remnum;
+        dkecluster.param = param;
+        dkecluster.fun = fun;
+        dkecluster.dkepath = dkepath;
+        dkecluster.schedulertype = schedulertype;
+        %
+        disp(['==> Distributed calculation transfered to remote location ',dkepath.remote(remnum).host,'.'])
+        %
+        return
+        %
+    else
+        %
+        disp(['==> WARNING : dkepath.remote(',num2str(remnum),') profile is not defined. Local calculation enforced'])
+        %
+    end
+end    
 %
 % Temp folder
 %

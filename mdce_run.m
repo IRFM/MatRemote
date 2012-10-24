@@ -73,11 +73,37 @@ end
 narg_range = length(arg_range);
 %
 varargout = cell(1,nargout-1);
-flag = 0;
 %
 for j_nargout = 1:nargout-1,
     varargout{j_nargout} = cell(narg_range,1);
 end
+%
+% remote calculation
+%
+if isfield(dkecluster,'remnum'),
+    %
+    [flag,varargout{:}] = mdce_luke_remote(fun,args_in,arg_index,arg_range,dkecluster);
+    %
+    mask_loc = (flag < 0);%flagged for local computing
+    %
+    if any(mask_loc),%back to local computing 
+        %
+        dkecluster_loc = clustermode_luke(dkecluster.param,dkecluster.fun,dkecluster.dkepath,dkecluster.schedulertype,0);% local dkecluster
+        %
+        varargout_loc = cell(1,nargout-1);
+        [flag(mask_loc),varargout_loc{:}] = mdce_luke(fun,args_in,arg_index,arg_range(mask_loc),dkecluster_loc);
+        %
+        for j_nargout = 1:nargout-1,
+            varargout{j_nargout}(mask_loc) = varargout_loc{j_nargout};
+        end	
+        %
+    end
+    %
+    return
+    %
+end
+%
+flag = 0;
 %
 if isempty(dkecluster),
     dkecluster = clustermode_luke(0,'',dkepath);%All cluster parameters and paths (sequential mode by default)
