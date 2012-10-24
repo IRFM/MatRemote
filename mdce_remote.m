@@ -1,0 +1,82 @@
+function [flag,varargout] = mdce_luke_remote(fun,args_in,arg_index,arg_range,dkecluster)
+%
+% This function transfers the distributed calculation to a remote cluster
+%
+%
+narg_range = length(arg_range);
+%
+varargout = cell(1,nargout-1);
+%
+for j_nargout = 1:nargout-1,
+    varargout{j_nargout} = cell(narg_range,1);
+end
+%
+flag = [-Inf]*ones(1,narg_range);% failed remote calc. flag
+%
+if isfield(dkecluster,'debugmode'),
+    debugmode = dkecluster.debugmode;
+else
+    debugmode = 0;
+end
+%
+dkepath = dkecluster.dkepath;
+remote = dkepath.remote(dkecluster.remnum);
+%
+if isempty(remote.host),% same version for local calculations
+    mdce_job.env.luke_root = dkepath.luke_root;
+else
+    mdce_job.env.luke_root = remote.luke_root;
+end
+mdce_job.env.remotematfnc = 'runmdce';
+%
+mdce_job.script = [mdce_job.env.luke_root,filesep,'Tools/matlabbatch.sh'];
+mdce_job.args = 'luke_root = getenv(''luke_root'');addpath([luke_root,''Project_DKE/DKE'']);setpath_luke_jd(luke_root);disp(['' Path set to '',luke_root]);remotematrun;';%argument to be passed into script
+%
+mdce_job.savefcn = 'matstandardsave';%'runlukesave';%
+mdce_job.loadfcn = 'matstandardload';%'runlukeload';%
+mdce_job.localdatapath = '';
+mdce_job.remotedatapath = '/Users/yvespeysson/condor/';
+%
+mdce_job.wait = 0;% (0) return hand (1) wait for result
+mdce_job.nodes = 1;%number of nodes required
+mdce_job.nproc = 2;%number of cores required
+mdce_job.walltime = [];% time required (integers - in hours) - leave empty if no requirement
+mdce_job.memory = [];% requested memory specified in dkeparam
+%
+mdce_job.debugmode = debugmode;
+%
+mdce_input.fun = fun;
+mdce_input.args_in = args_in;
+mdce_input.arg_index = arg_index;
+mdce_input.arg_range = arg_range;
+mdce_input.dkecluster = rmfield(dkecluster,'remnum');
+mdce_input.nargout = nargout;
+%
+mdce_job = remoterunbatch(remote,mdce_job,mdce_input,debugmode);
+%
+if ~isfield(mdce_job,'err'),% no error occured in the remote job start,
+    if ~isfield(dkepath,'remtimout'),
+        dkepath.remtimout = Inf;
+    end
+    %
+    for it = 1:dkepath.remtimout,
+        %
+        pause(1);
+        %
+        output = remotegetbatch(remote,mdce_job,debugmode);
+        %
+        if ~isempty(output),
+            break
+        end
+        %
+    end
+end
+%
+if isempty(output),
+    disp('Timeout reached, MDCE calculation started locally')
+elseif isfield(output,'err'),
+    disp('Remote MDCE run failed, calculation started locally')
+else
+    flag = output.flag;
+    varargout = output.varargout;
+end
