@@ -1,4 +1,4 @@
-function [filename] = xgrid_batch2xml_yp(luketimeid,appid,jobname,userid,matlabroot,remoteprefdir,lukepath,script_sh,lukedatapath,hostname,key)
+function [filename] = xgrid_batch2xml_yp(job,data)
 %
 %LUKE - This function creates dynamically the xml batch file for remote
 %calculations on a Mac cluster with Xgrid scheduler (can generate multiple
@@ -6,14 +6,14 @@ function [filename] = xgrid_batch2xml_yp(luketimeid,appid,jobname,userid,matlabr
 %
 %by Y.Peysson CEA-IRFM <yves.peysson@cea.fr> and Joan Decker CEA-IRFM (joan.decker@cea.fr)
 %
-if nargin < 10,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
+if nargin < 2,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
 %
-if nargin < 11,
-    key = 0;%first job
-end
+key = 0;%first job
 %
-filename = ['xgrid_batch_matlab_',luketimeid,'.plist'];
-fileid = fopen(filename,'w');
+filename = ['xgrid_batch_matlab_',job.timeid,'.plist'];
+fileid = fopen([job.localdatapath,job.xgrid_dir,filesep,filename],'w');
+%
+env = fieldnames(job.env);
 %
 fprintf(fileid,['<?xml version="1.0" encoding="UTF-8"?>','\n']);
 fprintf(fileid,['<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">','\n']);
@@ -21,39 +21,43 @@ fprintf(fileid,['<plist version="1.0">','\n']);
 fprintf(fileid,['<array>','\n']);
 fprintf(fileid,['	<dict>','\n']);
 fprintf(fileid,['		<key>applicationIdentifier</key>','\n']);
-fprintf(fileid,['		<string>',appid,'</string>','\n']);
+fprintf(fileid,['		<string>',job.env.remotebatch_path,'</string>','\n']);
 fprintf(fileid,['		<key>name</key>','\n']);
-fprintf(fileid,['		<string>',jobname,'</string>','\n']);
+fprintf(fileid,['		<string>matlab_job_',job.timeid,'</string>','\n']);
 fprintf(fileid,['		<key>submissionIdentifier</key>','\n']);
-fprintf(fileid,['		<string>',userid,'</string>','\n']);
+fprintf(fileid,['		<string>',job.remotelogname,'</string>','\n']);
 fprintf(fileid,['		<key>taskSpecifications</key>','\n']);
 fprintf(fileid,['		<dict>','\n']);
 fprintf(fileid,['			<key>',int2str(key),'</key>','\n']);
 fprintf(fileid,['			<dict>','\n']);
 fprintf(fileid,['				<key>arguments</key>','\n']);
 fprintf(fileid,['				<array>','\n']);
-fprintf(fileid,['					<string>',lukepath,script_sh,'</string>','\n']);
+fprintf(fileid,['					<string>',job.script,'</string>','\n']);
 fprintf(fileid,['				</array>','\n']);
 fprintf(fileid,['				<key>command</key>','\n']);
 fprintf(fileid,['				<string>/bin/sh</string>','\n']);
 fprintf(fileid,['				<key>environment</key>','\n']);
 fprintf(fileid,['				<dict>','\n']);
-fprintf(fileid,['					<key>LUKE_timeid</key>','\n']);
-fprintf(fileid,['					<string>',luketimeid,'</string>','\n']);
-fprintf(fileid,['					<key>LUKE_path</key>','\n']);
-fprintf(fileid,['					<string>',lukepath,'</string>','\n']);
-fprintf(fileid,['					<key>LUKE_matlabroot</key>','\n']);
-fprintf(fileid,['					<string>',matlabroot,'</string>','\n']);
+%
+for ienv = 1:length(env),
+    if ~strcmp(env{ienv},'remotebatch_matlabprefdir'),%fixed syntax imposed by Matlab, see below
+        fprintf(fileid,['					<key>',env{ienv},'</key>','\n']);
+        fprintf(fileid,['					<string>',job.env.(env{ienv}),'</string>','\n']);
+    end
+end
+%
+fprintf(fileid,['					<key>jobtimeid</key>','\n']);
+fprintf(fileid,['					<string>',job.timeid,'</string>','\n']);
+fprintf(fileid,['					<key>debugmode</key>','\n']);
+fprintf(fileid,['					<string>',num2str(job.debugmode),'</string>','\n']);
+fprintf(fileid,['					<key>args</key>','\n']);
+fprintf(fileid,['					<string>',job.args,'</string>','\n']);
 fprintf(fileid,['					<key>USER</key>','\n']);
-fprintf(fileid,['					<string>',userid,'</string>','\n']);
-fprintf(fileid,['					<key>LUKE_datapath</key>','\n']);
-fprintf(fileid,['					<string>',lukedatapath,'</string>','\n']);
-fprintf(fileid,['					<key>LUKE_hostname</key>','\n']);
-fprintf(fileid,['					<string>',hostname,'</string>','\n']);
-fprintf(fileid,['					<key>LUKE_xgrid</key>','\n']);
-fprintf(fileid,['					<string>1</string>','\n']);
+fprintf(fileid,['					<string>',job.remotelogname,'</string>','\n']);
+fprintf(fileid,['					<key>remotedatapath</key>','\n']);
+fprintf(fileid,['					<string>',job.remotedatapath,'xgrid_',job.timeid,'/</string>','\n']);
 fprintf(fileid,['					<key>MATLAB_PREFDIR</key>','\n']);
-fprintf(fileid,['					<string>',remoteprefdir,'</string>','\n']);
+fprintf(fileid,['					<string>',job.env.remotebatch_matlabprefdir,'</string>','\n']);
 fprintf(fileid,['				</dict>','\n']);
 fprintf(fileid,['			</dict>','\n']);
 fprintf(fileid,['		</dict>','\n']);
