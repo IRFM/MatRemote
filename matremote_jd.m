@@ -17,7 +17,7 @@ job.env.luke_root = remote.luke_root;% luke path environment
 job.env.remotematfnc = 'runmat';
 %
 job.script = [job.env.luke_root,filesep,'Tools/matlabbatch.sh'];
-job.args = 'luke_root = getenv(''luke_root'');addpath([luke_root,''Project_DKE/DKE'']);setpath_luke_jd(luke_root);disp(['' Path set to '',luke_root]);remotematrun;';%argument to be passed into script
+job.args = 'luke_root = getenv(''luke_root'');addpath([luke_root,''Project_DKE/DKE'']);setpath_luke_jd(luke_root);disp(['' Path set to '',luke_root]);remotematrun;exit';%argument to be passed into script
 %
 job.savefcn = 'matstandardsave';%'runlukesave';%
 job.loadfcn = 'matstandardload';%'runlukeload';%
