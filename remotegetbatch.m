@@ -1,4 +1,4 @@
-function soutput = remotegetbatch(remote,job,displaymode)
+function soutput = remotegetbatch(remote,job,displaymode,check)
 %
 % This function retrieve results from a batch job on a local or remote host
 %
@@ -22,14 +22,56 @@ function soutput = remotegetbatch(remote,job,displaymode)
 %
 %       - displaymode : display mode : (0) no display; (1) operation display (default : 0)
 %
+%       - check : check result directly (1-default) or set up wait loop (0) 
+%
 %   OUTPUTS : 
 %   
 %       - soutput : output data structure (optional)
 %
 % by J. Decker, Y. Peysson and M. Schneider, CEA/IRFM
 %
+if nargin < 4,
+    check = 1;% check for result (1) or set-up wait loop (0)  
+end
+%
 if nargin < 3,
     displaymode = 0;
+end
+%
+if check == 0,
+    %
+    if isfield(remote,'remtimout'),% in minutes
+        remtimout = remote.remtimout;
+    else
+        remtimout = Inf;
+    end
+    %
+    if isfield(remote,'rempause'),% in minutes
+        rempause = remote.rempause;
+    else
+        rempause = 1/6;
+    end
+    %
+    trem = tic;
+    %
+    while toc(trem) < 60*remtimout,
+        %
+        pause(60*rempause);
+        %
+        soutput = remotegetbatch(remote,job,displaymode,1);
+        %
+        if ~isempty(soutput),
+            break
+        end
+        %
+        if displaymode,
+            disp(['Run still executed remotely. Elapsed time (mins) ',num2str(toc(trem)/60),'/',num2str(remtimout)])
+        end
+        %
+    end
+    %
+    return
+    %
 end
 %
 soutput = '';
@@ -76,7 +118,9 @@ elseif job.condorsearch,
     remotecmd = [remenvstr,remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
 elseif job.xgridsearch,  
-    %%%% TO DO
+    %
+    remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{2},job.id];  
+    %
 end
 %
 locdisp(displaymode,['    --> Checking status of job # ',job.id]);
@@ -135,7 +179,36 @@ elseif job.condorsearch,
     end
     %
 elseif job.xgridsearch,  
-    %%%% TO DO
+    %
+    if ~isempty(strfind(txt,remoteset_jobid{3})), % job still running
+        return
+    elseif ~isempty(strfind(txt,remoteset_jobid{4})), % job pending
+        return
+    else
+        if isempty(strfind(txt,remoteset_jobid{5})), % job has a problem (check if xgrid is in operation on the remote machine)
+            disp(['Remote run check failed : ',txt]);
+            return
+        end
+    end
+    %
+    remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.xgrid_dir,filesep,'error_file',' -so ',job.remotedatapath,job.xgrid_dir,filesep,'output_file -out'];  
+    %
+    if ~isempty(remotehost),
+        %
+        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        pause(0.1)
+        %
+    else
+        %
+        [res,err] = unix(remotecmd);
+        %
+    end
+    %
+    if res == 0,% error file successfuly transfered
+        locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer.']);
+    else
+        locdisp(displaymode,['Remote transfer of xgrid error and output files for Job # ',job.id,' failed : ',err]);
+    end        
 end
 %
 % data transfer
@@ -145,11 +218,78 @@ if ~isempty(job.load_id),
         %
         locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,' from remote host ',remotehost,':',job.remotedatapath,...
             ' as user ',remotelogname,' to location ',job.localdatapath,job.load_id])  
+        %
+        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
+            %
+            remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
+            %
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            pause(0.1)
+            %
+            if res ~= 0,
+                locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end            
+            %
+            [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.xgrid_dir,filesep,'output_file ',job.localdatapath,job.xgrid_dir,filesep,'output_file']);
+            %
+            if res ~= 0,
+                locdisp(displaymode,['xgrid output file transfer failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end            
+            %
+            [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.xgrid_dir,filesep,'error_file ',job.localdatapath,job.xgrid_dir,filesep,'error_file']);
+            %
+            if res ~= 0,
+                locdisp(displaymode,['xgrid error file transfer failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end
+        end
+        %
         [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
         locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])
+        %
+        if job.xgridsearch,%data must be first transfered from xgrid temp folder to the job folder
+            %
+            remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
+            %
+            [res,err] = unix(remotecmd);
+            %           
+            if res ~= 0,
+                locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end            
+            %
+            [res,err] = unix(['cp -r ',job.remotedatapath,job.xgrid_dir,filesep,'output_file ',job.localdatapath,job.xgrid_dir,filesep,'output_file']);
+            %
+            if res ~= 0,
+                locdisp(displaymode,['xgrid output file transfer failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end            
+            %
+            [res,err] = unix(['cp -r ',job.remotedatapath,job.xgrid_dir,filesep,'error_file ',job.localdatapath,job.xgrid_dir,filesep,'error_file']);
+            %
+            if res ~= 0,
+                locdisp(displaymode,['xgrid error file transfer failed : ',err]);
+                soutput.err = err;
+                %
+                return
+            end
+            %
+        end
         [res,err] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);        
         %
     else
@@ -251,7 +391,21 @@ if job.clean >= 1,%clean remote and batch files
     elseif job.condorsearch,
         %%%% TO DO
     elseif job.xgridsearch,
-        %%%% TO DO
+        %
+        rmbatchcmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{10},job.id];
+        %
+        if ~isempty(remotehost),
+            %
+            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remotelogname,' ...'])
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',rmbatchcmd,'''']);
+            pause(0.1)
+            %
+        else
+            %
+            locdisp(displaymode,'    --> Removing batch output files ...')
+            [res,err] = unix(rmbatchcmd);
+            %
+        end       
     end
     %
     if res ~= 0,

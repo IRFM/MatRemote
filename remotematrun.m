@@ -41,7 +41,12 @@ try
     remotematfnc = getenv('remotematfnc');
     %
     filein = [datapath,'MAT_RUN_',logname,'_',timeid,'.mat'];
-    fileout = [datapath,'MAT_OUT_',logname,'_',timeid,'.mat'];
+    %
+    if any(strfind(datapath,['xgrid_',timeid])),
+        fileout = ['MAT_OUT_',logname,'_',timeid,'.mat'];
+    else
+        fileout = [datapath,'MAT_OUT_',logname,'_',timeid,'.mat'];
+    end
     %
     if debugmode,
         disp('-------- in remotematrun.m --------');

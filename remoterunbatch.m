@@ -62,14 +62,18 @@ if any(strfind(job.script,'matlabbatch.sh')) && (~isfield(job,'env') || ~isfield
     [dummy,matver] = LUKEversion_jd;
     if isempty(remote.host),% same version for local calculations
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
-    elseif isfield(remote,'matlabroot') && isfield(remote.matlabroot,['mat',matver]),
+        job.env.remotebatch_matlabprefdir = prefdir;        
+    elseif isfield(remote,['mat',matver]) && ~isempty(remote.(['mat',matver])),
         % same version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matlabroot.(['mat',matver]);
-    elseif isfield(remote,'matlabroot') && isfield(remote.matlabroot,'default'),
+        job.env.remotebatch_matlabroot = remote.(['mat',matver]).root;
+        job.env.remotebatch_matlabprefdir = remote.(['mat',matver]).prefdir;
+    elseif isfield(remote,'matdef') && ~isempty(remote.matdef),
         % default version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matlabroot.default;
+        job.env.remotebatch_matlabroot = remote.matdef.root;
+        job.env.remotebatch_matlabprefdir = remote.matdef.prefdir;
     else% default version on remote cluster
-        job.env.remotebatch_matlabroot = '';%  path to matlab (optional)
+        job.env.remotebatch_matlabroot = '';
+        job.env.remotebatch_matlabprefdir = '';
     end
 end
 %
@@ -270,7 +274,7 @@ elseif job.condorsearch,
     remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
-        %%%% TO DO
+    remotecmd = [remote.cmd{1},remote.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.xgrid_dir,filesep,job.xgrid_script];
 end
 %
 locdisp(displaymode,['    --> Starting run with command ',remotecmd]) 

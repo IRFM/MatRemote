@@ -27,7 +27,19 @@ elseif job.condorsearch,
     job.load_id = [job.condor_dir,filesep,job.load_id];
     %
 elseif job.xgridsearch,
-    %%%% TO DO
+    %
+    job.xgrid_dir = ['/xgrid_',job.timeid];
+    localdatapath = [job.localdatapath,job.xgrid_dir,filesep];% job directory for xgrid
+    mkdir(localdatapath);
+    %
+    % save xgrid batch file into job directory 
+    %
+    job.xgrid_script = xgrid_batch2xml_yp(job,'');
+    %
+    job.save_id = job.xgrid_dir;% entire directory to be transfered
+    %
+    job.load_id = [job.xgrid_dir,filesep,job.load_id];
+    %
 end
 %
 save([localdatapath,datafile],'-struct','sinput');% save input data into file
