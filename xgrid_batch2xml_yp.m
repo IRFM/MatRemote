@@ -13,15 +13,13 @@ key = 0;%first job
 filename = ['xgrid_batch_matlab_',job.timeid,'.plist'];
 fileid = fopen([job.localdatapath,job.xgrid_dir,filesep,filename],'w');
 %
-env = fieldnames(job.env);
+env = fieldnames(rmfield(job.env,{'remotebatch_matlabprefdir'}));%fixed syntax imposed by Matlab for prefdir, see below
 %
 fprintf(fileid,['<?xml version="1.0" encoding="UTF-8"?>','\n']);
 fprintf(fileid,['<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">','\n']);
 fprintf(fileid,['<plist version="1.0">','\n']);
 fprintf(fileid,['<array>','\n']);
 fprintf(fileid,['	<dict>','\n']);
-fprintf(fileid,['		<key>applicationIdentifier</key>','\n']);
-fprintf(fileid,['		<string>',job.env.remotebatch_path,'</string>','\n']);
 fprintf(fileid,['		<key>name</key>','\n']);
 fprintf(fileid,['		<string>matlab_job_',job.timeid,'</string>','\n']);
 fprintf(fileid,['		<key>submissionIdentifier</key>','\n']);
@@ -40,10 +38,8 @@ fprintf(fileid,['				<key>environment</key>','\n']);
 fprintf(fileid,['				<dict>','\n']);
 %
 for ienv = 1:length(env),
-    if ~strcmp(env{ienv},'remotebatch_matlabprefdir'),%fixed syntax imposed by Matlab, see below
-        fprintf(fileid,['					<key>',env{ienv},'</key>','\n']);
-        fprintf(fileid,['					<string>',job.env.(env{ienv}),'</string>','\n']);
-    end
+    fprintf(fileid,['					<key>',env{ienv},'</key>','\n']);
+    fprintf(fileid,['					<string>',job.env.(env{ienv}),'</string>','\n']);
 end
 %
 fprintf(fileid,['					<key>jobtimeid</key>','\n']);
