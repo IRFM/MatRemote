@@ -119,7 +119,7 @@ elseif job.condorsearch,
     %
 elseif job.xgridsearch,  
     %
-    remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{2},job.id];  
+    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{2},job.id];  
     %
 end
 %
@@ -191,7 +191,7 @@ elseif job.xgridsearch,
         end
     end
     %
-    remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.xgrid_dir,filesep,'error_file',' -so ',job.remotedatapath,job.xgrid_dir,filesep,'output_file -out'];  
+    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.xgrid_dir,filesep,'error_file',' -so ',job.remotedatapath,job.xgrid_dir,filesep,'output_file -out'];  
     %
     if ~isempty(remotehost),
         %
@@ -221,7 +221,7 @@ if ~isempty(job.load_id),
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
             %
-            remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
+            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
             %
             [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
             pause(0.1)
@@ -260,7 +260,7 @@ if ~isempty(job.load_id),
         %
         if job.xgridsearch,%data must be first transfered from xgrid temp folder to the job folder
             %
-            remotecmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
+            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
             %
             [res,err] = unix(remotecmd);
             %           
@@ -392,7 +392,7 @@ if job.clean >= 1,%clean remote and batch files
         %%%% TO DO
     elseif job.xgridsearch,
         %
-        rmbatchcmd = [remoteset_jobid{1},remote.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{10},job.id];
+        rmbatchcmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{10},job.id];
         %
         if ~isempty(remotehost),
             %
