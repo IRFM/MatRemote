@@ -22,7 +22,11 @@ job.args = 'luke_root = getenv(''luke_root'');addpath([luke_root,''Project_DKE/D
 job.savefcn = 'matstandardsave';%'runlukesave';%
 job.loadfcn = 'matstandardload';%'runlukeload';%
 job.localdatapath = '';
-job.remotedatapath = '/Users/yvespeysson/condor/';
+if isfield(remote,'remotedatapath') && ~isempty(remote.remotedatapath),
+    job.remotedatapath = remote.remotedatapath;
+else
+    job.remotedatapath = '';
+end
 %
 job.wait = 0;% (0) return hand (1) wait for result
 job.nodes = 1;%number of nodes required
@@ -42,36 +46,7 @@ mat_input.nargout = nargout;
 job = remoterunbatch(remote,job,mat_input,debugmode);
 %
 if ~isfield(job,'err'),% no error occured in the remote job start,
-    %
-    if isfield(remote,'remtimout'),
-        remtimout = remote.remtimout;
-    else
-        remtimout = Inf;
-    end
-    %
-    if isfield(remote,'rempause'),
-        rempause = remote.rempause;
-    else
-        rempause = 0.1;
-    end
-    %
-    trem = tic;
-    %
-    while toc(trem) < remtimout,
-        %
-        pause(rempause);
-        %
-        output = remotegetbatch(remote,job,debugmode);
-        %
-        if ~isempty(output),
-            break
-        end
-        %
-        if debugmode,
-            disp(['Function ',fun,' still executed remotely. Elapsed time (mins) ',num2str(toc(trem)/60),'/',num2str(remtimout/60)])
-        end
-        %
-    end
+    output = remotegetbatch(remote,job,debugmode,0);
 else
     output.err = job.err;
 end

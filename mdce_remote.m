@@ -35,7 +35,11 @@ mdce_job.args = 'luke_root = getenv(''luke_root'');addpath([luke_root,''Project_
 mdce_job.savefcn = 'matstandardsave';%'runlukesave';%
 mdce_job.loadfcn = 'matstandardload';%'runlukeload';%
 mdce_job.localdatapath = '';
-mdce_job.remotedatapath = '/Users/yvespeysson/condor/';
+if isfield(remote,'remotedatapath') && ~isempty(remote.remotedatapath),
+    mdce_job.remotedatapath = remote.remotedatapath;
+else
+    mdce_job.remotedatapath = '';
+end
 %
 mdce_job.wait = 0;% (0) return hand (1) wait for result
 mdce_job.nodes = 1;%number of nodes required
@@ -55,21 +59,9 @@ mdce_input.nargout = nargout;
 mdce_job = remoterunbatch(remote,mdce_job,mdce_input,debugmode);
 %
 if ~isfield(mdce_job,'err'),% no error occured in the remote job start,
-    if ~isfield(dkepath,'remtimout'),
-        dkepath.remtimout = Inf;
-    end
-    %
-    for it = 1:dkepath.remtimout,
-        %
-        pause(1);
-        %
-        output = remotegetbatch(remote,mdce_job,debugmode);
-        %
-        if ~isempty(output),
-            break
-        end
-        %
-    end
+    output = remotegetbatch(remote,mdce_job,debugmode,0);
+else
+    output.err = mdce_job.err;
 end
 %
 if isempty(output),
