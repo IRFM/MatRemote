@@ -5,7 +5,7 @@
 %
 clear all
 %
-remnum = 1;%-4;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
+remnum = -4;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
 %                                   (1,2,3,...) profile number in dkepath.remote
 %
 if remnum > 0,
@@ -68,15 +68,40 @@ elseif remnum == -4,
     remote.cmd = 'condor_submit';
     remote.get_jobid = {'** Proc ',':'};
     remote.set_jobid = {'condor_q ',''};
+    remote.remotedatapath = '/Users/yvespeysson/condor/';
     %
     remote.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
     remote.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-    remote.matlabroot.mat712 = '/Applications/MATLAB_R2012a.app/bin/';
-    remote.matlabroot.default = laptopjoan.joan(1).remote(1).matlabroot.mat712;
+    %
+    remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
+    remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    remote.matdef = remote.mat714;%default matlab on remote machine
+    %
+    remote.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
     %
     remote.yves = 'yvespeysson';
-    remote.joan = 'yvespeysson';%'joandecker';
-    remote.JD211098 = 'yvespeysson';%'joandecker';
+    remote.joan = 'yvespeysson';
+    remote.JD211098 = 'yvespeysson';
+    %
+elseif remnum == -5,
+    %
+    % remote run on yvespeysson desktop with xgrid
+    %
+    remote.host = 'tolbachik.hd.free.fr';
+    remote.cmd = {'xgrid -h ',' -p ',' -job batch '};%
+    remote.get_jobid = {'jobIdentifier = ',';'};%
+    remote.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
+    remote.remotedatapath = '/Users/yvespeysson/xgrid/';
+    %
+    remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
+    remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    remote.matdef = remote.mat714;%default matlab on remote machine
+    %
+    remote.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
+    %
+    remote.password = {'ghm93'};
+    remote.yves = 'yvespeysson';
+    remote.joan = 'yvespeysson';
     %
 end
 %
@@ -87,7 +112,7 @@ test_job.savefcn = 'matstandardsave';% function saving the data locally
 test_job.loadfcn = 'matstandardload';% function reading the data locally
 test_job.localdatapath = 'data/';%'';%forder where local data is stored - leave empty for local data folder
 test_job.remotedatapath = [remotehome,'/remotebatchtest/run'];%'';%folder where remote data is stored
-test_job.args = 'remotebatch_path = getenv(''remotebatch_path'');addpath(remotebatch_path);disp(['' Path set to '',remotebatch_path]);remotematrun;';%argument to be passed into script
+test_job.args = 'remotebatch_path = getenv(''remotebatch_path'');addpath(remotebatch_path);disp(['' Path set to '',remotebatch_path]);remotematrun;exit';%argument to be passed into script
 test_job.env.remotebatch_path = [remotehome,'/remotebatchtest/mat/']; % matlab path for remotetest.m (to test path transfer)
 test_job.env.remotematfnc = 'remotetest'; % remote matlab function to be called
 %
@@ -102,8 +127,8 @@ test_job.debugmode = 1;
 %
 sinput.strin = 'The best code is : ';
 %
-time_step = 1;
-nit = 60;
+remote.rempause = 1/60;% in minutes
+remote.remtimout = 5;% in minutes
 %
 displaymode = 1;
 %
@@ -112,16 +137,7 @@ test_job = remoterunbatch(remote,test_job,sinput,displaymode);
 if isfield(test_job,'err'),
     soutput = test_job.err;
 else
-    for it = 1:nit,
-        %
-        pause(time_step)
-        %
-        soutput = remotegetbatch(remote,test_job,displaymode);
-        %
-        if ~isempty(soutput),
-            break
-        end
-    end
+    soutput = remotegetbatch(remote,test_job,displaymode,0);
 end
 %
 if isfield(soutput,'err'),
