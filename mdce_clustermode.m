@@ -249,7 +249,7 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
     end
 elseif dkecluster.scheduler.mode < 0,%remote computing mode
     %
-    if -dkecluster.scheduler.mode < length(dkepath.remote),
+    if -dkecluster.scheduler.mode <= length(dkepath.remote),
         %
         dkecluster.scheduler.remote = dkepath.remote(-dkecluster.scheduler.mode);
         %
