@@ -25,8 +25,6 @@ nrange = length(arg_range);
 varargout_array = cell(nrange,nargout-1);
 flag = zeros(1,nrange);
 %
-keyboard
-%
 try
     remote = scheduler.remote;
     %
