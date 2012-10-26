@@ -247,6 +247,20 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
         disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab > R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
         dkecluster.scheduler.mode = 0;
     end
+elseif dkecluster.scheduler.mode < 0,%remote computing mode
+    %
+    if -dkecluster.scheduler.mode < length(dkepath.remote),
+        %
+        dkecluster.scheduler.remote = dkepath.remote(-dkecluster.scheduler.mode);
+        %
+        dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',num2str(-dkecluster.scheduler.mode),' chosen.'];        
+        disp(['==> ',dkecluster.scheduler.info])
+        %
+    else
+        disp(['WARNING: The profile number ',num2str(-dkecluster.scheduler.mode),' does not exist in dkepath.remote. Sequential mode enforced']);
+        dkecluster.scheduler.mode = 0;
+    end
+    %
 end
 %
 if dkecluster.scheduler.mode == 0,

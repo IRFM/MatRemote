@@ -164,6 +164,10 @@ if isfield(dkecluster,'scheduler'),
         %
         [flag,varargout{:}] = process_loop_jd(@parcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
+    elseif dkecluster.scheduler.mode < 0,% remote computing on cluster dkepath.remote(-dkecluster.scheduler.mode)
+        %
+        [flag,varargout{:}] = process_loop_jd(@remcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
+        %
     else
         if dkecluster.scheduler.display,disp(['---> ''for'' loop for the function ',func2str(fun),'.m']);end
     	[flag,varargout{:}] = seqcomputing(fun,args_in,arg_index,arg_range);
