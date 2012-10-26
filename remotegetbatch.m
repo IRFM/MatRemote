@@ -191,6 +191,8 @@ elseif job.xgridsearch,
         end
     end
     %
+    % extract output and error files
+    %
     remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.xgrid_dir,filesep,'error_file',' -so ',job.remotedatapath,job.xgrid_dir,filesep,'output_file -out'];  
     %
     if ~isempty(remotehost),
@@ -205,10 +207,34 @@ elseif job.xgridsearch,
     end
     %
     if res == 0,% error file successfuly transfered
-        locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer.']);
+        locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer completed.']);
     else
         locdisp(displaymode,['Remote transfer of xgrid error and output files for Job # ',job.id,' failed : ',err]);
     end        
+    %
+    % extract result files
+    %
+    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
+    %
+    if ~isempty(remotehost),
+        %
+        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        pause(0.1)
+        %
+    else
+        %
+        [res,err] = unix(remotecmd);
+        %
+    end
+    %
+    if res == 0,% result file successfuly transfered
+        locdisp(displaymode,['    --> Remote transfer of xgrid result files for Job # ',job.id,' on the remote computer completed.']);
+    else
+        locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
+        soutput.err = err;
+        %
+        return
+    end            
 end
 %
 % data transfer
@@ -220,18 +246,6 @@ if ~isempty(job.load_id),
             ' as user ',remotelogname,' to location ',job.localdatapath,job.load_id])  
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-            %
-            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.xgrid_dir];  
-            %
-            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-            pause(0.1)
-            %
-            if res ~= 0,
-                locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end            
             %
             [res,err] = unix(['scp -r ',remotelogname,'@',remotehost,':',job.remotedatapath,job.xgrid_dir,filesep,'output_file ',job.localdatapath,job.xgrid_dir,filesep,'output_file']);
             %
