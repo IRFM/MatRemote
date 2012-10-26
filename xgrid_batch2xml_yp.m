@@ -46,6 +46,8 @@ fprintf(fileid,['					<key>jobtimeid</key>','\n']);
 fprintf(fileid,['					<string>',job.timeid,'</string>','\n']);
 fprintf(fileid,['					<key>debugmode</key>','\n']);
 fprintf(fileid,['					<string>',num2str(job.debugmode),'</string>','\n']);
+fprintf(fileid,['					<key>hostname</key>','\n']);
+fprintf(fileid,['					<string>',job.hostname,'</string>','\n']);
 fprintf(fileid,['					<key>USER</key>','\n']);
 fprintf(fileid,['					<string>',job.remotelogname,'</string>','\n']);
 fprintf(fileid,['					<key>remotedatapath</key>','\n']);

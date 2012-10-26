@@ -32,6 +32,37 @@ elseif job.xgridsearch,
     localdatapath = [job.localdatapath,job.xgrid_dir,filesep];% job directory for xgrid
     mkdir(localdatapath);
     %
+    % determine remote hostname
+    %
+    remotecmd = 'echo $HOSTNAME';
+    %
+    locdisp(displaymode,['    --> Retrieving remote hostname : ',remotecmd]) 
+    %
+    if ~isempty(remotehost),
+        %
+        [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        %
+    else
+        %
+        [res,txt] = unix(remotecmd);
+        %
+    end
+    %
+    if res ~= 0,
+        %
+        locdisp(displaymode,['Remote hostname check failed : ',txt]);
+        job.err = txt;
+        %
+        return
+        %
+    else
+        %
+        job.hostname = txt(1:end-1);
+        %
+        locdisp(displaymode,[' ... done. Remote hostname : ',job.hostname])
+        %
+    end
+    %
     % save xgrid batch file into job directory 
     %
     job.xgrid_script = xgrid_batch2xml_yp(job,'');

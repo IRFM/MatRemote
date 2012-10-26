@@ -58,7 +58,7 @@ end
 %
 % path to matlab if applicable
 %
-if any(strfind(job.script,'matlabbatch.sh')) && (~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot')),%matlab called remotely and not prescribed
+if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed
     [dummy,matver] = LUKEversion_jd;
     if isempty(remote.host),% same version for local calculations
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
@@ -274,35 +274,6 @@ elseif job.condorsearch,
     remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
-    %
-    remotecmd = 'echo $HOSTNAME';
-    %
-    locdisp(displaymode,['    --> Retrieving remote hostname : ',remotecmd]) 
-    %
-    if ~isempty(remotehost),
-        %
-        [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-        %
-    else
-        %
-        [res,txt] = unix(remotecmd);
-        %
-    end
-    %
-    if res ~= 0,
-        %
-        locdisp(displaymode,['Remote run start failed : ',txt]);
-        job.err = txt;
-        %
-        return
-        %
-    else
-        %
-        job.hostname = txt(1:end-1);
-        %
-        locdisp(displaymode,[' ... done. Remote hostname : ',job.hostname])
-        %
-    end
     %
     remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.xgrid_dir,filesep,job.xgrid_script];
     %
