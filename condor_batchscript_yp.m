@@ -82,7 +82,7 @@ fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
 if isempty(data),%remote computing
-    fprintf(fileid,['Arguments = ',job.args,'\n']);
+    fprintf(fileid,['Arguments = ','\n']);%,job.args
 else%dcluke
     fprintf(fileid,['Arguments = load(''input_dcluke_',job.timeid,'.mat'');noms = fieldnames(data.appdata);for  k = 1:length(noms),setappdata(0,noms{k},data.appdata.(noms{k}));end;cd(data.dir);diary(data.diaryfile);clear resultat;try,[resultat{1:nargout(data.commande)}] =  feval(data.commande,data.entrees{:});etat_sortie = 0;catch,etat_sortie = 1;resultat = [];end;etat_error = lasterr;save(data.outputdata,''resultat'',''etat_sortie'',''etat_error'');diary off;\n']);
 end

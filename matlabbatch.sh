@@ -2,11 +2,7 @@
 #
 # Filename: matlabbatch.sh
 #
+# Standard matlab batch start where the generic function remotematrun is called after setting the path to environment variable 'remotebatch_path'
 #
-# run matlab in text mode 
-#
-# Note : the matlab command can be specified either through the environment variable $args (xgrid)
-#        or through an argument to the command matlabbatch (condor)
-#
-"$remotebatch_matlabroot"matlab  -nojvm -nodesktop -nodisplay -nosplash -r "$args $*"
+"$remotebatch_matlabroot"matlab  -nojvm -nodesktop -nodisplay -nosplash -r "remotebatch_path = getenv('remotebatch_path');addpath(remotebatch_path);disp([' Path set to ',remotebatch_path]);remotematrun;exit"
 
