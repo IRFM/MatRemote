@@ -5,7 +5,7 @@
 %
 clear all
 %
-remnum = -1;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
+remnum = -4;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
 %                                   (1,2,3,...) profile number in dkepath.remote
 %
 if remnum > 0,
@@ -50,7 +50,7 @@ elseif remnum == -2,
     %
 elseif remnum == -3,
     %
-    % local run on yves laptop with condor
+    % local run on yves laptop or macpro yvespeysson with condor
     %
     remote.host = '';
     remote.cmd = 'condor_submit';
