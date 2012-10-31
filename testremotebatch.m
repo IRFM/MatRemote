@@ -74,9 +74,13 @@ elseif remnum == -4,
     remote.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
     remote.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
     %
-    remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
-    remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
-    remote.matdef = remote.mat714;%default matlab on remote machine
+    %remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
+    %remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    %remote.matdef = remote.mat714;%default matlab on remote machine
+    %
+    remote.mat800.root = '/Applications/MATLAB_R2012a.app/bin/';
+    remote.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    remote.matdef = remote.mat800;%default matlab on remote machine
     %
     %remote.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
     %
@@ -95,9 +99,13 @@ elseif remnum == -5,
     remote.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
     %remote.remotedatapath = '/Users/yvespeysson/xgrid/';
     %
-    remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
-    remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
-    remote.matdef = remote.mat714;%default matlab on remote machine
+    %remote.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
+    %remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    %remote.matdef = remote.mat714;%default matlab on remote machine
+    %
+    remote.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+    remote.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+    remote.matdef = remote.mat800;%default matlab on remote machine
     %
     %remote.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
     %
