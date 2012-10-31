@@ -5,7 +5,11 @@
 %
 clear all
 %
+<<<<<<< testremotebatch.m
+remnum = -5;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
+=======
 remnum = -4;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
+>>>>>>> 1.8
 %                                   (1,2,3,...) profile number in dkepath.remote
 %
 if remnum > 0,
@@ -78,8 +82,8 @@ elseif remnum == -4,
     %remote.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
     %remote.matdef = remote.mat714;%default matlab on remote machine
     %
-    remote.mat800.root = '/Applications/MATLAB_R2012a.app/bin/';
-    remote.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012a';
+    remote.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+    remote.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
     remote.matdef = remote.mat800;%default matlab on remote machine
     %
     %remote.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
