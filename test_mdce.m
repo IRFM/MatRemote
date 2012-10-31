@@ -7,8 +7,8 @@ function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,
 %   - b is the number of the remote profile in the path file (used only if a > 0)
 %
 %   - calculation is done localy: test_mdce(0,0,0) -> sequential, test_mdce(1,0,0) -> jobs, test_mdce(2,0,0) -> dcluke, test_mdce(3,0,0) -> parfor
-%   - calculation may be first transfered and done remotely according to the distributed computing environment state: test_mdce(a,b,0) with a >= 0 and b > 0
-%   - calculation is first distributed localy and each job is executed remotely: test_mdce(a,0,0) with a < 0
+%   - calculation may be first transfered and done remotely according to the distributed computing environment state: test_mdce(a,b,0) with a >= 0 and b > 0 Here b is the remote index (path file)
+%   - calculation is first distributed localy and each job is executed remotely: test_mdce(a,0,0) with a < 0. Here a is the remote index (path file)
 %
 %   INPUT :
 %
