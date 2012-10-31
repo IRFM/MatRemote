@@ -5,11 +5,7 @@
 %
 clear all
 %
-<<<<<<< testremotebatch.m
 remnum = -5;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
-=======
-remnum = -4;%1;%remote profile number : (-1,-2,-3) local parameters (for testing new profile)
->>>>>>> 1.8
 %                                   (1,2,3,...) profile number in dkepath.remote
 %
 if remnum > 0,
