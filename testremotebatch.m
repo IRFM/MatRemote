@@ -17,7 +17,8 @@ elseif remnum == -1,
     %
     % local or ssh run on cephee with qsub
     %
-    remote.host = 'cephee15.intra.cea.fr';%'';%
+    remote.scheduler = 'pbs';
+    remote.host = 'cephee15.intra.cea.fr';
     remote.cmd = 'qsub -l inter=false';
     remote.get_jobid = {'','.cephee'};
     remote.set_jobid = {'qstat ','.cephee','Unknown Job Id'};
@@ -35,6 +36,7 @@ elseif remnum == -2,
     %
     % ssh run on saturne with qsub
     %
+    remote.scheduler = 'pbs';
     remote.host = 'saturne1.partenaires.cea.fr';
     remote.cmd = 'qsub -q batch.q';
     remote.get_jobid = {'Your job ',' '};
@@ -65,6 +67,7 @@ elseif remnum == -4,
     % remote run on yves desktop with condor
     % commented lines not needed here but for LUKE
     %
+    remote.scheduler = 'condor';
     remote.host = 'tolbachik.hd.free.fr';
     remote.cmd = 'condor_submit';
     remote.get_jobid = {'** Proc ',':'};
@@ -93,6 +96,7 @@ elseif remnum == -5,
     % remote run on yvespeysson desktop with xgrid 
     % commented lines not needed here but for LUKE
     %
+    remote.scheduler = 'xgrid';
     remote.host = 'tolbachik.hd.free.fr';
     remote.cmd = {'xgrid -h ',' -p ',' -job batch '};%
     remote.get_jobid = {'jobIdentifier = ',';'};%
@@ -113,6 +117,16 @@ elseif remnum == -5,
     remote.yves = 'yvespeysson';
     remote.joan = 'yvespeysson';
     %
+end
+%
+if ~isempty(remote.host),
+    %
+    if ~isfield(remote,'scheduler'),
+        remote.scheduler = '';
+    end
+    %
+    [flag,remotestruct] = check_remote_yp('',[remote.host,':',remote.scheduler ]);%check remote connexion
+    if ~flag,return,end,%no remote connection
 end
 %
 remotehome = reminstall(remote);
