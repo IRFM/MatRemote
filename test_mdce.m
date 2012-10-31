@@ -2,6 +2,14 @@ function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,
 %
 %Test function of the distributed computing calculation 
 %
+% For a quick test run test_mdce(a,b,0) where:
+%   - a is the distributed calculation mode (0,1,2,3,-1,-2,...)
+%   - b is the number of the remote profile in the path file (used only if a > 0)
+%
+%   - calculation is done localy: test_mdce(0,0,0) -> sequential, test_mdce(1,0,0) -> jobs, test_mdce(2,0,0) -> dcluke, test_mdce(3,0,0) -> parfor
+%   - calculation may be first transfered and done remotely according to the distributed computing environment state: test_mdce(a,b,0) with a >= 0 and b > 0
+%   - calculation is first distributed localy and each job is executed remotely: test_mdce(a,0,0) with a < 0
+%
 %   INPUT :
 %
 %       - mdce_mode: distributed computing environment state: (0) disabled, (1) enabled with the dedicated Matlab toolbox which must be installed, (2) enabled with a private method (LDCE), (3) parfor parallel computing [1,1]
