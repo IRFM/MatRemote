@@ -22,29 +22,7 @@ end
 dkepath = dkecluster.dkepath;
 remote = dkepath.remote(dkecluster.remnum);
 %
-if isempty(remote.host),% same version for local calculations
-    mdce_job.env.luke_root = dkepath.luke_root;
-else
-    mdce_job.env.luke_root = remote.luke_root;
-end
-mdce_job.env.remotematfnc = 'runmdce';
-%
-mdce_job.script = [mdce_job.env.luke_root,filesep,'Tools/matlablukebatch.sh'];
-%
-mdce_job.savefcn = 'matstandardsave';%'runlukesave';%
-mdce_job.loadfcn = 'matstandardload';%'runlukeload';%
-mdce_job.localdatapath = '';
-if isfield(remote,'remotedatapath') && ~isempty(remote.remotedatapath),
-    mdce_job.remotedatapath = remote.remotedatapath;
-else
-    mdce_job.remotedatapath = '';
-end
-%
-mdce_job.wait = 0;% (0) return hand (1) wait for result
-mdce_job.nodes = 1;%number of nodes required
-mdce_job.nproc = 2;%number of cores required
-mdce_job.walltime = [];% time required (integers - in hours) - leave empty if no requirement
-mdce_job.memory = [];% requested memory specified in dkeparam
+mdce_job = matstandardjob_jd(remote,'runmdce');
 %
 mdce_job.debugmode = debugmode;
 %
