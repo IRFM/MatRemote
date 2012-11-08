@@ -267,8 +267,8 @@ if job.pbssearch,
         comopts = [comopts,' -l nodes=1'];
     end
     %
-    if isfield(job,'nproc') && ~isempty(job.nproc),
-        comopts = [comopts,':ppn=',num2str(job.nproc)];
+    if isfield(job,'ppn') && ~isempty(job.ppn),
+        comopts = [comopts,':ppn=',num2str(job.ppn)];
     else
         comopts = [comopts,':ppn=1'];
     end
