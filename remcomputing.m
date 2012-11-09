@@ -46,27 +46,10 @@ try
         debugmode = 0;
     end
     %
-    job.env.luke_root = remote.luke_root;% luke path environment
-    job.env.remotematfnc = 'runmat';
+    job = matstandardjob_jd(remote,'runmat');
     %
-    job.script = [job.env.luke_root,filesep,'Tools/matlablukebatch.sh'];
-    %
-    job.savefcn = 'matstandardsave';%'runlukesave';%
-    job.loadfcn = 'matstandardload';%'runlukeload';%
-    job.localdatapath = '';
-    if isfield(remote,'remotedatapath') && ~isempty(remote.remotedatapath),
-        job.remotedatapath = remote.remotedatapath;
-    else
-        job.remotedatapath = '';
-    end
-    %
-    job.wait = 0;% (0) return hand (1) wait for result
-    job.nodes = 1;%number of nodes required
-    job.nproc = 2;%number of cores required
-    job.walltime = [];% time required (integers - in hours) - leave empty if no requirement
-    %
-    if isfield(remote,'memory'),
-        job.memory = remote.memory;% requested memory specified in dkeparam
+    if isfield(scheduler,'memory'),
+        job.memory = scheduler.memory;% requested memory specified by scheduler
     end
     %
     job.debugmode = debugmode;
