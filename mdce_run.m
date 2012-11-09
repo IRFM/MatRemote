@@ -88,6 +88,8 @@ if isfield(dkecluster,'remnum'),
     %
     if any(mask_loc),%back to local computing 
         %
+        disp(['WARNING: Remote distributed computing failed for ',num2str(sum(mask_loc)),'/',num2str(length(mask_loc)),' cases. Switching to local computing for these cases.']);
+        %
         dkecluster_loc = clustermode_luke(dkecluster.param,dkecluster.fun,dkecluster.dkepath,dkecluster.schedulertype,0);% local dkecluster
         %
         varargout_loc = cell(1,nargout-1);
@@ -114,7 +116,7 @@ end
 if isfield(dkecluster,'scheduler'),
     if ~isfield(dkecluster.scheduler,'mode'),
         dkecluster = clustermode_luke(0,'',dkepath);%All cluster parameters and paths (sequential mode by default)
-        disp('WARNING: parallel computing is inconsistently set-up: ''mode'' must be chosen. Sequential mode enforced.');
+        disp('WARNING: distributed computing is inconsistently set-up: ''mode'' must be chosen. Sequential mode enforced.');
     else
         if ~isfield(dkecluster.scheduler,'temppath'),
             dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];%Local calculation
@@ -166,7 +168,7 @@ if isfield(dkecluster,'scheduler'),
         %
     elseif dkecluster.scheduler.mode < 0,% remote computing on cluster dkepath.remote(-dkecluster.scheduler.mode)
         %
-        [flag,varargout{:}] = process_loop_jd(@remcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
+        [flag,varargout{:}] = create_loop_jd(@remcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
     else
         if dkecluster.scheduler.display,disp(['---> ''for'' loop for the function ',func2str(fun),'.m']);end
@@ -231,6 +233,9 @@ end
 mask_seq = (flag < 0);%flagged for sequential computing
 %
 if any(mask_seq) && (~isfield(scheduler,'enforce') || scheduler.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
+    %
+    disp(['WARNING: Distributed computing failed for ',num2str(sum(mask_seq)),'/',num2str(length(mask_seq)),' cases. Switching to sequential computing for these cases.']);
+    %
     varargout_seq = cell(1,nargout-1);
     [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
     %

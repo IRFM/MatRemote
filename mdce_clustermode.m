@@ -205,7 +205,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
     dkecluster.scheduler.get_jobid = remote.get_jobid;
     dkecluster.scheduler.set_jobid = remote.set_jobid;
     if dkecluster.scheduler.clustersize > remote.nproc,
-        dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster
+        dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster enforced by remote
     end
     %
     if isfield(remote,'mem'),%batch run memory allocation information
@@ -252,6 +252,10 @@ elseif dkecluster.scheduler.mode < 0,%remote computing mode
     if -dkecluster.scheduler.mode <= length(dkepath.remote),
         %
         dkecluster.scheduler.remote = dkepath.remote(-dkecluster.scheduler.mode);
+        %
+        if dkecluster.scheduler.clustersize > remote.nproc,
+            dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
+        end
         %
         dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',num2str(-dkecluster.scheduler.mode),' chosen.'];        
         disp(['==> ',dkecluster.scheduler.info])
