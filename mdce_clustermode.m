@@ -253,8 +253,8 @@ elseif dkecluster.scheduler.mode < 0,%remote computing mode
         %
         dkecluster.scheduler.remote = dkepath.remote(-dkecluster.scheduler.mode);
         %
-        if dkecluster.scheduler.clustersize > remote.nproc,
-            dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
+        if dkecluster.scheduler.clustersize > dkecluster.scheduler.remote.nproc,
+            dkecluster.scheduler.clustersize = dkecluster.scheduler.remote.nproc;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
         end
         %
         dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',num2str(-dkecluster.scheduler.mode),' chosen.'];        
