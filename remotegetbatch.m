@@ -334,6 +334,9 @@ end
 %
 if isfield(soutput,'err'),
     locdisp(displaymode,'The remote script failed for the following reason : ');
+    if ~iscell(soutput.err),
+        soutput.err = {soutput.err};
+    end
     for istr = 1:length(soutput.err),
         locdisp(displaymode,soutput.err{istr});
     end

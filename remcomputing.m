@@ -65,9 +65,9 @@ try
         %
         jobs{j_range} = remoterunbatch(remote,job,mat_input,debugmode);%submit job     
         %
-        if isfield(jobs{j_range},'err'),% no error occured in the remote job start,
+        if isfield(jobs{j_range},'err'),% an error occured in the remote job start,
             flag(j_range) = -3;
-            varargout_array{j_range,1}.err = job.err;
+            varargout_array{j_range,1}.err = jobs{j_range}.err;
         end
     end
     %
