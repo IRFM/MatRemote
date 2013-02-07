@@ -47,7 +47,7 @@ else
     job.walltime = [];
 end
 %
-if isfield(remote,'memory'),
+if isfield(remote,'memory') && ~isnan(remote.memory),
     job.memory = remote.memory;% requested memory specified in dkeparam
 else
     job.memory = [];
