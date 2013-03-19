@@ -263,14 +263,21 @@ if job.pbssearch,
     %
     if isfield(job,'nodes') && ~isempty(job.nodes),
         comopts = [comopts,' -l nodes=',num2str(job.nodes)];
-    else
-        comopts = [comopts,' -l nodes=1'];
+%     else
+%         comopts = [comopts,' -l nodes=1'];
+        %
+        if isfield(job,'ppn') && ~isempty(job.ppn),
+            comopts = [comopts,':ppn=',num2str(job.ppn)];
+    %     else
+    %         comopts = [comopts,':ppn=1'];
+        end
+        %
     end
     %
-    if isfield(job,'ppn') && ~isempty(job.ppn),
-        comopts = [comopts,':ppn=',num2str(job.ppn)];
-    else
-        comopts = [comopts,':ppn=1'];
+    if isfield(job,'ncpus') && ~isempty(job.ncpus),
+        comopts = [comopts,' -l ncpus=',num2str(job.nodes)];
+%     else
+%         comopts = [comopts,':ppn=1'];
     end
     %
     if isfield(job,'memory') && ~isempty(job.memory),
