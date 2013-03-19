@@ -32,13 +32,13 @@ end
 if isfield(remote,'nodes'),%number of nodes required
     job.nodes = remote.nodes;
 else
-    job.nodes = 1;
+    job.nodes = [];
 end
 %
 if isfield(remote,'ppn'),%number of cores required
     job.ppn = remote.ppn;
 else
-    job.ppn = 2;
+    job.ppn = [];
 end
 %
 if isfield(remote,'walltime'),% time required (integers - in hours) - leave empty if no requirement
