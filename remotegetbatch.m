@@ -38,6 +38,17 @@ if nargin < 3,
     displaymode = 0;
 end
 %
+if ~isfield(job,'id'),
+    %
+    locdisp(displaymode,'No id field in job structure; error starting job likely.');
+    %
+    if isfield(job,'err')
+        soutput.err = job.err;
+    end
+    %
+    return
+end
+%
 if check == 0,
     %
     if isfield(remote,'remtimout'),% in minutes
