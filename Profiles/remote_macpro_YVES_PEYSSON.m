@@ -21,8 +21,6 @@ remote.condor.yves.set_jobid = {'condor_q ',''};
 remote.condor.yves.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
 remote.condor.yves.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
 remote.condor.yves.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.yves.matver.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
-remote.condor.yves.matver.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
 remote.condor.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.condor.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.condor.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
@@ -30,6 +28,23 @@ remote.condor.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat800;%default matlab on remote machine
 remote.condor.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.condor.yves.remoteuser = 'yvespeysson';
+%
+remote.condor.yvespeysson = default_remote_profile;
+remote.condor.yvespeysson.host = '';
+remote.condor.yvespeysson.nproc = 6;
+remote.condor.yvespeysson.cmd = 'condor_submit';
+remote.condor.yvespeysson.get_jobid = {'** Proc ',':'};
+remote.condor.yvespeysson.set_jobid = {'condor_q ',''};
+remote.condor.yvespeysson.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
+remote.condor.yvespeysson.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
+remote.condor.yvespeysson.remotedatapath = '/Users/yvespeysson/condor/';
+remote.condor.yvespeysson.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.condor.yvespeysson.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.condor.yvespeysson.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.condor.yvespeysson.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
+remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat800;%default matlab on remote machine
+remote.condor.yvespeysson.luke_root = '/Users/yvespeysson/Projets/LUKE/';
+remote.condor.yvespeysson.remoteuser = 'yvespeysson';
 %
 % JOAN DECKER
 %
@@ -54,6 +69,39 @@ remote.condor.joan.remoteuser = 'yvespeysson';%'joandecker';
 %
 % macproyves (xgrid)
 %
+% WARNING about Xgrid scheduler for mac OSX (> 10.5.x)
+% Xgrid runs tasks using the "sandbox" facility. Tasks running as 'nobody' ie, 
+% any task where either the submitting client or the receiving agent 
+% are NOT using Kerberos authentication) have very restricted access to the
+% filesystem. To by-pass this strong protection (no password) on a local
+% cluster or a multi-core multi-processor machine, go to
+% /usr/share/sandbox/xgridagentd_task_nobody.sb file (root rights needed)
+% then, comment the following line (with a ';' at the beginning of the line):
+% (allow process* sysctl* mach* network* system-socket)
+% and replace it by
+% (allow process* sysctl* mach* file-read* file-write* network* system-socket)
+% omment the following lines (with a ';' at the beginning of the line):
+% (allow file-read* (regex "^/(bin|dev|(private/)?(etc|tmp|var)|usr|System|Library)(/|$)"))
+% (allow file-read* file-write* (regex "^/(private/)?(tmp|var)(/|$)"))
+% and replace it by
+% (allow file-read* file-write* (regex "^/all(/|$)"))
+%
+% NOTE that it should be done each time the system is updated.
+% furthermore, all *.m and *.mex* files must be read by anybody.
+% This lack of protection make the cluster more vulnerable to an external
+% attack, but on a personal computer, this risk is limited.
+%
+% Furthermore, on the remote session, before any calculation, it is
+% necessary to create a folder named 'xgrid' (~/xgrid)
+% that will contain all the files for the remote calculations. The owner is the
+% USER , and the group is 'nobody(-2)'. The rights are 777. It is also
+% necessary to done it the same for the Matlab_R20xx_y application (all the
+% package and inside) in such a way Matlab can write in the ~/xgrid folder.
+%
+% The IP address of the hostname must be given in the file /etc/hosts
+%
+% WARNING: most of the problems come from the SSH without login
+% authentication, rights of the target directory and Matlab !
 %
 % YVES PEYSSON
 %
@@ -69,9 +117,25 @@ remote.xgrid.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat800;%default matlab on remote machine
-remote.xgrid.yves.luke_root = '/Users/yvespeysson/LUKE/';
+remote.xgrid.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
 remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
+%
+remote.xgrid.yvespeysson = default_remote_profile;
+remote.xgrid.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yvespeysson.nproc = 6;
+remote.xgrid.yvespeysson.cmd = {'xgrid -h ',' -p ',' -job batch '};
+remote.xgrid.yvespeysson.get_jobid = {'jobIdentifier = ',';'};
+remote.xgrid.yvespeysson.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
+remote.xgrid.yvespeysson.remotedatapath = '/Users/yvespeysson/xgrid/';
+remote.xgrid.yvespeysson.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.xgrid.yvespeysson.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.xgrid.yvespeysson.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.xgrid.yvespeysson.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
+remote.xgrid.yvespeysson.matver.matdef = remote.xgrid.yvespeysson.matver.mat800;%default matlab on remote machine
+remote.xgrid.yvespeysson.luke_root = '/Users/yvespeysson/Projets/LUKE/';
+remote.xgrid.yvespeysson.password = {'ghm93'};
+remote.xgrid.yvespeysson.remoteuser = 'yvespeysson';%'joandecker';
 %
 % JOAN DECKER
 %
