@@ -29,23 +29,6 @@ remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat800;%default mat
 remote.condor.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.condor.yves.remoteuser = 'yvespeysson';
 %
-remote.condor.yvespeysson = default_remote_profile;
-remote.condor.yvespeysson.host = '';
-remote.condor.yvespeysson.nproc = 6;
-remote.condor.yvespeysson.cmd = 'condor_submit';
-remote.condor.yvespeysson.get_jobid = {'** Proc ',':'};
-remote.condor.yvespeysson.set_jobid = {'condor_q ',''};
-remote.condor.yvespeysson.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
-remote.condor.yvespeysson.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-remote.condor.yvespeysson.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.yvespeysson.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.condor.yvespeysson.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.condor.yvespeysson.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.condor.yvespeysson.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat800;%default matlab on remote machine
-remote.condor.yvespeysson.luke_root = '/Users/yvespeysson/Projets/LUKE/';
-remote.condor.yvespeysson.remoteuser = 'yvespeysson';
-%
 % JOAN DECKER
 %
 remote.condor.joan = default_remote_profile;
@@ -120,22 +103,6 @@ remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat800;%default matla
 remote.xgrid.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
 remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
-%
-remote.xgrid.yvespeysson = default_remote_profile;
-remote.xgrid.yvespeysson.host = 'tolbachik.hd.free.fr';
-remote.xgrid.yvespeysson.nproc = 6;
-remote.xgrid.yvespeysson.cmd = {'xgrid -h ',' -p ',' -job batch '};
-remote.xgrid.yvespeysson.get_jobid = {'jobIdentifier = ',';'};
-remote.xgrid.yvespeysson.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
-remote.xgrid.yvespeysson.remotedatapath = '/Users/yvespeysson/xgrid/';
-remote.xgrid.yvespeysson.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.xgrid.yvespeysson.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.xgrid.yvespeysson.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.xgrid.yvespeysson.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.xgrid.yvespeysson.matver.matdef = remote.xgrid.yvespeysson.matver.mat800;%default matlab on remote machine
-remote.xgrid.yvespeysson.luke_root = '/Users/yvespeysson/Projets/LUKE/';
-remote.xgrid.yvespeysson.password = {'ghm93'};
-remote.xgrid.yvespeysson.remoteuser = 'yvespeysson';%'joandecker';
 %
 % JOAN DECKER
 %
