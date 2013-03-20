@@ -53,8 +53,8 @@ else
     temppathroot = [pwd,filesep];% Local folder
 end
 %
-if isfield(dkepath,'remote'),
-    remote = dkepath.remote(1);%first cluster is always considered
+if isfield(dkepath,'remote') & ~isempty(dkepath.remote),
+        remote = dkepath.remote(1);%first cluster is always considered
 else
     remote = '';% no dcluke information
 end
