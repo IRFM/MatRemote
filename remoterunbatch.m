@@ -58,19 +58,19 @@ end
 %
 % path to matlab if applicable
 %
-if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed
+if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed by job
     [dummy,matver] = LUKEversion_jd;
     if isempty(remote.host),% same version for local calculations
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
         job.env.remotebatch_matlabprefdir = prefdir;        
-    elseif isfield(remote,['mat',matver]) && ~isempty(remote.(['mat',matver])),
+    elseif isfield(remote,'matver') && isfield(remote.matver,['mat',matver]) && ~isempty(remote.matver.(['mat',matver])),
         % same version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.(['mat',matver]).root;
-        job.env.remotebatch_matlabprefdir = remote.(['mat',matver]).prefdir;
-    elseif isfield(remote,'matdef') && ~isempty(remote.matdef),
+        job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]).root;
+        job.env.remotebatch_matlabprefdir = remote.matver.(['mat',matver]).prefdir;
+    elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef),
         % default version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matdef.root;
-        job.env.remotebatch_matlabprefdir = remote.matdef.prefdir;
+        job.env.remotebatch_matlabroot = remote.matver.matdef.root;
+        job.env.remotebatch_matlabprefdir = remote.matver.matdef.prefdir;
     else% default version on remote cluster
         job.env.remotebatch_matlabroot = '';
         job.env.remotebatch_matlabprefdir = '';
