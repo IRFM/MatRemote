@@ -3,7 +3,7 @@ function remote_profile = remote_macpro_YVES_PEYSSON(clustername,profilename,loc
 % This function regroups the remote profiles run on the MACPRO of Yves Peysson
 %
 default_cluster = 'condor';% default cluster profile if 'clustername' is not an existing cluster profile
-default_user = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+default_profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -27,7 +27,7 @@ remote.condor.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.condor.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat800;%default matlab on remote machine
 remote.condor.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
-remote.condor.yves.remoteuser = 'yvespeysson';
+remote.condor.yves.users.remoteuser = 'yvespeysson';
 %
 % JOAN DECKER
 %
@@ -46,7 +46,7 @@ remote.condor.joan.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.condor.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.condor.joan.matver.matdef = remote.condor.joan.matver.mat800;%default matlab on remote machine
 remote.condor.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
-remote.condor.joan.remoteuser = 'yvespeysson';%'joandecker';
+remote.condor.joan.users.remoteuser = 'yvespeysson';%'joandecker';
 %
 % --------------------------------------------------
 %
@@ -102,7 +102,7 @@ remote.xgrid.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat800;%default matlab on remote machine
 remote.xgrid.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
-remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.yves.users.remoteuser = 'yvespeysson';%'joandecker';
 %
 % JOAN DECKER
 %
@@ -120,7 +120,7 @@ remote.xgrid.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.xgrid.joan.matver.matdef = remote.xgrid.joan.matver.mat800;%default matlab on remote machine
 remote.xgrid.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
 remote.xgrid.joan.password = {'ghm93'};
-remote.xgrid.joan.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.joan.users.remoteuser = 'yvespeysson';%'joandecker';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
@@ -131,13 +131,15 @@ if nargin < 1 || ~isfield(remote,clustername),
 end
 %
 if nargin < 2 || ~isfield(remote.(clustername),profilename),
-    profilename = default_user;
+    profilename = default_profile;
 end
 %
 remote_profile = remote.(clustername).(profilename);
 %
 if nargin >= 3,
-    remote_profile.(localuser) = remote_profile.remoteuser;
+    remote_profile.users.(localuser) = remote_profile.users.remoteuser;
 end
 %
+
+
     
