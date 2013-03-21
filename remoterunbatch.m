@@ -77,6 +77,10 @@ if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab cal
     end
 end
 %
+% Job parameters tested to be compatible with or enforced by remote
+%
+job = remote2job_jd(remote,job);
+%
 remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
 %
@@ -101,8 +105,8 @@ end
 %
 logname(double(logname) == 10) = [];% remove return character
 %
-if isfield(remote,logname) && ~isempty(remote.(logname)),
-    remotelogname = remote.(logname);
+if isfield(remote,'users') && isfield(remote.users,logname) && ~isempty(remote.users.(logname)),
+    remotelogname = remote.users.(logname);
 else
     remotelogname = logname;
 end
@@ -257,30 +261,24 @@ if job.pbssearch,
     % command options
     %
     comopts = '';
-    if isfield(job,'wait') && job.wait == 1,
+    if isfield(job,'wait') && ~isnan(job.wait) && ~isempty(job.wait) && job.wait == 1,
         comopts = [comopts,' -W block=true'];
     end
     %
-    if isfield(job,'nodes') && ~isempty(job.nodes),
+    if isfield(job,'nodes') && ~isnan(job.nodes) && ~isempty(job.nodes),
         comopts = [comopts,' -l nodes=',num2str(job.nodes)];
-%     else
-%         comopts = [comopts,' -l nodes=1'];
         %
-        if isfield(job,'ppn') && ~isempty(job.ppn),
+        if isfield(job,'ppn') && ~isnan(job.ppn) && ~isempty(job.ppn),
             comopts = [comopts,':ppn=',num2str(job.ppn)];
-    %     else
-    %         comopts = [comopts,':ppn=1'];
         end
         %
     end
     %
-    if isfield(job,'ncpus') && ~isempty(job.ncpus),
-        comopts = [comopts,' -l ncpus=',num2str(job.nodes)];
-%     else
-%         comopts = [comopts,':ppn=1'];
+    if isfield(job,'ncpus') && ~isnan(job.ncpus) && ~isempty(job.ncpus),
+        comopts = [comopts,' -l ncpus=',num2str(job.ncpus)];
     end
     %
-    if isfield(job,'memory') && ~isempty(job.memory),
+    if isfield(job,'memory') && ~isnan(job.memory) && ~isempty(job.memory),
         comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
     end
     %
