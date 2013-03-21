@@ -31,18 +31,22 @@ end
 %
 if isfield(remote,'ppn') && ~isempty(remote.ppn), 
     job.ppn = remote.ppn;%Number of nodes required by remote cluster  
-elseif ~isfield(job,'ppn') && isfield(job,'ncpus'),
-    job.ppn = job.ncpus;
-else
-    job.ppn = 1;
+elseif ~isfield(job,'ppn') 
+    if isfield(job,'ncpus'),
+        job.ppn = job.ncpus;
+    else
+        job.ppn = 1;
+    end
 end
 %
 if isfield(remote,'ncpus') && ~isempty(remote.ncpus), 
     job.ncpus = remote.ncpus;%Number of nodes required by remote cluster  
-elseif ~isfield(job,'ncpus') && isfield(job,'ppn'),
-    job.ncpus = job.ppn;
-else
-    job.ppn = 1;
+elseif ~isfield(job,'ncpus')
+    if isfield(job,'ppn'),
+        job.ncpus = job.ppn;
+    else
+        job.ppn = 1;
+    end
 end
 %
 if isfield(remote,'walltime') && ~isempty(remote.walltime),% time required (integers - in hours) - leave empty if no requirement
