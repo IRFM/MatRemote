@@ -54,7 +54,7 @@ else
 end
 %
 if isfield(dkepath,'remote') & ~isempty(dkepath.remote),
-        remote = dkepath.remote(1);%first cluster is always considered
+    remote = dkepath.remote(1);%first cluster is always considered
 else
     remote = '';% no dcluke information
 end
@@ -189,8 +189,7 @@ elseif dkecluster.scheduler.mode == 2,%LDCE mode
         dkecluster.scheduler.luke_root = remote.luke_root;
         dkecluster.scheduler.prefdir = remote.prefdir;
         dkecluster.scheduler.password = remote.password; 
-        remotefields = fieldnames(remote);
-        dkecluster.scheduler.logname = remote.(remotefields{end});  
+        dkecluster.scheduler.logname = remote.users.remoteuser;  
     elseif ~isempty(condorsearch),
         dkecluster.scheduler.cluster = remote.cluster;
         dkecluster.scheduler.matlabroot = remote.matlabroot;
