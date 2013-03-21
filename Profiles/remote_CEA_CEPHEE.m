@@ -33,7 +33,7 @@ remote.pbs.joan.users.remoteuser = 'JD211098';
 % YVES PEYSSON
 %
 remote.pbs.yves = default_remote_profile;
-remote.condor.yves.host = 'tolbachik.hd.free.fr';
+remote.pbs.yves.host = 'cephee15.intra.cea.fr';
 %
 % to complete
 %
