@@ -282,7 +282,7 @@ if job.pbssearch,
         comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
     end
     %
-    if isfield(job,'walltime') && ~isempty(job.walltime),
+    if isfield(job,'walltime') && ~isnan(job.walltime) && ~isempty(job.walltime),
         comopts = [comopts,' -l walltime=',num2str(job.walltime),':00:00'];
     end
     %
