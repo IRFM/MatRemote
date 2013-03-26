@@ -261,28 +261,28 @@ if job.pbssearch,
     % command options
     %
     comopts = '';
-    if isfield(job,'wait') && ~isnan(job.wait) && ~isempty(job.wait) && job.wait == 1,
+    if isfield(job,'wait') && ~isempty(job.wait) && ~isnan(job.wait) && job.wait == 1,
         comopts = [comopts,' -W block=true'];
     end
     %
-    if isfield(job,'nodes') && ~isnan(job.nodes) && ~isempty(job.nodes),
+    if isfield(job,'nodes') && ~isempty(job.nodes) && ~isnan(job.nodes),
         comopts = [comopts,' -l nodes=',num2str(job.nodes)];
         %
-        if isfield(job,'ppn') && ~isnan(job.ppn) && ~isempty(job.ppn),
+        if isfield(job,'ppn') && ~isempty(job.ppn) && ~isnan(job.ppn),
             comopts = [comopts,':ppn=',num2str(job.ppn)];
         end
         %
     end
     %
-    if isfield(job,'ncpus') && ~isnan(job.ncpus) && ~isempty(job.ncpus),
+    if isfield(job,'ncpus') && ~isempty(job.ncpus) && ~isnan(job.ncpus),
         comopts = [comopts,' -l ncpus=',num2str(job.ncpus)];
     end
     %
-    if isfield(job,'memory') && ~isnan(job.memory) && ~isempty(job.memory),
+    if isfield(job,'memory') && ~isempty(job.memory) && ~isnan(job.memory),
         comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
     end
     %
-    if isfield(job,'walltime') && ~isnan(job.walltime) && ~isempty(job.walltime),
+    if isfield(job,'walltime') && ~isempty(job.walltime) && ~isnan(job.walltime),
         comopts = [comopts,' -l walltime=',num2str(job.walltime),':00:00'];
     end
     %
