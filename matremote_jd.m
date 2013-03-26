@@ -25,7 +25,7 @@ if isfield(args_in{1},'job'),% check result of previously launched job
         if debugmode,
             disp('Job still running.')
         end
-        err = 'running';
+        output.varargout{1}.job = args_in{1}.job;
     end
     %
 else   
