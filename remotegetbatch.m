@@ -403,6 +403,9 @@ if job.clean >= 1,%clean remote and batch files
     if job.pbssearch,
         %
         batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
+        if length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
+            batchfileroot = batchfileroot(1:end-3);
+        end
         rmbatchcmd = ['rm -f ',batchfileroot,'.e',job.id,' ',batchfileroot,'.o',job.id];
         %
         if ~isempty(remotehost)
