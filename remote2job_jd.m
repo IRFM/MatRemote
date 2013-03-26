@@ -55,9 +55,15 @@ elseif ~isfield(job,'walltime'),
     job.walltime = 1;
 end
 %
+if ~isfield(job,'memory'),
+    job.memory = [];% default value in mb
+end
 if isfield(remote,'memory') && ~isempty(remote.memory),
-    job.memory = remote.memory;% requested memory specified in dkeparam
-elseif ~isfield(job,'memory'),
-    job.memory = 500;
+    if isnan(remote.memory),
+        luke_job.memory = NaN;
+    elseif ~isempty(job.memory) && remote.memory < luke_job.memory,% max memory on remote computer
+        disp('WARNING : memory request limited by remote host')
+        luke_job.memory = remote.memory;
+    end
 end
 %
