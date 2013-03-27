@@ -29,10 +29,33 @@ remote.pbs.joan.users.remoteuser = 'JD211098';
 %
 remote.pbs.yves = default_remote_profile;
 remote.pbs.yves.host = 'pleione.intra.cea.fr';
+remote.pbs.yves.nproc = 48;
+remote.pbs.yves.cmd = 'qsub';
+remote.pbs.yves.get_jobid = {'','.pleione'};%str_before,str_after
+remote.pbs.yves.set_jobid = {'qstat ','.pleione','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.pbs.yves.matver.mat710.prefdir = '/home/sccp/gsem/peysson/.matlab/R2010a';
+remote.pbs.yves.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
+remote.pbs.yves.matver.mat712.prefdir = '/home/sccp/gsem/peysson/.matlab/R2011a';
+remote.pbs.yves.matver.matdef = remote.pbs.yves.matver.mat710;%default matlab on remote machine
+remote.pbs.yves.luke_root = '/home/sccp/gsem/yves/LUKE/';
+remote.pbs.yves.users.remoteuser = 'YP105119';
 %
-% to complete
+% YVES BURAVAND
 %
-
+remote.pbs.yvesb = default_remote_profile;
+remote.pbs.yvesb.host = 'pleione.intra.cea.fr';
+remote.pbs.yvesb.nproc = 48;
+remote.pbs.yvesb.cmd = 'qsub';
+remote.pbs.yvesb.get_jobid = {'','.pleione'};%str_before,str_after
+remote.pbs.yvesb.set_jobid = {'qstat ','.pleione','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.yvesb.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.pbs.yvesb.matver.mat710.prefdir = '/home/sccp/gsem/peysson/.matlab/R2010a';
+remote.pbs.yvesb.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
+remote.pbs.yvesb.matver.mat712.prefdir = '/home/sccp/gsem/peysson/.matlab/R2011a';
+remote.pbs.yvesb.matver.matdef = remote.pbs.yvesb.matver.mat710;%default matlab on remote machine
+remote.pbs.yvesb.luke_root = '/home/sccp/gsem/yves/LUKE/';
+remote.pbs.yvesb.users.remoteuser = 'YB109156';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
@@ -52,3 +75,4 @@ if nargin >= 3,
     remote_profile.users.(localuser) = remote_profile.users.remoteuser;
 end
 %
+
