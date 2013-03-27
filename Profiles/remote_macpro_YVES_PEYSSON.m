@@ -40,10 +40,10 @@ remote.condor.joan.set_jobid = {'condor_q ',''};
 remote.condor.joan.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
 remote.condor.joan.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
 remote.condor.joan.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.joan.matver.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
-remote.condor.joan.matver.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
 remote.condor.joan.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.condor.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.condor.joan.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.condor.joan.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.condor.joan.matver.matdef = remote.condor.joan.matver.mat800;%default matlab on remote machine
 remote.condor.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
 remote.condor.joan.users.remoteuser = 'yvespeysson';%'joandecker';
@@ -113,10 +113,10 @@ remote.xgrid.joan.cmd = {'xgrid -h ',' -p ',' -job batch '};
 remote.xgrid.joan.get_jobid = {'jobIdentifier = ',';'};
 remote.xgrid.joan.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
 remote.xgrid.joan.remotedatapath = '/Users/yvespeysson/xgrid/';
-remote.xgrid.joan.matver.mat714.root = '/Applications/MATLAB_R2012a.app/bin/';
-remote.xgrid.joan.matver.mat714.prefdir = '/Users/yvespeysson/.matlab/R2012a';
 remote.xgrid.joan.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.xgrid.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.xgrid.joan.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.xgrid.joan.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.xgrid.joan.matver.matdef = remote.xgrid.joan.matver.mat800;%default matlab on remote machine
 remote.xgrid.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
 remote.xgrid.joan.password = {'ghm93'};
