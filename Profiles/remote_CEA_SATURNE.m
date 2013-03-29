@@ -37,10 +37,24 @@ remote.sun.joan.users.remoteuser = 'JD211098';
 %
 remote.sun.yves = default_remote_profile;
 remote.sun.yves.host = 'saturne1.partenaires.cea.fr';
-%
-% to complete
-%
-
+remote.sun.yves.nproc = 12;% limited to two jobs per PBS node to avoid cluster saturation
+remote.sun.yves.wait = 0;% invalid option
+remote.sun.yves.nodes = NaN;% invalid option
+remote.sun.yves.ncpus = NaN;% invalid option
+remote.sun.yves.memory = NaN;% invalid option
+remote.sun.yves.walltime = NaN;% invalid option
+remote.sun.yves.cmd = 'qsub -q batch.q';% 
+remote.sun.yves.get_jobid = {'Your job ',' '};%str_before,str_after
+remote.sun.yves.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str_before,str_after,str_check
+% remote.sun.yves.matver.mat705.root = '/applications/matlab_2007b/bin/';
+% remote.sun.yves.matver.mat705.prefdir = '/home/sccp/gsem/peysson/.matlab/R2007b';
+% remote.sun.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+% remote.sun.yves.matver.mat710.prefdir = '/home/sccp/gsem/peysson/.matlab/R2010a';
+% remote.sun.yves.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
+% remote.sun.yves.matver.mat712.prefdir = '/home/sccp/gsem/peysson/.matlab/R2011a';
+% remote.sun.yves.matver.matdef = remote.sun.yves.matver.mat710;%default matlab on remote machine
+remote.sun.yves.luke_root = '/home/sccp/gsem/peysson/LUKE/';
+remote.sun.yves.users.remoteuser = 'YP105119';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
