@@ -53,7 +53,7 @@ remote.sun.yves.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str_
 % remote.sun.yves.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
 % remote.sun.yves.matver.mat712.prefdir = '/home/sccp/gsem/peysson/.matlab/R2011a';
 % remote.sun.yves.matver.matdef = remote.sun.yves.matver.mat710;%default matlab on remote machine
-remote.sun.yves.luke_root = '/home/sccp/gsem/peysson/LUKE/';
+remote.sun.yves.luke_root = '/home/YP105119/LUKE/';
 remote.sun.yves.users.remoteuser = 'YP105119';
 %
 % -------------------------------------------------
