@@ -15,6 +15,12 @@ elseif ~isfield(job,'remotedatapath'),
     job.remotedatapath = '';
 end
 %
+if isfield(remote,'clean') && ~isempty(remote.clean),
+    job.clean = remote.clean;
+elseif ~isfield(job,'clean'),
+    job.clean = 2;
+end
+%
 % PBS and TORQUE only
 %
 if isfield(remote,'wait') && ~isempty(remote.wait),
