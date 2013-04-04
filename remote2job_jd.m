@@ -60,10 +60,10 @@ if ~isfield(job,'memory'),
 end
 if isfield(remote,'memory') && ~isempty(remote.memory),
     if isnan(remote.memory),
-        luke_job.memory = NaN;
-    elseif ~isempty(job.memory) && remote.memory < luke_job.memory,% max memory on remote computer
+        job.memory = NaN;
+    elseif ~isempty(job.memory) && remote.memory < job.memory,% max memory on remote computer
         disp('WARNING : memory request limited by remote host')
-        luke_job.memory = remote.memory;
+        job.memory = remote.memory;
     end
 end
 %
