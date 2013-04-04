@@ -26,7 +26,7 @@ remote.sun.joan.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str_
 remote.sun.joan.matver.mat705.root = '/usr/local/matlab7/bin/';
 remote.sun.joan.matver.mat705.prefdir = '/home/JD211098/.matlab/R2007b';
 remote.sun.joan.matver.matdef = remote.sun.joan.matver.mat705;%default matlab on remote machine
-remote.sun.joan.luke_root = '/home/JD211098/LUKE_1_10/';
+remote.sun.joan.luke_root = '/home/JD211098/LUKE/';
 remote.sun.joan.users.remoteuser = 'JD211098';
 %
 % YVES PEYSSON
