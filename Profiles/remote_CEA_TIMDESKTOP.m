@@ -43,7 +43,7 @@ remote.torque.yves.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
 remote.torque.yves.matver.mat712.prefdir = '/home/sccp/gsem/peysson/.matlab/R2011a';
 remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat710;%default matlab on remote machine
 remote.torque.yves.luke_root = '/home/sccp/gsem/peysson/LUKE/';
-remote.torque.yves.users.remoteuser = 'YP195119';
+remote.torque.yves.users.remoteuser = 'YP105119';
 %
 % YVES BURAVAND
 %
