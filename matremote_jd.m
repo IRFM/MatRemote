@@ -17,7 +17,7 @@ else
     debugmode = 0;
 end
 %
-if isfield(args_in{1},'job'),% check result of previously launched job
+if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously launched job
     %
     output = remotegetbatch(remote,args_in{1}.job,debugmode,1);
     %
