@@ -20,4 +20,5 @@ remote.ncpus = [];% use if ressources are specified by ncpus=?
 remote.walltime = [];% use if walltime necessary or one hour imposed
 remote.wait = [];% use to specify if musy wait for job completion
 remote.memory = [];% use to limit the maximum memory per job
+remote.shclean = [];% use to limit the maximum memory per job
 
