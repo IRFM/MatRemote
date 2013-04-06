@@ -27,7 +27,10 @@ remote.pbs.joan.matver.mat710.prefdir = '/home/sccp/gsem/decker/.matlab/R2010a';
 remote.pbs.joan.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
 remote.pbs.joan.matver.mat712.prefdir = '/home/sccp/gsem/decker/.matlab/R2011a';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat710;%default matlab on remote machine
-remote.pbs.joan.luke_root = '/home/sccp/gsem/decker/LUKE_1_10/';
+remote.pbs.joan.luke_root.LUKE_1_8_6 = '/home/sccp/gsem/decker/LUKE_1_8/';
+remote.pbs.joan.luke_root.LUKE_1_9_1 = '/home/sccp/gsem/decker/LUKE_1_9/';
+remote.pbs.joan.luke_root.LUKE_1_10_0 = '/home/sccp/gsem/decker/LUKE_1_10/';
+remote.pbs.joan.luke_root.LUKE_default = remote.pbs.joan.luke_root.LUKE_1_10_0;% default remote LUKE version. Leave empty to enforce error if no match
 remote.pbs.joan.users.remoteuser = 'JD211098';
 %
 % YVES PEYSSON
