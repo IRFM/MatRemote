@@ -25,7 +25,7 @@ remote.condor.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.condor.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.condor.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.condor.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat800;%default matlab on remote machine
+remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
 remote.condor.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.condor.yves.users.remoteuser = 'yvespeysson';
 %
@@ -99,7 +99,7 @@ remote.xgrid.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.xgrid.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat800;%default matlab on remote machine
+remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
 remote.xgrid.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
 remote.xgrid.yves.users.remoteuser = 'yvespeysson';%'joandecker';
