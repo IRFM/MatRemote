@@ -166,6 +166,10 @@ if isfield(dkecluster,'scheduler'),
         %
         [flag,varargout{:}] = process_loop_jd(@parcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
+    elseif dkecluster.scheduler.mode == 4,
+        %
+        [flag,varargout{:}] = process_loop_jd(@gpucomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
+        %
     elseif dkecluster.scheduler.mode < 0,% remote computing on cluster dkepath.remote(-dkecluster.scheduler.mode)
         %
         [flag,varargout{:}] = create_loop_jd(@remcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
