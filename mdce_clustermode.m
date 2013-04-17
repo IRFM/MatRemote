@@ -107,6 +107,10 @@ else% only the DC mode is provided
     dkecluster.scheduler.mode = param;
 end
 %
+if dkecluster.scheduler.clustersize == 0,
+    dkecluster.scheduler.mode = 0;%sequential mode enforced
+end
+%
 % Specific operations depending on DC mode
 %
 if dkecluster.scheduler.mode == 1,%MDCE mode
