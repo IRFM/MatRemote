@@ -52,6 +52,10 @@ try
         job.memory = scheduler.memory;% requested memory specified by scheduler
     end
     %
+    if isfield(scheduler,'walltime'),
+        job.walltime = scheduler.walltime;% requested memory specified by scheduler
+    end
+    %
     job.debugmode = debugmode;
     %
     mat_input.fun = fun_handle;
