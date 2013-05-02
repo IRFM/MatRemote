@@ -59,7 +59,7 @@ end
 % path to matlab if applicable
 %
 if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed by job
-    [dummy,matver] = LUKEversion_jd;
+    matver = matversion_yp;
     if isempty(remote.host),% same version for local calculations
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
         job.env.remotebatch_matlabprefdir = prefdir;        
