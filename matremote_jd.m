@@ -1,4 +1,4 @@
-function [err,varargout] = matremote_luke_jd(fun,args_in,remote,job)
+function [err,varargout] = matremote_jd(fun,args_in,remote,job)
 %
 % This is a generic matlab function exectuting the function fun with
 % arguments args_in remotely according to profile remote

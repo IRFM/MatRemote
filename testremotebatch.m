@@ -11,8 +11,8 @@ function job = testremotebatch(remote,job)
 %
 %   - job : can be
 %       o a number : (0) use remoterunbatch and wait for result with remotegetbatch
-%                    (1) use matremote_luke_jd and wait for result 
-%                    (2) use matremote_luke_jd and return job for later check
+%                    (1) use matremote_jd and wait for result 
+%                    (2) use matremote_jd and return job for later check
 %       o a structure containing the job started earlier with option (job = 2)
 %
 % OUTPUTS : 
@@ -41,7 +41,7 @@ end
 if isstruct(job),% check previously started job
     %
     args_in{1}.job = job;
-    [soutput.err,soutput] = matremote_luke_jd('remotetest',args_in,remote);
+    [soutput.err,soutput] = matremote_jd('remotetest',args_in,remote);
     %
 else% start new job
     %
@@ -50,7 +50,7 @@ else% start new job
     %   - the script matlabbatch.sh
     %   - the test function remotetest.m
     %   - the standard matlab remote run function remotematrun.m
-    %   - if matremote_luke_jd is used, the standard function runmat.m to manage variable inputs/outputs
+    %   - if matremote_jd is used, the standard function runmat.m to manage variable inputs/outputs
     %
     remotehome = reminstall(remote);
     %
@@ -89,22 +89,22 @@ else% start new job
             soutput = remotegetbatch(remote,test_job,displaymode,0);
         end
         %
-    else% use matremote_luke_jd
+    else% use matremote_jd
         %
         test_job.env.remotematfnc = 'runmat'; % remote matlab function to be called by remotematrun (case of standard call using runmat)
         %
-        if job == 1,% use matremote_luke_jd and wait for result
+        if job == 1,% use matremote_jd and wait for result
             %
             remote.remtimout = 5;% in minutes
             %
-        else% use matremote_luke_jd and return job for later check
+        else% use matremote_jd and return job for later check
             %
             remote.remtimout = 0;% in minutes
             %
         end
         %
         args_in{1} = sinput;
-        [err,soutput] = matremote_luke_jd('remotetest',args_in,remote,test_job);
+        [err,soutput] = matremote_jd('remotetest',args_in,remote,test_job);
         %
         if ~isempty(err),
             soutput.err = err;
