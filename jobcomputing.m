@@ -20,6 +20,8 @@ function [flag,varargout] = jobcomputing(fun,args_in,arg_index,arg_range,schedul
 %
 %   by J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr) and Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) 
 %
+%%%% TODO: YP -> update the distributed computing syntax for matlab version > 810 (R2013a)
+%
 nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
@@ -33,10 +35,14 @@ for j_argout = 1:nargout_in,
 end
 %
 try
-    jm = findResource('scheduler','configuration',scheduler.configuration);%Initiate the job server for Matlab Distributed Computing Environment  
+    if matlabstatus_yp <= 810,%old matlab syntax
+        jm = findResource('scheduler','configuration',scheduler.configuration);%Initiate the job server for Matlab Distributed Computing Environment  
+    else%new matlab syntax
+        jm = parcluster(scheduler.configuration);
+    end
     %
     jmfields = get(jm);%save original scheduler properties
-	jminit = struct;
+    jminit = struct;
 catch err
     info_dke_yp(2,['WARNING: exiting jobcomputing for ',func2str(fun),'.m (mode 1) because of error: ',err.message]);
     flag(:) = -2;
@@ -44,13 +50,23 @@ catch err
 end
 %
 if isfield(scheduler,'temppath'),
-    set(jm,'datalocation',scheduler.temppath);
-	jminit.datalocation = jmfields.DataLocation;
+    if matlabstatus_yp <= 810,%old matlab syntax
+        set(jm,'datalocation',scheduler.temppath);
+        jminit.datalocation = jmfields.DataLocation;
+    else
+        set(jm,'JobStorageLocation',scheduler.temppath);
+        jminit.JobStorageLocation = jmfields.JobStorageLocation;
+    end      
 end
 %
-if isfield(scheduler,'clustersize'),            
-    set(jm,'clustersize',min([scheduler.clustersize,jmfields.ClusterSize]));
-	jminit.clustersize = jmfields.ClusterSize;
+if isfield(scheduler,'clustersize'),    
+    if matlabstatus_yp <= 810,%old matlab syntax
+        set(jm,'clustersize',min([scheduler.clustersize,jmfields.ClusterSize]));
+        jminit.clustersize = jmfields.ClusterSize;
+    else
+        set(jm,'NumWorkers',min([scheduler.clustersize,jmfields.NumWorkers]));
+        jminit.NumWorkers = jmfields.NumWorkers;
+    end
 end
 %
 %if isfield(scheduler,'hasSharedFileSystem'),set(jm,'HasSharedFileSystem',scheduler.HasSharedFileSystem);end
@@ -59,13 +75,33 @@ end
 %if isfield(scheduler,'ParallelSubmitFcn'),set(jm,'ParallelSubmitFcn',scheduler.ParallelSubmitFcn);end
 %
 job = createJob(jm);
-set(job,'PathDependencies',strread(path,'%s','delimiter',':'));
+if matlabstatus_yp <= 810,%old matlab syntax
+    set(job,'PathDependencies',strread(path,'%s','delimiter',':'));
+else
+    set(job,'AdditionalPaths',strread(path,'%s','delimiter',':'));
+end
+%
+[flag_GPU,gpuStatus] = checkmatlabgpu_yp(scheduler);
+%
+if flag_GPU,
+    spmd
+        selectGPUDeviceForLab();
+    end
+end
 %
 for j_range = 1:nrange,
     %
     arg_job = args_in;  
     %
-    arg_job{arg_index} = arg_range{j_range};
+    if flag_GPU,
+        if scheduler.gpu == 1,
+            arg_job{arg_index} = gpuArray(single(arg_range{j_range}));%transfer data to GPU memory (single precision enforce)
+        else
+            arg_job{arg_index} = gpuArray(double(arg_range{j_range}));%transfer data to GPU memory (double precision enforce)
+        end
+    else
+        arg_job{arg_index} = arg_range{j_range};
+    end
     %
     createTask(job, fun, nargout-1,arg_job);
     %
@@ -108,10 +144,27 @@ set(jm,jminit)%restore original scheduler properties
 %
 for j_argout = 1:nargout_in,
     for j_range = 1:nrange,
-        varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
+        if flag_GPU,
+            varargout{j_argout}{j_range} = gather(varargout_array{j_range}{j_argout});
+        else
+            varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
+        end
     end
 end
+%
+function ok = selectGPUDeviceForLab()
+persistent hasGPU;
 
+if isempty(hasGPU)
+    devIdx = mod(labindex-1,gpuDeviceCount())+1;
+    try
+        dev = gpuDevice(devIdx);
+        hasGPU = dev.DeviceSupported;
+    catch %#ok
+        hasGPU = false;
+    end
+end
+ok = hasGPU;
 
 
 
