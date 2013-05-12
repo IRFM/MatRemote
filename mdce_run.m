@@ -166,17 +166,13 @@ if isfield(dkecluster,'scheduler'),
         %
         [flag,varargout{:}] = process_loop_jd(@parcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
-    elseif dkecluster.scheduler.mode == 4,
-        %
-        [flag,varargout{:}] = process_loop_jd(@gpucomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
-        %
     elseif dkecluster.scheduler.mode < 0,% remote computing on cluster dkepath.remote(-dkecluster.scheduler.mode)
         %
         [flag,varargout{:}] = create_loop_jd(@remcomputing,fun,args_in,arg_index,arg_range,dkecluster.scheduler);
         %
     else
         if dkecluster.scheduler.display,disp(['---> ''for'' loop for the function ',func2str(fun),'.m']);end
-    	[flag,varargout{:}] = seqcomputing(fun,args_in,arg_index,arg_range);
+    	[flag,varargout{:}] = seqcomputing(fun,args_in,arg_index,arg_range,dkecluster.scheduler);
     end
     %
 elseif isfield(dkecluster,'batch'),
@@ -241,7 +237,17 @@ if any(mask_seq) && (~isfield(scheduler,'enforce') || scheduler.enforce == 1),%b
     disp(['WARNING: Distributed computing failed for ',num2str(sum(mask_seq)),'/',num2str(length(mask_seq)),' cases. Switching to sequential computing for these cases.']);
     %
     varargout_seq = cell(1,nargout-1);
-    [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq));
+    %
+    if isfield(scheduler,'gpu'),
+        gpu_status = scheduler.gpu;
+        scheduler.gpu = 0;%no GPU when distributed computing failed
+    end
+    %
+    [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq),scheduler);
+    %
+    if isfield(scheduler,'gpu'),
+        scheduler.gpu = gpu_status;%back to the initial GPU status
+    end
     %
     for j_nargout = 1:nargout-1,
         varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};

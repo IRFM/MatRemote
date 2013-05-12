@@ -70,6 +70,7 @@ end
 dkecluster.scheduler.mode = 0;
 dkecluster.scheduler.type = schedulertype;
 dkecluster.scheduler.configfile = '';
+dkecluster.scheduler.gpu = 0;
 dkecluster.scheduler.timeout = 100;%100 s time out for job submission
 dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
 dkecluster.scheduler.memory = NaN;%no memory requirements
@@ -119,9 +120,16 @@ if dkecluster.scheduler.mode == 1,%MDCE mode
 	%
     try %test the availability of the MatLab MDCE toolbox and set clustersize
         %
-        scheduler = findResource('scheduler','configuration',dkecluster.scheduler.configuration);
-        dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
-        dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.clustersize]);
+        if matlabstatus_yp < 810,%old matlab syntax
+        	scheduler = findResource('scheduler','configuration',dkecluster.scheduler.configuration);
+            dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
+            dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.clustersize]);
+        else%new matlab syntax
+            scheduler = parcluster(dkecluster.scheduler.configuration);
+            dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
+            dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.NumWorkers]);
+        end
+        %
         disp(['==> ',dkecluster.scheduler.info])
         %
     catch err
@@ -230,24 +238,8 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
     [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
     %
-    if vmatlab >= 77 && testtoolbox,% test removed because already existing in parcomputing
-% 		try %test the availability of the MatLab MDCE toolbox
-% 			%
-% 			matlabpool('open',dkecluster.scheduler.configuration,1)
-% 			matlabpool close
-% 			dkecluster.scheduler.info = ['Matlab PARFOR mode operational for the scheduler <',dkecluster.scheduler.configuration,'>'];
-% 			disp(['==> ',dkecluster.scheduler.info])
-% 			%
-%         catch err
-%             %
-%             dkecluster.scheduler.info = ['Impossible to use PARFOR MDCE with configuration ',dkecluster.scheduler.configuration,...
-%             ' because of the following error : ',err.message,'. Sequential mode enforced.'];
-% 			disp(['==> ',dkecluster.scheduler.info])
-% 			dkecluster.scheduler.mode = 0;
-% 			%
-% 		end
-    else
-        disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab > R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
+    if vmatlab < 77 || ~testtoolbox,
+        disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
         dkecluster.scheduler.mode = 0;
     end
 elseif dkecluster.scheduler.mode < 0,%remote computing mode

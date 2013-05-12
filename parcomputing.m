@@ -24,8 +24,14 @@ nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
 flag = scheduler.mode*ones(1,nrange);
-configuration = findResource('scheduler','configuration',scheduler.configuration);
-scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
+%
+if matlabstatus_yp < 810,%old matlab syntax
+    configuration = findResource('scheduler','configuration',scheduler.configuration);
+    scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
+else%new matlab syntax
+    configuration = parcluster(scheduler.configuration);
+    scheduler.clustersize = min([scheduler.clustersize,configuration.NumWorkers]);
+end
 %
 try
     matlabpool('open',scheduler.configuration,scheduler.clustersize);
@@ -35,11 +41,30 @@ catch err
     return
 end
 %
+[flag_GPU,gpuStatus] = checkmatlabgpu_yp(scheduler);
+%
+if flag_GPU,
+    spmd
+        selectGPUDeviceForLab();
+    end
+end
+%
 parfor j_range = 1:nrange,
     %
     args_loc = args_in;
-    args_loc{arg_index} = arg_range{j_range};
+    %
+    if flag_GPU,
+        if scheduler.gpu == 1,
+            args_loc{arg_index} = gpuArray(single(arg_range{j_range}));%transfer data to GPU memory (single precision enforce)
+        else
+            args_loc{arg_index} = gpuArray(double(arg_range{j_range}));%transfer data to GPU memory (double precision enforce)
+        end
+    else
+        args_loc{arg_index} = arg_range{j_range};
+    end
+    %
     varargout_loc = cell(1,nargout_in);
+    %
     try
         [varargout_loc{:}] = feval(fun,args_loc{:});
     catch me_seq
@@ -58,12 +83,29 @@ varargout = cell(1,nargout_in);
 parfor j_argout = 1:nargout_in,
     %
     varargout{j_argout} = cell(nrange,1);
+    %
     for j_range = 1:nrange,
-        varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
+        if flag_GPU,
+            varargout{j_argout}{j_range} = gather(varargout_array{j_range}{j_argout});
+        else
+            varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
+        end
     end
     %
 end
 %
 matlabpool close force
 %
-      
+function ok = selectGPUDeviceForLab()
+persistent hasGPU;
+
+if isempty(hasGPU)
+    devIdx = mod(labindex-1,gpuDeviceCount())+1;
+    try
+        dev = gpuDevice(devIdx);
+        hasGPU = dev.DeviceSupported;
+    catch %#ok
+        hasGPU = false;
+    end
+end
+ok = hasGPU;

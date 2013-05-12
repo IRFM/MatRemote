@@ -1,4 +1,4 @@
-function [flag,varargout] = seqcomputing(fun_handle,args_in,arg_index,arg_range)
+function [flag,varargout] = seqcomputing(fun_handle,args_in,arg_index,arg_range,scheduler)
 % LUKE - Sequential computing of the loop
 %
 %   Sequential computing of the loop
@@ -10,6 +10,7 @@ function [flag,varargout] = seqcomputing(fun_handle,args_in,arg_index,arg_range)
 %       - arg_index: index in the argument list args_in which must be changed [1,1]
 %       - arg_range: list of values for the input argument arg_index [1,nrange]
 %           => nrange = length(arg_range) = number of iterations 
+%       - scheduler: scheduler information (for GPU calculation only)
 %
 %   OUTPUT:
 %
@@ -23,9 +24,19 @@ nrange = length(arg_range);
 varargout_array = cell(nrange,nargout-1);
 flag = zeros(1,nrange);
 %
-for j_range = 1:nrange,
+[flag_GPU,gpuStatus] = checkmatlabgpu_yp(scheduler);
+%
+for j_range = 1:nrange,%maximize the loop when GPU is activated (warm-up effect)
     %
     args_in{arg_index} = arg_range{j_range};
+    %
+    if flag_GPU,
+        if scheduler.gpu == 1,
+            args_in{arg_index} = gpuArray(single(args_in{arg_index}));%transfer data to GPU memory (single precision enforce)
+        else
+            args_in{arg_index} = gpuArray(double(args_in{arg_index}));%transfer data to GPU memory (double precision enforce)
+        end
+    end
     %
     try
         [varargout_array{j_range,:}] = feval(fun_handle,args_in{:});
@@ -43,7 +54,13 @@ varargout = cell(1,nargout-1);
 %
 for j_argout = 1:nargout-1,
     %
-    varargout{j_argout} = varargout_array(:,j_argout);
+    varargout{j_argout} = cell(nrange,1);
     %
+    for j_range = 1:nrange,
+        if flag_GPU,
+            varargout{j_argout}{j_range} = gather(varargout_array{j_range,j_argout});
+        else
+            varargout{j_argout}{j_range} = varargout_array{j_range,j_argout};    
+        end
+    end
 end
-%
