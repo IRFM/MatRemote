@@ -25,7 +25,7 @@ nrange = length(arg_range);
 varargout_array = cell(1,nrange);
 flag = scheduler.mode*ones(1,nrange);
 %
-if matlabstatus_yp < 810,%old matlab syntax
+if str2double(matversion_yp) < 801,%old matlab syntax
     configuration = findResource('scheduler','configuration',scheduler.configuration);
     scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
 else%new matlab syntax

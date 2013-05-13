@@ -120,7 +120,7 @@ if dkecluster.scheduler.mode == 1,%MDCE mode
 	%
     try %test the availability of the MatLab MDCE toolbox and set clustersize
         %
-        if matlabstatus_yp < 810,%old matlab syntax
+        if str2double(matversion_yp) < 801,%old matlab syntax
         	scheduler = findResource('scheduler','configuration',dkecluster.scheduler.configuration);
             dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
             dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.clustersize]);
@@ -236,9 +236,9 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
     %
 	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,configurations);
     %
-    [vmatlab,testtoolbox] = matlabstatus_yp('Parallel Computing Toolbox');
+    [vmatlab,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
     %
-    if vmatlab < 77 || ~testtoolbox,
+    if str2double(vmatlab) < 77 || ~testtoolbox,
         disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
         dkecluster.scheduler.mode = 0;
     end

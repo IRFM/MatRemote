@@ -35,7 +35,7 @@ for j_argout = 1:nargout_in,
 end
 %
 try
-    if matlabstatus_yp <= 810,%old matlab syntax
+    if str2double(matversion_yp) <= 801,%old matlab syntax
         jm = findResource('scheduler','configuration',scheduler.configuration);%Initiate the job server for Matlab Distributed Computing Environment  
     else%new matlab syntax
         jm = parcluster(scheduler.configuration);
@@ -50,7 +50,7 @@ catch err
 end
 %
 if isfield(scheduler,'temppath'),
-    if matlabstatus_yp <= 810,%old matlab syntax
+    if str2double(matversion_yp) <= 801,%old matlab syntax
         set(jm,'datalocation',scheduler.temppath);
         jminit.datalocation = jmfields.DataLocation;
     else
@@ -60,7 +60,7 @@ if isfield(scheduler,'temppath'),
 end
 %
 if isfield(scheduler,'clustersize'),    
-    if matlabstatus_yp <= 810,%old matlab syntax
+    if str2double(matversion_yp) <= 801,%old matlab syntax
         set(jm,'clustersize',min([scheduler.clustersize,jmfields.ClusterSize]));
         jminit.clustersize = jmfields.ClusterSize;
     else
@@ -75,7 +75,7 @@ end
 %if isfield(scheduler,'ParallelSubmitFcn'),set(jm,'ParallelSubmitFcn',scheduler.ParallelSubmitFcn);end
 %
 job = createJob(jm);
-if matlabstatus_yp <= 810,%old matlab syntax
+if str2double(matversion_yp) <= 801,%old matlab syntax
     set(job,'PathDependencies',strread(path,'%s','delimiter',':'));
 else
     set(job,'AdditionalPaths',strread(path,'%s','delimiter',':'));
