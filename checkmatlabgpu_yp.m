@@ -30,7 +30,7 @@ end
 %
 if abs(gpu_mode) > 0,
     %
-    [vmatlab,,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox')
+    [vmatlab,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox')
     %
     if str2double(vmatlab) < 711 || ~testtoolbox,
         disp(['WARNING: GPU calculations may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2010b (7.11) for this functionality with the appropriate library. Sequential mode without GPU enforced']);
