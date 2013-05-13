@@ -56,11 +56,11 @@ for j_argout = 1:nargout-1,
     %
     varargout{j_argout} = cell(nrange,1);
     %
-    for j_range = 1:nrange,
-        if flag_GPU,
-            varargout{j_argout}{j_range} = gather(varargout_array{j_range,j_argout});
-        else
-            varargout{j_argout}{j_range} = varargout_array{j_range,j_argout};    
-        end
+    if flag_GPU,
+    	for j_range = 1:nrange,
+			varargout{j_argout}{j_range} = gather(varargout_array{j_range,j_argout});
+		end
+    else
+    	varargout{j_argout} = varargout_array(:,j_argout);
     end
 end
