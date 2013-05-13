@@ -47,6 +47,11 @@ if flag_GPU,
     spmd
         selectGPUDeviceForLab();
     end
+    if scheduler.gpu == 1,
+        flag = flag + 1i;
+    else
+        flag = flag + 2i;
+    end
 end
 %
 parfor j_range = 1:nrange,
@@ -55,10 +60,8 @@ parfor j_range = 1:nrange,
     %
     if flag_GPU,
         if scheduler.gpu == 1,
-            flag = flag + i;
             args_loc{arg_index} = gpuArray(single(arg_range{j_range}));%transfer data to GPU memory (single precision enforce)
         else
-            flag = flag + 2*i;
             args_loc{arg_index} = gpuArray(double(arg_range{j_range}));%transfer data to GPU memory (double precision enforce)
         end
     else
