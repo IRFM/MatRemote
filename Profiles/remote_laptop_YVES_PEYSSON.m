@@ -77,7 +77,7 @@ remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
 remote.xgrid.yves.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
 remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.xgrid.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
+remote.xgrid.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
 remote.xgrid.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
