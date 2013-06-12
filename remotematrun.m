@@ -62,7 +62,7 @@ try
     %
     dataout = feval(remotematfnc,datain);
     %
-    save(fileout,'-struct','dataout');
+    save(fileout,'-struct','dataout','-v7.3');
     %
 catch
     %
