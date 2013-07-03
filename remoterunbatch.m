@@ -175,6 +175,24 @@ elseif res ~= 0,
     %
 end   
 %
+if isfield(remote,'cvs'),
+    if ~isempty(remote.cvs.CVSROOT) && ~isempty(remote.cvs.cmd),
+        remotecmd = ['CVSROOT=',remote.cvs.CVSROOT,'; export CVSROOT; cd ',remote.luke_root,'; cvs ',remote.cvs.cmd];
+        %
+        locdisp(displaymode,['    --> CVS : ',remotecmd]) 
+        %
+        if ~isempty(remotehost),
+            %
+            [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            %
+        else
+            %
+            [res,txt] = unix(remotecmd);
+            %
+        end
+    end
+end
+%
 % determine remote hostname (xgrid)
 %
 if job.xgridsearch,
