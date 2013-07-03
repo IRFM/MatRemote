@@ -172,12 +172,27 @@ elseif job.condorsearch,
     i_job = strfind(txt,job.id);
     i_running = strfind(txt(i_job:end),'R');
     i_pending = strfind(txt(i_job:end),'I');
+    i_held = strfind(txt(i_job:end),'H');
+    i_unexpanded = strfind(txt(i_job:end),'U');
+    i_completed = strfind(txt(i_job:end),'C');
+    i_submissionerror = strfind(txt(i_job:end),'E');
+    i_removed = strfind(txt(i_job:end),'X');
     %
     if ~isempty(i_job),% job not completed
         if ~isempty(i_running)
             locdisp(displaymode,['Job # ',job.id,' still running...']);
         elseif ~isempty(i_pending),
             locdisp(displaymode,['Job # ',job.id,' still pending...']);
+        elseif ~isempty(i_held),
+            locdisp(displaymode,['Job # ',job.id,' is held...']);
+        elseif ~isempty(i_unexpanded),
+            locdisp(displaymode,['Job # ',job.id,' unexpanded...']);
+        elseif ~isempty(i_completed),
+            locdisp(displaymode,['Job # ',job.id,' completed...']);
+        elseif ~isempty(i_submissionerror),
+            locdisp(displaymode,['Job # ',job.id,' has a submission error...']);
+        elseif ~isempty(i_removed),
+            locdisp(displaymode,['Job # ',job.id,' has has been removed...']);
         else
             %
             locdisp(displaymode,['Run check failed : ',txt]);
