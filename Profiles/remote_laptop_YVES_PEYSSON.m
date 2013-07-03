@@ -26,6 +26,8 @@ remote.condor.yves.matver.mat800.prefdir = '/Users/yves/.matlab/R2012b';
 remote.condor.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.condor.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
+remote.condor.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
+remote.condor.yves.cvs.cmd = 'update -d';%CVS commandremote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.condor.yves.users.remoteuser = 'yves';
 %
@@ -79,6 +81,8 @@ remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
+remote.xgrid.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
+remote.xgrid.yves.cvs.cmd = 'update -d';%CVS commandremote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.xgrid.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
 remote.xgrid.yves.users.remoteuser = 'yves';
