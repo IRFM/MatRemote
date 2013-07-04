@@ -183,11 +183,21 @@ if isfield(remote,'cvs'),
         %
         if ~isempty(remotehost),
             %
-            [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            try
+                [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            catch
+                res = 1;
+                txt = ['Error in CVS update'];
+            end
             %
         else
             %
-            [res,txt] = unix(remotecmd);
+            try
+                [res,txt] = unix(remotecmd);
+            catch
+                res = 1;
+                txt = ['Error in CVS update'];
+            end
             %
         end
     end
