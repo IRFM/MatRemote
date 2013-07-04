@@ -177,6 +177,9 @@ end
 %
 if isfield(remote,'cvs'),
     if ~isempty(remote.cvs.CVSROOT) && ~isempty(remote.cvs.cmd),
+        %
+        dir_init = pwd;
+        %
         remotecmd = ['CVSROOT=',remote.cvs.CVSROOT,'; export CVSROOT; cd ',remote.luke_root,'; cvs ',remote.cvs.cmd];
         %
         locdisp(displaymode,['    --> CVS : ',remotecmd]) 
@@ -200,6 +203,8 @@ if isfield(remote,'cvs'),
             end
             %
         end
+        %
+        cd(dir_init);
     end
 end
 %
