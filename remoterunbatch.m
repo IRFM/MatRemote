@@ -176,7 +176,7 @@ elseif res ~= 0,
 end   
 %
 if isfield(remote,'cvs'),
-    if ~isempty(remote.cvs.CVSROOT) && ~isempty(remote.cvs.cmd),
+    if isstruct(remote.cvs) && ~isempty(remote.cvs.CVSROOT) && ~isempty(remote.cvs.cmd),
         %
         dir_init = pwd;
         %
