@@ -50,6 +50,26 @@ remote.condor.joan.matver.matdef = remote.condor.joan.matver.mat801;%default mat
 remote.condor.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
 remote.condor.joan.users.remoteuser = 'yvespeysson';%'joandecker';
 %
+% EMELIE NILSSON
+%
+remote.condor.emelie = default_remote_profile;
+remote.condor.emelie.host = 'tolbachik.hd.free.fr';
+remote.condor.emelie.nproc = 6;
+remote.condor.emelie.cmd = 'condor_submit';
+remote.condor.emelie.get_jobid = {'** Proc ',':'};
+remote.condor.emelie.set_jobid = {'condor_q ',''};
+remote.condor.emelie.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
+remote.condor.emelie.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
+remote.condor.emelie.remotedatapath = '/Users/yvespeysson/condor/';
+remote.condor.emelie.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.condor.emelie.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.condor.emelie.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.condor.emelie.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
+remote.condor.emelie.matver.matdef = remote.condor.emelie.matver.mat801;%default matlab on remote machine
+remote.condor.emelie.luke_root = '/Users/yvespeysson/emelienilsson/LUKE/';
+remote.condor.emelie.users.remoteuser = 'yvespeysson';%'joandecker';
+%
+
 % --------------------------------------------------
 %
 % macproyves (xgrid)
@@ -125,6 +145,24 @@ remote.xgrid.joan.matver.matdef = remote.xgrid.joan.matver.mat801;%default matla
 remote.xgrid.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
 remote.xgrid.joan.password = {'ghm93'};
 remote.xgrid.joan.users.remoteuser = 'yvespeysson';%'joandecker';
+%
+% EMELIE NILSSON
+%
+remote.xgrid.emelie = default_remote_profile;
+remote.xgrid.emelie.host = 'tolbachik.hd.free.fr';
+remote.xgrid.emelie.nproc = 6;
+remote.xgrid.emelie.cmd = {'xgrid -h ',' -p ',' -job batch '};
+remote.xgrid.emelie.get_jobid = {'jobIdentifier = ',';'};
+remote.xgrid.emelie.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
+remote.xgrid.emelie.remotedatapath = '/Users/yvespeysson/xgrid/';
+remote.xgrid.emelie.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.xgrid.emelie.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
+remote.xgrid.emelie.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.xgrid.emelie.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
+remote.xgrid.emelie.matver.matdef = remote.xgrid.emelie.matver.mat801;%default matlab on remote machine
+remote.xgrid.emelie.luke_root = '/Users/yvespeysson/emelienilsson/LUKE/';
+remote.xgrid.emelie.password = {'ghm93'};
+remote.xgrid.emelie.users.remoteuser = 'yvespeysson';%'joandecker';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
