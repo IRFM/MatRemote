@@ -26,19 +26,20 @@ try
     %
     if nargin < 2,
         debugmode = str2double(getenv('debugmode'));
-        if isempty(debugmode),
-            debugmode = 0;
-        end
     end
     %
-    if debugmode,
-        filediary = ['matlab_diary.',timeid];
-        diary(filediary);
+    if isempty(debugmode) || isnan(debugmode),
+        debugmode = 0;
     end
     %
     datapath = getenv('remotedatapath');
     logname = getenv('USER');
     remotematfnc = getenv('remotematfnc');
+    %
+    if debugmode,
+        filediary = [datapath,'matlab_diary.',timeid];
+        diary(filediary);
+    end
     %
     filein = [datapath,'MAT_RUN_',logname,'_',timeid,'.mat'];
     %
