@@ -78,6 +78,7 @@ clustermode.ftest_mdce.scheduler.enforce = mdce_enforce;
 clustermode.ftest_mdce.scheduler.display = 1;
 %
 dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype,mdce_remnum);
+%dkecluster.debugmode = 1;
 %
 [flag,a,b] = mdce_luke(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
