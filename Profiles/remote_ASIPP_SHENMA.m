@@ -14,8 +14,8 @@ default_profile = 'bojiang';% default user profile if 'remoteuser' is not an exi
 %
 remote.torque.bojiang = default_remote_profile;
 remote.torque.bojiang.host = 'shenma.ipp.ac.cn';% empty for local host
-remote.torque.bojiang.nproc = 8;
-remote.torque.bojiang.nodes = 10;% default number of nodes for job on shenma
+remote.torque.bojiang.nproc = 20;
+%remote.torque.bojiang.nodes = 10;% default number of nodes for job on shenma
 remote.torque.bojiang.wait = 0;
 remote.torque.bojiang.shclean = 1;
 remote.torque.bojiang.cmd = 'qsub -q batch';
@@ -33,8 +33,8 @@ remote.torque.bojiang.users.remoteuser = 'bjding';
 %
 remote.torque.yves = default_remote_profile;
 remote.torque.yves.host = 'shenma.ipp.ac.cn';% empty for local host
-remote.torque.yves.nproc = 8;
-remote.torque.yves.nodes = 10;% default number of nodes for job on shenma
+remote.torque.yves.nproc = 20;
+%remote.torque.yves.nodes = 10;% default number of nodes for job on shenma
 remote.torque.yves.wait = 0;
 remote.torque.yves.shclean = 1;
 remote.torque.yves.cmd = 'qsub -q batch';
