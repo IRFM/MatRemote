@@ -256,8 +256,8 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.xgridsearch,
-    remotecmd_xgrid = ['chmod -R 777 ',job.remotedatapath,job.save_id];
+if job.xgridsearch | job.condorsearch,
+    remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end
 %
 % data transfer
@@ -268,8 +268,8 @@ if ~isempty(job.save_id),
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remotelogname,' ...'])  
         [res,err] = unix(['scp -r ',job.localdatapath,job.save_id,' ',remotelogname,'@',remotehost,':',job.remotedatapath]);
         %
-        if job.xgridsearch,
-            [res_xgrid,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd_xgrid,'''']);
+        if job.xgridsearch | job.condorsearch,
+            [res_chmod,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd_chmod,'''']);
         end
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
@@ -277,8 +277,8 @@ if ~isempty(job.save_id),
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
         [res,err] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);
         %
-        if job.xgridsearch,
-            [res_xgrid,txt] = unix(remotecmd_xgrid);        
+        if job.xgridsearch | job.condorsearch,
+            [res_chmod,txt] = unix(remotecmd_chmod);        
         end
         %
     else
