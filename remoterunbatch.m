@@ -242,6 +242,21 @@ if job.xgridsearch,
     end
 end
 %
+% copy function to data as string 
+%
+if isfield(sinput,'fun') && isfield(job,'scriptcopy') && job.scriptcopy
+    if ~ischar(sinput.fun),
+        funname = func2str(sinput.fun);
+    else
+        funname = sinput.fun;
+    end
+    %
+    if ~strcmp(funname(end-1:end),'.m'),
+        funname = [funname,'.m'];
+    end
+    sinput.funstr = fileread(funname);
+end  
+%
 % process data
 %
 if isstruct(sinput),% data transfer to job,
@@ -258,22 +273,7 @@ end
 %
 if job.xgridsearch | job.condorsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
-end
-%
-% copy function to data as string 
-%
-if isfield(sinput,'fun') && isfield(job,'scriptcopy') && job.scriptcopy
-    if ~ischar(sinput.fun),
-        funname = func2str(sinput.fun);
-    else
-        funname = sinput.fun;
-    end
-    %
-    if ~strcmp(funname(end-1:end),'.m'),
-        funname = [funname,'.m'];
-    end
-    sinput.funstr = fileread(funname);
-end    
+end  
 %
 % data transfer
 %
