@@ -61,6 +61,8 @@ try
     %
     datain = load(filein);
     %
+    datain.timeid = timeid;
+    %
     dataout = feval(remotematfnc,datain);
     %
     save(fileout,'-struct','dataout','-v7.3');

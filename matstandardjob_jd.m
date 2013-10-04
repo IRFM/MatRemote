@@ -15,3 +15,9 @@ job.savefcn = 'matstandardsave';%'runlukesave';%
 job.loadfcn = 'matstandardload';%'runlukeload';%
 job.localdatapath = '';
 %
+if isfield(remote,'scriptcopy'),
+    job.scriptcopy = remote.scriptcopy;% copy the distributed function script to the worker
+else
+    job.scriptcopy = true;
+end
+%

@@ -260,6 +260,16 @@ if job.xgridsearch | job.condorsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end
 %
+% copy function to data as string 
+%
+if isfield(sinput,'fun') && isfield(job,'scriptcopy') && job.scriptcopy
+    funname = func2str(sinput.fun);
+    if ~strcmp(funname(end-1:end),'.m'),
+        funname = [funname,'.m'];
+    end
+    sinput.funstr = fileread(funname);
+end    
+%
 % data transfer
 %
 if ~isempty(job.save_id),
