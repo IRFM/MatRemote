@@ -4,7 +4,12 @@ varargout = cell(1,mat_input.nargout-1);
 %
 if isfield(mat_input,'funstr'),% function string was passed on to worker
     %
-    tmpfilestr = [func2str(mat_input.fun),'_',mat_input.timeid];
+    %
+    if ~ischar(mat_input.fun),
+        tmpfilestr = [func2str(mat_input.fun),'_',mat_input.timeid];
+    else
+        tmpfilestr = [mat_input.fun,'_',mdce_input.timeid];
+    end
     tmpfilename = [tmpfilestr,'.m'];
     %
     diary(tmpfilename);

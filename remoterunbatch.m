@@ -263,7 +263,12 @@ end
 % copy function to data as string 
 %
 if isfield(sinput,'fun') && isfield(job,'scriptcopy') && job.scriptcopy
-    funname = func2str(sinput.fun);
+    if ~ischar(sinput.fun),
+        funname = func2str(sinput.fun);
+    else
+        funname = sinput.fun;
+    end
+    %
     if ~strcmp(funname(end-1:end),'.m'),
         funname = [funname,'.m'];
     end

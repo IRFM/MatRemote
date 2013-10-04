@@ -15,7 +15,12 @@ end
 %
 if isfield(mdce_input,'funstr'),% function string was passed on to worker
     %
-    tmpfilestr = [func2str(mdce_input.fun),'_',mdce_input.timeid];
+    if ~ischar(mdce_input.fun),
+        tmpfilestr = [func2str(mdce_input.fun),'_',mdce_input.timeid];
+    else
+        tmpfilestr = [mdce_input.fun,'_',mdce_input.timeid];
+    end
+    %
     tmpfilename = [tmpfilestr,'.m'];
     %
     diary(tmpfilename);
