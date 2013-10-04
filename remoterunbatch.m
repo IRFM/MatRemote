@@ -422,6 +422,8 @@ end
 %
 job.id = txt(istr0:istr1);
 %
+job.remote = remote;
+%
 locdisp(displaymode,[' ... started with Job id ',job.id]);
 %
 function locdisp(mode,s)
