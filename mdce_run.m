@@ -51,6 +51,8 @@ if nargout < 1,
     error('At least one output argument (flag) must be defined.');
 end
 %
+if ischar(fun),fun = str2func(fun);end
+%
 if ~iscell(arg_range),
     if isnumeric(arg_range),
         if size(arg_range,1) == 1 || size(arg_range,2) == 1,
