@@ -115,10 +115,10 @@ job.remotelogname = remotelogname;
 % local data location
 %
 if ~isfield(job,'localdatapath') || isempty(job.localdatapath),% remote data location
-    if ~isempty(remotehost),
-        job.localdatapath = [pwd,filesep];
-    elseif ~isempty(job.remotedatapath),
+    if isempty(remotehost) && ~isempty(job.remotedatapath),
         job.localdatapath = job.remotedatapath;
+    else
+        job.localdatapath = [pwd,filesep];
     end
 end
 if ~strcmp(job.localdatapath(end),filesep),
