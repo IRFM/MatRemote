@@ -21,7 +21,7 @@ if isfield(mdce_input,'funstr'),% function string was passed on to worker
         tmpfilestr = [mdce_input.fun,'_',mdce_input.timeid];
     end
     %
-    tmpfilename = [tmpfilestr,'.m'];
+    tmpfilename = [mdce_input.datapath,tmpfilestr,'.m'];
     %
     diary(tmpfilename);
     %
@@ -40,11 +40,19 @@ if isfield(mdce_input,'funstr'),% function string was passed on to worker
         pause(1);
     end
     %
+    %addpath(mdce_input.datapath);
+    %
 else
     fun = mdce_input.fun;
 end
 %
+wd = pwd;
+%
+cd(mdce_input.datapath);
+%
 [flag,varargout{:}] = mdce_luke(fun,mdce_input.args_in,mdce_input.arg_index,mdce_input.arg_range,dkecluster);
+%
+cd(wd);
 %
 if isfield(mdce_input,'funstr'),
     delete(tmpfilename);

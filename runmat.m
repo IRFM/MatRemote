@@ -10,7 +10,7 @@ if isfield(mat_input,'funstr'),% function string was passed on to worker
     else
         tmpfilestr = [mat_input.fun,'_',mat_input.timeid];
     end
-    tmpfilename = [tmpfilestr,'.m'];
+    tmpfilename = [mat_input.datapath,tmpfilestr,'.m'];
     %
     diary(tmpfilename);
     %
@@ -28,6 +28,8 @@ if isfield(mat_input,'funstr'),% function string was passed on to worker
         end
         pause(1);
     end
+    %
+    addpath(mat_input.datapath);
     %
 else
     fun = mat_input.fun;

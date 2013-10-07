@@ -62,6 +62,7 @@ try
     datain = load(filein);
     %
     datain.timeid = timeid;
+    datain.datapath = datapath;
     %
     dataout = feval(remotematfnc,datain);
     %
