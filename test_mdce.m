@@ -82,6 +82,13 @@ dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype,mdc
 %
 [flag,a,b] = mdce_luke(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
-disp(['Flag     : ',num2str(flag)]);
-disp(['a (2->9) : ',num2str([a{:}])]);
-disp(['b (0->7) : ',num2str([b{:}])]);
+if any(imag(flag) ~= 0),
+    disp(['Rem Flag : ',num2str(real(flag))]);
+    disp(['Loc Flag : ',num2str(imag(flag))]);
+    disp(['a (2->9) : ',num2str([a{:}])]);
+    disp(['b (0->7) : ',num2str([b{:}])]);
+else
+    disp(['Flag : ',num2str(flag)]);
+    disp(['a (2->9) : ',num2str([a{:}])]);
+    disp(['b (0->7) : ',num2str([b{:}])]);
+end    

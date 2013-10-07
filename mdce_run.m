@@ -84,9 +84,11 @@ end
 %
 if isfield(dkecluster,'remnum'),
     %
-    [flag,varargout{:}] = mdce_luke_remote(fun,args_in,arg_index,arg_range,dkecluster);
+    [flag_remote,varargout{:}] = mdce_luke_remote(fun,args_in,arg_index,arg_range,dkecluster);
     %
-    mask_loc = (flag < 0);%flagged for local computing
+    mask_loc = (flag_remote < 0);%flagged for local computing
+    %
+    flag = zeros(size(flag_remote));
     %
     if any(mask_loc),%back to local computing 
         %
@@ -102,6 +104,8 @@ if isfield(dkecluster,'remnum'),
         end	
         %
     end
+    %
+    flag = flag_remote + 1i*flag;
     %
     return
     %
