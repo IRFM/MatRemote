@@ -25,15 +25,15 @@ nrange = length(arg_range);
 varargout_array = cell(1,nrange);
 flag = scheduler.mode*ones(1,nrange);
 %
-if str2double(matversion_yp) < 801,%old matlab syntax
-    configuration = findResource('scheduler','configuration',scheduler.configuration);
-    scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
-else%new matlab syntax
-    configuration = parcluster(scheduler.configuration);
-    scheduler.clustersize = min([scheduler.clustersize,configuration.NumWorkers]);
-end
-%
 try
+    if str2double(matversion_yp) < 801,%old matlab syntax
+        configuration = findResource('scheduler','configuration',scheduler.configuration);
+        scheduler.clustersize = min([scheduler.clustersize,configuration.ClusterSize]);
+    else%new matlab syntax
+        configuration = parcluster(scheduler.configuration);
+        scheduler.clustersize = min([scheduler.clustersize,configuration.NumWorkers]);
+    end
+    %
     matlabpool('open',scheduler.configuration,scheduler.clustersize);
 catch err
     info_dke_yp(2,['WARNING: exiting parcomputing for function ',func2str(fun),'.m (mode 3) because of error: ',err.message]);
