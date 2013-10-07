@@ -9,6 +9,12 @@ function job = remote2job_jd(remote,job)
 % 
 % ALL PROTOCOLS
 %
+if isfield(remote,'localdatapath') && ~isempty(remote.localdatapath),
+    job.localdatapath = remote.localdatapath;
+elseif ~isfield(job,'localdatapath'),
+    job.localdatapath = '';
+end
+%
 if isfield(remote,'remotedatapath') && ~isempty(remote.remotedatapath),
     job.remotedatapath = remote.remotedatapath;
 elseif ~isfield(job,'remotedatapath'),
