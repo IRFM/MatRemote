@@ -75,7 +75,7 @@ try
         %
         diary(tmpfilename);% create tmp file
         %
-        disp(mdce_input.funstr);
+        disp(datain.funstr);
         %
         diary off
         %
