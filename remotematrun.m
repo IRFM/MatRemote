@@ -61,10 +61,42 @@ try
     %
     datain = load(filein);
     %
-    datain.timeid = timeid;
-    datain.datapath = datapath;
+    % create function to be run remotely if datain.funstr exists
+    %
+    if ~ischar(datain.fun),% datain.fun is function handle
+        datain.fun = func2str(datain.fun);
+    end
+    %
+    if isfield(datain,'funstr'),% function string was passed on to worker
+        %
+        datain.fun = [datain.fun,'_',timeid];% new function name
+        %
+        tmpfilename = [datapath,datain.fun,'.m'];% tmp function file
+        %
+        diary(tmpfilename);% create tmp file
+        %
+        disp(mdce_input.funstr);
+        %
+        diary off
+        %
+        niwait = 100;% maximum waiting time in s
+        %
+        for iwait = 1:niwait,% wait for tmp file to be written
+            if exist(tmpfilename,'file') == 2,
+                break
+            end
+            pause(1);
+        end
+        %
+        addpath(datapath);
+        %
+    end
     %
     dataout = feval(remotematfnc,datain);
+    %
+    if isfield(datain,'funstr'),
+        delete(tmpfilename);
+    end
     %
     save(fileout,'-struct','dataout','-v7.3');
     %
