@@ -56,6 +56,10 @@ try
         job.walltime = scheduler.walltime;% requested memory specified by scheduler
     end
     %
+    if isfield(scheduler,'localdatapath'),
+        job.localdatapath = scheduler.localdatapath;% requested memory specified by scheduler
+    end
+    %
     job.debugmode = debugmode;
     %
     mat_input.fun = fun_handle;
