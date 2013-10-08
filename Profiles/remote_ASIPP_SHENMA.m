@@ -7,9 +7,6 @@ default_profile = 'bojiang';% default user profile if 'remoteuser' is not an exi
 %
 % --------------------------------------------------
 %
-% cephee (pbs)
-%
-%
 % BOJIANG DING
 %
 remote.torque.bojiang = default_remote_profile;
