@@ -23,6 +23,8 @@ remote.torque.bojiang.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str
 remote.torque.bojiang.matver.mat800.root = '/pkg/MATLAB/R2012b/bin/';
 remote.torque.bojiang.matver.mat800.prefdir = '/home/bjding/.matlab/R2012b';
 remote.torque.bojiang.matver.matdef = remote.torque.bojiang.matver.mat800;%default matlab on remote machine
+remote.torque.bojiang.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
+remote.torque.bojiang.cvs.cmd = 'update -d';%CVS command
 remote.torque.bojiang.luke_root = '/home/bjding/LUKE/';
 remote.torque.bojiang.users.remoteuser = 'bjding';
 %
@@ -42,6 +44,8 @@ remote.torque.yves.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_af
 remote.torque.yves.matver.mat800.root = '/pkg/MATLAB/R2012b/bin/';
 remote.torque.yves.matver.mat800.prefdir = '/home/PEYSSON/.matlab/R2012b';
 remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat800;%default matlab on remote machine
+remote.torque.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
+remote.torque.yves.cvs.cmd = 'update -d';%CVS command
 remote.torque.yves.luke_root = '/home/PEYSSON/LUKE/';
 remote.torque.yves.users.remoteuser = 'PEYSSON';
 %
