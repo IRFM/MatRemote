@@ -60,7 +60,14 @@ try
         job.localdatapath = scheduler.localdatapath;% requested memory specified by scheduler
     end
     %
+    if isfield(scheduler,'cleanmode'),
+        cleanmode = scheduler.cleanmode;
+    else
+        cleanmode = 2;
+    end
+    %
     job.debugmode = debugmode;
+    job.clean = cleanmode;
     %
     mat_input.fun = fun_handle;
     mat_input.args_in = args_in;

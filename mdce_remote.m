@@ -19,12 +19,19 @@ else
     debugmode = 0;
 end
 %
+if isfield(dkecluster,'cleanmode'),
+    cleanmode = dkecluster.cleanmode;
+else
+    cleanmode = 2;
+end
+%
 dkepath = dkecluster.dkepath;
 remote = dkepath.remote(dkecluster.remnum);
 %
 mdce_job = matstandardjob_jd(remote,'runmdce');
 %
 mdce_job.debugmode = debugmode;
+mdce_job.clean = cleanmode;
 %
 mdce_input.fun = fun;
 mdce_input.args_in = args_in;

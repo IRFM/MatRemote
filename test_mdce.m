@@ -1,4 +1,4 @@
-function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,dkepath)
+function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,debugmode,dkepath)
 %
 % Test function of the distributed computing calculation 
 %
@@ -62,6 +62,10 @@ if nargin < 7,
 end
 %
 if nargin < 8,
+    debugmode = 0;
+end
+%
+if nargin < 9,
     dkepath = load_structures_yp('dkepath','','');
 end
 %
@@ -74,11 +78,15 @@ end
 clustermode.ftest_mdce.scheduler.clustersize = mdce_size;
 clustermode.ftest_mdce.scheduler.memory = mdce_memory;
 clustermode.ftest_mdce.scheduler.enforce = mdce_enforce;
+clustermode.ftest_mdce.scheduler.debugmode = debugmode;
+%
+if debugmode,
+    clustermode.ftest_mdce.scheduler.cleanmode = 0;  
+end
 %
 clustermode.ftest_mdce.scheduler.display = 1;
 %
 dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype,mdce_remnum);
-%dkecluster.debugmode = 1;
 %
 [flag,a,b] = mdce_luke(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
