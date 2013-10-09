@@ -68,6 +68,8 @@ try
     end
     %
     if isfield(datain,'funstr'),% function string was passed on to worker
+        % 
+        addpath(datapath);
         %
         datain.fun = [datain.fun,'_',timeid];% new function name
         %
@@ -82,13 +84,12 @@ try
         niwait = 100;% maximum waiting time in s
         %
         for iwait = 1:niwait,% wait for tmp file to be written
-            if exist(tmpfilename,'file') == 2,
+            if ~isempty(which(datain.fun)),
+                pause(1);
                 break
             end
             pause(1);
         end
-        %
-        addpath(datapath);
         %
     end
     %
