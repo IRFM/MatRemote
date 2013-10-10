@@ -286,7 +286,7 @@ if ~isempty(job.save_id),
     if ~isempty(remotehost),%remote calculation 
         %
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remotelogname,' ...'])  
-        [res,err] = unix(['scp -r ',job.localdatapath,job.save_id,' ',remotelogname,'@',remotehost,':',job.remotedatapath]);
+        [res,err] = scp2remote_yp(remotelogname,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
         %
         if job.xgridsearch | job.condorsearch,
             [res_chmod,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd_chmod,'''']);
