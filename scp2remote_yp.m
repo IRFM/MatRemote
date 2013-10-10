@@ -31,7 +31,7 @@ if res == 0,
         filelist = get_all_filesname_yp([local_path,filename]);
         %
         for ifile = 1:length(filelist),
-            filelist{ifile} = filelist{ifile}(findstr(filelist{ifile},filename)+1:end)
+            filelist{ifile} = filelist{ifile}(findstr(filelist{ifile},filename)+1:end);
         end     
         %
     else
