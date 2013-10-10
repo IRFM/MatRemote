@@ -24,7 +24,6 @@ if nargin < 3,error('Not enough input arguments in scp2remote_yp.m.');end
 %
 % Check that the file transfer is fully achieved even when network is slow 
 %
-keyboard
 if res == 0,
     %
     if isdir([local_path,filename]),
