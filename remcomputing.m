@@ -1,5 +1,4 @@
 function [flag,varargout] = remcomputing(fun_handle,args_in,arg_index,arg_range,scheduler)
-%
 % LUKE - remote distributed computing environment
 %
 %   Distributed computing using remote jobs within LUKE environment
