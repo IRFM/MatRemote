@@ -10,7 +10,7 @@ default_profile = 'yvesp';% default user profile if 'remoteuser' is not an exist
 % YVES PEYSSON
 %
 remote.sun.yvesp = default_remote_profile;
-remote.sun.yvesp.host = 'g01.efda-itm.eu';
+remote.sun.yvesp.host = 'g04.efda-itm.eu';
 remote.sun.yvesp.nproc = 16;% limited to two jobs per PBS node to avoid cluster saturation
 remote.sun.yvesp.wait = 0;% invalid option
 remote.sun.yvesp.nodes = NaN;% invalid option
