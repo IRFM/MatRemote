@@ -63,7 +63,7 @@ try
     %
     % create function to be run remotely if datain.funstr exists
     %
-    if ~ischar(datain.fun),% datain.fun is function handle
+    if isfield(datain,'fun') && ~ischar(datain.fun),% datain.fun is function handle
         datain.fun = func2str(datain.fun);
     end
     %
