@@ -20,12 +20,10 @@ remote.pbs.joan.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.joan.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
 remote.pbs.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.pbs.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
-remote.pbs.joan.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
-remote.pbs.joan.matver.mat712.prefdir = '/home/JD211098/.matlab/R2011a';
 remote.pbs.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.pbs.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
-remote.pbs.joan.luke_root = '/home/JD211098/LUKE_1_10/';
+remote.pbs.joan.luke_root = '/home/JD211098/LUKE/';
 remote.pbs.joan.users.remoteuser = 'JD211098';
 %
 % YVES PEYSSON
@@ -38,9 +36,9 @@ remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.yves.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
 remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.pbs.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
-remote.pbs.yves.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
-remote.pbs.yves.matver.mat712.prefdir = '/home/YP105119/.matlab/R2011a';
-remote.pbs.yves.matver.matdef = remote.pbs.yves.matver.mat710;%default matlab on remote machine
+remote.pbs.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.pbs.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
+remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
 remote.pbs.yves.luke_root = '/home/YP105119/LUKE/';
 remote.pbs.yves.users.remoteuser = 'YP105119';
 %
@@ -72,8 +70,6 @@ remote.pbs.emelie.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.emelie.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
 remote.pbs.emelie.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.pbs.emelie.matver.mat710.prefdir = '/home/EN290612/.matlab/R2010a';
-remote.pbs.emelie.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
-remote.pbs.emelie.matver.mat712.prefdir = '/home/EN290612/.matlab/R2011a';
 remote.pbs.emelie.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.pbs.emelie.matver.mat800.prefdir = '/home/EN290612/.matlab/R2012b';
 remote.pbs.emelie.matver.matdef = remote.pbs.emelie.matver.mat800;%default matlab on remote machine
