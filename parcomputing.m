@@ -41,7 +41,13 @@ catch err
     return
 end
 %
+varargout = cell(1,nargout-1);
+%
 [flag_GPU,gpuStatus] = checkmatlabgpu_yp(scheduler);
+%
+if ~isempty(gpuStatus),
+    FreeMemory_gpu(1) = gpuStatus.FreeMemory;
+end
 %
 if flag_GPU,
     spmd
@@ -71,7 +77,22 @@ parfor j_range = 1:nrange,
     varargout_loc = cell(1,nargout_in);
     %
     try
-        [varargout_loc{:}] = feval(fun,args_loc{:});
+        if scheduler.gpu == 1,
+            varargout_array_gpu = cell(1,nargout-1);
+            [varargout_array_gpu{1,:}]  = feval(fun_handle,args_loc{:});
+            for j_argout = 1:nargout-1,
+                varargout{j_argout}{j_range} = gather(varargout_array_gpu{1,j_argout});%to release some memory on GPU device
+            end
+            %
+            if j_range > 2 && gpuStatus.FreeMemory - (FreeMemory_gpu(end) - FreeMemory_gpu(end-1)) < 0,
+                reset(gpuDevice);
+                FreeMemory_gpu(end) = gpuStatus.FreeMemory;
+                disp('WARNING: A reset of the GPU device is performed as the free memory is becoming short. ');
+            end
+            FreeMemory_gpu(j_range) = gpuStatus.FreeMemory;
+        else
+            [varargout_loc{:}] = feval(fun,args_loc{:});
+        end
     catch me_seq
         disp(['Error executing the iteration ',int2str(j_range),'/',int2str(nrange),'.']);
         disp(['===> Error : ',getReport(me_seq)]);
@@ -81,8 +102,6 @@ parfor j_range = 1:nrange,
     %
 end
 %
-varargout = cell(1,nargout_in);
-%
 %[varargout{:}] = deal(cell(N_range,1)); keep this line as an example of use of the function deal
 %
 parfor j_argout = 1:nargout_in,
@@ -90,9 +109,7 @@ parfor j_argout = 1:nargout_in,
     varargout{j_argout} = cell(nrange,1);
     %
     for j_range = 1:nrange,
-        if flag_GPU,
-            varargout{j_argout}{j_range} = gather(varargout_array{j_range}{j_argout});
-        else
+        if ~flag_GPU,
             varargout{j_argout}{j_range} = varargout_array{j_range}{j_argout};
         end
     end
