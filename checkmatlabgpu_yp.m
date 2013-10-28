@@ -28,6 +28,9 @@ else
     display_mode = scheduler.display;
 end
 %
+gpuStatus = [];
+flag_GPU = 0;
+%
 if abs(gpu_mode) > 0,
     %
     [vmatlab,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
@@ -41,21 +44,22 @@ if abs(gpu_mode) > 0,
             %
             if gpuStatus(igpu).DeviceSupported,
                 if display_mode,
-                    disp(['GPU calculations on the ',gpuStatus(igpu).Name,' graphic card are supported']);
-                    disp(['Max. GPU free memory available : ',num2str(round(gpuStatus(igpu).FreeMemory/1e6)),' MBytes']);
+                    disp(['GPU calculations on the ',gpuStatus(igpu).Name,' graphic card are supported.']);
+                    disp(['Max. GPU free memory available : ',num2str(round(gpuStatus(igpu).FreeMemory/1e6)),' MBytes.']);
                 end
                 %
                 flag_GPU(igpu) = 1;
             else
-                disp(['GPU calculations on the ',gpuStatus(igpu).Name,' graphic card are not supported']);
+                disp(['GPU calculations on the ',gpuStatus(igpu).Name,' graphic card are not supported.']);
                 flag_GPU(igpu) = 0;
             end
         end
         %
         if sum(flag_GPU) == 0,
-            disp('None of the graphic cards are not supported for GPU calculations');
+            disp('No graphic cards supported for GPU calculations in Matlab.');
         end
     end
+    %
 else
     gpuStatus = [];
     flag_GPU = 0;
