@@ -28,7 +28,6 @@ else
     display_mode = scheduler.display;
 end
 %
-gpuStatus = [];
 flag_GPU = 0;
 %
 if abs(gpu_mode) > 0,
@@ -60,6 +59,9 @@ if abs(gpu_mode) > 0,
         end
     end
     %
+    if ~exist('gpuStatus'),
+        gpuStatus = [];
+    end
 else
     gpuStatus = [];
     flag_GPU = 0;
