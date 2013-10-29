@@ -38,7 +38,7 @@ for j_range = 1:nrange,%maximize the loop when GPU is activated (warm-up effect)
     %
     if flag_GPU,
         if scheduler.gpu == 1,
-            flag = flag + i;
+            flag = flag + 1*i;
             args_in{arg_index} = gpuArray(single(args_in{arg_index}));%transfer data to GPU memory (single precision enforce)
         else
             flag = flag + 2*i;
