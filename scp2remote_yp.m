@@ -52,13 +52,17 @@ if res == 0,
             %
             [res1,err1] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
             %
+            day = date;
+            idate = strfind(day,'-');
+            month = day(idate(1)+1:idate(2)-1);
+            %
             if res0+res1 == 0,
                 %
-                token0 = err0(1:strfind(err0,'Oct')-2);
+                token0 = err0(1:strfind(err0,month)-2);
                 itoken0 = strfind(token0,' ');
                 filesize0 = token0(itoken0(end):end);
                 %
-                token1 = err1(1:strfind(err1,'Oct')-2);
+                token1 = err1(1:strfind(err1,month)-2);
                 itoken1 = strfind(token1,' ');
                 filesize1 = token1(itoken1(end):end);
                 %
