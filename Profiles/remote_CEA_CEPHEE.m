@@ -45,6 +45,7 @@ remote.pbs.yves.ppn = 2;% default number of cores for job on cephee
 remote.pbs.yves.cmd = 'qsub -l inter=false';% -l walltime=1:59:00 -l nodes=1:ppn=1
 remote.pbs.yves.get_jobid = {'','.cephee'};%str_before,str_after
 remote.pbs.yves.set_jobid = {'qstat ','.cephee','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.yves.remotedatapath = '/home/sccp/gsem/peysson/tmp/';
 remote.pbs.yves.matver.mat705.root = '/applications/matlab_2007b/bin/';
 remote.pbs.yves.matver.mat705.prefdir = '/home/sccp/gsem/peysson/.matlab/R2007b';
 remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';

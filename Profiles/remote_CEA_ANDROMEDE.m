@@ -32,6 +32,7 @@ remote.pbs.yves = default_remote_profile;
 remote.pbs.yves.host = 'andromede1.partenaires.cea.fr';
 remote.pbs.yves.nproc = 12;
 remote.pbs.yves.cmd = 'qsub';
+remote.pbs.yves.remotedatapath = '/home/YP105119/tmp/';
 remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.yves.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
 remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
