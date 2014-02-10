@@ -1,155 +1,271 @@
-function job = testremotebatch(remote,job)
-%
+function soutputs = testremotebatch(sinputs,testall,debugmode)
+% ------------------------------------------------
 % test for remote batch using a standard function.
+% ------------------------------------------------
+%
+% This function tests the MatRemote package using eitehr batch or direct
+% calculations. Given the option sinputs, three modes can be tested :
+%
+%   - the direct use of remoterunbatch and remotegetbatch
+%
+%   - the use of matremote_jd(fun,args_in,remote,job), where 'fun' is the
+%   matlab function to be executed remotely, 'args_in' are the arguments used
+%   by 'fun', 'remote' is the remote (or local!) profile, and the optional
+%   input 'job' specifies job parameters.
+%
+%   - the use of matremote_jd by returning job info to be checked later
 %
 % by J. Decker, Y. Peysson and M. Schneider (CEA/IRFM)   
 %
 % INPUTS : 
-%   - remote : can be
-%       o a structure, possibly created by a function of the type remote_CEA_CEPHEE('pbs','joan','JD211098');
-%       o a number, which calls the corresponding profile in dkepath.remote
 %
-%   - job : can be
+%   - sinputs : can be
 %       o a number : (0) use remoterunbatch and wait for result with remotegetbatch
 %                    (1) use matremote_jd and wait for result 
 %                    (2) use matremote_jd and return job for later check
-%       o a structure containing the job started earlier with option (job = 2)
+%       o a cell array containing the job(s) started earlier with option (job = 2), or the results of completed jobs
+%
+%   - testall (only if isnumeric(sinputs) : if true, test all remote profiles; if false (default), prompt for given profile from list 
+%   - debugmode : [0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
 %
 % OUTPUTS : 
-%   - job : can be
+%
+%   - soutputs is a cell array containing
 %       o a structure containing the job started with option (job = 2)
-%       o a flag giving (0) if test failed or (1) if test passed 
+%       o the job output or error message if the job is completed
+%
+% The test works by checking remote access and transfers, remote path,
+% remote matlab version, remote command (remotetest), variable transfer ('The best code is : ')
+% and environment variable ('luke').
+% 
+
+%
+% Set path to MatRemote & MatTools toolboxes
+%
+matremote_path = [fileparts(which(mfilename)),filesep];
+mattools_path = [matremote_path,'../MatTools/'];% change if needed
+%
+addpath(matremote_path);% MatRemote toolbox
+addpath([matremote_path,'Profiles/']);% remote profiles
+addpath(mattools_path);% MatTools toolbox
+%
+sinput.strin = 'The best code is : ';% input to function remotetest
+testvar = 'luke'; % test variable
+%
+% Debugmode
+%
+if nargin < 3,
+    debugmode = 0;% default mode is direct use of remoterunbatch and remotegetbatch
+end
+%
+% Test direct calculation with matremote_jd
+%
+if debugmode,
+    setenv('TESTVAR',testvar);
+    [err,soutput_init] = matremote_jd('remotetest',{sinput});
+    %
+    if ~isempty(err),
+        soutput_init.err = err;
+    end
+end
+%
+% Test remote calculation
 %
 if nargin < 1,
-    remote = 1;
+    sinputs = 0;% default mode is direct use of remoterunbatch and remotegetbatch
 end
 %
-if ~isstruct(remote)
+if isnumeric(sinputs),% start new test
     %
-    dkepath = load_structures_yp('dkepath','','');
-    remote = dkepath.remote(remote);
+    if nargin < 2 || ~isscalar(testall),
+        testall = false;
+    elseif isnumeric(testall),
+        testall = (testall == 1);
+    end
     %
-end
-%
-remote.debugmode = 1;
-remote.rempause = 1/60;% in minutes
-%
-if nargin < 2,
-    job = 0;
-end
-%
-if isstruct(job),% check previously started job
+    profilename = input_dke_yp('Identify Profile Name (ex : ''joan'',''yves'',...), or leave empty to use default for each remote profile','');
     %
-    args_in{1}.job = job;
-    [soutput.err,soutput] = matremote_jd('remotetest',args_in,remote);
+    % Select local and remote profiles to be tested
     %
-else% start new job
+    [remoteprofiles,profilestr] = list_remoteprofiles_jd(profilename,~testall,true);
     %
-    % creates the remote directories and transfer necessary files for the test.
-    % the files needed for remote matlab run are :
-    %   - the script matlabbatch.sh
-    %   - the test function remotetest.m
-    %   - the standard matlab remote run function remotematrun.m
-    %   - if matremote_jd is used, the standard function runmat.m to manage variable inputs/outputs
+    nrem = length(remoteprofiles);
     %
-    remotehome = reminstall(remote);
+    soutputs = cell(1,nrem);% output structure cell array: can be output, jobs, or error message depending on options and results 
     %
-    test_job.script = [remotehome,'/remotebatchtest/bin/matlabbatch.sh'];% script to be run by scheduler on remote cluster
-    test_job.savefcn = 'matstandardsave';% function saving the data locally 
-    test_job.loadfcn = 'matstandardload';% function reading the data locally
-    test_job.localdatapath = 'data/';%'';%forder where local data is stored - leave empty for local data folder
-    test_job.remotedatapath = [remotehome,'/remotebatchtest/run'];%'';%folder where remote data is stored
-    test_job.env.remotebatch_path = [remotehome,'/remotebatchtest/mat/']; % matlab path for remotetest.m (to test path transfer)
+    % loop on tested profiles
     %
-    test_job.wait = 1;%0;% (0) return hand (1) wait for result
-    test_job.nodes = 1;%number of nodes required
-    test_job.ppn = 2;%number of cores required
-    test_job.memory = 2000;% memory required (in mb) - leave empty if no requirement
-    test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
-    %
-    test_job.env.TESTVAR = 'luke'; % test variable
-    test_job.debugmode = 1;
-    %
-    sinput.strin = 'The best code is : ';
-    %
-    displaymode = 1;
-    %
-    if job == 0,% use remoterunbatch and wait for result with remotegetbatch
+    for irem = 1:nrem,
         %
-        test_job.env.remotematfnc = 'remotetest'; % remote matlab function to be called by remotematrun (case of direct call)
+        disp(' ');
+        disp('-------------------------------------------------------------------')
+        disp([' ---> Testing profile [',profilestr{irem},']']);
+        disp('-------------------------------------------------------------------')
+        disp(' ');
         %
-        test_job = remoterunbatch(remote,test_job,sinput,displaymode);
+        remote = remoteprofiles(irem);
+        %remote.debugmode = 1;
+        remote.rempause = 1/60;% in minutes
         %
-        if isfield(test_job,'err'),
-            soutput = test_job.err;
-        else
+        test_job = matstandardjob_jd;
+        %
+        test_job.wait = 1;%0;% (0) return hand (1) wait for result
+        test_job.nodes = 1;%number of nodes required
+        test_job.ppn = 1;%number of cores required
+        test_job.memory = 2000;% memory required (in mb) - leave empty if no requirement
+        test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
+        %
+        test_job.env.TESTVAR = testvar;
+        test_job.debugmode = debugmode;
+        %
+        displaymode = debugmode;% display step by step information in debugmode
+        %
+        if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch
             %
-            remote.remtimout = 5;% in minutes
+            test_job.env.remotematfnc = 'remotetest'; % matlab function to be called remotely by remotematrun (case of direct call)
             %
-            soutput = remotegetbatch(remote,test_job,displaymode,0);
-        end
-        %
-    else% use matremote_jd
-        %
-        test_job.env.remotematfnc = 'runmat'; % remote matlab function to be called by remotematrun (case of standard call using runmat)
-        %
-        if job == 1,% use matremote_jd and wait for result
+            test_job = remoterunbatch(remote,test_job,sinput,displaymode);
             %
-            remote.remtimout = 5;% in minutes
+            if isfield(test_job,'err'),
+                soutputs{irem}.err = test_job.err;
+            else
+                test_job.remtimout = 5;% in minutes
+                %
+                soutputs{irem} = remotegetbatch(test_job,displaymode,0);
+            end
             %
-        else% use matremote_jd and return job for later check
+        else% use matremote_jd
             %
-            remote.remtimout = 0;% in minutes
+            test_job.funcopy = true;
             %
-        end
-        %
-        args_in{1} = sinput;
-        [err,soutput] = matremote_jd('remotetest',args_in,remote,test_job);
-        %
-        if ~isempty(err),
-            soutput.err = err;
+            if sinputs == 1,% use matremote_jd and wait for result
+                %
+                remote.remtimout = 5;% in minutes
+                %
+            else% use matremote_jd and return job for later check
+                %
+                remote.remtimout = 0;% in minutes
+                %
+            end
+            %
+            test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
+            %
+            [err,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
+            %
+            if ~isempty(err),
+                soutputs{irem}.err = err;
+            else
+                soutputs{irem} = soutput;
+            end
+            %
         end
         %
     end
-end        
+    %
+else% check previously started job
+    %
+    nrem = length(sinputs);
+    %
+    soutputs = cell(1,nrem);% output structure cell array: can be output, jobs, or error message depending on options and results 
+    %
+    % loop on tested profiles
+    %
+    for irem = 1:nrem,
+        %
+        if isfield(sinputs{irem},'job'),% previously running job
+            %
+            [err,soutput] = matremote_jd('remotetest',sinputs(irem));
+            %
+            if ~isempty(err),
+                soutputs{irem}.err = err;
+            else
+                soutputs{irem} = soutput;
+            end
+            %
+            soutputs{irem}.remoteprofile = list_remoteprofiles_jd(sinputs{irem}.job.remote);
+            %
+        else% completed jobs
+            %
+            soutputs{irem} = sinputs{irem};
+            %
+        end
+        %
+    end
+    %
+end
 %
-if isfield(soutput,'err'),
+% Display results
+%
+disp(' ');
+disp('-------------------------------------------------------------------')
+disp('                     TEST RESULTS');
+disp('-------------------------------------------------------------------')
+disp(' ');
+%
+if debugmode,
+    disp(' ---> Direct local calculation');
+    disp(' ');
     %
-    % failed test
-    %
-    disp('The remote run failed : ');
-    if ~iscell(soutput.err),
-        disp(soutput.err)
+    if isfield(soutput_init,'err'),
+        %
+        % failed test
+        %
+        disp('The remote job failed : ');
+        disperr_jd(soutput_init.err)
+        %
+    elseif isfield(soutput_init,'strout'),
+        %
+        % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
+        %
+        disp(soutput_init.strout)
+        %
     else
-        for ierr = 1:length(soutput.err),
-            disp(soutput.err{ierr})
-        end
+        %
+        % failed test
+        %
+        disp('The direct local calculation failed for unknown reasons');
+        %
     end
+end
+%
+for irem = 1:nrem,
     %
-    job = 0;
+    disp(' ');
+    disp('-------------------------------------------------------------------')
+    disp(' ');
+    if isnumeric(sinputs),
+        disp([' ---> Profile [',profilestr{irem},']']);
+    else
+        disp([' ---> Profile [',soutputs{irem}.remoteprofile{end},']']);% here {end} is used to select batch mode when localhost
+    end
+    disp(' ');
     %
-elseif isfield(soutput,'job'),
-    %
-    % job started and returned for later check
-    %
-    job = soutput.job;
-    %
-elseif isfield(soutput,'strout'),
-    %
-    % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
-    %
-    disp(soutput.strout)
-    %
-    job = 1;
-    %
-else
-    %
-    % failed test
-    %
-    disp('The remote run failed for unknown reasons');
-    %
-    job = 0;
-    %
+    if isfield(soutputs{irem},'err'),
+        %
+        % failed test
+        %
+        disp('The remote job failed : ');
+        disperr_jd(soutputs{irem}.err)
+        %
+    elseif isfield(soutputs{irem},'job'),
+        %
+        % job started and returned for later check
+        %
+        disp(['The remote job is running under id ',soutputs{irem}.job.id]);
+        %
+    elseif isfield(soutputs{irem},'strout'),
+        %
+        % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
+        %
+        disp(soutputs{irem}.strout)
+        %
+    else
+        %
+        % failed test
+        %
+        disp('The remote job failed for unknown reasons');
+        %
+    end
 end
 %
 

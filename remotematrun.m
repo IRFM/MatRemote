@@ -1,9 +1,15 @@
-function remotematrun(timeid,debugmode)
+function remotematrun(timeid,debugmode,remotepathfnc,remotematfnc)
 %
 % This function is a generic matlab function to be called when matlab is
-% started in a remote location. timeid and debugmode are meant to be loaded
-% from environment variables but can be prescribed directly, typically for
-% debugging purposes.
+% started in a remote location. The following variables are set by environment 
+% variables but can be specified by inputs, typically for debugging purposes.
+%
+%   - timeid : identification for the job
+%   - debugmode : debugging mode
+%   - remotepathfnc : function setting remote matlab path
+%   - remotematfnc : function called by remotematrun
+%
+% in debugmode, it is assumed that the function is called from the remotedatath location
 %
 % This function is to be combined with matstandardsave and matstandardload
 % on the client machine.
@@ -32,72 +38,47 @@ try
         debugmode = 0;
     end
     %
-    datapath = getenv('remotedatapath');
+    remotebatchdir = getenv('remotebatchdir');
     logname = getenv('USER');
-    remotematfnc = getenv('remotematfnc');
+    %
+    if nargin < 3,
+        remotepathfnc = getenv('remotepathfnc');
+    end
+    %
+    if ~isempty(remotepathfnc) && exist(remotepathfnc,'file'),
+        feval(remotepathfnc);% setup remote matlab path
+    end
+    %
+    if nargin < 4,
+        remotematfnc = getenv('remotematfnc');
+    end
+    %
+    if isempty(remotematfnc) || ~exist(remotematfnc,'file'),
+        error('remotematfnc not prescribed')
+    end
     %
     if debugmode,
-        filediary = [datapath,'matlab_diary.',timeid];
+        filediary = [remotebatchdir,'matlab_diary.',timeid];
         diary(filediary);
     end
     %
-    filein = [datapath,'MAT_RUN_',logname,'_',timeid,'.mat'];
-    %
-    if any(strfind(datapath,['xgrid_',timeid])),
-        fileout = ['MAT_OUT_',logname,'_',timeid,'.mat'];
-    else
-        fileout = [datapath,'MAT_OUT_',logname,'_',timeid,'.mat'];
-    end
+    filein = [remotebatchdir,'MAT_RUN_',logname,'_',timeid,'.mat'];
+    fileout = [remotebatchdir,'MAT_OUT_',logname,'_',timeid,'.mat'];
     %
     if debugmode,
         disp('-------- in remotematrun.m --------');
-        disp(['datapath = ',datapath]);
+        disp(['remotebatchdir = ',remotebatchdir]);
         disp(['logname = ',logname]);
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
+        disp(['luke_root = ',getenv('luke_root')])
         disp('------------------------------');
     end
     %
     datain = load(filein);
     %
-    % create function to be run remotely if datain.funstr exists
-    %
-    if isfield(datain,'fun') && ~ischar(datain.fun),% datain.fun is function handle
-        datain.fun = func2str(datain.fun);
-    end
-    %
-    if isfield(datain,'funstr'),% function string was passed on to worker
-        % 
-        addpath(datapath);
-        %
-        datain.fun = [datain.fun,'_',timeid];% new function name
-        %
-        tmpfilename = [datapath,datain.fun,'.m'];% tmp function file
-        %
-        diary(tmpfilename);% create tmp file
-        %
-        disp(datain.funstr);
-        %
-        diary off
-        %
-        niwait = 100;% maximum waiting time in s
-        %
-        for iwait = 1:niwait,% wait for tmp file to be written
-            if ~isempty(which(datain.fun)),
-                pause(1);
-                break
-            end
-            pause(1);
-        end
-        %
-    end
-    %
     dataout = feval(remotematfnc,datain);
-    %
-    if isfield(datain,'funstr'),
-        delete(tmpfilename);
-    end
     %
     save(fileout,'-struct','dataout','-v7.3');
     %

@@ -11,58 +11,77 @@ varargout = cell(1,nargout-1);
 %
 err = '';
 %
-if isfield(remote,'debugmode'),
-    debugmode = remote.debugmode;
-else
-    debugmode = 0;
-end
-%
 if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously launched job
     %
-    output = remotegetbatch(remote,args_in{1}.job,debugmode,1);
+    output = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
     %
     if isempty(output),
-        if debugmode,
+        if args_in{1}.job.debugmode,
             disp('Job still running.')
         end
         output.varargout{1}.job = args_in{1}.job;
     end
     %
-else   
+elseif nargin > 2 && ~isempty(remote),% batch job received   
     %
     if nargin < 4,
-        job = matstandardjob_jd(remote,'runmat');
+        job = matstandardjob_jd('runmat');
     end
     %
-    job.debugmode = debugmode;
+    if ~isfield(job,'debugmode'),
+        if isfield(remote,'debugmode'),
+            job.debugmode = remote.debugmode;
+        else
+            job.debugmode = 0;
+        end
+    end
     %
     mat_input.fun = fun;
     mat_input.args_in = args_in;
     mat_input.nargout = nargout;
     %
-    job = remoterunbatch(remote,job,mat_input,debugmode);
+    displaymode = job.debugmode;% display step by step information in debugmode
+    %
+    job = remoterunbatch(remote,job,mat_input,displaymode);
     %
     if ~isfield(job,'err'),% no error occured in the remote job start,
-        if isfield(remote,'remtimout') && remote.remtimout == 0,% return and check later
+        if isfield(job,'remtimout') && job.remtimout == 0,% return and check later
             output.varargout{1}.job = job;
         else
-            output = remotegetbatch(remote,job,debugmode,0);% wait for result
+            output = remotegetbatch(job,displaymode,0);% wait for result
         end
     else
         output.err = job.err;
     end
     %
     if isempty(output),
-        if debugmode,
+        if displaymode,
             disp('Timeout reached. Calculation started locally if enforced.')
         end
         err = 'timout';
     end
     %
+else% direct calculation
+    %
+    try 
+        [varargout{:}] = feval(fun,args_in{:});
+        output.varargout = varargout;
+    catch
+        %
+        lsterr = lasterror;
+        %
+        err = {'The action was cancelled due to the following error:','',lsterr.message};
+        for il = 1:length(lsterr.stack),
+            err = [err,['In ',lsterr.stack(il).file,' at line ',num2str(lsterr.stack(il).line)]];
+        end
+        %
+        output.err = err;
+        %
+    end
 end
 %
 if isfield(output,'err'),
-    if debugmode,
+    if displaymode,
         disp('Remote calculation failed. Calculation started locally if enforced.')
     end
     err = output.err;

@@ -1,49 +1,70 @@
 function job = matstandardsave(sinput,job)
 %
-% This function saves the structure sinput in a mat file tagged by logname and timeid 
+% This function creates the batch directory and saves therein :
+%   - the structure sinput in a mat file MAT_RUN_... tagged by logname and timeid 
+%   - the script to be run as batch
+%   - the 
 %
-job.load_id = ['MAT_OUT_',job.remotelogname,'_',job.timeid,'.mat'];%output data filename
+job.batch_dir = ['batch_',job.timeid,filesep];
+mkdir([job.localdatapath,job.batch_dir]);% create batch directory
 %
-datafile = ['MAT_RUN_',job.remotelogname,'_',job.timeid,'.mat'];%input data filename
+savefile = ['MAT_RUN_',job.remotelogname,'_',job.timeid,'.mat'];%input data filename
+loadfile = ['MAT_OUT_',job.remotelogname,'_',job.timeid,'.mat'];%output data filename
 %
-if job.pbssearch,
-    %
-    localdatapath = job.localdatapath;% save input directly into data folder
-    %
-    job.save_id = datafile;% input data file to be transfered
-    %    
-elseif job.condorsearch,
-    %
-    job.condor_dir = ['/condor_',job.timeid];
-    localdatapath = [job.localdatapath,job.condor_dir,filesep];% job directory for condor
-    mkdir(localdatapath);
+% create specific scripts for condor and xgrid jobs
+%
+if job.condorsearch,
     %
     % save condor batch file into job directory 
     %
     job.condor_script = condor_batchscript_yp(job,'');
     %
-    job.save_id = job.condor_dir;% entire directory to be transfered
-    %
-    job.load_id = [job.condor_dir,filesep,job.load_id];
-    %
 elseif job.xgridsearch,
-    %
-    job.xgrid_dir = ['/xgrid_',job.timeid];
-    localdatapath = [job.localdatapath,job.xgrid_dir,filesep];% job directory for xgrid
-    mkdir(localdatapath);
     %
     % save xgrid batch file into job directory 
     %
     job.xgrid_script = xgrid_batch2xml_yp(job,'');
     %
-    job.save_id = job.xgrid_dir;% entire directory to be transfered
-    %
-    job.load_id = [job.xgrid_dir,filesep,job.load_id];
-    %
 end
 %
-save([localdatapath,datafile],'-struct','sinput');% save input data into file
+save([job.localdatapath,job.batch_dir,savefile],'-struct','sinput');% save input data into file
 %
-
+% copy script file to local folder
+%
+if isfield(job,'script') && ~isempty(job.script),
+    safecopyfile(job.script,[job.localdatapath,job.batch_dir]);% script to be called by scheduler (ex : matlabbatch.sh)
+end
+%
+% for standard remote matlab job, also copy path and remote matlab functions to local folder
+%
+if isfield(job,'env') && isfield(job.env,'remotebatch_matlabfun') && ~isempty(job.env.remotebatch_matlabfun),
+    safecopyfile(job.env.remotebatch_matlabfun,[job.localdatapath,job.batch_dir]);% matlab function (ex : remotematrun) to be called by batch script (only with matlabbatch.sh)
+end
+%
+if isfield(job,'env') && isfield(job.env,'remotepathfnc') && ~isempty(job.env.remotepathfnc),
+    safecopyfile(job.env.remotepathfnc,[job.localdatapath,job.batch_dir]);% matlab function (ex : setlukepath) to set remote matlab path (only with remotematrun)
+end
+%
+if isfield(job,'env') && isfield(job.env,'remotematfnc') && ~isempty(job.env.remotematfnc),
+    safecopyfile(job.env.remotematfnc,[job.localdatapath,job.batch_dir]);% matlab function to take the input structure 'sinput' (only with remotematrun)
+end
+%
+if isfield(sinput,'fun') && ~isempty(sinput.fun) && isfield(job,'funcopy') && job.funcopy,
+    safecopyfile(sinput.fun,[job.localdatapath,job.batch_dir]);% matlab function to be called by batch script
+end
+%
+job.save_id = job.batch_dir;% batch directory to be transfered if remote cluster
+job.load_id = [job.batch_dir,loadfile];
+%
+end
+%
+function safecopyfile(filename,savedir)
+    filepath = which(filename);
+    if ~isempty(filepath),
+        copyfile(filepath,savedir);
+    else
+        error(['The file = ',filename,' cannot be found on the local matlab path']);
+    end
+end
     
     

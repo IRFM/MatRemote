@@ -1,23 +1,18 @@
-function job = matstandardjob_jd(remote,remotematfnc)
+function job = matstandardjob_jd(remotematfnc)
 %
 % Standard preparation for remote matlab job
 %
-job.env.luke_root = remote.luke_root;% luke path environment
-job.env.remotematfnc = remotematfnc;
+job.script = 'matlabbatch.sh';% script to be run by scheduler on remote cluster
 %
-if isfield(remote,'hostname'),
-    job.env.hostname = remote.hostname;% case where hostname needs to be passed on as variable
-end
+job.savefcn = 'matstandardsave';% function saving the data locally 
+job.loadfcn = 'matstandardload';% function reading the data locally
 %
-job.script = [job.env.luke_root,filesep,'Tools/matlablukebatch.sh'];
+job.localdatapath = '';%'';%forder where local data is stored - leave empty for local data folder
 %
-job.savefcn = 'matstandardsave';%'runlukesave';%
-job.loadfcn = 'matstandardload';%'runlukeload';%
-job.localdatapath = '';
+job.env.remotebatch_matlabfun = 'remotematrun';% (required by matlabbatch.sh) matlab function to be called by batch script on remote cluster
+job.env.remotepathfnc = '';% (optional, called by remotematrun) matlab function to set the path on the remote machine
 %
-if isfield(remote,'scriptcopy'),
-    job.scriptcopy = remote.scriptcopy;% copy the distributed function script to the worker
-else
-    job.scriptcopy = true;
+if nargin > 0 && ~isempty(remotematfnc),
+    job.env.remotematfnc = remotematfnc;
 end
 %

@@ -21,6 +21,14 @@ elseif ~isfield(job,'clean'),
     job.clean = 2;
 end
 %
+% XGRID only
+%
+if isfield(remote,'hostname') && ~isempty(remote.hostname),
+    job.hostname = remote.hostname;
+elseif ~isfield(job,'hostname'),
+    job.hostname = '';
+end
+%
 % PBS and TORQUE only
 %
 if isfield(remote,'wait') && ~isempty(remote.wait),
@@ -71,5 +79,27 @@ if isfield(remote,'memory') && ~isempty(remote.memory),
         disp('WARNING : memory request limited by remote host')
         job.memory = remote.memory;
     end
+end
+%
+if isfield(remote,'remtimout') && ~isempty(remote.remtimout), 
+    job.remtimout = remote.remtimout;%Number of nodes required by remote cluster  
+elseif ~isfield(job,'remtimout')
+    if isfield(job,'ppn'),
+        job.ncpus = job.ppn;
+    else
+        job.ppn = 1;
+    end
+end
+%
+if isfield(remote,'remtimout') && ~isempty(remote.remtimout), 
+    job.remtimout = remote.remtimout;%Number of nodes required by remote cluster  
+elseif ~isfield(job,'remtimout')
+    job.remtimout = Inf;
+end
+%
+if isfield(remote,'rempause') && ~isempty(remote.rempause), 
+    job.rempause = remote.rempause;%Number of nodes required by remote cluster  
+elseif ~isfield(job,'rempause')
+    job.rempause = 1/6;
 end
 %

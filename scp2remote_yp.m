@@ -18,7 +18,9 @@ function [res,err] = scp2remote_yp(remotelogname,remotehost,filename,local_path,
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
-if nargin < 3,error('Not enough input arguments in scp2remote_yp.m.');end
+if nargin < 3,
+    error('Not enough input arguments in scp2remote_yp.m.');
+end
 %
 [res,err] = unix(['scp -r ',local_path,filename,' ',remotelogname,'@',remotehost,':',remote_path]);
 %
@@ -31,7 +33,7 @@ if res == 0,
         filelist = get_all_filesname_yp([local_path,filename]);
         %
         for ifile = 1:length(filelist),
-            filelist{ifile} = filelist{ifile}(findstr(filelist{ifile},filename)+1:end);
+            filelist{ifile} = filelist{ifile}(findstr(filelist{ifile},filename):end);
         end     
         %
     else
@@ -39,7 +41,7 @@ if res == 0,
     end
     %
     for ifile = 1:length(filelist),
-    %
+        %
         remotecmd = ['ls -al ',remote_path,filelist{ifile}];
         %
         tstart = tic;
@@ -94,5 +96,4 @@ if res == 0,
         end
     end
 end
-
 %

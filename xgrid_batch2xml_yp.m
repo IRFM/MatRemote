@@ -11,7 +11,7 @@ if nargin < 2,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
 key = 0;%first job
 %
 filename = ['xgrid_batch_matlab_',job.timeid,'.plist'];
-fileid = fopen([job.localdatapath,job.xgrid_dir,filesep,filename],'w');
+fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
 env = fieldnames(rmfield(job.env,{'remotebatch_matlabprefdir'}));%fixed syntax imposed by Matlab for prefdir, see below
 %
@@ -30,7 +30,7 @@ fprintf(fileid,['			<key>',int2str(key),'</key>','\n']);
 fprintf(fileid,['			<dict>','\n']);
 fprintf(fileid,['				<key>arguments</key>','\n']);
 fprintf(fileid,['				<array>','\n']);
-fprintf(fileid,['					<string>',job.script,'</string>','\n']);
+fprintf(fileid,['					<string>',job.remotedatapath,job.batch_dir,job.script,'</string>','\n']);
 fprintf(fileid,['				</array>','\n']);
 fprintf(fileid,['				<key>command</key>','\n']);
 fprintf(fileid,['				<string>/bin/sh</string>','\n']);
@@ -50,8 +50,8 @@ fprintf(fileid,['					<key>hostname</key>','\n']);
 fprintf(fileid,['					<string>',job.hostname,'</string>','\n']);
 fprintf(fileid,['					<key>USER</key>','\n']);
 fprintf(fileid,['					<string>',job.remotelogname,'</string>','\n']);
-fprintf(fileid,['					<key>remotedatapath</key>','\n']);
-fprintf(fileid,['					<string>',job.remotedatapath,'xgrid_',job.timeid,'/</string>','\n']);
+fprintf(fileid,['					<key>remotebatchdir</key>','\n']);
+fprintf(fileid,['					<string>',job.remotedatapath,job.batch_dir,'</string>','\n']);
 fprintf(fileid,['					<key>MATLAB_PREFDIR</key>','\n']);
 fprintf(fileid,['					<string>',job.env.remotebatch_matlabprefdir,'</string>','\n']);
 fprintf(fileid,['				</dict>','\n']);

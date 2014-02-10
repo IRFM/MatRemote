@@ -93,24 +93,11 @@ if job.condorsearch + job.xgridsearch + job.pbssearch ~= 1,
     error('scheduler type identification problem')
 end
 %
-% get local user name
-%
-[res,logname] = unix('whoami');
-%
-if res ~= 0,
-    error('Local login name could not be obtained')
-end
-%
 % get remote user name
 %
-logname(double(logname) == 10) = [];% remove return character
-%
-if isfield(remote,'users') && isfield(remote.users,logname) && ~isempty(remote.users.(logname)),
-    remotelogname = remote.users.(logname);
-else
-    remotelogname = logname;
+if ~isfield(job,'remotelogname'),
+    job.remotelogname = remote.remoteuser;
 end
-job.remotelogname = remotelogname;
 %
 % local data location
 %
@@ -135,7 +122,7 @@ end
 %
 % remote data location
 %
-if ~isfield(job,'remotedatapath') || isempty(job.remotedatapath),% remote data location
+if isempty(job.remotedatapath),% remote data location
     if ~isempty(remotehost),
         job.remotedatapath = './';
     else
@@ -149,7 +136,7 @@ end
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
 if ~isempty(remotehost),
-    [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+    [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
 else
     [res,err] = unix(remotecmd);
 end
@@ -158,7 +145,7 @@ if res == 1,% remote directory does not exist
     remotecmd = ['mkdir ',job.remotedatapath];%create remote directory
     locdisp(displaymode,['    --> Creating remote data folder ',job.remotedatapath])  
     if ~isempty(remotehost),
-        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
     else
         [res,err] = unix(remotecmd);
     end
@@ -192,7 +179,7 @@ if isfield(remote,'cvs'),
         if ~isempty(remotehost),
             %
             try
-                [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+                [res,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
             catch
                 res = 1;
                 txt = ['Error in CVS update'];
@@ -213,55 +200,6 @@ if isfield(remote,'cvs'),
     end
 end
 %
-% determine remote hostname (xgrid)
-%
-if job.xgridsearch,
-    %
-    remotecmd = 'echo $HOSTNAME';
-    %
-    locdisp(displaymode,['    --> Retrieving remote hostname : ',remotecmd]) 
-    %
-    if ~isempty(remotehost),
-        %
-        [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-        %
-    else
-        %
-        [res,txt] = unix(remotecmd);
-        %
-    end
-    %
-    if res ~= 0,
-        %
-        locdisp(displaymode,['Remote hostname check failed : ',txt]);
-        job.err = txt;
-        %
-        return
-        %
-    else
-        %
-        job.hostname = txt(1:end-1);
-        %
-        locdisp(displaymode,[' ... done. Remote hostname : ',job.hostname])
-        %
-    end
-end
-%
-% copy function to data as string 
-%
-if isfield(sinput,'fun') && isfield(job,'scriptcopy') && job.scriptcopy
-    if ~ischar(sinput.fun),
-        funname = func2str(sinput.fun);
-    else
-        funname = sinput.fun;
-    end
-    %
-    if ~strcmp(funname(end-1:end),'.m'),
-        funname = [funname,'.m'];
-    end
-    sinput.funstr = fileread(funname);
-end  
-%
 % process data
 %
 if isstruct(sinput),% data transfer to job,
@@ -276,7 +214,7 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.xgridsearch | job.condorsearch,
+if job.xgridsearch || job.condorsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end  
 %
@@ -285,11 +223,11 @@ end
 if ~isempty(job.save_id),
     if ~isempty(remotehost),%remote calculation 
         %
-        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remotelogname,' ...'])  
-        [res,err] = scp2remote_yp(remotelogname,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',job.remotelogname,' ...'])  
+        [res,err] = scp2remote_yp(job.remotelogname,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
         %
-        if job.xgridsearch | job.condorsearch,
-            [res_chmod,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd_chmod,'''']);
+        if job.xgridsearch || job.condorsearch,
+            [res_chmod,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd_chmod,'''']);
         end
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
@@ -297,7 +235,7 @@ if ~isempty(job.save_id),
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
         [res,err] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);
         %
-        if job.xgridsearch | job.condorsearch,
+        if job.xgridsearch || job.condorsearch,
             [res_chmod,txt] = unix(remotecmd_chmod);        
         end
         %
@@ -313,7 +251,9 @@ if ~isempty(job.save_id),
         return
         %
     end
-    locdisp(displaymode,' ... done');
+    if ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
+        locdisp(displaymode,' ... done');
+    end
     %
 end
 %
@@ -361,7 +301,7 @@ if job.pbssearch,
         end
     end
     %
-    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotedatapath=',job.remotedatapath,jobenvstr,' ',job.script];% batch command
+    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
     %
 elseif job.condorsearch,
     %
@@ -375,11 +315,11 @@ elseif job.condorsearch,
         end
     end
     %
-    remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.condor_dir,filesep,job.condor_script,' -v'];
+    remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.save_id,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
     %
-    remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.xgrid_dir,filesep,job.xgrid_script];
+    remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
     %
 end
 %
@@ -387,7 +327,7 @@ locdisp(displaymode,['    --> Starting run with command ',remotecmd])
 %
 if ~isempty(remotehost),
     %
-    [res,txt] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+    [res,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
     %
 else
     %

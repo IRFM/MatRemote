@@ -9,7 +9,7 @@ function filename = condor_batchscript_yp(job,data)
 if nargin < 2,error('Not enough input arguments in condor_batchscript_yp.m');end
 %
 filename = ['batch_matlab_',job.timeid,'.condor'];
-fileid = fopen([job.localdatapath,job.condor_dir,filesep,filename],'w');
+fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
 fprintf(fileid,['####################','\n']);
 fprintf(fileid,['##','\n']);
@@ -32,15 +32,15 @@ fprintf(fileid,['Universe = vanilla','\n']);
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['InputDir = ',job.remotedatapath,job.condor_dir,filesep,'\n']);%CONDOR simulation input dir
+fprintf(fileid,['InputDir = ',job.remotedatapath,job.batch_dir,'\n']);%CONDOR simulation input dir
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['OutputDir = ',job.remotedatapath,job.condor_dir,filesep,'\n']);%CONDOR simulation output dir
+fprintf(fileid,['OutputDir = ',job.remotedatapath,job.batch_dir,'\n']);%CONDOR simulation output dir
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
-fprintf(fileid,['Executable = ',job.script,'\n']);%matlab shell script
+fprintf(fileid,['Executable = ',job.remotedatapath,job.batch_dir,job.script,'\n']);%matlab shell script
 fprintf(fileid,[' ','\n']);
 %
 fprintf(fileid,['#','\n']);
