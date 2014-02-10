@@ -77,27 +77,13 @@ parfor j_range = 1:nrange,
     varargout_loc = cell(1,nargout_in);
     %
     try
-        if scheduler.gpu == 1,
-            varargout_array_gpu = cell(1,nargout-1);
-            [varargout_array_gpu{1,:}]  = feval(fun_handle,args_loc{:});
-            for j_argout = 1:nargout-1,
-                varargout{j_argout}{j_range} = gather(varargout_array_gpu{1,j_argout});%to release some memory on GPU device
-            end
-            %
-            if j_range > 2 && gpuStatus.FreeMemory - (FreeMemory_gpu(end) - FreeMemory_gpu(end-1)) < 0,
-                reset(gpuDevice);
-                FreeMemory_gpu(end) = gpuStatus.FreeMemory;
-                disp('WARNING: A reset of the GPU device is performed as the free memory is becoming short. ');
-            end
-            FreeMemory_gpu(j_range) = gpuStatus.FreeMemory;
-        else
-            [varargout_loc{:}] = feval(fun,args_loc{:});
-        end
+        [varargout_loc{:}] = feval(fun,args_loc{:});
     catch me_seq
         disp(['Error executing the iteration ',int2str(j_range),'/',int2str(nrange),'.']);
         disp(['===> Error : ',getReport(me_seq)]);
         flag(j_range) = -2;
     end
+    %
     varargout_array{j_range} = varargout_loc;
     %
 end
