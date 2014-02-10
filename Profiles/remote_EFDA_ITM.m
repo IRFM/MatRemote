@@ -32,9 +32,6 @@ remote.sun.yvesp.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str
 remote.sun.yvesp.matver.mat800.root = '/afs/ipp/common/soft/matlab_2012b/bin/';
 remote.sun.yvesp.matver.mat800.prefdir = '/pfs/home/yvesp/.matlab/R2012b';%warning /pfs/home/ must replace /u/
 remote.sun.yvesp.matver.matdef = remote.sun.yvesp.matver.mat800;%default matlab on remote machine
-remote.sun.yvesp.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
-remote.sun.yvesp.cvs.cmd = 'update -d';%CVS command
-remote.sun.yvesp.luke_root = '/pfs/home/yvesp/public/LUKE_ITM/trunk/LUKE/';%warning /pfs/home/ must replace /u/
 remote.sun.yvesp.remoteuser = 'yvesp';
 %
 % JOAN DECKER
