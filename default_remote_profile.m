@@ -2,6 +2,7 @@ function remote = default_remote_profile
 %
 remote.host = [];% adress of host. Ex : cephee15.intra.cea.fr
 remote.hostname = [];% local name of host (from hostname -f command)
+remote.sshopts = '';% ssh options
 remote.nproc = [];% maximum number of processors. Ex : 48    
 remote.cmd = [];% job submit command. Ex : qsub
 remote.get_jobid = [];% syntax to read job number {str_before,str_after}. Ex : {'','.cephee'}

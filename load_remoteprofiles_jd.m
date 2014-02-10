@@ -73,7 +73,11 @@ for ifile = 1:nremotefiles,
     % test connection with key-pair
     %
     disp(['Testing connection to ',remote.remoteuser,'@',remote.host,' ... ']);
-    [res,txt] = unix(['ssh -o ConnectTimeout=10 -o BatchMode=yes ',remote.remoteuser,'@',remote.host,' ''echo test ok ''']);
+    %
+    remotecmd = 'echo test ok';
+    remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
+    %
+    [res,txt] = matremotecmd(remote,remotecmd);
     %
     if res ~= 0,
         %
