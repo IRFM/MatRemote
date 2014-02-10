@@ -1,9 +1,16 @@
-function remote_profile = remote_macpro_YVES_PEYSSON(clustername,profilename,localuser)
+function remote_profile = remote_macpro_YVES_PEYSSON(varargin)
 %
 % This function regroups the remote profiles run on the MACPRO of Yves Peysson
 %
-default_cluster = 'condor';% default cluster profile if 'clustername' is not an existing cluster profile
-default_profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+%   INPUTS : 
+%       - schedulername (optinal) : name of selected scheduler
+%       - profilename (optinal) : name of selected profile
+%
+%   OUTPUTS : 
+%       - remote_profile : name of selected remote profile(s)
+%
+default.scheduler = 'condor';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -14,6 +21,7 @@ default_profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 remote.condor.yves = default_remote_profile;
 remote.condor.yves.host = 'tolbachik.hd.free.fr';
+remote.condor.yves.hostname = 'macproyves';
 remote.condor.yves.nproc = 6;
 remote.condor.yves.cmd = 'condor_submit';
 remote.condor.yves.get_jobid = {'** Proc ',':'};
@@ -26,50 +34,16 @@ remote.condor.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.condor.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.condor.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
-remote.condor.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
-remote.condor.yves.cvs.cmd = 'update -d';%CVS command
-remote.condor.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
-remote.condor.yves.users.remoteuser = 'yvespeysson';
+remote.condor.yves.remoteuser = 'yvespeysson';
 %
 % JOAN DECKER
 %
-remote.condor.joan = default_remote_profile;
-remote.condor.joan.host = 'tolbachik.hd.free.fr';
-remote.condor.joan.nproc = 6;
-remote.condor.joan.cmd = 'condor_submit';
-remote.condor.joan.get_jobid = {'** Proc ',':'};
-remote.condor.joan.set_jobid = {'condor_q ',''};
-remote.condor.joan.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
-remote.condor.joan.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-remote.condor.joan.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.joan.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.condor.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.condor.joan.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.condor.joan.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.condor.joan.matver.matdef = remote.condor.joan.matver.mat801;%default matlab on remote machine
-remote.condor.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
-remote.condor.joan.users.remoteuser = 'yvespeysson';%'joandecker';
+remote.condor.joan = remote.condor.yves;% same remote user, same options
 %
 % EMELIE NILSSON
 %
-remote.condor.emelie = default_remote_profile;
-remote.condor.emelie.host = 'tolbachik.hd.free.fr';
-remote.condor.emelie.nproc = 6;
-remote.condor.emelie.cmd = 'condor_submit';
-remote.condor.emelie.get_jobid = {'** Proc ',':'};
-remote.condor.emelie.set_jobid = {'condor_q ',''};
-remote.condor.emelie.env.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
-remote.condor.emelie.env.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-remote.condor.emelie.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.emelie.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.condor.emelie.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.condor.emelie.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.condor.emelie.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.condor.emelie.matver.matdef = remote.condor.emelie.matver.mat801;%default matlab on remote machine
-remote.condor.emelie.luke_root = '/Users/yvespeysson/emelienilsson/LUKE/';
-remote.condor.emelie.users.remoteuser = 'yvespeysson';%'joandecker';
+remote.condor.emelie = remote.condor.yves;% same remote user, same options
 %
-
 % --------------------------------------------------
 %
 % macproyves (xgrid)
@@ -112,6 +86,7 @@ remote.condor.emelie.users.remoteuser = 'yvespeysson';%'joandecker';
 %
 remote.xgrid.yves = default_remote_profile;
 remote.xgrid.yves.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yves.hostname = 'macproyves';
 remote.xgrid.yves.nproc = 6;
 remote.xgrid.yves.cmd = {'xgrid -h ',' -p ',' -job batch '};
 remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
@@ -122,65 +97,22 @@ remote.xgrid.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
-remote.xgrid.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
-remote.xgrid.yves.cvs.cmd = 'update -d';%CVS command
-remote.xgrid.yves.luke_root = '/Users/yvespeysson/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
-remote.xgrid.yves.users.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
 %
 % JOAN DECKER
 %
-remote.xgrid.joan = default_remote_profile;
-remote.xgrid.joan.host = 'tolbachik.hd.free.fr';
-remote.xgrid.joan.nproc = 6;
-remote.xgrid.joan.cmd = {'xgrid -h ',' -p ',' -job batch '};
-remote.xgrid.joan.get_jobid = {'jobIdentifier = ',';'};
-remote.xgrid.joan.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
-remote.xgrid.joan.remotedatapath = '/Users/yvespeysson/xgrid/';
-remote.xgrid.joan.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.xgrid.joan.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.xgrid.joan.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.xgrid.joan.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.xgrid.joan.matver.matdef = remote.xgrid.joan.matver.mat801;%default matlab on remote machine
-remote.xgrid.joan.luke_root = '/Users/yvespeysson/joandecker/Work/LUKE_1_10/';
-remote.xgrid.joan.password = {'ghm93'};
-remote.xgrid.joan.users.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
 %
 % EMELIE NILSSON
 %
-remote.xgrid.emelie = default_remote_profile;
-remote.xgrid.emelie.host = 'tolbachik.hd.free.fr';
-remote.xgrid.emelie.nproc = 6;
-remote.xgrid.emelie.cmd = {'xgrid -h ',' -p ',' -job batch '};
-remote.xgrid.emelie.get_jobid = {'jobIdentifier = ',';'};
-remote.xgrid.emelie.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
-remote.xgrid.emelie.remotedatapath = '/Users/yvespeysson/xgrid/';
-remote.xgrid.emelie.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
-remote.xgrid.emelie.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.xgrid.emelie.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
-remote.xgrid.emelie.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
-remote.xgrid.emelie.matver.matdef = remote.xgrid.emelie.matver.mat801;%default matlab on remote machine
-remote.xgrid.emelie.luke_root = '/Users/yvespeysson/emelienilsson/LUKE/';
-remote.xgrid.emelie.password = {'ghm93'};
-remote.xgrid.emelie.users.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.emelie = remote.xgrid.yves;% same remote user, same options
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
 %
-if nargin < 1 || ~isfield(remote,clustername),
-    clustername = default_cluster;
-end
-%
-if nargin < 2 || ~isfield(remote.(clustername),profilename),
-    profilename = default_profile;
-end
-%
-remote_profile = remote.(clustername).(profilename);
-%
-if nargin >= 3,
-    remote_profile.users.(localuser) = remote_profile.users.remoteuser;
-end
+remote_profile = select_remote_profile_jd(remote,default,varargin{:});
 %
 
 

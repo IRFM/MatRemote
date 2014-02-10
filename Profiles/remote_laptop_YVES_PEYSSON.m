@@ -1,9 +1,16 @@
-function remote_profile = remote_laptop_YVES_PEYSSON(clustername,profilename,localuser)
+function remote_profile = remote_laptop_YVES_PEYSSON(varargin)
 %
 % This function regroups the remote profiles run on the MACPRO of Yves Peysson
 %
-default_cluster = 'condor';% default cluster profile if 'clustername' is not an existing cluster profile
-default_profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+%   INPUTS : 
+%       - schedulername (optinal) : name of selected scheduler
+%       - profilename (optinal) : name of selected profile
+%
+%   OUTPUTS : 
+%       - remote_profile : name of selected remote profile(s)
+%
+default.scheduler = 'condor';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -14,6 +21,7 @@ default_profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 remote.condor.yves = default_remote_profile;
 remote.condor.yves.host = '127.0.0.1';
+remote.condor.yves.hostname = 'macbookyves';
 remote.condor.yves.nproc = 6;
 remote.condor.yves.cmd = 'condor_submit';
 remote.condor.yves.get_jobid = {'** Proc ',':'};
@@ -30,7 +38,7 @@ remote.condor.yves.cvs.CVSROOT = '';%CVS root for LUKE
 %remote.condor.yves.cvs.CVSROOT = ':pserver:YP105119:Peys#4Yv@altair.partenaires.cea.fr:/usr/local/cvs/gcgc';%CVS root for LUKE
 remote.condor.yves.cvs.cmd = 'update -d';%CVS commandremote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
-remote.condor.yves.users.remoteuser = 'yves';
+remote.condor.yves.remoteuser = 'yves';
 %
 % --------------------------------------------------
 %
@@ -74,6 +82,7 @@ remote.condor.yves.users.remoteuser = 'yves';
 %
 remote.xgrid.yves = default_remote_profile;
 remote.xgrid.yves.host = '127.0.0.1';
+remote.xgrid.yves.hostname = 'macbookyves';
 remote.xgrid.yves.nproc = 2;
 remote.xgrid.yves.cmd = {'xgrid -h ',' -p ',' -job batch '};
 remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
@@ -87,24 +96,12 @@ remote.xgrid.yves.cvs.CVSROOT = '';
 remote.xgrid.yves.cvs.cmd = 'update -d';%CVS commandremote.condor.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.xgrid.yves.luke_root = '/Users/yves/Projets/LUKE/';
 remote.xgrid.yves.password = {'ghm93'};
-remote.xgrid.yves.users.remoteuser = 'yves';
+remote.xgrid.yves.remoteuser = 'yves';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
 %
-if nargin < 1 || ~isfield(remote,clustername),
-    clustername = default_cluster;
-end
-%
-if nargin < 2 || ~isfield(remote.(clustername),profilename),
-    profilename = default_profile;
-end
-%
-remote_profile = remote.(clustername).(profilename);
-%
-if nargin >= 3,
-    remote_profile.users.(localuser) = remote_profile.users.remoteuser;
-end
+remote_profile = select_remote_profile_jd(remote,default,varargin{:});
 %
     
