@@ -130,16 +130,7 @@ end
 %
 locdisp(displaymode,['    --> Checking status of job # ',job.id]);
 %
-if ~isempty(remotehost),
-    %
-    [res,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-    pause(0.1)
-    %
-else
-    %
-    [res,txt] = unix(remotecmd);
-    %
-end
+[res,txt] = matremotecmd(remote,remotecmd);
 %
 txt(double(txt) == 10) = [];
 %
@@ -215,16 +206,8 @@ elseif job.xgridsearch,
     %
     remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
     %
-    if ~isempty(remotehost),
-        %
-        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-        pause(0.1)
-        %
-    else
-        %
-        [res,err] = unix(remotecmd);
-        %
-    end
+    [res,err] = matremotecmd(remote,remotecmd);
+    pause(0.1)
     %
     if res == 0,% error file successfuly transfered
         locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer completed.']);
@@ -236,16 +219,8 @@ elseif job.xgridsearch,
     %
     remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
     %
-    if ~isempty(remotehost),
-        %
-        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-        pause(0.1)
-        %
-    else
-        %
-        [res,err] = unix(remotecmd);
-        %
-    end
+    [res,err] = matremotecmd(remote,remotecmd);
+    pause(0.1)
     %
     if res == 0,% result file successfuly transfered
         locdisp(displaymode,['    --> Remote transfer of xgrid result files for Job # ',job.id,' on the remote computer completed.']);
@@ -263,11 +238,11 @@ if ~isempty(job.load_id),
     if ~isempty(remotehost),
         %
         locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,' from remote host ',remotehost,':',job.remotedatapath,...
-            ' as user ',job.remotelogname,' to location ',job.localdatapath,job.load_id])  
+            ' as user ',remote.remoteuser,' to location ',job.localdatapath,job.load_id])  
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
             %
-            [res,err] = unix(['scp -r ',job.remotelogname,'@',remotehost,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
+            [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
             %
             if res ~= 0,
                 locdisp(displaymode,['xgrid output file transfer failed : ',err]);
@@ -276,7 +251,7 @@ if ~isempty(job.load_id),
                 return
             end            
             %
-            [res,err] = unix(['scp -r ',job.remotelogname,'@',remotehost,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
+            [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
             %
             if res ~= 0,
                 locdisp(displaymode,['xgrid error file transfer failed : ',err]);
@@ -286,7 +261,7 @@ if ~isempty(job.load_id),
             end
         end
         %
-        [res,err] = unix(['scp -r ',job.remotelogname,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
+        [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
@@ -377,13 +352,13 @@ if job.clean >= 1,%clean remote and batch files
     %
     if ~isempty(remotehost)
         %
-        locdisp(displaymode,['    --> Removing remote input file/folder ',remotehost,':',job.remotedatapath,job.save_id,' as user ',job.remotelogname,' ...'])
-        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',rminputcmd,'''']);
+        locdisp(displaymode,['    --> Removing remote input file/folder ',remotehost,':',job.remotedatapath,job.save_id,' as user ',remote.remoteuser,' ...'])
+        [res,err] = matremotecmd(remote,rminputcmd);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
         locdisp(displaymode,['    --> Removing remote input file/folder ',job.remotedatapath,job.save_id,' ...'])
-        [res,err] = unix(rminputcmd);
+        [res,err] = matremotecmd(remote,rminputcmd);
         %
     else 
         res = 0;
@@ -397,13 +372,13 @@ if job.clean >= 1,%clean remote and batch files
     %
     if ~isempty(remotehost)
         %
-        locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',job.remotelogname,' ...'])
-        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',rmoutputcmd,'''']);
+        locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remote.remoteuser,' ...'])
+        [res,err] = matremotecmd(remote,rmoutputcmd);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
         locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
-        [res,err] = unix(rmoutputcmd);
+        [res,err] = matremotecmd(remote,rmoutputcmd);
         %
     else 
         res = 0;
@@ -425,13 +400,13 @@ if job.clean >= 1,%clean remote and batch files
         %
         if ~isempty(remotehost)
             %
-            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',job.remotelogname,' ...'])
-            [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',rmbatchcmd,'''']);
+            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
+            [res,err] = matremotecmd(remote,rmbatchcmd);
             %
         else
             %
             locdisp(displaymode,'    --> Removing batch output files ...')
-            [res,err] = unix(rmbatchcmd);
+            [res,err] = matremotecmd(remote,rmbatchcmd);
             %
         end        
     elseif job.condorsearch,
@@ -443,14 +418,14 @@ if job.clean >= 1,%clean remote and batch files
         %
         if ~isempty(remotehost),
             %
-            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',job.remotelogname,' ...'])
-            [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',rmbatchcmd,'''']);
+            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
+            [res,err] = matremotecmd(remote,rmbatchcmd);
             pause(0.1)
             %
         else
             %
             locdisp(displaymode,'    --> Removing batch output files ...')
-            [res,err] = unix(rmbatchcmd);
+            [res,err] = matremotecmd(remote,rmbatchcmd);
             %
         end       
     end

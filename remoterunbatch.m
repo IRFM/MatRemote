@@ -93,12 +93,6 @@ if job.condorsearch + job.xgridsearch + job.pbssearch ~= 1,
     error('scheduler type identification problem')
 end
 %
-% get remote user name
-%
-if ~isfield(job,'remotelogname'),
-    job.remotelogname = remote.remoteuser;
-end
-%
 % local data location
 %
 if ~isfield(job,'localdatapath') || isempty(job.localdatapath),% remote data location
@@ -135,20 +129,14 @@ end
 % create remote data folder if needed - this also tests remote connection
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
-if ~isempty(remotehost),
-    [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-else
-    [res,err] = unix(remotecmd);
-end
+%
+[res,err] = matremotecmd(remote,remotecmd);
 %
 if res == 1,% remote directory does not exist
     remotecmd = ['mkdir ',job.remotedatapath];%create remote directory
     locdisp(displaymode,['    --> Creating remote data folder ',job.remotedatapath])  
-    if ~isempty(remotehost),
-        [res,err] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-    else
-        [res,err] = unix(remotecmd);
-    end
+    %
+    [res,err] = matremotecmd(remote,remotecmd);
     if res ~= 0,
         %
         locdisp(displaymode,['Remote data folder creation failed : ',err]);
@@ -176,24 +164,11 @@ if isfield(remote,'cvs'),
         %
         locdisp(displaymode,['    --> CVS : ',remotecmd]) 
         %
-        if ~isempty(remotehost),
-            %
-            try
-                [res,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-            catch
-                res = 1;
-                txt = ['Error in CVS update'];
-            end
-            %
-        else
-            %
-            try
-                [res,txt] = unix(remotecmd);
-            catch
-                res = 1;
-                txt = ['Error in CVS update'];
-            end
-            %
+        try
+            [res,txt] = matremotecmd(remote,remotecmd);
+        catch
+            res = 1;
+            txt = ['Error in CVS update'];
         end
         %
         cd(dir_init);
@@ -223,11 +198,11 @@ end
 if ~isempty(job.save_id),
     if ~isempty(remotehost),%remote calculation 
         %
-        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',job.remotelogname,' ...'])  
-        [res,err] = scp2remote_yp(job.remotelogname,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remote.remoteuser,' ...'])  
+        [res,err] = scp2remote_yp(remote.remoteuser,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
         %
         if job.xgridsearch || job.condorsearch,
-            [res_chmod,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd_chmod,'''']);
+            [res_chmod,txt] = matremotecmd(remote,remotecmd_chmod);
         end
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
@@ -236,7 +211,7 @@ if ~isempty(job.save_id),
         [res,err] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);
         %
         if job.xgridsearch || job.condorsearch,
-            [res_chmod,txt] = unix(remotecmd_chmod);        
+            [res_chmod,txt] = matremotecmd(remote,remotecmd_chmod);
         end
         %
     else
@@ -325,15 +300,7 @@ end
 %
 locdisp(displaymode,['    --> Starting run with command ',remotecmd]) 
 %
-if ~isempty(remotehost),
-    %
-    [res,txt] = unix(['ssh ',job.remotelogname,'@',remotehost,' ''',remotecmd,'''']);
-    %
-else
-    %
-    [res,txt] = unix(remotecmd);
-    %
-end
+[res,txt] = matremotecmd(remote,remotecmd);
 %
 if res ~= 0,
     %
