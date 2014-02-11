@@ -37,7 +37,6 @@ remote.sun.yvesp.remoteuser = 'yvesp';
 % JOAN DECKER
 %
 remote.sun.joan = remote.sun.yvesp;
-remote.sun.joan.luke_root = '/pfs/home/yvesp/joandecker/LUKE/';%warning /pfs/home/ must replace /u/
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
