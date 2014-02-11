@@ -39,7 +39,6 @@ try
     end
     %
     remotebatchdir = getenv('remotebatchdir');
-    logname = getenv('USER');
     %
     if nargin < 3,
         remotepathfnc = getenv('remotepathfnc');
@@ -62,13 +61,12 @@ try
         diary(filediary);
     end
     %
-    filein = [remotebatchdir,'MAT_RUN_',logname,'_',timeid,'.mat'];
-    fileout = [remotebatchdir,'MAT_OUT_',logname,'_',timeid,'.mat'];
+    filein = [remotebatchdir,'MAT_RUN_',timeid,'.mat'];
+    fileout = [remotebatchdir,'MAT_OUT_',timeid,'.mat'];
     %
     if debugmode,
         disp('-------- in remotematrun.m --------');
         disp(['remotebatchdir = ',remotebatchdir]);
-        disp(['logname = ',logname]);
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);

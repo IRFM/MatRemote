@@ -8,8 +8,8 @@ function job = matstandardsave(sinput,job)
 job.batch_dir = ['batch_',job.timeid,filesep];
 mkdir([job.localdatapath,job.batch_dir]);% create batch directory
 %
-savefile = ['MAT_RUN_',job.remotelogname,'_',job.timeid,'.mat'];%input data filename
-loadfile = ['MAT_OUT_',job.remotelogname,'_',job.timeid,'.mat'];%output data filename
+savefile = ['MAT_RUN_',job.timeid,'.mat'];%input data filename
+loadfile = ['MAT_OUT_',job.timeid,'.mat'];%output data filename
 %
 % create specific scripts for condor and xgrid jobs
 %
