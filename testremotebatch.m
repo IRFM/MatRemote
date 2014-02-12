@@ -134,7 +134,7 @@ if isnumeric(sinputs),% start new test
             %
         else% use matremote_jd
             %
-            test_job.funcopy = true;
+            test_job.funcopy = true;% to copy function remotetest to remote folder
             %
             if sinputs == 1,% use matremote_jd and wait for result
                 %

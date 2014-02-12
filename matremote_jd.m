@@ -36,6 +36,10 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
         end
     end
     %
+    if ~isfield(job,'funcopy'),
+        job.funcopy = true;
+    end
+    %
     mat_input.fun = fun;
     mat_input.args_in = args_in;
     mat_input.nargout = nargout;

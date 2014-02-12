@@ -59,6 +59,9 @@ job.load_id = [job.batch_dir,loadfile];
 end
 %
 function safecopyfile(filename,savedir)
+    if ~ischar(filename)
+        filename = func2str(filename);
+    end
     filepath = which(filename);
     if ~isempty(filepath),
         copyfile(filepath,savedir);
