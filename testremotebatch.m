@@ -1,4 +1,4 @@
-function soutputs = testremotebatch(sinputs,remoteid,debugmode)
+function soutputs = testremotebatch(sinputs,remote,debugmode)
 % ------------------------------------------------
 % test for remote batch using a standard function.
 % ------------------------------------------------
@@ -25,11 +25,12 @@ function soutputs = testremotebatch(sinputs,remoteid,debugmode)
 %                    (2) use matremote_jd and return job for later check
 %       o a cell array containing the job(s) started earlier with option (job = 2), or the results of completed jobs
 %
-%   - remoteid : only if isnumeric(sinputs)
-%       	o selection of the remote profile remote_(remoteid).m
-%       	o If remoteid == NaN,       prompt for user selection (default)
-%           o If remoteid == '',        load & test all profiles  
-%           o If remoteid == 'local',   identify and load local profile
+%   - remote : only if isnumeric(sinputs)
+%           o (NaN)     : load all profiles and ask for user selection 
+%           o (struct)  : profile contained in structure 'remote' 
+%           o (string)  : identification of profile to be selected as remote_(string).m 
+% (default) o ('')      : load & return all profiles 
+%           o ('local') : idendify and return local cluster
 %
 %   - debugmode : [0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
 %
@@ -82,16 +83,9 @@ end
 %
 if isnumeric(sinputs),% start new test
     %
-    if nargin < 2 || ~ischar(remoteid),
-        remoteid = '';% list all profiles
-        selection = true;% prompt for user selection
-    else
-        selection = false;
-    end
-    %
     % Select local and remote profiles to be tested
     %
-    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,NaN,NaN,true,selection,true,debugmode);
+    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,NaN,NaN,true,debugmode);
     %
     nrem = length(remoteprofiles);
     %

@@ -1,4 +1,4 @@
-function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler,profilename,test,select,duplicate,display_mode)
+function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,scheduler,profilename,duplicate,display_mode)
     %
     % This function loads remote profiles, identifies local cluster if it
     % exists, and creates a user-friendly list including scheduler type
@@ -6,20 +6,22 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
     % The function can test the connection, and return either all profiles, all
     % valid profiles, profiles selected by user input, or profiles selected by function inputs
     %
-    % If the profile selected by remoteid does not exist or test failed, empty remoteprofiles returned
+    % If the profile selected by remote does not exist or test failed, empty remoteprofiles returned
     %
     %   - INPUTS : 
-    %       - remoteid : (char array) identification of profile to be selected as remote_(remoteid).m 
-    %           o If remoteid == '', load all profiles
-    %           o If remoteid == 'local', identify and load local profile
-    %       - scheduler : (char array - only if remoteid ~= '') identification of scheduler to be selected. 
+    %       - remote : 
+    %           o (NaN)     : load all profiles and ask for user selection 
+    %           o (struct)  : profile contained in structure 'remote' 
+    %           o (string)  : identification of profile to be selected as remote_(string).m 
+    % (default) o ('')      : load & return all profiles 
+    %           o ('local') : idendify and return local cluster
+    %       - test : (boolean) test loaded profiles
+    %       - scheduler : (char array - only if remote ~= '') identification of scheduler to be selected. 
     %           o If scheduler == '', load default scheduler
     %           o If scheduler == NaN (default), user input for scheduler
     %       - profilename : (NaN or char array) name of profile within remote cluster description (ex : joan, yves, ...)
     %           o if NaN (default), user input for profile name
     %           o if the name is not specified or does not exist, default profile name is selected.
-    %       - test : (boolean) test loaded profiles
-    %       - select : (boolean - used only if remoteid == '') if select == true, user-input selection from loaded list of profiles
     %       - duplicate : (boolean - used only if local profile among those selected) duplicate local profile with and without empty host, to test both ways
     %       - display_mode : (boolean) show information in command window 
     %
@@ -37,29 +39,26 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
     %       - to load and return all profiles and scheduler with default profilename and without connection test or duplicate local profile, and also load user-friendly description :
     %           >> [remoteprofiles,profilestr] = load_remoteprofiles_jd;
     %
-    if nargin < 7 || ~isscalar(display_mode) || (~islogical(display_mode) && ~isnumeric(display_mode)),
+    if nargin < 6 || ~isscalar(display_mode) || (~islogical(display_mode) && ~isnumeric(display_mode)),
         display_mode = true;
     end
-    if nargin < 6 || ~isscalar(duplicate) || (~islogical(duplicate) && ~isnumeric(duplicate)),
+    if nargin < 5 || ~isscalar(duplicate) || (~islogical(duplicate) && ~isnumeric(duplicate)),
         duplicate = false;
     end
-    if nargin < 5 || ~isscalar(select) || (~islogical(select) && ~isnumeric(select)),
-        select = false;
-    end
-    if nargin < 4 || ~isscalar(test) || (~islogical(test) && ~isnumeric(test)),
-        test = false;
-    end
-    if nargin < 3 
+    if nargin < 4 
         profilename = NaN;% prompt user for profile name
     end
-    if nargin < 2 || ~ischar(scheduler),
+    if nargin < 3 || ~ischar(scheduler),
         scheduler = NaN;% prompt user for  scheduler
     end
-    if nargin < 1 
-        remoteid = '';% load all profiles
+    if nargin < 2 || ~isscalar(test) || (~islogical(test) && ~isnumeric(test)),
+        test = false;
+    end
+    if nargin < 1 || (~isstruct(remote) && ~ischar(remote) && (~isscalar(remote) || ~isnan(remote))),
+        remote = '';% load all profiles
     end
     %
-    if ~ischar(profilename),
+    if ~ischar(profilename) && ~isstruct(remote),
         profilename = input_dke_yp('Identify Profile Name (ex : ''joan'',''yves'',...), or leave empty to use default for each remote profile','');
     end
     %
@@ -77,11 +76,34 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
         RemoteFileNames{ifile} = RemoteProfDirContents(ifile).name(1:end-2);
     end
     %
-    if ~isempty(remoteid) && ~strcmp(remoteid,'local'),
+    if isstruct(remote),% case where structure was input
+        %
+        if test && ~testremoteprofile_jd(remote,display_mode),
+            disp('WARNING : connection test failed for structure remote. Empty remoteprofiles returned');
+            return
+        end
+        %
+        remoteprofiles = remote;
+        profilestr = {getremotestr_jd(remote)};
+        %
+        return
+        %
+    end
+    %
+    if isscalar(remote) && isnan(remote),% load all profiles and prompt selection
+        %
+        remote = '';
+        select = true;
+        %
+    else
+        select = false;
+    end
+    %
+    if ~isempty(remote) && ~strcmp(remote,'local'),
         %
         % case where profile was specified by function input
         %
-        filename = ['remote_',remoteid];
+        filename = ['remote_',remote];
         iselected = strcmp(RemoteFileNames,filename);
         %
         if ~any(iselected),
@@ -112,14 +134,14 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
         %
         for ifile = 1:nremotefiles,
             %
-            remote = feval(RemoteFileNames{ifile},'',profilename);
-            hostname = remote.hostname;
+            remoteprofile = feval(RemoteFileNames{ifile},'',profilename);
+            hostname = remoteprofile.hostname;
             %
             if any(strfind(lochostname,hostname)),% local cluster,
                 %
                 if display_mode,
                     disp(' ')
-                    disp(['Local cluster identified : ',remote.host]);
+                    disp(['Local cluster identified : ',remoteprofile.host]);
                 end
                 %
                 LocalFileTest(ifile) = true;
@@ -127,7 +149,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
             end
         end
         %
-        if strcmp(remoteid,'local'),% local cluster selected
+        if strcmp(remote,'local'),% local cluster selected
             %
             if sum(LocalFileTest) == 0,
                 disp('WARNING : no local cluster found among remote_*.m files. Empty remoteprofiles returned');
@@ -144,7 +166,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
         end
     end
     %
-    if ~isempty(remoteid),
+    if ~isempty(remote),
         %
         % case where profile was specified by function input
         %
@@ -155,7 +177,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
         cmdstr = cell(1,nrem);
         %
         for irem = 1:nrem,
-            if strcmp(remoteid,'local'),
+            if strcmp(remote,'local'),
                 newremoteprofiles(irem).host = '';% local cluster
             end
             %
@@ -242,18 +264,18 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteid,scheduler
             %
             if localprofiletest(irem),% local cluster with empty host field
                 %
-                remote = remoteprofiles(irem);% remote profile selected
-                remote.host = '';
-                newremoteprofiles = [newremoteprofiles,remote];
-                profilestr = [profilestr,getremotestr_jd(remote)];
+                remoteprofile = remoteprofiles(irem);% remote profile selected
+                remoteprofile.host = '';
+                newremoteprofiles = [newremoteprofiles,remoteprofile];
+                profilestr = [profilestr,getremotestr_jd(remoteprofile)];
                 %
             end
             %
             if remoteprofiletest(irem) && (~localprofiletest(irem) || (localprofiletest(irem) && duplicate)),% remote cluster or local cluster with full host field (if duplicate == true)
                 %
-                remote = remoteprofiles(irem);% remote profile selected
-                newremoteprofiles = [newremoteprofiles,remote];
-                profilestr = [profilestr,getremotestr_jd(remote)];
+                remoteprofile = remoteprofiles(irem);% remote profile selected
+                newremoteprofiles = [newremoteprofiles,remoteprofile];
+                profilestr = [profilestr,getremotestr_jd(remoteprofile)];
                 %
             end
             %
