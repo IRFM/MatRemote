@@ -17,13 +17,13 @@ if job.condorsearch,
     %
     % save condor batch file into job directory 
     %
-    job.condor_script = condor_batchscript_yp(job,'');
+    job.condor_script = condor_batchscript_yp(job);
     %
 elseif job.xgridsearch,
     %
     % save xgrid batch file into job directory 
     %
-    job.xgrid_script = xgrid_batch2xml_yp(job,'');
+    job.xgrid_script = xgrid_batch2xml_yp(job);
     %
 end
 %

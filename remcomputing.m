@@ -137,9 +137,9 @@ try
         %
     end
     %
-catch me_dcluke
+catch me_remcomputing
     disp('Error running remcomputing : flagged for sequential run');
-    disp(['===> Error : ',getReport(me_dcluke)]);
+    disp(['===> Error : ',getReport(me_remcomputing)]);
     flag = -2*ones(1,nrange);
 end
 %

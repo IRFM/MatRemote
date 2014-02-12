@@ -70,7 +70,6 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
-        disp(['luke_root = ',getenv('luke_root')])
         disp('------------------------------');
     end
     %

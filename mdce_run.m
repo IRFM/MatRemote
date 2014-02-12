@@ -117,14 +117,14 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
     flag = 0;
     %
     if isempty(dkecluster),
-        dkecluster = mdce_clustermode(0,'');%All cluster parameters and paths (sequential mode by default)
+        dkecluster = mdce_clustermode;%All cluster parameters and paths (sequential mode by default)
     end
     %
     % Parameter validation of different parallel computing techniques
     %
     if isfield(dkecluster,'scheduler'),
         if ~isfield(dkecluster.scheduler,'mode'),
-            dkecluster = clustermode_luke(0,'');%All cluster parameters and paths (sequential mode by default)
+            dkecluster = mdce_clustermode;%All cluster parameters and paths (sequential mode by default)
             disp('WARNING: distributed computing is inconsistently set-up: ''mode'' must be chosen. Sequential mode enforced.');
         else
             if ~isfield(dkecluster.scheduler,'temppath'),
@@ -148,10 +148,10 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
             end
         end
     elseif isfield(dkecluster,'batch'),
-        dkecluster = clustermode_luke(0,'');%All cluster parameters and paths (sequential mode by default)
+        dkecluster = mdce_clustermode;%All cluster parameters and paths (sequential mode by default)
         disp('WARNING: batch parallel computing is not yet implemented. Sequential mode enforced.');
     else
-        dkecluster = clustermode_luke(0,'');%All cluster parameters and paths (sequential mode by default)
+        dkecluster = mdce_clustermode;%All cluster parameters and paths (sequential mode by default)
         disp('WARNING: unknown parallel computing mode. Sequential mode enforced.');
     end
     %
@@ -181,7 +181,7 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
     end
 end
 %
-% This function divides the MDCE calculation in groups for the methods that require it (DCLUKE, JOB MDCE)
+% This function divides the MDCE calculation in groups for the methods that require it (JOB MDCE, remcomputing)
 %
 function [flag,varargout] = create_loop_jd(method,fun,args_in,arg_index,arg_range,scheduler)
     %

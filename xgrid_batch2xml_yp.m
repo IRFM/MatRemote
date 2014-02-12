@@ -1,4 +1,4 @@
-function [filename] = xgrid_batch2xml_yp(job,data)
+function [filename] = xgrid_batch2xml_yp(job)
 %
 %LUKE - This function creates dynamically the xml batch file for remote
 %calculations on a Mac cluster with Xgrid scheduler (can generate multiple
