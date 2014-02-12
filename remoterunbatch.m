@@ -158,9 +158,7 @@ end
 if isfield(remote,'cvs'),
     if isstruct(remote.cvs) && ~isempty(remote.cvs.CVSROOT) && ~isempty(remote.cvs.cmd),
         %
-        dir_init = pwd;
-        %
-        remotecmd = ['CVSROOT=',remote.cvs.CVSROOT,'; export CVSROOT; cd ',remote.luke_root,'; cvs ',remote.cvs.cmd];
+        remotecmd = ['CVSROOT=',remote.cvs.CVSROOT,'; export CVSROOT; cvs ',remote.cvs.cmd];
         %
         locdisp(displaymode,['    --> CVS : ',remotecmd]) 
         %
@@ -170,8 +168,6 @@ if isfield(remote,'cvs'),
             res = 1;
             txt = ['Error in CVS update'];
         end
-        %
-        cd(dir_init);
     end
 end
 %
