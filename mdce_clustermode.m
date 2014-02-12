@@ -1,84 +1,76 @@
-function [dkecluster] = clustermode_luke(param,fun,dkepath,schedulertype,remnum)
-%LUKE - Test cluster properties
+function [dkecluster] = mdce_clustermode(param,fun)
 %
-% This function tests cluster properties and generate default values
+% Test & configure cluster properties for use by mdce_run
+%
+% INPUTS : 
+%   - param : parameters for distributed computing
+%
+%       o if param is not a structure (default = 0)
+%           o (0)       : sequential
+%           o (1)       : job scheduler (Matlab MDCE required)             (+i enables GPU calculations)
+%           o (2)       : parfor parallel computing (Matlab MDCE required) (+i enables GPU calculations)
+%           o (3)       : use of remcomputing with local cluster
+%           o remote id : extended use of remcomputing (cluster identification, see below for details)
+%           
+%
+%       o if param is a structure : param or param.(fun).scheduler contains optional mdce parameters among these :
+%           - mode : see param above
+%           - gpu (default : 0) : gpu distributed computing
+%           - type (default : 'local') : name of cluster configuration (mode = 1,2)
+%           - configurations (default : struct) : cluster configurations parameters
+%           - clustersize (default : Inf) : number of workers
+%           - memory (default : NaN) : memory requirements
+%           - enforce (default : 1) : enforce sequential if distributed failed
+%           - debugmode (default : 0) : debuging mode
+%           - cleanmode (default : 2) : clean remote and local files (2), remote files only (1), no files (0)
+%           - display (default : 0) : disply mode
+%           - timeout  (default : 100) : time out for job submission (s)
+%           - info (default : '') : info on mdce configuration
+%           - temppath (default : [pwd,filesep,'mdce_',timeid_jd(clock),filesep]) : folder where tmp files are saved
+%           - remote (default : {}) : cell array of remote cluster identification, to transfert calculation recursively to clusters remote{1}, remote{2}, ...
+%
+%       cluster identification (param, param.mode or param.remote{irem})
+%           o (struct)       : calculation distributed to the profile stored in the structure 'remote'
+%           o (NaN)          : prompt user for profile
+%           o ('local')      : identifies and select local cluster
+%           o (string)       : profile from remote_(remote).m (ex : 'macpro_YVES_PEYSSON')
+%
+%   - fun : function name, used if (fun) is a field of param 
+%               (case when param contains distributed computing parameters for multiple functions)
+%
+% OUTPUT :
+%   - dkecluster : structure containing MDCE properties
 %
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
 %
-if nargin < 3,
-    error('Wrong number of input arguments in clustermode_luke.m')
+if nargin < 1 || (~isstruct(param) && ~ischar(param) && ~isempty(mdce_mode) && (~isscalar(param) || (~any(param == 0:3) && ~isnan(param)))),% test param for valid formats
+    param = 0;
 end
 %
-if nargin < 4 || isempty(schedulertype),
-    schedulertype = 'local';
-end
-%
-if nargin < 5 || isempty(remnum),
-    remnum = 0;
-end
-%
-% remote calculation  : remnum provides the profile number in dkepath.remote
-%
-if remnum > 0,
-    %
-    if remnum <= length(dkepath.remote),
-        %
-        dkecluster.remnum = remnum;
-        dkecluster.param = param;
-        dkecluster.fun = fun;
-        dkecluster.dkepath = dkepath;
-        dkecluster.schedulertype = schedulertype;
-        %
-        disp(['==> Distributed calculation transfered to remote location ',dkepath.remote(remnum).host,'.'])
-        %
-        return
-        %
-    else
-        %
-        disp(['==> WARNING : dkepath.remote(',num2str(remnum),') profile is not defined. Local calculation enforced'])
-        %
-    end
-end    
-%
-% Temp folder
-%
-temppath = ['mdce_',timeid_jd(clock),filesep];
-%
-% Parameters from dkepath
-%
-if isfield(dkepath,'temppathroot'),
-    temppathroot = dkepath.temppathroot;
-else
-    temppathroot = [pwd,filesep];% Local folder
-end
-%
-if isfield(dkepath,'remote') & ~isempty(dkepath.remote),
-    remote = dkepath.remote(1);%first cluster is always considered
-else
-    remote = '';% no dcluke information
-end
-%
-if isfield(dkepath,'configurations'),
-    configurations = dkepath.configurations;
-else
-    configurations = struct;% no dcluke information
+if nargin < 2 || ~ischar(fun),
+    fun = '';
 end
 %
 % default scheduler properties
 %
 dkecluster.scheduler.mode = 0;
-dkecluster.scheduler.type = schedulertype;
-dkecluster.scheduler.configfile = '';
 dkecluster.scheduler.gpu = 0;
-dkecluster.scheduler.timeout = 100;%100 s time out for job submission
+dkecluster.scheduler.type = 'local';
+dkecluster.scheduler.configurations = struct;
+dkecluster.scheduler.remote = {};% for remcomputing (mode == 3)
+dkecluster.scheduler.funcopy = false;% copy distributed function to remote cluster
+%
 dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
-dkecluster.scheduler.memory = NaN;%no memory requirements
-dkecluster.scheduler.temppathroot = temppathroot;
+dkecluster.scheduler.memory = NaN;% no memory requirements
+dkecluster.scheduler.enforce = 1;% enforce sequential if distributed failed
+dkecluster.scheduler.debugmode = 0;
+dkecluster.scheduler.cleanmode = 2;  
 dkecluster.scheduler.display = 0;
+dkecluster.scheduler.timeout = 100;%100 s time out for job submission
 dkecluster.scheduler.info = '';
 %
-dkecluster.scheduler.temppath = [dkecluster.scheduler.temppathroot,filesep,temppath];
+dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
@@ -112,11 +104,46 @@ if dkecluster.scheduler.clustersize == 0,
     dkecluster.scheduler.mode = 0;%sequential mode enforced
 end
 %
+% calculation transfered to remote cluster using mdce_remote.m 
+%
+if ~isempty(dkecluster.scheduler.remote),
+    %
+    % loads remote profile & test connection
+    %
+    if iscell(dkecluster.scheduler.remote),
+        remote = dkecluster.scheduler.remote{1};
+        dkecluster.scheduler.remote = dkecluster.param.remote(2:end);% if recursive use of mdce_remote.m 
+    else
+        remote = dkecluster.scheduler.remote;% non-recursive case
+        dkecluster.scheduler.remote = {};
+    end
+    [remote,profilestr] = load_remoteprofiles_jd(remote,true);
+    %
+    disp(' ');
+    if ~isempty(remote),
+        %
+        dkecluster.remote = remote;
+        dkecluster.param = dkecluster.scheduler;
+        dkecluster.fun = fun;
+        %
+        disp(['==> Distributed calculation transfered to : ',profilestr{1}])
+        %
+        return
+        %
+    else
+        %
+        disp('==> WARNING : invalid remote profile. Local calculation enforced.')
+        %
+    end
+end    
+%
 % Specific operations depending on DC mode
 %
-if dkecluster.scheduler.mode == 1,%MDCE mode
+if isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 0,% sequential
     %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,configurations);
+elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% MDCE mode
+    %
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
 	%
     try %test the availability of the MatLab MDCE toolbox and set clustersize
         %
@@ -141,100 +168,9 @@ if dkecluster.scheduler.mode == 1,%MDCE mode
         %
     end
     %
-elseif dkecluster.scheduler.mode == 2,%LDCE mode
+elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% parfor mode
     %
-    nrem = length(remote);
-    rem_list = ones(1,nrem);
-    %
-    %  LUKE batch DC calculations on local host only
-    %
-    for irem = 1:nrem,% reject remote hosts
-        if ~iscell(remote(irem).host) && ~isempty(remote(irem).host),
-            rem_list(irem) = 0;
-        elseif iscell(remote(irem).host) && (length(remote(irem).host) == 1 || ~strcmp(remote(irem).host{1},remote(irem).host{2}))
-            rem_list(irem) = 0;
-        end
-    end
-    %
-    if ~any(rem_list),
-        dkecluster.scheduler.info = [dkecluster.scheduler.info,' No local cluster. Sequential mode enforced.'];
-        disp(['==> ',dkecluster.scheduler.info])
-        dkecluster.scheduler.mode = 0;
-        return
-    end            
-    %
-    for irem = find(rem_list),% test LUKE path
-        if isfield(remote(irem),'luke_root') && ~isempty(remote(irem).luke_root) && ~any(strfind(path,remote(irem).luke_root))
-            rem_list(irem) = 0;
-        end
-    end
-    %
-    if sum(rem_list) == 0,
-        dkecluster.scheduler.info = [dkecluster.scheduler.info,' Cluster LUKE path different from local one. Sequential mode enforced.'];
-        disp(['==> ',dkecluster.scheduler.info])
-        dkecluster.scheduler.mode = 0;
-        return
-    end
-    %
-    if sum(rem_list) > 1
-        dkecluster.scheduler.info = [dkecluster.scheduler.info,' Warning : more than one compatible cluster configuration for LUKE batch DC. First one selected.'];
-    else
-        dkecluster.scheduler.info = 'Distributed computing mode with LUKE scripts chosen.';        
-    end
-    disp(['==> ',dkecluster.scheduler.info])
-    %
-    remote = remote(find(rem_list,1,'first'));
-    %
-    dkecluster.scheduler.cmd = remote.cmd;
-    %
-    if iscell(remote.cmd),
-        xgridsearch = strfind(remote.cmd{1},'xgrid');%find if the xgrid task scheduler is used (mac,...)
-        condorsearch = strfind(remote.cmd{1},'condor');%find if the condor task scheduler is used (mac,...)
-    else
-        xgridsearch = '';
-        condorsearch = '';
-    end
-    %
-    if ~isempty(xgridsearch),
-        dkecluster.scheduler.cluster = remote.cluster;
-        dkecluster.scheduler.matlabroot = remote.matlabroot;
-        dkecluster.scheduler.luke_root = remote.luke_root;
-        dkecluster.scheduler.prefdir = remote.prefdir;
-        dkecluster.scheduler.password = remote.password; 
-        dkecluster.scheduler.logname = remote.users.remoteuser;  
-    elseif ~isempty(condorsearch),
-        dkecluster.scheduler.cluster = remote.cluster;
-        dkecluster.scheduler.matlabroot = remote.matlabroot;
-        dkecluster.scheduler.home = remote.home;
-        dkecluster.scheduler.luke_root = remote.luke_root;
-        dkecluster.scheduler.prefdir = remote.prefdir;
-        dkecluster.scheduler.password = ''; 
-        dkecluster.scheduler.logname = ''; 
-        dkecluster.scheduler.path = remote.path;
-    end
-    %
-    dkecluster.scheduler.get_jobid = remote.get_jobid;
-    dkecluster.scheduler.set_jobid = remote.set_jobid;
-    if dkecluster.scheduler.clustersize > remote.nproc,
-        dkecluster.scheduler.clustersize = remote.nproc;%maximum number of processors on cluster enforced by remote
-    end
-    %
-    if isfield(remote,'mem'),%batch run memory allocation information
-        if ~isempty(remote.mem),
-            dkecluster.scheduler.mem = remote.mem(1:3);
-            if ~isnan(dkecluster.scheduler.memory),%memory allocated specified by dkecluster
-                dkecluster.scheduler.mem{3} = num2str(dkecluster.scheduler.memory);
-            end
-        else
-            dkecluster.scheduler.mem = '';
-        end
-    else
-        dkecluster.scheduler.mem = '';
-    end
-    %
-elseif dkecluster.scheduler.mode == 3,%parfor mode
-    %
-	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,configurations);
+	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
     %
     [vmatlab,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
     %
@@ -242,29 +178,34 @@ elseif dkecluster.scheduler.mode == 3,%parfor mode
         disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
         dkecluster.scheduler.mode = 0;
     end
-elseif dkecluster.scheduler.mode < 0,%remote computing mode
     %
-    if -dkecluster.scheduler.mode <= length(dkepath.remote),
+else% remote computing mode
+    %
+    if isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3;% remcomputing on local cluster
+        dkecluster.scheduler.remote = 'local';
+    end
+    %
+    [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,true);% test validity and connection of remote profile
+    %
+    if ~isempty(dkecluster.scheduler.remote),
         %
-        dkecluster.scheduler.remote = dkepath.remote(-dkecluster.scheduler.mode);
-        %
+        dkecluster.scheduler.mode = 3;% use of remcomputing
+        %    
         if dkecluster.scheduler.clustersize > dkecluster.scheduler.remote.nproc,
             dkecluster.scheduler.clustersize = dkecluster.scheduler.remote.nproc;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
         end
         %
-        if isfield(dkecluster.scheduler,'debugmode'),
-            dkecluster.scheduler.remote.debugmode = dkecluster.scheduler.debugmode;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
+        if ~isfield(dkecluster.scheduler.remote,'localdatapath') || isempty(dkecluster.scheduler.remote.localdatapath),
+            dkecluster.scheduler.remote.localdatapath = dkecluster.scheduler.temppath;
         end
         %
-        if isfield(dkepath,'localdatapath'),
-            dkecluster.scheduler.localdatapath = dkepath.localdatapath;
-        end
+        dkecluster.scheduler.remote.debugmode = dkecluster.scheduler.debugmode;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
         %
-        dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',num2str(-dkecluster.scheduler.mode),' chosen.'];        
+        dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',profilestr{1},' chosen.'];        
         disp(['==> ',dkecluster.scheduler.info])
         %
     else
-        disp(['WARNING: The profile number ',num2str(-dkecluster.scheduler.mode),' does not exist in dkepath.remote. Sequential mode enforced']);
+        disp('WARNING: invalid remote profile. Sequential mode enforced');
         dkecluster.scheduler.mode = 0;
     end
     %

@@ -1,7 +1,8 @@
 function [flag,varargout] = remcomputing(fun_handle,args_in,arg_index,arg_range,scheduler)
-% LUKE - remote distributed computing environment
+% 
+% remote distributed computing environment
 %
-%   Distributed computing using remote jobs within LUKE environment
+%   Distributed computing using remote jobs
 %
 %   INPUT:
 %
@@ -45,7 +46,7 @@ try
         debugmode = 0;
     end
     %
-    job = matstandardjob_jd(remote,'runmat');
+    job = matstandardjob_jd('runmat');
     %
     if isfield(scheduler,'memory'),
         job.memory = scheduler.memory;% requested memory specified by scheduler
@@ -63,6 +64,12 @@ try
         cleanmode = scheduler.cleanmode;
     else
         cleanmode = 2;
+    end
+    %
+    if isfield(scheduler,'funcopy'),
+        job.funcopy = scheduler.funcopy;% requested memory specified by scheduler
+    else
+        job.funcopy = true;
     end
     %
     job.debugmode = debugmode;
@@ -91,7 +98,7 @@ try
         %
         for j_range = find(abs(flag) == 0),
             %
-            output = remotegetbatch(remote,jobs{j_range},debugmode,1);
+            output = remotegetbatch(jobs{j_range},debugmode,1);
             %
             if ~isempty(output),
                 %
@@ -102,7 +109,7 @@ try
                     flag(j_range) = -4;
                     varargout_array{j_range,1}.err = output.err;
                 else
-                    flag(j_range) = -scheduler.mode;
+                    flag(j_range) = scheduler.mode;
                     varargout_array(j_range,:) = output.varargout;
                 end
             end

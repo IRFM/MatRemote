@@ -1,21 +1,61 @@
-function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,debugmode,dkepath)
+function test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,debugmode)
 %
 % Test function of the distributed computing calculation 
 %
 % For a quick test run test_mdce(a,b,0) where:
-%   - a is the distributed calculation mode (0,1,2,3,-1,-2,...) or (0+i,1+i,2+i,3+i,-1+i,-2+i,...) if single precision GPU calculations is enabled (recommanded) or (0+2i,1+2i,2+2i,3+2i,-1+2i,-2+2i,...) if double precision GPU calculations is enabled or 
-%   - b is the number of the remote profile in the path file (used only if a > 0)
+%   - a is the distributed calculation mode :
+%       o (0) sequential (1) MDCE job scheduler (2) parfor
+%       o (0+i,1+i,2+i) if single precision GPU calculations is enabled (recommanded)
+%       o (0+2i,1+2i,2+2i) if double precision GPU calculations is enabled
+%       o remote cluster identification (see "INPUTS") 
+%   - b : if ~isempty(b), the calculation is sent (possibly recursively) to the remote host b{1} (using mdce_remote.m) and distributed there using the modes (a,b{2:end})
 %
-%   - calculation is done localy: test_mdce(0,0,0) -> sequential, test_mdce(i,0,0) -> sequential+GPU, test_mdce(1,0,0) -> jobs, test_mdce(2,0,0) -> dcluke, test_mdce(3,0,0) -> parfor, test_mdce(3+i,0,0) -> parfor+GPU
-%   - calculation may be first transfered and done remotely according to the distributed computing environment state: test_mdce(a,b,0) with a >= 0 and b > 0 Here b is the remote index (path file)
-%   - calculation is first distributed localy and each job is executed remotely: test_mdce(a,0,0) with a < 0. Here a is the remote index (path file)
+% Note that the use of mdce_remote.m [when ~isempty(b)] requires the MatRemote and MatTools toolboxes to be installed on the remote machibe b{1,2,3...}
+%
+% ex : 
+%   - to run locally and sequentially :
+%       >> test_mdce(0)
+%   - to run locally on GPU :
+%       >> test_mdce(1i)
+%   - to run locally using job sceduler :
+%       >> test_mdce(1)
+%   - to run locally using parfor :
+%       >> test_mdce(2)
+%   - to distribute to local cluster using remcomputing :
+%       >> test_mdce(3)
+%           or
+%       >> test_mdce('local')
+%   - to distribute to 'macpro_YVES_PEYSSON' using remcomputing :
+%       >> test_mdce('macpro_YVES_PEYSSON')
+%   - to distribute to the profile stored in the structure 'remote' using remcomputing :
+%       >> test_mdce(remote)
+%   - to select manually which remote profile you want to distribute the calculation :
+%       >> test_mdce(NaN)
+%   - to transfer the calculation to 'macpro_YVES_PEYSSON' and distribute therein using parfor
+%       >> test_mdce(2,{'macpro_YVES_PEYSSON'})
+%   - to transfer the calculation to 'macpro_YVES_PEYSSON' and then to 'ANDROMEDE1' and distribute therein using remcomputing
+%       >> test_mdce('local',{'macpro_YVES_PEYSSON','ANDROMEDE1'})
 %
 %   INPUT :
 %
-%       - mdce_mode: distributed computing environment state: (0) disabled, (1) enabled with the dedicated Matlab toolbox which must be installed, (2) enabled with a private method (LDCE), (3) parfor parallel computing (+i enables GPU calculations) [1,1]
+%       - mdce_mode: distributed computing environment state: 
+%           o (0)       : sequential
+%           o (1)       : job scheduler (Matlab MDCE required)             (+i enables GPU calculations)
+%           o (2)       : parfor parallel computing (Matlab MDCE required) (+i enables GPU calculations)
+%           o (3)       : use of remcomputing with local cluster
+%           o remote id : extended use of remcomputing (cluster identification, see below for details)
 %           (default = 0)
-%       - mdce_remnum: remote index (0 for local cluster calculations) [1,1]
-%           (default = 0)
+%
+%       - remote (cell array) : calculation sent to remote{1} using mdce_remote.m. 
+%               Each cell contains cluster identification, see below for details
+%           (default = {})
+%        
+%       cluster identification (mdce_mode or remote{irem})
+%           o (struct)       : calculation distributed to the profile stored in the structure 'remote'
+%           o (NaN)          : prompt user for profile
+%           o ('local') : identifies and select local cluster
+%           o (string)       : profile from remote_(remote).m (ex : 'macpro_YVES_PEYSSON')
+%
 %       - force_error: force an error to check how a possible error in calculation is managed, 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5 [1,1]
 %           (default = 1)
 %       - mdce_enforce: (1) enforce sequential run if distributed computing failed, (0) otherwise [1,1]
@@ -26,23 +66,21 @@ function test_mdce(mdce_mode,mdce_remnum,force_error,mdce_enforce,schedulertype,
 %           (default = 8)
 %       - mdce_memory: memory allocated to batch runs, in MBytes (NaN to set no limit, not valid for GPU) [1,1]
 %           (default = 200)
-%       - dkepath: path structure of LUKE
-%           (automatic load in ~/LUKE/Project_DKE/Database/PATH_files/)
 %
 %   OUTPUT : none
 %
 % by J. Decker DRFC-CEA <joan.decker@cea.fr> and Y. Peysson DRFC-CEA <yves.peysson@cea.fr>
 %
-if nargin < 1,
-    mdce_mode = 0;%MatLab distributed computing environment disabled (0), enabled with the dedicated toolbox (1), enabled with a private method (2) for the function coll_dke_jd.m (MDC toolbox must be installed for option 1)
+if nargin < 1 || (~isstruct(mdce_mode) && ~ischar(mdce_mode) && ~isempty(mdce_mode) && (~isscalar(mdce_mode) || (~any(real(mdce_mode) == 0:3) && ~isnan(mdce_mode)))),% test mdce_mode for valid formats
+    mdce_mode = 0;
 end
 %
 if nargin < 2,
-    mdce_remnum = 0;
+    remote = {};
 end
 %
 if nargin < 3,
-    force_error = 1;% 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5,
+    force_error = 0;% 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5,
 end
 %
 if nargin < 4,
@@ -65,30 +103,36 @@ if nargin < 8,
     debugmode = 0;
 end
 %
-if nargin < 9,
-    dkepath = load_structures_yp('dkepath','','');
-end
-%
-clustermode.ftest_mdce.scheduler.mode = real(mdce_mode);
-if ~isreal(mdce_mode),
-    clustermode.ftest_mdce.scheduler.gpu = imag(mdce_mode);
+if isscalar(mdce_mode) && any(real(mdce_mode) == 0:2),
+    param.mode = real(mdce_mode);
+    param.gpu = imag(mdce_mode);
 else
-    clustermode.ftest_mdce.scheduler.gpu = 0;
+    param.mode = mdce_mode;
+    param.gpu = 0;
 end
-clustermode.ftest_mdce.scheduler.clustersize = mdce_size;
-clustermode.ftest_mdce.scheduler.memory = mdce_memory;
-clustermode.ftest_mdce.scheduler.enforce = mdce_enforce;
-clustermode.ftest_mdce.scheduler.debugmode = debugmode;
+param.remote = remote;
+param.funcopy = true;% copy ftest_mdce to remote cluster
+param.type = schedulertype;
+%
+param.clustersize = mdce_size;
+param.memory = mdce_memory;
+param.enforce = mdce_enforce;
+param.debugmode = debugmode;
 %
 if debugmode,
-    clustermode.ftest_mdce.scheduler.cleanmode = 0;  
+    param.cleanmode = 0;  
 end
 %
-clustermode.ftest_mdce.scheduler.display = 1;
+param.display = 1;
 %
-dkecluster = clustermode_luke(clustermode,'ftest_mdce',dkepath,schedulertype,mdce_remnum);
+dkecluster = mdce_clustermode(param);
 %
-[flag,a,b] = mdce_luke(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
+% note that it would be equivalent to use :
+% 
+% >> clustermode.ftest_mdce.scheduler = param;
+% >> dkecluster = mdce_clustermode(clustermode,'ftest_mdce');
+%
+[flag,a,b] = mdce_run(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
 if any(imag(flag) ~= 0),
     disp(['Rem Flag : ',num2str(real(flag))]);
