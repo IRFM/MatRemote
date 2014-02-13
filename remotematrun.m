@@ -40,6 +40,9 @@ try
     %
     remotebatchdir = getenv('remotebatchdir');
     %
+    filein = [remotebatchdir,'MAT_RUN_',timeid,'.mat'];
+    fileout = [remotebatchdir,'MAT_OUT_',timeid,'.mat'];
+    %
     if nargin < 3,
         remotepathfnc = getenv('remotepathfnc');
     end
@@ -60,9 +63,6 @@ try
         filediary = [remotebatchdir,'matlab_diary.',timeid];
         diary(filediary);
     end
-    %
-    filein = [remotebatchdir,'MAT_RUN_',timeid,'.mat'];
-    fileout = [remotebatchdir,'MAT_OUT_',timeid,'.mat'];
     %
     if debugmode,
         disp('-------- in remotematrun.m --------');
@@ -88,7 +88,11 @@ catch
         err = [err,['In ',lsterr.stack(il).file,' at line ',num2str(lsterr.stack(il).line)]];
     end
     %
-    save(fileout,'err')
+    if exist('fileout','var'),
+        save(fileout,'err')
+    else
+        save('error.mat','err')
+    end
     %
 end
 %
