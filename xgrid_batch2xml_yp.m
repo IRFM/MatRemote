@@ -6,8 +6,6 @@ function [filename] = xgrid_batch2xml_yp(job)
 %
 %by Y.Peysson CEA-IRFM <yves.peysson@cea.fr> and Joan Decker CEA-IRFM (joan.decker@cea.fr)
 %
-if nargin < 2,error('Not enough input arguments in xgrid_batch2xml_yp.m');end
-%
 key = 0;%first job
 %
 filename = ['xgrid_batch_matlab_',job.timeid,'.plist'];
