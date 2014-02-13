@@ -104,7 +104,11 @@ remoteset_jobid = remote.set_jobid;% syntax to read the job status
 %
 % test job status
 %
-if job.pbssearch,
+if job.directsearch,% PID as job.id
+    %
+    remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
+    %
+elseif job.pbssearch,
     %
     remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
@@ -136,7 +140,16 @@ txt(double(txt) == 10) = [];
 %
 % process job status cases
 %
-if job.pbssearch,
+if job.directsearch,
+    %
+    if res == 0 || ~strcmp(txt,remoteset_jobid{3}),% job still running
+        %
+        locdisp(displaymode,['Job # ',job.id,' still running...']);
+        return
+        %
+    end
+    %
+elseif job.pbssearch,
     %
     if res == 0,% job still running
         %
@@ -345,10 +358,13 @@ if ~isfield(job,'clean'),
     job.clean = 2;% clean all local and remote files
 end
 %
+outputclear = ~strcmp([fileparts(job.load_id),filesep],job.save_id);% case where job.load_id is not equal or included in job.save_id
+%
 if job.clean >= 1,%clean remote and batch files
     %
+    % remote files & folders
+    %
     rminputcmd = ['rm -fr ',job.remotedatapath,job.save_id];
-    rmoutputcmd = ['rm -fr ',job.remotedatapath,job.load_id];
     %
     if ~isempty(remotehost)
         %
@@ -370,25 +386,31 @@ if job.clean >= 1,%clean remote and batch files
         locdisp(displaymode,' ... done');          
     end
     %
-    if ~isempty(remotehost)
+    if outputclear,
+        rmoutputcmd = ['rm -fr ',job.remotedatapath,job.load_id];
         %
-        locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remote.remoteuser,' ...'])
-        [res,err] = matremotecmd(remote,rmoutputcmd);
+        if ~isempty(remotehost)
+            %
+            locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remote.remoteuser,' ...'])
+            [res,err] = matremotecmd(remote,rmoutputcmd);
+            %
+        elseif ~strcmp(job.localdatapath,job.remotedatapath),
+            %
+            locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
+            [res,err] = matremotecmd(remote,rmoutputcmd);
+            %
+        else 
+            res = 0;
+        end        
         %
-    elseif ~strcmp(job.localdatapath,job.remotedatapath),
-        %
-        locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
-        [res,err] = matremotecmd(remote,rmoutputcmd);
-        %
-    else 
-        res = 0;
-    end        
-    %
-    if res ~= 0,
-        locdisp(displaymode,['Warning, remote output file/folder delete failed : ',err])
-    elseif ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
-        locdisp(displaymode,' ... done');          
+        if res ~= 0,
+            locdisp(displaymode,['Warning, remote output file/folder delete failed : ',err])
+        elseif ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
+            locdisp(displaymode,' ... done');          
+        end
     end
+    %
+    % batch files
     %
     if job.pbssearch,
         %
@@ -441,7 +463,6 @@ end
 if job.clean >= 2,%clean local files
     %
     rminputcmd = ['rm -fr ',job.localdatapath,job.save_id];
-    rmoutputcmd = ['rm -fr ',job.localdatapath,job.load_id];
     %
     locdisp(displaymode,['    --> Removing local input file/folder ',job.localdatapath,job.save_id,' ...'])
     [res,err] = unix(rminputcmd);
@@ -452,15 +473,19 @@ if job.clean >= 2,%clean local files
         locdisp(displaymode,' ... done');          
     end
     %
-    locdisp(displaymode,['    --> Removing local output file/folder ',job.localdatapath,job.load_id,' ...'])
-    [res,err] = unix(rmoutputcmd);
-    %
-    if res ~= 0,
-        locdisp(displaymode,['Warning, local output file/folder delete failed : ',err])
-    else
-        locdisp(displaymode,' ... done');          
+    if outputclear,% case where job.load_id is not equal or included in job.save_id
+        %
+        rmoutputcmd = ['rm -fr ',job.localdatapath,job.load_id];
+        %
+        locdisp(displaymode,['    --> Removing local output file/folder ',job.localdatapath,job.load_id,' ...'])
+        [res,err] = unix(rmoutputcmd);
+        %
+        if res ~= 0,
+            locdisp(displaymode,['Warning, local output file/folder delete failed : ',err])
+        else
+            locdisp(displaymode,' ... done');          
+        end
     end
-    %
 end
 %
 function locdisp(mode,s)

@@ -85,11 +85,11 @@ remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
 %
 job.pbssearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'qsub'));
-%job.condorsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'condor')));
 job.condorsearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'condor'));
 job.xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+job.directsearch = ~iscell(remote.cmd) && any(strcmp(remote.cmd,{'csh','bash'}));
 %
-if job.condorsearch + job.xgridsearch + job.pbssearch ~= 1,
+if job.condorsearch + job.xgridsearch + job.pbssearch + job.directsearch ~= 1,
     error('scheduler type identification problem')
 end
 %
@@ -232,7 +232,40 @@ pause(5)
 %
 % start job
 %
-if job.pbssearch,
+if job.directsearch,
+    %
+    % job environment variables
+    %
+    remenv = struct;
+    if isfield(remote,'env') && isstruct(remote.env),
+        remenv = conc_struct_jd(remenv,remote.env);% environment variables stored in remote.env
+    end
+    if isfield(job,'env') && isstruct(job.env),
+        remenv = conc_struct_jd(remenv,job.env);% environment variables stored in remote.env
+    end
+    %
+    % common environment variables
+    %
+    remenv.jobtimeid = job.timeid;
+    remenv.debugmode = num2str(job.debugmode);
+    remenv.remotebatchdir = [job.remotedatapath,job.save_id];
+    %
+    envnames = fieldnames(remenv);
+    remenvstr = '';
+    %
+    for ienv = 1:length(envnames),
+        if strcmp(remote.cmd,'csh'),
+            remenvstr = ['setenv ',envnames{ienv},' ',remenv.(envnames{ienv}),'; ',remenvstr];
+        elseif strcmp(remote.cmd,'bash'),
+            remenvstr = ['export ',envnames{ienv},'=',remenv.(envnames{ienv}),'; ',remenvstr];
+        else
+            error(['case with cmd = ',remote.cmd,' not yet implemented']);
+        end
+    end
+    %    
+    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,'&;'];% direct command
+    %
+elseif job.pbssearch,
     %
     % command options
     %
