@@ -182,7 +182,7 @@ elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% p
 else% remote computing mode
     %
     if isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3;% remcomputing on local cluster
-        dkecluster.scheduler.remote = 'local';
+        dkecluster.scheduler.mode = 'local';
     end
     %
     [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,true);% test validity and connection of remote profile
