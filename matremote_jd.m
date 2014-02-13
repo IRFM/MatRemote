@@ -28,14 +28,6 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
         job = matstandardjob_jd('runmat');
     end
     %
-    if ~isfield(job,'debugmode'),
-        if isfield(remote,'debugmode'),
-            job.debugmode = remote.debugmode;
-        else
-            job.debugmode = 0;
-        end
-    end
-    %
     if ~isfield(job,'funcopy'),
         job.funcopy = true;
     end

@@ -15,6 +15,12 @@ elseif ~isfield(job,'remotedatapath'),
     job.remotedatapath = '';
 end
 %
+if isfield(remote,'debugmode'),
+    job.debugmode = remote.debugmode;
+elseif ~isfield(job,'debugmode'),
+    job.debugmode = 0;
+end
+%
 if isfield(remote,'clean') && ~isempty(remote.clean),
     job.clean = remote.clean;
 elseif ~isfield(job,'clean'),

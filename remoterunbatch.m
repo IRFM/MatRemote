@@ -28,7 +28,7 @@ function job = remoterunbatch(remote,job,sinput,displaymode)
 %           o walltime (optional) :  time required (in hours) - leave empty if no requirement
 %
 %       - sinput (optional) : input data structure
-%       - displaymode : display mode : (0) no display; (1) operation display (default : 0)
+%       - displaymode : display mode : (0) no display; (1) operation display (default : debugmode)
 %
 %   OUTPUTS : 
 %   
@@ -41,19 +41,12 @@ function job = remoterunbatch(remote,job,sinput,displaymode)
 %
 % by J. Decker, Y. Peysson and M. Schneider, CEA/IRFM
 %
-if nargin < 4,
-    displaymode = 0;
-end
 if nargin < 3,
     sinput = '';
 end
 %
 if ~isfield(job,'timeid') || isempty(job.timeid),
     job.timeid = timeid_jd(clock);
-end
-%
-if ~isfield(job,'debugmode'),
-    job.debugmode = 0;
 end
 %
 % path to matlab if applicable
@@ -80,6 +73,10 @@ end
 % Job parameters tested to be compatible with or enforced by remote
 %
 job = remote2job_jd(remote,job);
+%
+if nargin < 4,
+    displaymode = job.debugmode;
+end
 %
 remotehost = remote.host;%  hostname (empty for local host)
 remoteget_jobid = remote.get_jobid;% syntax to read the job id 
