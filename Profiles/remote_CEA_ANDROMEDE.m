@@ -1,4 +1,4 @@
-function remote_profile = remote_CEA_PARTENAIRES_ANDROMEDE(varargin)
+function remote_profile = remote_CEA_ANDROMEDE(varargin)
 %
 % This function regroups the remote profiles run on the ANDROMEDE cluster
 % in the CEA PARTENAIRES network
@@ -17,7 +17,7 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 %
 % JOAN DECKER
 %
-% andromede (pbs pro)
+% pbs pro
 %
 remote.pbs.joan = default_remote_profile;
 remote.pbs.joan.host = 'andromede1.partenaires.cea.fr';
@@ -33,6 +33,22 @@ remote.pbs.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.pbs.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
 remote.pbs.joan.remoteuser = 'JD211098';
+%
+% direct
+%
+remote.direct.joan = default_remote_profile;
+remote.direct.joan.host = 'andromede1.partenaires.cea.fr';
+remote.direct.joan.hostname = 'andromede1';
+remote.direct.joan.nproc = 12;
+remote.direct.joan.cmd = 'csh';% direct calculation (csh, bash)
+remote.direct.joan.get_jobid = {'[1] ',''};%str_before,str_after
+remote.direct.joan.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.direct.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
+remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.direct.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
+remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
+remote.direct.joan.remoteuser = 'JD211098';
 %
 % YVES PEYSSON
 %
