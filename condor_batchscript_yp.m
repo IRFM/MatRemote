@@ -1,4 +1,4 @@
-function filename = condor_batchscript_yp(job,data)
+function filename = condor_batchscript_yp(job)
 %
 % This function creates dynamically the batch script for remote
 % calculations on a Mac cluster with CONDOR scheduler (can generate multiple
