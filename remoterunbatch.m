@@ -256,7 +256,7 @@ if job.directsearch,
         end
     end
     %    
-    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,'&;'];% direct command
+    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,' &;'];% direct command
     %
 elseif job.pbssearch,
     %
@@ -316,7 +316,11 @@ elseif job.condorsearch,
     %
 elseif job.xgridsearch,
     %
-    remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
+    if ~isfield(remote,'password') || isempty(remote.password),
+        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
+    else
+        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
+    end
     %
 end
 %

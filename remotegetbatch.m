@@ -128,7 +128,11 @@ elseif job.condorsearch,
     %
 elseif job.xgridsearch,  
     %
-    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{2},job.id];  
+    if ~isfield(remote,'password') || isempty(remote.password),
+        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{2},job.id];
+    else
+        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{2},job.id];
+    end
     %
 end
 %
@@ -219,7 +223,11 @@ elseif job.xgridsearch,
     %
     % extract output and error files
     %
-    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
+    if ~isfield(remote,'password') || isempty(remote.password),
+        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
+    else
+        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
+    end
     %
     [res,err] = matremotecmd(remote,remotecmd);
     %
@@ -233,7 +241,11 @@ elseif job.xgridsearch,
     %
     % extract result files
     %
-    remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
+    if ~isfield(remote,'password') || isempty(remote.password),
+        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
+    else
+        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
+    end
     %
     [res,err] = matremotecmd(remote,remotecmd);
     %
@@ -376,7 +388,11 @@ if job.clean >= 1,%clean remote and batch files
         res = 0;
     elseif job.xgridsearch,
         %
-        rmbatchcmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{10},job.id];
+        if ~isfield(remote,'password') || isempty(remote.password),
+            rmbatchcmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{10},job.id];
+        else
+            rmbatchcmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{10},job.id];
+        end
         %
         if ~isempty(remotehost),
             %
