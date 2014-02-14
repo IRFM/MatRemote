@@ -41,6 +41,7 @@ else
         [res,txt] = unix(remotecmd);%execute the local command
     else
         res = 0;
+        txt = '';
     end
     %
 end   
