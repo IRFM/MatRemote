@@ -14,15 +14,30 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 % --------------------------------------------------
 %
-% macbookyves (condor)
-%
-%
 % YVES PEYSSON
+%
+% direct
+%
+remote.direct.yves = default_remote_profile;
+remote.direct.yves.host = '127.0.0.1';
+remote.direct.yves.hostname = 'macbookyves';
+remote.direct.yves.nproc = 4;
+remote.direct.yves.cmd = 'csh';% direct calculation (csh, bash)
+remote.direct.yves.get_jobid = {'[1] ',''};%str_before,str_after
+remote.direct.yves.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.direct.yves.matver.mat800.prefdir = '/Users/yves/.matlab/R2012b';
+remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.direct.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
+remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
+remote.direct.yves.remoteuser = 'yves';
+%
+% condor
 %
 remote.condor.yves = default_remote_profile;
 remote.condor.yves.host = '127.0.0.1';
 remote.condor.yves.hostname = 'macbookyves';
-remote.condor.yves.nproc = 6;
+remote.condor.yves.nproc = 4;
 remote.condor.yves.cmd = 'condor_submit';
 remote.condor.yves.get_jobid = {'** Proc ',':'};
 remote.condor.yves.set_jobid = {'condor_q ',''};

@@ -14,10 +14,25 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 % --------------------------------------------------
 %
-% macproyves (condor)
-%
-%
 % YVES PEYSSON
+%
+% direct
+%
+remote.direct.yves = default_remote_profile;
+remote.direct.yves.host = '127.0.0.1';
+remote.direct.yves.hostname = 'macbookyves';
+remote.direct.yves.nproc = 4;
+remote.direct.yves.cmd = 'csh';% direct calculation (csh, bash)
+remote.direct.yves.get_jobid = {'[1] ',''};%str_before,str_after
+remote.direct.yves.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
+remote.direct.yves.matver.mat800.prefdir = '/Users/yves/.matlab/R2012b';
+remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.direct.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
+remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
+remote.direct.yves.remoteuser = 'yves';
+%
+% condor
 %
 remote.condor.yves = default_remote_profile;
 remote.condor.yves.host = 'tolbachik.hd.free.fr';
@@ -41,17 +56,7 @@ remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.condor.yves.bridge.ftp.username = 'matremote';
 remote.condor.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
-% JOAN DECKER
-%
-remote.condor.joan = remote.condor.yves;% same remote user, same options
-%
-% EMELIE NILSSON
-%
-remote.condor.emelie = remote.condor.yves;% same remote user, same options
-%
-% --------------------------------------------------
-%
-% macproyves (xgrid)
+% xgrid
 %
 % WARNING about Xgrid scheduler for mac OSX (> 10.5.x)
 % Xgrid runs tasks using the "sandbox" facility. Tasks running as 'nobody' ie, 
@@ -112,11 +117,23 @@ remote.xgrid.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % JOAN DECKER
 %
+% condor
+%
+remote.condor.joan = remote.condor.yves;% same remote user, same options
+%
+% xgrid
+%
 remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
 %
 % EMELIE NILSSON
 %
-remote.xgrid.emelie = remote.xgrid.yves;% same remote user, same options
+% condor
+%
+remote.condor.emelie = remote.condor.yves;% same remote user, same options
+%
+% xgrid
+%
+remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
