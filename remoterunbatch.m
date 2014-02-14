@@ -124,11 +124,7 @@ end
 %
 % test remote connection - select ssh mode over bridge mode if possible
 %
-if ~isfield(job,'bridge'),
-    job.bridge = false;% do not enforce bridge mode if ssh key pair works
-end
-%
-remote = testremoteprofile_jd(remote,job.bridge,displaymode);% test connection to remote host
+remote = testremoteprofile_jd(remote,job.bridge_enforce,displaymode);% test connection to remote host
 %
 % create remote data folder if needed - this also tests remote connection
 %
