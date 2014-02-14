@@ -21,7 +21,7 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 remote.direct.yves = default_remote_profile;
 remote.direct.yves.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.hostname = 'macproyves';
-remote.direct.yves.nproc = 4;
+remote.direct.yves.nproc = 6;
 remote.direct.yves.cmd = 'bash';% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {'[1] ',' '};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
@@ -30,7 +30,7 @@ remote.direct.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
 remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.direct.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'yves';
+remote.direct.yves.remoteuser = 'yvespeysson';
 %
 % condor
 %
@@ -132,7 +132,7 @@ remote.condor.emelie = remote.condor.yves;% same remote user, same options
 %
 % xgrid
 %
-remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
+remote.xgrid.emelie = remote.xgrid.yves;% same remote user, same options
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
