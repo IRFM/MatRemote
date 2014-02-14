@@ -6,18 +6,7 @@ end
 %
 if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
     %
-    if ~ischar(debugmode) && abs(debugmode) >= 1, debugmode = '1';end
-    if ~ischar(debugmode) && debugmode == 0, debugmode = '0';end
-    %
-    php_post{1} = 'remotehost';%php variable
-    php_post{2} = remote.host;
-    php_post{3} = 'remotecmd';%php variable
-    php_post{4} = remotecmd;
-    php_post{5} = 'debugmode';%php variable
-    php_post{6} = debugmode;
-    %
-    [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/ssh.php'],'post',php_post);%execute the remote command from the bridge (ssh over php) 
-    txt_url = strtrim(txt_url);
+    [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
     %
     ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
     error_txt = txt_url(ie+15:end);

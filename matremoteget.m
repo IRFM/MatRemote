@@ -8,9 +8,6 @@ end
 %
 if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
     %
-    if ~ischar(debugmode) && abs(debugmode) >= 1, debugmode = '1';end
-    if ~ischar(debugmode) && debugmode == 0, debugmode = '0';end
-    %
     if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
         %
         [res,txt] = scp_over_php(job,remote,[job.batch_dir,'output_file'],debugmode);
@@ -93,17 +90,7 @@ end
 %
 function [res,txt] = scp_over_php(job,remote,filename,debugmode)
     %
-    php_post{1} = 'remotehost';%php variable
-    php_post{2} = remote.host;
-    php_post{3} = 'remotedatapath';%php variable
-    php_post{4} = job.remotedatapath;
-    php_post{5} = 'filename';%php variable
-    php_post{6} = filename;
-    php_post{7} = 'debugmode';%php variable
-    php_post{8} = debugmode;
-    %
-    [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/scp_getfile.php'],'post',php_post);%transfer data from the bridge batch dir to the remote batch dir
-    txt_url = strtrim(txt_url);
+    [txt_url,res_url] = matremoteurl(remote,job,'',filename,debugmode);
     %
     ie = strfind(txt_url,'scp2php_error:');%the 'scp2php_error:' separates the scp output from the error in scp.php
     error_txt = txt_url(ie+15:end);
