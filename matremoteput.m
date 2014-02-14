@@ -12,8 +12,12 @@ if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
     mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
     close(f);
     %
-    if ~ischar(debugmode) && abs(debugmode) >= 1, debugmode = '1';end
-    if ~ischar(debugmode) && debugmode == 0, debugmode = '0';end
+    if ~ischar(debugmode) && abs(debugmode) >= 1, 
+        debugmode = '1';
+    end
+    if ~ischar(debugmode) && debugmode == 0, 
+        debugmode = '0';
+    end
     %
     php_post{1} = 'remotehost';%php variable
     php_post{2} = remote.host;
@@ -45,7 +49,7 @@ elseif isfield(remote,'remote'),
 else
     %
 	if ~isempty(remote.host),       
-        [res,txt] = scp2remote_yp(job.remotelogname,remote.host,job.save_id,job.localdatapath,job.remotedatapath);%transfer data from the local batch dir to the remote batch dir
+        [res,txt] = scp2remote_yp(remote.remoteuser,remote.host,job.save_id,job.localdatapath,job.remotedatapath);%transfer data from the local batch dir to the remote batch dir
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         [res,txt] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);%transfer data from the local batch dir to the local batch dir
     else
@@ -55,4 +59,3 @@ else
     %
 end   
 %
-

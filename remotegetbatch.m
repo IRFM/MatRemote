@@ -260,7 +260,7 @@ if ~isempty(job.load_id),
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])  
+        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])
         %
     end    
     %
@@ -334,13 +334,19 @@ if job.clean >= 1,%clean remote and batch files
         rmoutputcmd = ['rm -fr ',job.remotedatapath,job.load_id];
         %
     	if ~isempty(remotehost)
-        	locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',job.remotelogname,' ...'])
+        	locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remote.remoteuser,' ...'])
     	elseif ~strcmp(job.localdatapath,job.remotedatapath),
         	locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
     	end
     	%
     	[res,err] = matremoteclean(job,remote,rmoutputcmd);
-    	end
+        %
+        if res ~= 0,
+            locdisp(displaymode,['Warning, remote output file/folder delete failed : ',err])
+        elseif ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
+            locdisp(displaymode,' ... done');          
+        end
+    end
     %
     % batch files
     %
