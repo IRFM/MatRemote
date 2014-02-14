@@ -134,6 +134,7 @@ if res == 1,% remote directory does not exist
     locdisp(displaymode,['    --> Creating remote data folder ',job.remotedatapath])  
     %
     [res,err] = matremotecmd(remote,remotecmd);
+    %
     if res ~= 0,
         %
         locdisp(displaymode,['Remote data folder creation failed : ',err]);
@@ -189,27 +190,8 @@ end
 % data transfer
 %
 if ~isempty(job.save_id),
-    if ~isempty(remotehost),%remote calculation 
-        %
-        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remote.remoteuser,' ...'])  
-        [res,err] = scp2remote_yp(remote.remoteuser,remotehost,job.save_id,job.localdatapath,job.remotedatapath);
-        %
-        if job.xgridsearch || job.condorsearch,
-            [res_chmod,txt] = matremotecmd(remote,remotecmd_chmod);
-        end
-        %
-    elseif ~strcmp(job.localdatapath,job.remotedatapath),
-        %
-        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
-        [res,err] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);
-        %
-        if job.xgridsearch || job.condorsearch,
-            [res_chmod,txt] = matremotecmd(remote,remotecmd_chmod);
-        end
-        %
-    else
-        res = 0;
-    end
+    %
+    [res,txt] = matremoteput(job,remote);
     %
     if res ~= 0,
         %
@@ -218,9 +200,20 @@ if ~isempty(job.save_id),
         %
         return
         %
-    end
-    if ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
-        locdisp(displaymode,' ... done');
+    else
+        if job.xgridsearch || job.condorsearch,
+            [res_chmod,txt_chmod] = matremotecmd(remote,remotecmd_chmod);
+            %
+            if res_chmod ~= 0,
+                locdisp(displaymode,['Warning: for xgrid and condor schedulers only, chmod for directory',job.remotedatapath,'failed : ',txt_chmod]);
+            end
+        end
+        %
+        if ~isempty(remotehost),%remote calculation 
+            locdisp(displaymode,['    --> Data file/folder ',job.localdatapath,job.save_id,' copied to remote host ',remotehost,':',job.remotedatapath,' as user ',job.remotelogname,' ...'])  
+        elseif ~strcmp(job.localdatapath,job.remotedatapath),
+            locdisp(displaymode,['    --> Data file/folder ',job.localdatapath,job.save_id,' copied to location ',job.remotedatapath])  
+        end
     end
     %
 end
