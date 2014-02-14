@@ -136,6 +136,8 @@ locdisp(displaymode,['    --> Checking status of job # ',job.id]);
 %
 [res,txt] = matremotecmd(remote,remotecmd);
 %
+pause(0.1);
+%
 txt(double(txt) == 10) = [];
 %
 % process job status cases
@@ -220,7 +222,8 @@ elseif job.xgridsearch,
     remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
     %
     [res,err] = matremotecmd(remote,remotecmd);
-    pause(0.1)
+    %
+    pause(0.1);
     %
     if res == 0,% error file successfuly transfered
         locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer completed.']);
@@ -233,10 +236,11 @@ elseif job.xgridsearch,
     remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
     %
     [res,err] = matremotecmd(remote,remotecmd);
-    pause(0.1)
+    %
+    pause(0.1);
     %
     if res == 0,% result file successfuly transfered
-        locdisp(displaymode,['    --> Remote transfer of xgrid result files for Job # ',job.id,' on the remote computer completed.']);
+        locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
     else
         locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
         soutput.err = err;
@@ -245,78 +249,22 @@ elseif job.xgridsearch,
     end            
 end
 %
-% data transfer
+% data transfer (results are transfered back from the remote to the local computer) 
 %
 if ~isempty(job.load_id),
+    %
     if ~isempty(remotehost),
         %
         locdisp(displaymode,['    --> Copying output file/folder ',job.load_id,' from remote host ',remotehost,':',job.remotedatapath,...
             ' as user ',remote.remoteuser,' to location ',job.localdatapath,job.load_id])  
         %
-        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-            %
-            [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
-            %
-            if res ~= 0,
-                locdisp(displaymode,['xgrid output file transfer failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end            
-            %
-            [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
-            %
-            if res ~= 0,
-                locdisp(displaymode,['xgrid error file transfer failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end
-        end
-        %
-        [res,err] = unix(['scp -r ',remote.remoteuser,'@',remotehost,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
-        %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
-        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])
+        locdisp(displaymode,['    --> Copying output file/folder ',job.remotedatapath,job.load_id,' to location ',job.localdatapath,job.load_id])  
         %
-        if job.xgridsearch,%data must be first transfered from xgrid temp folder to the job folder
-            %
-            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
-            %
-            [res,err] = unix(remotecmd);
-            %           
-            if res ~= 0,
-                locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end            
-            %
-            [res,err] = unix(['cp -r ',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
-            %
-            if res ~= 0,
-                locdisp(displaymode,['xgrid output file transfer failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end            
-            %
-            [res,err] = unix(['cp -r ',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
-            %
-            if res ~= 0,
-                locdisp(displaymode,['xgrid error file transfer failed : ',err]);
-                soutput.err = err;
-                %
-                return
-            end
-            %
-        end
-        [res,err] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);        
-        %
-    else
-        res = 0;
     end    
+    %
+    [res,err] = matremoteget(job,remote);
     %
     if res ~= 0,
         locdisp(displaymode,['File transfer failed : ',err]);
@@ -324,6 +272,7 @@ if ~isempty(job.load_id),
         %
         return
     end
+    %
     if ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
         locdisp(displaymode,' ... done');
     end
@@ -369,16 +318,11 @@ if job.clean >= 1,%clean remote and batch files
     if ~isempty(remotehost)
         %
         locdisp(displaymode,['    --> Removing remote input file/folder ',remotehost,':',job.remotedatapath,job.save_id,' as user ',remote.remoteuser,' ...'])
-        [res,err] = matremotecmd(remote,rminputcmd);
-        %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
-        %
         locdisp(displaymode,['    --> Removing remote input file/folder ',job.remotedatapath,job.save_id,' ...'])
-        [res,err] = matremotecmd(remote,rminputcmd);
-        %
-    else 
-        res = 0;
-    end        
+    end
+    %
+    [res,err] = matremoteclean(job,remote,rminputcmd);
     %
     if res ~= 0,
         locdisp(displaymode,['Warning, remote input file/folder delete failed : ',err])
@@ -389,35 +333,25 @@ if job.clean >= 1,%clean remote and batch files
     if outputclear,
         rmoutputcmd = ['rm -fr ',job.remotedatapath,job.load_id];
         %
-        if ~isempty(remotehost)
-            %
-            locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',remote.remoteuser,' ...'])
-            [res,err] = matremotecmd(remote,rmoutputcmd);
-            %
-        elseif ~strcmp(job.localdatapath,job.remotedatapath),
-            %
-            locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
-            [res,err] = matremotecmd(remote,rmoutputcmd);
-            %
-        else 
-            res = 0;
-        end        
-        %
-        if res ~= 0,
-            locdisp(displaymode,['Warning, remote output file/folder delete failed : ',err])
-        elseif ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
-            locdisp(displaymode,' ... done');          
-        end
-    end
+    	if ~isempty(remotehost)
+        	locdisp(displaymode,['    --> Removing remote output file/folder ',remotehost,':',job.remotedatapath,job.load_id,' as user ',job.remotelogname,' ...'])
+    	elseif ~strcmp(job.localdatapath,job.remotedatapath),
+        	locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
+    	end
+    	%
+    	[res,err] = matremoteclean(job,remote,rmoutputcmd);
+    	end
     %
     % batch files
     %
     if job.pbssearch,
         %
         batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
+        %
         if (~isfield(remote,'shclean') || isempty(remote.shclean) || remote.shclean == 0) && length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
             batchfileroot = batchfileroot(1:end-3);
         end
+        %
         rmbatchcmd = ['rm -f ',batchfileroot,'.e',job.id,' ',batchfileroot,'.o',job.id];
         %
         if ~isempty(remotehost)
@@ -465,6 +399,7 @@ if job.clean >= 2,%clean local files
     rminputcmd = ['rm -fr ',job.localdatapath,job.save_id];
     %
     locdisp(displaymode,['    --> Removing local input file/folder ',job.localdatapath,job.save_id,' ...'])
+    %
     [res,err] = unix(rminputcmd);
     %
     if res ~= 0,
