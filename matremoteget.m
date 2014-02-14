@@ -59,7 +59,7 @@ else
         %
         if job.xgridsearch,%data must be first transfered from xgrid temp folder to the job folder
             %
-            if ~isfield(remote,'password') || isempty(remote.password{1}),
+            if ~isfield(remote,'password') || isempty(remote.password),
                 remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
             else
                 remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
