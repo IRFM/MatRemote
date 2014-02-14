@@ -40,20 +40,20 @@ else
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
             %
-            [res,txt] = unix(['scp -r ',job.remotelogname,'@',remote.host,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
+            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
             %
             if res ~= 0,
                 return
             end            
             %
-            [res,txt] = unix(['scp -r ',job.remotelogname,'@',remote.host,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
+            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
             %
             if res ~= 0,
                 return
             end
         end
         %
-        [res,txt] = unix(['scp -r ',job.remotelogname,'@',remote. host,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
+        [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
         %
     elseif ~strcmp(job.localdatapath,job.remotedatapath),
         %
