@@ -79,7 +79,6 @@ if nargin < 4,
 end
 %
 remotehost = remote.host;%  hostname (empty for local host)
-remoteget_jobid = remote.get_jobid;% syntax to read the job id 
 %
 job.pbssearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'qsub'));
 job.condorsearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'condor'));
@@ -122,6 +121,14 @@ if isempty(job.remotedatapath),% remote data location
 elseif ~strcmp(job.remotedatapath(end),filesep),
     job.remotedatapath = [job.remotedatapath,filesep];
 end
+%
+% test remote connection - select ssh mode over bridge mode if possible
+%
+if ~isfield(job,'bridge'),
+    job.bridge = false;% do not enforce bridge mode if ssh key pair works
+end
+%
+remote = testremoteprofile_jd(remote,job.bridge,displaymode);% test connection to remote host
 %
 % create remote data folder if needed - this also tests remote connection
 %
@@ -339,9 +346,30 @@ end
 %
 txt(double(txt) == 10) = [];
 %
-if ~isempty(remoteget_jobid{1}),
-    strl1 = length(remoteget_jobid{1});
-    istr0 = strl1 + min(strfind(txt,remoteget_jobid{1}));
+% Read the job id 
+%
+if ~isempty(remote.get_jobid{1}),
+    if ~iscell(remote.get_jobid{1}),
+        remoteget_jobid = remote.get_jobid(1);% only one test
+    else
+        remoteget_jobid = remote.get_jobid{1};% more than one tests
+    end
+    %
+    for itests = 1:length(remoteget_jobid),% tests in order
+        %
+        if isempty(remoteget_jobid{itests}),% empty case is a valid case
+            istr0 = 1;
+            break
+        end
+        %
+        strl1 = length(remoteget_jobid{itests});
+        istr0 = strl1 + min(strfind(txt,remoteget_jobid{itests}));
+        %
+        if ~isempty(istr0),
+            break
+        end
+        %
+    end
     if isempty(istr0),
         error('Job ID could not be retrieved')
     end
@@ -349,8 +377,27 @@ else
     istr0 = 1;
 end
 %
-if ~isempty(remoteget_jobid{2}),
-    istr1 = min(strfind(txt(istr0:end),remoteget_jobid{2})) + istr0 - 2;
+if ~isempty(remote.get_jobid{2}),
+    if ~iscell(remote.get_jobid{2}),
+        remoteget_jobid = remote.get_jobid(2);% only one test
+    else
+        remoteget_jobid = remote.get_jobid{2};% more than one tests
+    end
+    %
+    for itests = 1:length(remoteget_jobid),% tests in order
+        %
+        if isempty(remoteget_jobid{itests}),% empty case is a valid case
+            istr1 = length(txt);
+            break
+        end
+        %
+        istr1 = min(strfind(txt(istr0:end),remoteget_jobid{itests})) + istr0 - 2;
+        %
+        if ~isempty(istr1),
+            break
+        end
+        %
+    end
     if isempty(istr1),
         error('Job ID could not be retrieved')
     end
