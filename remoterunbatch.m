@@ -190,6 +190,11 @@ end
 % data transfer
 %
 if ~isempty(job.save_id),
+    if ~isempty(remotehost),%remote calculation 
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to remote host ',remotehost,':',job.remotedatapath,' as user ',remote.remoteuser,' ...'])  
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
+        locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
+    end
     %
     [res,txt] = matremoteput(job,remote);
     %
@@ -205,15 +210,13 @@ if ~isempty(job.save_id),
             [res_chmod,txt_chmod] = matremotecmd(remote,remotecmd_chmod);
             %
             if res_chmod ~= 0,
-                locdisp(displaymode,['Warning: for xgrid and condor schedulers only, chmod for directory',job.remotedatapath,'failed : ',txt_chmod]);
+                locdisp(displaymode,['Warning: for xgrid and condor schedulers only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
             end
         end
         %
-        if ~isempty(remotehost),%remote calculation 
-            locdisp(displaymode,['    --> Data file/folder ',job.localdatapath,job.save_id,' copied to remote host ',remotehost,':',job.remotedatapath,' as user ',job.remotelogname,' ...'])  
-        elseif ~strcmp(job.localdatapath,job.remotedatapath),
-            locdisp(displaymode,['    --> Data file/folder ',job.localdatapath,job.save_id,' copied to location ',job.remotedatapath])  
-        end
+    	if ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
+        	locdisp(displaymode,' ... done');
+    	end
     end
     %
 end
