@@ -78,7 +78,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
     %
     if isstruct(remote),% case where structure was input
         %
-        if test && ~testremoteprofile_jd(remote,display_mode),
+        if test && isempty(testremoteprofile_jd(remote,false,display_mode)),
             disp('WARNING : connection test failed for structure remote. Empty remoteprofiles returned');
             return
         end
@@ -111,7 +111,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
             return
         end
         %
-        if test && ~testremoteprofile_jd(feval(filename,'',profilename),display_mode),
+        if test && isempty(testremoteprofile_jd(feval(filename,'',profilename),display_mode)),
             disp(['WARNING : connection test failed for ',filename,'.m. Empty remoteprofiles returned']);
             return
         end
@@ -221,7 +221,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
             end
             %
             for ifile = 1:nremotefiles,
-                RemoteFileTest(ifile) = testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),display_mode);
+                RemoteFileTest(ifile) = ~isempty(testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),false,display_mode));
             end
             %
         end
@@ -305,6 +305,10 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
             profilestr = profilestr(irem);
             remoteprofiles = newremoteprofiles(irem);
             %
+        else
+            %
+            remoteprofiles = newremoteprofiles;
+            %
         end
     end
 end
@@ -331,45 +335,5 @@ function [profilestr,hoststr,cmdstr] = getremotestr_jd(remote)
     profilestr = [hoststr,' : ',cmdstr];    
 end
 %
-function flag = testremoteprofile_jd(remote,display_mode)
-    %
-    if nargin < 2,
-        display_mode = false;
-    end
-    % 
-    % test connection with key-pair
-    %
-    if display_mode,
-        disp(' ');
-        disp(['Testing connection to ',remote.remoteuser,'@',remote.host,' ... ']);
-    end
-    %
-    remotecmd = 'echo test ok';
-    remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
-    %
-    [res,txt] = matremotecmd(remote,remotecmd);
-    %
-    if res ~= 0,
-        %
-        if any(strfind(txt,'Connection timed out')),
-            msg = 'failed : connection timed out (10s)';
-        elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
-            msg = 'failed : ssh key pairing not set up or not working';
-        else
-            msg = ['failed with following message : ',txt];            
-        end
-        %
-        flag = false;
-        %
-    else
-        msg = ['completed with following result : ',txt];
-        %
-        flag = true;
-    end        
-    if display_mode,
-        disp(['   ... ',msg]);
-    end
-    %
-end
     
 
