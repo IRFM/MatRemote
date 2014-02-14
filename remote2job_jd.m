@@ -27,6 +27,18 @@ elseif ~isfield(job,'clean'),
     job.clean = 2;
 end
 %
+if isfield(remote,'funcopy') && ~isempty(remote.funcopy),
+    job.funcopy = remote.funcopy;
+elseif ~isfield(job,'funcopy'),
+    job.funcopy = 0;
+end
+%
+if isfield(remote,'bridge_enforce') && ~isempty(remote.bridge_enforce),
+    job.bridge_enforce = remote.bridge_enforce;
+elseif ~isfield(job,'bridge_enforce'),
+    job.bridge_enforce = false;
+end
+%
 % XGRID only
 %
 if isfield(remote,'hostname') && ~isempty(remote.hostname),
