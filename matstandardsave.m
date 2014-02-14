@@ -31,7 +31,7 @@ save([job.localdatapath,job.batch_dir,savefile],'-struct','sinput');% save input
 %
 % copy script file to local folder
 %
-if ~isfield(job,'funcopy') || job.funcopy >= 0,
+if job.funcopy >= 0,
     if isfield(job,'script') && ~isempty(job.script),
         safecopyfile(job.script,[job.localdatapath,job.batch_dir]);% script to be called by scheduler (ex : matlabbatch.sh)
     end
@@ -50,7 +50,7 @@ if ~isfield(job,'funcopy') || job.funcopy >= 0,
         safecopyfile(job.env.remotematfnc,[job.localdatapath,job.batch_dir]);% matlab function to take the input structure 'sinput' (only with remotematrun)
     end
     %
-    if isfield(sinput,'fun') && ~isempty(sinput.fun) && isfield(job,'funcopy') && job.funcopy == 1,
+    if isfield(sinput,'fun') && ~isempty(sinput.fun) && job.funcopy == 1,
         safecopyfile(sinput.fun,[job.localdatapath,job.batch_dir]);% matlab function to be called by batch script
     end
 end
