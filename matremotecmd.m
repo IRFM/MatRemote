@@ -4,42 +4,45 @@ if nargin < 3,
     debugmode = '0';
 end
 %
-if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
+if ~isempty(remote.host),
     %
-    [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
-    %
-    ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-    error_txt = txt_url(ie+15:end);
-    %
-    if isempty(error_txt),
-        res = 0;%force standard unix error.
-        txt = strtrim(txt_url(1:ie-1));
-    else
+    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
-        if strfind(remotecmd,'xgrid')
-            if strfind(error_txt,'ulimit:'),%wrong error
-                res = 0;%force standard unix error.
+        [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+        %
+        ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
+        error_txt = txt_url(ie+15:end);
+        %
+        if isempty(error_txt),
+            res = 0;%force standard unix error.
+            txt = strtrim(txt_url(1:ie-1));
+        else
+            %
+            if strfind(remotecmd,'xgrid')
+                if strfind(error_txt,'ulimit:'),%wrong error
+                    res = 0;%force standard unix error.
+                else
+                    res = 1;%force standard unix error.
+                end          
             else
                 res = 1;%force standard unix error.
-            end          
-        else
-            res = 1;%force standard unix error.
+            end
+            %
+            txt = error_txt;     
         end
         %
-        txt = error_txt;     
+    elseif isfield(remote,'remote'),
+        %
+        % TODO    
+        %
+    else
+        %
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
+        %
     end
-    %
-elseif isfield(remote,'remote'),
-    %
-    % TODO    
-    %
 else
     %
-    if ~isempty(remote.host),
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
-    else
-        [res,txt] = unix(remotecmd);%execute the local command
-    end
+    [res,txt] = unix(remotecmd);%execute the local command
     %
 end   
 %
