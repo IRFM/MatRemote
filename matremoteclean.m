@@ -48,8 +48,10 @@ else
     %
     if ~isempty(remote.host),
         [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
-    else
+    elseif ~strcmp(job.localdatapath,job.remotedatapath),
         [res,txt] = unix(remotecmd);%execute the local command
+    else
+        res = 0;
     end
     %
 end   
