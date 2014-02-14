@@ -23,7 +23,15 @@ list($remote_host,$remote_login,$remote_password) = login($remotehost);
 //echo $remote_login."\n";
 //echo $remote_password."\n";
 
-$remote_cmd = $remotecmd;
+
+if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
+  $remote_cmd = $remotecmd." -p ".$remote_password;//put hidden password
+} else {
+  $remote_cmd = $remotecmd;
+}
+  
+//echo "cmd=".$remote_cmd."\n";
+
 
 $connection = ssh2_connect($remote_host);
 
@@ -37,7 +45,6 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    stream_set_blocking($stream, true);
   
    echo stream_get_contents($stream)."\n";
-
    echo "ssh2php_error:".stream_get_contents($errorStream)."\n";
     
    fclose($errorStream);
@@ -47,10 +54,3 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
 }
 
 ?>
-
-
-
-
-
-
-
