@@ -13,6 +13,7 @@ remote.matver = [];% list of matlab bin and corresponding prefdir locations. Ex 
 remote.cvs = [];%CVS commands for code update
 remote.password = [];% use if password is necessary (xgrid)
 remote.remoteuser = [];% name on the remote cluster
+remote.bridge = [];% bridge address (url or ssh)
 %
 % The following parameters are for qsub only. Use NaN if option is forbidden 
 %

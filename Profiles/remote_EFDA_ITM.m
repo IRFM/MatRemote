@@ -33,6 +33,11 @@ remote.sun.yvesp.matver.mat800.root = '/afs/ipp/common/soft/matlab_2012b/bin/';
 remote.sun.yvesp.matver.mat800.prefdir = '/pfs/home/yvesp/.matlab/R2012b';%warning /pfs/home/ must replace /u/
 remote.sun.yvesp.matver.matdef = remote.sun.yvesp.matver.mat800;%default matlab on remote machine
 remote.sun.yvesp.remoteuser = 'yvesp';
+remote.sun.yvesp.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.sun.yvesp.bridge.url.path = '~yvespeysson/MatRemote';
+remote.sun.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.sun.yvesp.bridge.ftp.username = 'matremote';
+remote.sun.yvesp.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % JOAN DECKER
 %

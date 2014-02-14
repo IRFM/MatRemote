@@ -47,6 +47,11 @@ remote.torque.yves.matver.mat800.root = '/pkg/MATLAB/R2012b/bin/';
 remote.torque.yves.matver.mat800.prefdir = '/home/PEYSSON/.matlab/R2012b';
 remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat800;%default matlab on remote machine
 remote.torque.yves.remoteuser = 'PEYSSON';
+remote.torque.yves.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.torque.yves.bridge.url.path = '~yvespeysson/MatRemote';
+remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.torque.yves.bridge.ftp.username = 'matremote';
+remote.torque.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % JOAN DECKER
 %
