@@ -23,8 +23,8 @@ remote.direct.yves.host = '127.0.0.1';
 remote.direct.yves.hostname = 'macbookyves';
 remote.direct.yves.nproc = 4;
 remote.direct.yves.cmd = 'bash';% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {'[1] ',' '};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.yves.get_jobid = {'[1] ',''};%str_before,str_after
+remote.direct.yves.set_jobid = {'ps -p ','',''};%str_before,str_after,str_check
 remote.direct.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.direct.yves.matver.mat800.prefdir = '/Users/yves/.matlab/R2012b';
 remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
