@@ -148,11 +148,20 @@ txt(double(txt) == 10) = [];
 %
 if job.directsearch,
     %
-    if res == 0 || ~strcmp(txt,remoteset_jobid{3}),% job still running
+    if strcmp(computer,'MACI64'),
         %
-        locdisp(displaymode,['Job # ',job.id,' still running...']);
-        return
+        if strfind(txt,['CMD',job.id]),
+            locdisp(displaymode,['Job # ',job.id,' still running...']);
+            return
+        end
         %
+    else
+        if res == 0 || ~strcmp(txt,remoteset_jobid{3}),% job still running
+            %
+            locdisp(displaymode,['Job # ',job.id,' still running...']);
+            return
+            %
+        end
     end
     %
 elseif job.pbssearch,

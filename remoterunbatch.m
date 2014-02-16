@@ -258,8 +258,12 @@ if job.directsearch,
             error(['case with cmd = ',remote.cmd,' not yet implemented']);
         end
     end
-    %    
-    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,' &;'];% direct command
+    %
+    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,' &'];
+    %
+    if ~strcmp(computer,'MACI64'),
+    	remotecmd = [remotecmd,';'];% direct command
+    end
     %
 elseif job.pbssearch,
     %
