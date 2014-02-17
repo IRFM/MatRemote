@@ -342,74 +342,11 @@ if res ~= 0,
     %
     return
     %
-end
-%
-txt(double(txt) == 10) = [];
-%
-% Read the job id 
-%
-if ~isempty(remote.get_jobid{1}),
-    if ~iscell(remote.get_jobid{1}),
-        remoteget_jobid = remote.get_jobid(1);% only one test
-    else
-        remoteget_jobid = remote.get_jobid{1};% more than one tests
-    end
-    %
-    for itests = 1:length(remoteget_jobid),% tests in order
-        %
-        if isempty(remoteget_jobid{itests}),% empty case is a valid case
-            istr0 = 1;
-            break
-        end
-        %
-        strl1 = length(remoteget_jobid{itests});
-        istr0 = strl1 + min(strfind(txt,remoteget_jobid{itests}));
-        %
-        if ~isempty(istr0),
-            break
-        end
-        %
-    end
-    if isempty(istr0),
-        error('Job ID could not be retrieved')
-    end
 else
-    istr0 = 1;
+    job.id = '';
+    job.remote = remote;
+    locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
 end
-%
-if ~isempty(remote.get_jobid{2}),
-    if ~iscell(remote.get_jobid{2}),
-        remoteget_jobid = remote.get_jobid(2);% only one test
-    else
-        remoteget_jobid = remote.get_jobid{2};% more than one tests
-    end
-    %
-    for itests = 1:length(remoteget_jobid),% tests in order
-        %
-        if isempty(remoteget_jobid{itests}),% empty case is a valid case
-            istr1 = length(txt);
-            break
-        end
-        %
-        istr1 = min(strfind(txt(istr0:end),remoteget_jobid{itests})) + istr0 - 2;
-        %
-        if ~isempty(istr1),
-            break
-        end
-        %
-    end
-    if isempty(istr1),
-        error('Job ID could not be retrieved')
-    end
-else
-    istr1 = length(txt);
-end
-%
-job.id = txt(istr0:istr1);
-%
-job.remote = remote;
-%
-locdisp(displaymode,[' ... started with Job id ',job.id]);
 %
 function locdisp(mode,s)
 %
