@@ -261,7 +261,7 @@ if job.directsearch,
     %
     remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,' &'];
     %
-    if ~strcmp(computer,'MACI64'),
+    if ~isempty(remote.get_jobid{2}),
     	remotecmd = [remotecmd,';'];% direct command
     end
     %
