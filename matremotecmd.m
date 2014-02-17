@@ -6,16 +6,12 @@ end
 %
 if ~isempty(remote.host),
     %
-    [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
-    %
-    ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-    error_txt = txt_url(ie+15:end);
-    %
-    if isempty(error_txt),
-        res = 0;%force standard unix error.
-        txt = strtrim(txt_url(1:ie-1));
-        %        
-    else
+    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
+        %
+        [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+        %
+        ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
+        error_txt = txt_url(ie+15:end);
         %
         if isempty(error_txt),
             res = 0;%force standard unix error.
@@ -46,23 +42,22 @@ if ~isempty(remote.host),
     end
 else
     %
-    if ~isempty(remote.host),
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
-    else
-        [res,txt] = unix(remotecmd);%execute the local command
-        %
-        if ~res && (strcmp(remotecmd(1:6),'export') || strcmp(remotecmd(1:6),'setenv')),%PID identification
-            i0 = strfind(remotecmd,'remotebatchdir=');
-            i1 = strfind(remotecmd,';');
-            remotebatchdir = remotecmd(23:i1(1)-1);
-            pidsearch = {};
-            while isempty(strfind(pidsearch,'pid')),
-                pidsearch = ls(remotebatchdir);
-            end
-            pidfile = ls([remotebatchdir,'pid_*']);
-            txt = [remote.get_jobid{1},pidfile(length(remotebatchdir)+5:end-5)];
-            unix(['rm ',pidfile]);
+    [res,txt] = unix(remotecmd);%execute the local command
+    %
+    if ~res && (strcmp(remotecmd(1:6),'export') || strcmp(remotecmd(1:6),'setenv')),%PID identification
+        i0 = strfind(remotecmd,'remotebatchdir=');
+        i1 = strfind(remotecmd,';');
+        remotebatchdir = remotecmd(23:i1(1)-1);
+        pidsearch = {};
+        tstart = tic;
+        minTime = 10;
+        while isempty(strfind(pidsearch,'pid')),
+            pidsearch = ls(remotebatchdir);
+            if min(toc(tstart),minTime) == minTime,error('Error in matremotecmd.m: Process ID file not found');end
         end
+        pidfile = ls([remotebatchdir,'pid_*']);
+        txt = [remote.get_jobid{1},pidfile(length(remotebatchdir)+5:end-5)];
+        unix(['rm ',pidfile]);
     end
     %
 end   
