@@ -102,7 +102,6 @@ remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
 remote.xgrid.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.mat801.prefdir = '/Users/yves/.matlab/R2013a';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
-remote.xgrid.yves.password = {'ghm93'};
 remote.xgrid.yves.remoteuser = 'yves';
 %
 % -------------------------------------------------
