@@ -84,7 +84,11 @@ if check == 0,
         soutput = remotegetbatch(job,displaymode,1);
         %
         if ~isempty(soutput),
-            break
+            if ~isstruct(soutput) && strfind(soutput,remote.get_jobid{1}),
+                job.id = soutput(length(remote.get_jobid{1})+1:end);
+            else
+                break
+            end
         end
         %
         if displaymode,
@@ -136,7 +140,9 @@ elseif job.xgridsearch,
     %
 end
 %
-locdisp(displaymode,['    --> Checking status of job # ',job.id]);
+if ~isempty(job.id)
+    locdisp(displaymode,['    --> Checking status of job # ',job.id]);
+end
 %
 [res,txt] = matremotecmd(remote,remotecmd);
 %
@@ -144,13 +150,27 @@ pause(0.1);
 %
 txt(double(txt) == 10) = [];
 %
+% get job pid
+%
+if isempty(job.id),
+    pidsearch = ls([job.remotedatapath,job.batch_dir]);
+    if ~isempty(strfind(pidsearch,'pid')),
+        pidfile = ls([job.remotedatapath,job.batch_dir,'pid_*']);
+        soutput = [remote.get_jobid{1},pidfile(length([job.remotedatapath,job.batch_dir])+5:end-5)];
+        unix(['rm ',pidfile]);
+    end
+    %
+    locdisp(displaymode,['Job # ',job.id,' still running...']);
+    return
+end
+%
 % process job status cases
 %
 if job.directsearch,
     %
-    if strcmp(computer,'MACI64'),
+    if isempty(remote.get_jobid{2}),
         %
-        if strfind(txt,['CMD',job.id]),
+        if strfind(txt,[remoteset_jobid{3},job.id]),
             locdisp(displaymode,['Job # ',job.id,' still running...']);
             return
         end
