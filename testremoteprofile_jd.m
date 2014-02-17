@@ -8,6 +8,14 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     end
     %
     if isempty(remote.host), %local calculation
+        xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+        if xgridsearch, 
+            if ~isempty(getenv('XGRID_PWD')),
+                remote.password = {getenv('XGRID_PWD')};
+            else
+                error('XGRID password not set up.')
+            end
+        end
         return
     end
     %
@@ -24,10 +32,15 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
             disp(['Testing bridge connection to ',remote.host,' via  ',remote.bridge.url.host,' ... ']);
         end
         %
-        % TODO
+        [txt_url,res_url] = matremoteurl(remote,'','ls','','0');
         %
-        res = 0;% temporary
-        txt = 'test ok';% temporary
+        if res_url,
+            res = 0;
+            txt = 'test ok';
+        else
+            res = 1;
+            txt = txt_url;
+        end
         %
         if res ~= 0,% bridge connection failed,
             msg = ['failed with following message : ',txt];
@@ -49,25 +62,36 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
         disp(['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... ']);
     end
     %
-    remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
+    xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
     %
-    [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
-    %
-    if res ~= 0,
+    if ~xgridsearch || ~isempty(getenv('XGRID_PWD')),
         %
-        if any(strfind(txt,'Connection timed out')),
-            msg = 'failed : connection timed out (10s)';
-        elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
-            msg = 'failed : ssh key pairing not set up or not working';
+        remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
+        %
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
+        %
+        if res ~= 0,
+            %
+            if any(strfind(txt,'Connection timed out')),
+                msg = 'failed : connection timed out (10s)';
+            elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
+                msg = 'failed : ssh key pairing not set up or not working';
+            else
+                msg = ['failed with following message : ',txt];            
+            end
+            %
         else
-            msg = ['failed with following message : ',txt];            
+            msg = ['completed with following result : ',txt];
+            %
+            if xgridsearch,
+                remote.password = {getenv('XGRID_PWD')};
+            end
+            %
+            flag_ssh = true;
         end
-        %
-    else
-        msg = ['completed with following result : ',txt];
-        %
-        flag_ssh = true;
-    end        
+    elseif xgridsearch, 
+        msg = 'XGRID password not set up'; 
+    end
     if display_mode,
         disp(['   ... ',msg]);
     end
