@@ -44,21 +44,5 @@ else
     %
     [res,txt] = unix(remotecmd);%execute the local command
     %
-    if ~res && (strcmp(remotecmd(1:6),'export') || strcmp(remotecmd(1:6),'setenv')),%PID identification
-        i0 = strfind(remotecmd,'remotebatchdir=');
-        i1 = strfind(remotecmd,';');
-        remotebatchdir = remotecmd(23:i1(1)-1);
-        pidsearch = {};
-        tstart = tic;
-        minTime = 10;
-        while isempty(strfind(pidsearch,'pid')),
-            pidsearch = ls(remotebatchdir);
-            if min(toc(tstart),minTime) == minTime,error('Error in matremotecmd.m: Process ID file not found');end
-        end
-        pidfile = ls([remotebatchdir,'pid_*']);
-        txt = [remote.get_jobid{1},pidfile(length(remotebatchdir)+5:end-5)];
-        unix(['rm ',pidfile]);
-    end
-    %
 end   
 %
