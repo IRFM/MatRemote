@@ -21,12 +21,23 @@ end
 nschedulers = length(schedulernames);
 profilenames = cell(1,nschedulers);
 for ischeduler = 1:nschedulers,
-    if nargin < 4 || (ischar(profilename) && ~isfield(remote.(schedulernames{ischeduler}),profilename))
+    fnames = fieldnames(remote.(schedulernames{ischeduler}));
+    if nargin < 4,
         profilenames{ischeduler}{1} = default.profile;% default profile name
-    elseif ischar(profilename),
+    elseif ~ischar(profilename),
+        profilenames{ischeduler} = fnames;% all profile names
+    elseif isfield(remote.(schedulernames{ischeduler}),profilename)
         profilenames{ischeduler}{1} = profilename;% specific profile name
+    elseif ischar(profilename) && strcmp(profilename,'local'),% select local user
+        profilenames{ischeduler}{1} = default.profile;% default profile name if no remoteuser match
+        for iname = 1:length(fnames),
+            if strcmp(remote.(schedulernames{ischeduler}).(fnames{iname}).remoteuser,getenv('USER')),
+                profilenames{ischeduler}{1} = fnames{iname};% local user profile name
+                break
+            end
+        end        
     else
-        profilenames{ischeduler} = fieldnames(remote.(schedulernames{ischeduler}));% all profile names
+        profilenames{ischeduler}{1} = default.profile;% default profile name
     end
 end
 %
