@@ -39,6 +39,10 @@ elseif ~isfield(job,'bridge_enforce'),
     job.bridge_enforce = false;
 end
 %
+if isfield(remote,'env') && ~isempty(remote.env),
+    job.env = conc_struct_jd(job.env,remote.env);
+end
+%
 % XGRID only
 %
 if isfield(remote,'hostname') && ~isempty(remote.hostname),
@@ -96,16 +100,6 @@ if isfield(remote,'memory') && ~isempty(remote.memory),
     elseif ~isempty(job.memory) && remote.memory < job.memory,% max memory on remote computer
         disp('WARNING : memory request limited by remote host')
         job.memory = remote.memory;
-    end
-end
-%
-if isfield(remote,'remtimout') && ~isempty(remote.remtimout), 
-    job.remtimout = remote.remtimout;%Number of nodes required by remote cluster  
-elseif ~isfield(job,'remtimout')
-    if isfield(job,'ppn'),
-        job.ncpus = job.ppn;
-    else
-        job.ppn = 1;
     end
 end
 %
