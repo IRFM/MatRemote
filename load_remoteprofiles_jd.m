@@ -1,4 +1,4 @@
-function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,scheduler,profilename,duplicate,display_mode)
+function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,scheduler,profilename,duplicate,display_mode)
     %
     % This function loads remote profiles, identifies local cluster if it
     % exists, and creates a user-friendly list including scheduler type
@@ -10,17 +10,18 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
     %
     %   - INPUTS : 
     %       - remote : 
-    %           o (NaN)     : load all profiles and ask for user selection 
+    %           o (NaN)     : load all profiles and ask for user selection (if inter == 1, or same as 'local') 
     %           o (struct)  : profile contained in structure 'remote' 
     %           o (string)  : identification of profile to be selected as remote_(string).m 
     % (default) o ('')      : load & return all profiles 
     %           o ('local') : idendify and return local cluster
     %       - test : (boolean) test loaded profiles
+    %       - inter : (boolean) (1) interactive mode (for remote profile, scheduler and profile name) or (0) automatic mode
     %       - scheduler : (char array - only if remote ~= '') identification of scheduler to be selected. 
     %           o If scheduler == '', load default scheduler
-    %           o If scheduler == NaN (default), user input for scheduler
+    %           o If scheduler == NaN (default), user input for scheduler (if inter == 1, or default scheduler)
     %       - profilename : (NaN or char array) name of profile within remote cluster description (ex : joan, yves, ...)
-    %           o if NaN (default), user input for profile name
+    %           o if NaN (default), user input for profile name (if inter == 1, or default profile name)
     %           o if the name is not specified or does not exist, default profile name is selected.
     %       - duplicate : (boolean - used only if local profile among those selected) duplicate local profile with and without empty host, to test both ways
     %       - display_mode : (boolean) show information in command window 
@@ -39,27 +40,44 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,schedu
     %       - to load and return all profiles and scheduler with default profilename and without connection test or duplicate local profile, and also load user-friendly description :
     %           >> [remoteprofiles,profilestr] = load_remoteprofiles_jd;
     %
-    if nargin < 6 || ~isscalar(display_mode) || (~islogical(display_mode) && ~isnumeric(display_mode)),
+    if nargin < 7 || ~isscalar(display_mode) || (~islogical(display_mode) && ~isnumeric(display_mode)),
         display_mode = true;
     end
-    if nargin < 5 || ~isscalar(duplicate) || (~islogical(duplicate) && ~isnumeric(duplicate)),
+    if nargin < 6 || ~isscalar(duplicate) || (~islogical(duplicate) && ~isnumeric(duplicate)),
         duplicate = false;
     end
-    if nargin < 4 
+    if nargin < 5 
         profilename = NaN;% prompt user for profile name
     end
-    if nargin < 3 || ~ischar(scheduler),
-        scheduler = NaN;% prompt user for  scheduler
+    if nargin < 3 || ~isscalar(inter) || (~islogical(inter) && ~isnumeric(inter)),
+        inter = false;
     end
     if nargin < 2 || ~isscalar(test) || (~islogical(test) && ~isnumeric(test)),
         test = false;
     end
     if nargin < 1 || (~isstruct(remote) && ~ischar(remote) && (~isscalar(remote) || ~isnan(remote))),
-        remote = '';% load all profiles
+        if inter,
+            remote = '';% load all profiles
+        else
+            remote = 'local';% load all profiles
+        end
+    end
+    if nargin < 4 || ~ischar(scheduler),
+        if inter,
+            scheduler = NaN;% prompt user for  scheduler
+        else
+            scheduler = '';
+        end
     end
     %
     if ~ischar(profilename) && ~isstruct(remote),
-        profilename = input_dke_yp('Identify Profile Name (ex : ''joan'',''yves'',...), or leave empty to use default for each remote profile','');
+        if inter,
+            profilename = input_dke_yp('Identify Profile Name (ex : ''joan'',''yves'',...), or leave empty to use default for each remote profile','');
+        elseif strcmp(remote,'local'),
+            profilename = 'local';
+        else
+            profilename = '';
+        end
     end
     %
     remoteprofiles = [];

@@ -113,6 +113,7 @@ end
 param.remote = remote;
 param.funcopy = true;% copy ftest_mdce to remote cluster
 param.type = schedulertype;
+param.inter = 1;% interactive mode for profile and/or cluster name selection enabled
 %
 param.clustersize = mdce_size;
 param.memory = mdce_memory;
