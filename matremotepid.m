@@ -10,6 +10,7 @@ if ~isempty(remote.host),
     %
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
+        remotecmd = 'ls';
         [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
@@ -19,19 +20,64 @@ if ~isempty(remote.host),
             res = 0;%force standard unix error.
             txt = strtrim(txt_url(1:ie-1));
         else
+            res = 1;%force standard unix error.
+            txt = error_txt;
+            return
+        end
+        %
+        if ~isempty(strfind(txt,job.batch_dir(1:length(job.batch_dir)-1))),
             %
-            if strfind(remotecmd,'xgrid')
-                if strfind(error_txt,'ulimit:'),%wrong error
-                    res = 0;%force standard unix error.
-                else
-                    res = 1;%force standard unix error.
-                end          
+            remotecmd = ['cd ',job.batch_dir,';ls'];
+            %
+            [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+            %
+            ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
+            error_txt = txt_url(ie+15:end);
+            %
+            if isempty(error_txt),
+                res = 0;%force standard unix error.
+                txt = strtrim(txt_url(1:ie-1));
             else
                 res = 1;%force standard unix error.
-            end
+                txt = error_txt;
+                return
+            end            
             %
-            txt = error_txt;     
+            txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
+            %
+            ipid0 = strfind(txt,'pid_');
+            %
+            if ~isempty(ipid0),
+                %
+                ipid1 = strfind(txt(ipid0+4:end),'.mat');
+                %
+                txt = txt(ipid0+4:ipid0+4+ipid1-2);
+                %
+                remotecmd = ['cd ',job.batch_dir,';rm pid_',txt,'.mat'];%remove pid file
+                %
+                [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+                %
+                ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
+                error_txt = txt_url(ie+15:end);
+                %
+                if isempty(error_txt),
+                    res = 0;%force standard unix error.
+                    txt = strtrim(txt_url(1:ie-1));
+                else
+                    res = 1;%force standard unix error.
+                    txt = error_txt;
+                    return
+                end                      
+                %
+            else
+                txt = '';
+            end
+        else
+            txt = '';
         end
+        %
+        res = 0;
+        return;
         %
     elseif isfield(remote,'remote'),
         %
@@ -89,7 +135,4 @@ else
     end
     %
 end   
-%
 
-    
-end
