@@ -1,4 +1,4 @@
-function [dkecluster] = mdce_clustermode(param,fun)
+function [dkecluster] = mdce_clustermode(param)
 %
 % Test & configure cluster properties for use by mdce_run
 %
@@ -17,6 +17,7 @@ function [dkecluster] = mdce_clustermode(param,fun)
 %           - mode : see param above
 %           - gpu (default : 0) : gpu distributed computing
 %           - type (default : 'local') : name of cluster configuration (mode = 1,2)
+%           - inter (default : 0) : (1) interactive mode (for remote profile, scheduler and profile name) or (0) automatic mode
 %           - configurations (default : struct) : cluster configurations parameters
 %           - clustersize (default : Inf) : number of workers
 %           - memory (default : NaN) : memory requirements
@@ -31,12 +32,9 @@ function [dkecluster] = mdce_clustermode(param,fun)
 %
 %       cluster identification (param, param.mode or param.remote{irem})
 %           o (struct)       : calculation distributed to the profile stored in the structure 'remote'
-%           o (NaN)          : prompt user for profile
+%           o (NaN)          : prompt user for profile (if inter = 1) or same as 'local' if inter = 0
 %           o ('local')      : identifies and select local cluster
 %           o (string)       : profile from remote_(remote).m (ex : 'macpro_YVES_PEYSSON')
-%
-%   - fun : function name, used if (fun) is a field of param 
-%               (case when param contains distributed computing parameters for multiple functions)
 %
 % OUTPUT :
 %   - dkecluster : structure containing MDCE properties
@@ -48,15 +46,12 @@ if nargin < 1 || (~isstruct(param) && ~ischar(param) && ~isempty(mdce_mode) && (
     param = 0;
 end
 %
-if nargin < 2 || ~ischar(fun),
-    fun = '';
-end
-%
 % default scheduler properties
 %
 dkecluster.scheduler.mode = 0;
 dkecluster.scheduler.gpu = 0;
 dkecluster.scheduler.type = 'local';
+dkecluster.scheduler.inter = 0;% interactive mode (for profile, scheduler and profile name)
 dkecluster.scheduler.configurations = struct;
 dkecluster.scheduler.remote = {};% for remcomputing (mode == 3)
 dkecluster.scheduler.funcopy = false;% copy distributed function to remote cluster
@@ -75,28 +70,8 @@ dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
 if isstruct(param),
-    %
-    if ~isempty(fun)% when function-specific DC parameters are present 
-        %
-        if isfield(param,fun),% DC parameters found for the specific function
-            if isfield(param.(fun),'scheduler'),
-                dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param.(fun).scheduler);
-            elseif isfield(param.(fun),'batch'),
-                %not yet implemented
-            else
-                disp('Warning : dkecluster type not recognized')
-                dkecluster.scheduler.mode = 0;%dkecluster type not recognized, sequential mode enforced
-            end        
-        else
-            dkecluster.scheduler.mode = 0;%function not referenced in param, sequential mode enforced
-        end
-        %
-    else% when param contains overriding scheduler fields
-        %
-        dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param);
-        %
-    end
-else% only the DC mode is provided
+    dkecluster.scheduler = conc_struct_jd(dkecluster.scheduler,param);% override default parameters
+else% only override dkecluster.mode
     dkecluster.scheduler.mode = param;
 end
 %
@@ -139,9 +114,9 @@ end
 %
 % Specific operations depending on DC mode
 %
-if isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 0,% sequential
+if isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 0,% sequential
     %
-elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% MDCE mode
+elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% MDCE mode
     %
 	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
 	%
@@ -168,7 +143,7 @@ elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% M
         %
     end
     %
-elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% parfor mode
+elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% parfor mode
     %
 	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
     %
@@ -181,7 +156,7 @@ elseif isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% p
     %
 else% remote computing mode
     %
-    if isscalar(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3;% remcomputing on local cluster
+    if isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3;% remcomputing on local cluster
         dkecluster.scheduler.mode = 'local';
     end
     %
