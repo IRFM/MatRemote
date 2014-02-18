@@ -36,15 +36,13 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
     mat_input.args_in = args_in;
     mat_input.nargout = nargout;
     %
-    displaymode = job.debugmode;% display step by step information in debugmode
-    %
-    job = remoterunbatch(remote,job,mat_input,displaymode);
+    job = remoterunbatch(remote,job,mat_input);
     %
     if ~isfield(job,'err'),% no error occured in the remote job start,
         if isfield(job,'remtimout') && job.remtimout == 0,% return and check later
             output.varargout{1}.job = job;
         else
-            output = remotegetbatch(job,displaymode,0);% wait for result
+            output = remotegetbatch(job,[],0);% wait for result
         end
     else
         output.err = job.err;
