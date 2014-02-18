@@ -51,6 +51,10 @@ try
     end
     %
     if ~isempty(remotepathfnc) && exist(remotepathfnc,'file'),
+        [remotepath,remotepathfnc] = fileparts(remotepathfnc);
+        if ~isempty(remotepath),% function on the remote filesystem
+            addpath(remotepath);
+        end
         feval(remotepathfnc);% setup remote matlab path
     end
     %
