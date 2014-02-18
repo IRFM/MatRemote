@@ -10,8 +10,8 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %
     %   - INPUTS : 
     %       - remote : 
-    %           o (NaN)     : load all profiles and ask for user selection (if inter == 1, or same as 'local') 
-    %           o (struct)  : profile contained in structure 'remote' 
+    %           o (NaN)     : load all profiles and ask for user selection 
+    %           o (struct)  : profile contained in structure or structure array 'remote' 
     %           o (string)  : identification of profile to be selected as remote_(string).m 
     % (default) o ('')      : load & return all profiles 
     %           o ('local') : idendify and return local cluster
@@ -94,15 +94,19 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         RemoteFileNames{ifile} = RemoteProfDirContents(ifile).name(1:end-2);
     end
     %
-    if isstruct(remote),% case where structure was input
+    if isstruct(remote),% case where structure or structure array was input
         %
-        if test && isempty(testremoteprofile_jd(remote,false,display_mode)),
-            disp('WARNING : connection test failed for structure remote. Empty remoteprofiles returned');
-            return
+        if test,
+            for irem = 1:length(remote),
+                remoteprofile = testremoteprofile_jd(remote(irem),false,display_mode);
+                if ~isempty(remoteprofile),
+                    remoteprofiles = [remoteprofiles,remoteprofile];
+                    profilestr = [profilestr,getremotestr_jd(remoteprofile)];
+                else
+                    disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote)]);
+                end
+            end
         end
-        %
-        remoteprofiles = remote;
-        profilestr = {getremotestr_jd(remote)};
         %
         return
         %
