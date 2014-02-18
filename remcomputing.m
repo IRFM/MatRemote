@@ -57,7 +57,9 @@ try
     end
     %
     if isfield(scheduler,'localdatapath'),
-        job.localdatapath = scheduler.localdatapath;% requested memory specified by scheduler
+        job.localdatapath = scheduler.localdatapath;% path to store batch_timeid folders
+    elseif isfield(scheduler,'temppath'),
+        job.localdatapath = scheduler.temppath;
     end
     %
     if isfield(scheduler,'cleanmode'),
