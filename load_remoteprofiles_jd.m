@@ -70,10 +70,40 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         end
     end
     %
+    MatRemoteDir = fileparts(which(mfilename));
+    %
+    tmp_profiles = '';
+    %
     if ~ischar(profilename) && ~isstruct(remote),
+        %
+        if ~isnan(profilename),
+            %  
+            if exist([MatRemoteDir,'/Profiles/remote_',remote,'.m'])
+                tmp_remote = eval(['remote_',remote,'(''all'')']);
+                tmp_remote_fields = fieldnames(tmp_remote);
+                %
+                for itmprem = 1:length(tmp_remote_fields),
+                     tmp_profile_fields = fieldnames(tmp_remote.(tmp_remote_fields{itmprem}));
+                     for itmpprof = 1:length(tmp_profile_fields),
+                        if isempty(strfind(tmp_profiles,tmp_profile_fields{itmpprof})),
+                            if ~isempty(tmp_profiles),
+                                tmp_profiles = [tmp_profiles,', ',tmp_profile_fields{itmpprof}];
+                            else
+                                 tmp_profiles = tmp_profile_fields{itmpprof};
+                            end
+                        end
+                     end
+                end
+            end
+        end
+        %
         if inter,
-            profilename = input_dke_yp('Identify Profile Name (ex : ''joan'',''yves'',...), or leave empty to use default for each remote profile','');
-        elseif strcmp(remote,'local'),
+            if ~isempty(tmp_profiles),
+            	profilename = input_dke_yp(['Identify profile name in the list ''',tmp_profiles,''', or leave empty to use default remote profile'],'');
+            else
+             	profilename = input_dke_yp(['Identify profile name like ''yves, joan, ...'', or leave empty to use default for each remote profile'],'');
+            end
+       elseif strcmp(remote,'local'),
             profilename = 'local';
         else
             profilename = '';
@@ -84,8 +114,6 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     profilestr = {};
     %
     % List all files from Matremote/Profiles directory of the form remote_[...].m that contain profiles
-    %
-    MatRemoteDir = fileparts(which(mfilename));
     %
     RemoteProfDirContents = dir([MatRemoteDir,filesep,'Profiles/remote_*.m']);
     nremotefiles = length(RemoteProfDirContents);
