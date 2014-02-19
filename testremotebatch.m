@@ -81,6 +81,10 @@ if nargin < 1,
     sinputs = 0;% default mode is direct use of remoterunbatch and remotegetbatch
 end
 %
+if nargin < 2,
+    remote = '';% test all profiles
+end
+%
 if isnumeric(sinputs),% start new test
     %
     % Select local and remote profiles to be tested
