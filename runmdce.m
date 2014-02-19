@@ -1,6 +1,6 @@
 function mdce_output = runmdce(mdce_input)
 %
-dkecluster = mdce_clustermode(mdce_input.dkecluster.param,mdce_input.dkecluster.fun);% remote dkecluster
+dkecluster = mdce_clustermode(mdce_input.dkecluster.scheduler,mdce_input.dkecluster.fun);% remote dkecluster
 %
 varargout = cell(1,mdce_input.nargout-1);
 narg_range = length(mdce_input.arg_range);
