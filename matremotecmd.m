@@ -42,7 +42,10 @@ if ~isempty(remote.host),
     end
 else
     %
+    wd = pwd;
+    cd(getenv('HOME'))
     [res,txt] = unix(remotecmd);%execute the local command
+    cd(wd);
     %
 end   
 %
