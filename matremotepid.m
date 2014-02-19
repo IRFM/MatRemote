@@ -37,7 +37,7 @@ if ~isempty(remote.host),
                 %
                 txt = txt(ipid0+4:ipid0+4+ipid1-2);
                 %
-                remotecmd = ['cd ',job.batch_dir,';rm pid_',txt,'.mat'];%remove pid file
+                remotecmd = ['cd ',job.remotedatapath,job.batch_dir,';rm pid_',txt,'.mat'];%remove pid file
                 %
                 [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
                 %
