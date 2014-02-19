@@ -168,9 +168,9 @@ txt(double(txt) == 10) = [];
 %
 if job.directsearch,
     %
-    if isempty(remote.get_jobid),
+    if isempty(remote.get_jobid),%MAC OS X case
         %
-        if strfind(txt,[remoteset_jobid{3},job.id]),
+        if ~isempty(job.id) && ~isempty(strfind(txt,[remoteset_jobid{3},job.id])),
             locdisp(displaymode,['Job # ',job.id,' still running...']);
             return
         end
@@ -305,6 +305,16 @@ if ~isempty(job.load_id),
         %
     end    
     %
+    itmax = 10;
+    it = 0;
+    while matremotecheck(job,remote,'MAT_OUT_') && it < itmax,
+        it = it + 1;%check that the MAT_OUT file is well written
+    end
+    %
+    if it == itmax,
+        error(['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'])
+    end
+    
     [res,err] = matremoteget(job,remote);
     %
     if res ~= 0,
