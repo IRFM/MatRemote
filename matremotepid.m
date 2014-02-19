@@ -10,7 +10,7 @@ if ~isempty(remote.host),
     %
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
-        remotecmd = 'ls';
+        remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
         [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
@@ -25,23 +25,7 @@ if ~isempty(remote.host),
             return
         end
         %
-        if ~isempty(strfind(txt,job.batch_dir(1:length(job.batch_dir)-1))),
-            %
-            remotecmd = ['cd ',job.batch_dir,';ls'];
-            %
-            [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
-            %
-            ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-            error_txt = txt_url(ie+15:end);
-            %
-            if isempty(error_txt),
-                res = 0;%force standard unix error.
-                txt = strtrim(txt_url(1:ie-1));
-            else
-                res = 1;%force standard unix error.
-                txt = error_txt;
-                return
-            end            
+        if ~res,
             %
             txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
             %
@@ -85,14 +69,11 @@ if ~isempty(remote.host),
         %
     else
         %
-        remotecmd = 'ls';
+        remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
         [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
         %
-        if ~isempty(strfind(txt,job.batch_dir(1:length(job.batch_dir)-1))),
+        if ~res,
             %
-            remotecmd = ['cd ',job.batch_dir,';ls'];
-            %
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
             txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
             %
             ipid0 = strfind(txt,'pid_');
