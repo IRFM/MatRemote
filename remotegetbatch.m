@@ -170,7 +170,7 @@ if job.directsearch,
     %
     if isempty(remote.get_jobid),%MAC OS X case
         %
-        if ~isempty(job.id) && ~isempty(strfind(txt,[remoteset_jobid{3},job.id])),
+        if any(strfind(txt,remoteset_jobid{3})),
             locdisp(displaymode,['Job # ',job.id,' still running...']);
             return
         end

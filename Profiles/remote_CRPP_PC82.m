@@ -23,8 +23,8 @@ remote.bash.joan.host = 'crpppc82.epfl.ch';
 remote.bash.joan.hostname = 'crpppc82';
 remote.bash.joan.nproc = 8;
 remote.bash.joan.cmd = 'bash';% direct calculation (csh, bash)
-remote.bash.joan.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
-remote.bash.joan.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.bash.joan.get_jobid = {};%str_before,str_after
+remote.bash.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.bash.joan.matver.mat800.root = '/usr/local/MATLAB/R2012b/bin/';
 remote.bash.joan.matver.mat800.prefdir = '/home/decker/.matlab/R2010a';
 remote.bash.joan.matver.mat801.root = '/usr/local/MATLAB/R2013a/bin/';
