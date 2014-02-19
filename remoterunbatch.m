@@ -233,9 +233,6 @@ if job.directsearch,
     % job environment variables
     %
     remenv = struct;
-    if isfield(remote,'env') && isstruct(remote.env),
-        remenv = conc_struct_jd(remenv,remote.env);% environment variables stored in remote.env
-    end
     if isfield(job,'env') && isstruct(job.env),
         remenv = conc_struct_jd(remenv,job.env);% environment variables stored in remote.env
     end
@@ -311,15 +308,7 @@ elseif job.condorsearch,
     %
     % scheduler environment variables
     %
-    remenvstr = '';
-    if isfield(remote,'env') && isstruct(remote.env),
-        envnames = fieldnames(remote.env);
-        for ienv = 1:length(envnames),
-            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),'; ',remenvstr];
-        end
-    end
-    %
-    remotecmd = [remenvstr,'export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.save_id,job.condor_script,' -v'];
+    remotecmd = ['export CONDOR_CONFIG=',remote.condor.CONDOR_CONFIG,'; export PATH=',remote.condor.PATH,'; export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.save_id,job.condor_script,' -v'];
     %
 elseif job.xgridsearch,
     %

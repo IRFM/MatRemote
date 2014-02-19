@@ -122,15 +122,7 @@ elseif job.condorsearch,
     %
     % scheduler environment variables
     %
-    remenvstr = '';
-    if isfield(remote,'env') && isstruct(remote.env),
-        envnames = fieldnames(remote.env);
-        for ienv = 1:length(envnames),
-            remenvstr = ['export ',envnames{ienv},'=',remote.env.(envnames{ienv}),';',remenvstr];
-        end
-    end
-    %
-    remotecmd = [remenvstr,remoteset_jobid{1},job.id,remoteset_jobid{2}];
+    remotecmd = ['export CONDOR_CONFIG=',remote.condor.CONDOR_CONFIG,'; export PATH=',remote.condor.PATH,'; ',remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
 elseif job.xgridsearch,  
     %
