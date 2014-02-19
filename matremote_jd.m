@@ -75,9 +75,7 @@ else% direct calculation
 end
 %
 if isfield(output,'err'),
-    if displaymode,
-        disp('Remote calculation failed. Calculation started locally if enforced.')
-    end
+    disp('Remote calculation failed. Calculation started locally if enforced.')
     err = output.err;
 elseif isfield(output,'varargout'),
     varargout = output.varargout;

@@ -50,12 +50,14 @@ try
         remotepathfnc = getenv('remotepathfnc');
     end
     %
-    if ~isempty(remotepathfnc) && exist(remotepathfnc,'file'),
+    if ~isempty(remotepathfnc) && exist([remotepathfnc,'.m'],'file'),
         [remotepath,remotepathfnc] = fileparts(remotepathfnc);
         if ~isempty(remotepath),% function on the remote filesystem
             addpath(remotepath);
         end
         feval(remotepathfnc);% setup remote matlab path
+    else
+        remotepath = '';
     end
     %
     if nargin < 4,
@@ -78,6 +80,8 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
+        disp(['remotepath = ',remotepath]);
+        disp(['remotepathfnc = ',remotepathfnc]);
         disp('------------------------------');
     end
     %
