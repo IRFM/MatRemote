@@ -342,7 +342,7 @@ txt(double(txt) == 10) = [];
 %
 % Read the job id (if accessible)
 %
-if ~remote.bridge_enforce && ~isempty(remote.get_jobid)
+if (isempty(remote.bridge_enforce) || ~remote.bridge_enforce) && ~isempty(remote.get_jobid)
     if ~isempty(remote.get_jobid{1}),
         if ~iscell(remote.get_jobid{1}),
             remoteget_jobid = remote.get_jobid(1);% only one test
