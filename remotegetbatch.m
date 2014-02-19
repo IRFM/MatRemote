@@ -35,8 +35,8 @@ if nargin < 3,
     check = 1;% check for result (1) or set-up wait loop (0)  
 end
 %
-if nargin < 2,
-    displaymode = 0;
+if nargin < 2 || isempty(displaymode),
+    displaymode = job.debugmode;
 end
 %
 if ~isfield(job,'id'),
