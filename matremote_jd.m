@@ -19,10 +19,10 @@ if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously l
         %
         job = args_in{1}.job;
         %
-        if isempty(remote.get_jobid),
+        if ~isempty(soutput) && isempty(job.remote.get_jobid),
             job.id = soutput;
-        elseif strfind(soutput,remote.get_jobid{1}),
-            job.id = soutput(length(remote.get_jobid{1})+1:end);
+        elseif ~isempty(soutput) && strfind(soutput,job.remote.get_jobid{1}),
+            job.id = soutput(length(job.remote.get_jobid{1})+1:end);
         end
         %
         if job.debugmode,

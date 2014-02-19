@@ -76,9 +76,9 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %
     if ~ischar(profilename) && ~isstruct(remote),
         %
-        if ~isnan(remote),
+        if ischar(remote) && ~isempty(remote) && ~strcmp(remote,'local'),% case where a specified remote file is requested
             %  
-            if exist([MatRemoteDir,'/Profiles/remote_',remote,'.m'])
+            if exist([MatRemoteDir,'/Profiles/remote_',remote,'.m'],'file')
                 tmp_remote = eval(['remote_',remote,'(''all'')']);
                 tmp_remote_fields = fieldnames(tmp_remote);
                 %
@@ -103,7 +103,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             else
              	profilename = input_dke_yp(['Identify profile name like ''yves, joan, ...'', or leave empty to use default for each remote profile'],'');
             end
-       elseif strcmp(remote,'local'),
+        elseif strcmp(remote,'local'),
             profilename = 'local';
         else
             profilename = '';
@@ -123,16 +123,19 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     end
     %
     if isstruct(remote),% case where structure or structure array was input
-        %
-        if test,
-            for irem = 1:length(remote),
+        for irem = 1:length(remote),
+            %
+            if test,
                 remoteprofile = testremoteprofile_jd(remote(irem),false,display_mode);
-                if ~isempty(remoteprofile),
-                    remoteprofiles = [remoteprofiles,remoteprofile];
-                    profilestr = [profilestr,getremotestr_jd(remoteprofile)];
-                else
-                    disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote)]);
-                end
+            else
+                remoteprofile = remote(irem);
+            end
+            %
+            if ~isempty(remoteprofile),
+                remoteprofiles = [remoteprofiles,remoteprofile];
+                profilestr = [profilestr,getremotestr_jd(remoteprofile)];
+            else
+                disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote)]);
             end
         end
         %
