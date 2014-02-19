@@ -334,6 +334,10 @@ elseif job.xgridsearch,
     %
 end
 %
+if ~job.xgridsearch,
+	locdisp(displaymode,['    --> Starting run with command ',remotecmd])
+end
+%
 [res,txt] = matremotecmd(remote,remotecmd);
 %
 if res ~= 0,
@@ -408,16 +412,18 @@ if ~isempty(remote.get_jobid)
     end
     %
     job.id = txt(istr0:istr1);
+	%
+	locdisp(displaymode,[' ... started with job id ',job.id]);
     %
 else
     %
     job.id = '';
+	%
+	locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
     %
 end
 %
 job.remote = remote;
-%
-locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
 %
 function locdisp(mode,s)
 %
