@@ -3,8 +3,10 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     if nargin < 3,
         display_mode = false;
     end
-    if nargin < 2,
+    if nargin < 2 || isempty(remote.bridge_enforce),
         bridge_enforce = false;
+    else
+        bridge_enforce = remote.bridge_enforce;
     end
     %
     if isempty(remote.host), %local calculation
