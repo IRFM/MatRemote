@@ -85,7 +85,7 @@ if isnumeric(sinputs),% start new test
     %
     % Select local and remote profiles to be tested
     %
-    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true);
+    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true,debugmode);
     %
     nrem = length(remoteprofiles);
     %
