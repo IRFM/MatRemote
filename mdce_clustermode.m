@@ -87,7 +87,7 @@ if ~isempty(dkecluster.scheduler.remote),
     %
     if iscell(dkecluster.scheduler.remote),
         remote = dkecluster.scheduler.remote{1};
-        dkecluster.scheduler.remote = dkecluster.param.remote(2:end);% if recursive use of mdce_remote.m 
+        dkecluster.scheduler.remote = dkecluster.scheduler.remote(2:end);% if recursive use of mdce_remote.m 
     else
         remote = dkecluster.scheduler.remote;% non-recursive case
         dkecluster.scheduler.remote = {};
@@ -98,8 +98,6 @@ if ~isempty(dkecluster.scheduler.remote),
     if ~isempty(remote),
         %
         dkecluster.remote = remote;
-        dkecluster.param = dkecluster.scheduler;
-        dkecluster.fun = fun;
         %
         disp(['==> Distributed calculation transfered to : ',profilestr{1}])
         %

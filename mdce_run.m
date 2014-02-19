@@ -97,7 +97,7 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
             %
             disp(['WARNING: Remote distributed computing failed for ',num2str(sum(mask_loc)),'/',num2str(length(mask_loc)),' cases. Switching to local computing for these cases.']);
             %
-            dkecluster_loc = mdce_clustermode(dkecluster.param,dkecluster.fun);% local dkecluster
+            dkecluster_loc = mdce_clustermode(dkecluster.scheduler);% local dkecluster
             %
             varargout_loc = cell(1,nargout-1);
             [flag(mask_loc),varargout_loc{:}] = mdce_run(fun,args_in,arg_index,arg_range(mask_loc),dkecluster_loc);
