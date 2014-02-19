@@ -13,13 +13,25 @@ err = '';
 %
 if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously launched job
     %
-    output = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
+    soutput = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
     %
-    if isempty(output),
-        if args_in{1}.job.debugmode,
+    if isempty(soutput) || ~isstruct(soutput),
+        %
+        job = args_in{1}.job;
+        %
+        if isempty(remote.get_jobid),
+            job.id = soutput;
+        elseif strfind(soutput,remote.get_jobid{1}),
+            job.id = soutput(length(remote.get_jobid{1})+1:end);
+        end
+        %
+        if job.debugmode,
             disp('Job still running.')
         end
-        output.varargout{1}.job = args_in{1}.job;
+        output.varargout{1}.job = job;
+        %
+    else
+        output = soutput;
     end
     %
 elseif nargin > 2 && ~isempty(remote),% batch job received   
