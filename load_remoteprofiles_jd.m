@@ -76,7 +76,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %
     if ~ischar(profilename) && ~isstruct(remote),
         %
-        if ~isnan(profilename),
+        if ~isnan(remote),
             %  
             if exist([MatRemoteDir,'/Profiles/remote_',remote,'.m'])
                 tmp_remote = eval(['remote_',remote,'(''all'')']);
