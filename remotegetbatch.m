@@ -137,7 +137,7 @@ end
 if ~isempty(job.id),
     %
     locdisp(displaymode,['    --> Checking status of job # ',job.id]);
-    [res,txt] = matremotecmd(remote,remotecmd);
+    [res,txt] = matremotecmd(remote,job,remotecmd);
     %
 else
     %
@@ -250,7 +250,7 @@ elseif job.xgridsearch,
         remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
     end
     %
-    [res,err] = matremotecmd(remote,remotecmd);
+    [res,err] = matremotecmd(remote,job,remotecmd);
     %
     pause(0.1);
     %
@@ -268,7 +268,7 @@ elseif job.xgridsearch,
         remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
     end
     %
-    [res,err] = matremotecmd(remote,remotecmd);
+    [res,err] = matremotecmd(remote,job,remotecmd);
     %
     pause(0.1);
     %
@@ -299,7 +299,7 @@ if ~isempty(job.load_id),
     %
     itmax = 10;
     it = 0;
-    while matremotecheck(job,remote,'MAT_OUT_') && it < itmax,
+    while matremotecheck(remote,job,'MAT_OUT_') && it < itmax,
         it = it + 1;%check that the MAT_OUT file is well written
     end
     %
@@ -307,7 +307,7 @@ if ~isempty(job.load_id),
         error(['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'])
     end
     
-    [res,err] = matremoteget(job,remote);
+    [res,err] = matremoteget(remote,job);
     %
     if res ~= 0,
         locdisp(displaymode,['File transfer failed : ',err]);
@@ -365,7 +365,7 @@ if job.clean >= 1,%clean remote and batch files
         locdisp(displaymode,['    --> Removing remote input file/folder ',job.remotedatapath,job.save_id,' ...'])
     end
     %
-    [res,err] = matremoteclean(job,remote,rminputcmd);
+    [res,err] = matremoteclean(remote,job,rminputcmd);
     %
     if res ~= 0,
         locdisp(displaymode,['Warning, remote input file/folder delete failed : ',err])
@@ -382,7 +382,7 @@ if job.clean >= 1,%clean remote and batch files
         	locdisp(displaymode,['    --> Removing remote output file/folder ',job.remotedatapath,job.load_id,' ...'])
     	end
     	%
-    	[res,err] = matremoteclean(job,remote,rmoutputcmd);
+    	[res,err] = matremoteclean(remote,job,rmoutputcmd);
         %
         if res ~= 0,
             locdisp(displaymode,['Warning, remote output file/folder delete failed : ',err])
@@ -406,12 +406,12 @@ if job.clean >= 1,%clean remote and batch files
         if ~isempty(remotehost)
             %
             locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
-            [res,err] = matremotecmd(remote,rmbatchcmd);
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
             %
         else
             %
             locdisp(displaymode,'    --> Removing batch output files ...')
-            [res,err] = matremotecmd(remote,rmbatchcmd);
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
             %
         end        
     elseif job.condorsearch,
@@ -428,13 +428,13 @@ if job.clean >= 1,%clean remote and batch files
         if ~isempty(remotehost),
             %
             locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
-            [res,err] = matremotecmd(remote,rmbatchcmd);
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
             pause(0.1)
             %
         else
             %
             locdisp(displaymode,'    --> Removing batch output files ...')
-            [res,err] = matremotecmd(remote,rmbatchcmd);
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
             %
         end       
     end
@@ -474,6 +474,15 @@ if job.clean >= 2,%clean local files
             locdisp(displaymode,' ... done');          
         end
     end
+end
+%
+if isfield(remote,'disp_cmd') && remote.disp_cmd,
+    disp('------------------------------------------------------------------------------------')
+    job
+    disp('------------------------------------------------------------------------------------')
+    disp('------------------------------------------------------------------------------------')
+    remote
+    disp('------------------------------------------------------------------------------------')
 end
 %
 function locdisp(mode,s)
