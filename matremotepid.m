@@ -11,7 +11,7 @@ if ~isempty(remote.host),
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
         remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
-        [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+        [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'',debugmode);
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
         error_txt = txt_url(ie+15:end);
@@ -41,7 +41,7 @@ if ~isempty(remote.host),
                 %
                 txt = ['pid=',txt];%to specify that the PID file has been used for the PID extraction
                 %
-                [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
+                [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'',debugmode);
                 %
                 ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
                 error_txt = txt_url(ie+15:end);
