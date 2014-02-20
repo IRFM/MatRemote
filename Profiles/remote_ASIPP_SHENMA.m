@@ -52,6 +52,7 @@ remote.torque.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.torque.yves.bridge.ftp.username = 'matremote';
 remote.torque.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.torque.yves.bridge_enforce = false;
 %
 % JOAN DECKER
 %

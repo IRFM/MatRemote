@@ -31,6 +31,12 @@ remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
 remote.direct.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yvespeysson';
+remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
+remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.yves.bridge.ftp.username = 'matremote';
+remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.direct.yves.bridge_enforce = false;
 %
 % condor
 %
@@ -55,6 +61,7 @@ remote.condor.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.condor.yves.bridge.ftp.username = 'matremote';
 remote.condor.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.condor.yves.bridge_enforce = false;
 %
 % xgrid
 %
@@ -113,6 +120,7 @@ remote.xgrid.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.xgrid.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.xgrid.yves.bridge.ftp.username = 'matremote';
 remote.xgrid.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.xgrid.yves.bridge_enforce = false;
 %
 % JOAN DECKER
 %
