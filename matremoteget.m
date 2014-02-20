@@ -1,4 +1,4 @@
-function [res,txt] = matremoteget(job,remote,debugmode)
+function [res,txt] = matremoteget(remote,job,debugmode)
 %
 % download batch dir from the remote computer (through the bridge)
 %
@@ -12,21 +12,21 @@ if ~isempty(remote.host),
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
             %
-            [res,txt] = scp_over_php(job,remote,[job.batch_dir,'output_file'],debugmode);
+            [res,txt] = scp_over_php(remote,job,[job.batch_dir,'output_file'],debugmode);
             %
             if res ~= 0,
                 return
             end            
             %
             %
-            [res,txt] = scp_over_php(job,remote,[job.batch_dir,'error_file'],debugmode);
+            [res,txt] = scp_over_php(remote,job,[job.batch_dir,'error_file'],debugmode);
             %
             if res ~= 0,
                 return
             end
         end
         %
-        [res,txt] = scp_over_php(job,remote,job.load_id,debugmode);
+        [res,txt] = scp_over_php(remote,job,job.load_id,debugmode);
         %
         f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
         mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
@@ -94,7 +94,7 @@ else
 end
 end
 %
-function [res,txt] = scp_over_php(job,remote,filename,debugmode)
+function [res,txt] = scp_over_php(remote,job,filename,debugmode)
     %
     [txt_url,res_url] = matremoteurl(remote,job,'',filename,debugmode);
     %
