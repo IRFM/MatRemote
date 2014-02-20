@@ -130,13 +130,13 @@ remote = testremoteprofile_jd(remote,job.bridge_enforce,displaymode);% test conn
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
 %
-[res,err] = matremotecmd(remote,remotecmd);
+[res,err] = matremotecmd(remote,job,remotecmd);
 %
 if res == 1,% remote directory does not exist
     remotecmd = ['mkdir ',job.remotedatapath];%create remote directory
     locdisp(displaymode,['    --> Creating remote data folder ',job.remotedatapath])  
     %
-    [res,err] = matremotecmd(remote,remotecmd);
+    [res,err] = matremotecmd(remote,job,remotecmd);
     %
     if res ~= 0,
         %
@@ -164,7 +164,7 @@ if isfield(remote,'cvs'),
         locdisp(displaymode,['    --> CVS : ',remotecmd]) 
         %
         try
-            [res,txt] = matremotecmd(remote,remotecmd);
+            [res,txt] = matremotecmd(remote,job,remotecmd);
         catch
             res = 1;
             txt = ['Error in CVS update'];
@@ -199,7 +199,7 @@ if ~isempty(job.save_id),
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
     end
     %
-    [res,txt] = matremoteput(job,remote);
+    [res,txt] = matremoteput(remote,job);
     %
     if res ~= 0,
         %
@@ -210,7 +210,7 @@ if ~isempty(job.save_id),
         %
     else
         if job.xgridsearch || job.condorsearch,
-            [res_chmod,txt_chmod] = matremotecmd(remote,remotecmd_chmod);
+            [res_chmod,txt_chmod] = matremotecmd(remote,job,remotecmd_chmod);
             %
             if res_chmod ~= 0,
                 locdisp(displaymode,['Warning: for xgrid and condor schedulers only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
@@ -327,7 +327,7 @@ if ~job.xgridsearch,
 	locdisp(displaymode,['    --> Starting run with command ',remotecmd])
 end
 %
-[res,txt] = matremotecmd(remote,remotecmd);
+[res,txt] = matremotecmd(remote,job,remotecmd);
 %
 if res ~= 0,
     %
