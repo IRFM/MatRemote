@@ -39,6 +39,8 @@ if ~isempty(remote.host),
                 %
                 remotecmd = ['cd ',job.remotedatapath,job.batch_dir,';rm pid_',txt,'.mat'];%remove pid file
                 %
+                txt = ['pid=',txt];%to specify that the PID file has been used for the PID extraction
+                %
                 [txt_url,res_url] = matremoteurl(remote,'',remotecmd,'',debugmode);
                 %
                 ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
@@ -46,10 +48,9 @@ if ~isempty(remote.host),
                 %
                 if isempty(error_txt),
                     res = 0;%force standard unix error.
-                    txt = strtrim(txt_url(1:ie-1));
                 else
                     res = 1;%force standard unix error.
-                    txt = error_txt;
+                    txt = [txt,' + ',error_txt];
                     return
                 end                      
                 %
@@ -86,6 +87,8 @@ if ~isempty(remote.host),
                 %
                 remotecmd = ['cd ',job.batch_dir,';rm pid_',txt,'.mat'];%remove pid file
                 %
+                txt = ['pid=',txt];%to specify that the PID file has been used for the PID extraction
+                %
                 unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
                 %
             else
@@ -106,6 +109,7 @@ else
         pidfile = ls([job.remotedatapath,job.batch_dir,'pid_*']);
         %
         txt = pidfile(length([job.remotedatapath,job.batch_dir])+5:end-5);
+        txt = ['pid=',txt];%to specify that the PID file has been used for the PID extraction
         %
         unix(['rm ',pidfile]);
         %
