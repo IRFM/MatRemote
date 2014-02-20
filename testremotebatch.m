@@ -107,6 +107,7 @@ if isnumeric(sinputs),% start new test
         %
         remote = remoteprofiles(irem);
         %remote.debugmode = 1;
+        %remote.disp_cmd = 1;
         remote.rempause = 1/60;% in minutes
         %
         test_job = matstandardjob_jd;
@@ -270,5 +271,4 @@ for irem = 1:nrem,
     end
 end
 %
-
 
