@@ -256,10 +256,10 @@ if job.directsearch,
         end
     end
     %
-    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,' &'];
+    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script];
     %
     if ~isempty(remote.get_jobid) && ~isempty(remote.get_jobid{2}),
-    	remotecmd = [remotecmd,';'];% direct command
+    	remotecmd = [remotecmd,' &;'];% direct command
     end
     %
 elseif job.pbssearch,
@@ -342,7 +342,7 @@ txt(double(txt) == 10) = [];
 %
 % Read the job id (if accessible)
 %
-if (isempty(remote.bridge_enforce) || ~remote.bridge_enforce) && ~isempty(remote.get_jobid)
+if ~isempty(remote.get_jobid)
     if ~isempty(remote.get_jobid{1}),
         if ~iscell(remote.get_jobid{1}),
             remoteget_jobid = remote.get_jobid(1);% only one test
