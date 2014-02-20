@@ -84,10 +84,10 @@ if check == 0,
         soutput = remotegetbatch(job,displaymode,1);
         %
         if ~isempty(soutput),
-            if ~isstruct(soutput) && isempty(remote.get_jobid)
-                job.id = soutput;
-            elseif ~isstruct(soutput) && strfind(soutput,remote.get_jobid{1}),
-                job.id = soutput(length(remote.get_jobid{1})+1:end);
+            if ~isstruct(soutput) && ~isempty(strfind(soutput,'pid=')),
+                job.id = soutput(5:length(soutput));%PID extraction by file
+            elseif ~isstruct(soutput) && ~isempty(strfind(soutput,remote.get_jobid{1})),
+                job.id = soutput(length(remote.get_jobid{1})+1:end);              
             else
                 break
             end
@@ -141,7 +141,7 @@ if ~isempty(job.id),
     %
 else
     %
-    [res,txt] = matremotepid(remote,job);% get job id
+    [res,txt] = matremotepid(remote,job);%Retrieve job id by file
     %
     if ~res,
         soutput = txt;
