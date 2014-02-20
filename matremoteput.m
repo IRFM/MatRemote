@@ -1,4 +1,4 @@
-function [res,txt] = matremoteput(job,remote,debugmode)
+function [res,txt] = matremoteput(remote,job,debugmode)
 %
 % upload batch dir to the remote computer (through the bridge)
 %
@@ -23,12 +23,10 @@ if ~isempty(remote.host),
         %
         php_post{1} = 'remotehost';%php variable
         php_post{2} = remote.host;
-        php_post{3} = 'remotedatapath';%php variable
-        php_post{4} = job.remotedatapath;
-        php_post{5} = 'batch_dir';%php variable
-        php_post{6} = job.batch_dir;
-        php_post{7} = 'debugmode';%php variable
-        php_post{8} = debugmode;
+        php_post{3} = 'debugmode';%php variable
+        php_post{4} = debugmode;
+        %
+        php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
         %
         [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/scp_putdir.php'],'post',php_post);%transfer data from the bridge batch dir to the remote batch dir
         txt_url = strtrim(txt_url);
