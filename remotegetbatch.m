@@ -192,6 +192,8 @@ elseif job.pbssearch,
         %
     end
     %
+elseif job.sgesearch,
+    error('Scheduler SGE not yet implemented')
 elseif job.condorsearch,
     %
     i_job = strfind(txt,job.id);
@@ -413,7 +415,10 @@ if job.clean >= 1,%clean remote and batch files
             locdisp(displaymode,'    --> Removing batch output files ...')
             [res,err] = matremotecmd(remote,job,rmbatchcmd);
             %
-        end        
+        end
+    elseif job.sgesearch,
+        %%%% TO DO
+        res = 0;
     elseif job.condorsearch,
         %%%% TO DO
         res = 0;
