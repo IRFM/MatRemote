@@ -228,13 +228,14 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         profilestr = cell(1,nrem);
         cmdstr = cell(1,nrem);
+        schedulerstr = cell(1,nrem);
         %
         for irem = 1:nrem,
             if strcmp(remote,'local'),
                 newremoteprofiles(irem).host = '';% local cluster
             end
             %
-            [profilestr{irem},~,cmdstr{irem}] = getremotestr_jd(newremoteprofiles(irem));
+            [profilestr{irem},~,cmdstr{irem},schedulerstr{irem}] = getremotestr_jd(newremoteprofiles(irem));
             %
         end
         %
@@ -243,7 +244,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             disp(' ')
             disp('Please select a scheduler type :');
             for irem = 1:nrem,               
-                disp(['- ',num2str(irem),' : ',cmdstr{irem}]);
+                disp(['- ',num2str(irem),' : ',schedulerstr{irem},' (',cmdstr{irem},')']);
             end
             irem = input_dke_yp('',1,1:nrem);
         end
@@ -366,7 +367,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     end
 end
 %
-function [profilestr,hoststr,cmdstr] = getremotestr_jd(remote)
+function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     %
     % remote profile host string
     %
@@ -379,13 +380,21 @@ function [profilestr,hoststr,cmdstr] = getremotestr_jd(remote)
     %
     % remote profile cmd string
     %
+    schedulerstr = remote.scheduler;
+    if iscell(schedulerstr),
+        schedulerstr = schedulerstr{1};
+    end
+    schedulerstr = schedulerstr(1:min([end,find(schedulerstr == ' ' | schedulerstr == '_',1,'first') - 1]));
+    %
+    % remote profile cmd string
+    %
     cmdstr = remote.cmd;
     if iscell(cmdstr),
         cmdstr = cmdstr{1};
     end
     cmdstr = cmdstr(1:min([end,find(cmdstr == ' ' | cmdstr == '_',1,'first') - 1]));
     %
-    profilestr = [hoststr,' : ',cmdstr];    
+    profilestr = [hoststr,' : ',schedulerstr,' (',cmdstr,')'];    
 end
 %
     
