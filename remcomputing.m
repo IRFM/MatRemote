@@ -110,6 +110,12 @@ try
                     end
                     flag(j_range) = -4;
                     varargout_array{j_range,1}.err = output.err;
+                elseif ~isstruct(output),
+                    if isempty(jobs{j_range}.remote.get_jobid),
+                        jobs{j_range}.id = output;
+                    elseif strfind(output,jobs{j_range}.remote.get_jobid{1}),
+                        jobs{j_range}.id = output(length(jobs{j_range}.remote.get_jobid{1})+1:end);
+                    end
                 else
                     flag(j_range) = scheduler.mode;
                     varargout_array(j_range,:) = output.varargout;
