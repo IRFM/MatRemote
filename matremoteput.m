@@ -21,10 +21,8 @@ if ~isempty(remote.host),
             debugmode = '0';
         end
         %
-        php_post{1} = 'remotehost';%php variable
-        php_post{2} = remote.host;
-        php_post{3} = 'debugmode';%php variable
-        php_post{4} = debugmode;
+        php_post{1} = 'debugmode';%php variable
+        php_post{2} = debugmode;
         %
         php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
         %
