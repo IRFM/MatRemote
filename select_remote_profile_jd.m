@@ -53,8 +53,10 @@ for ischeduler = 1:nschedulers,
     for iprofile = 1:length(profilenames{ischeduler}),
         irem = irem + 1;
         remote_profile(irem) = remote.(schedulernames{ischeduler}).(profilenames{ischeduler}{iprofile});
+        remote_profile(irem).scheduler = schedulernames{ischeduler};
         %
     end
 end
+%
 
 
