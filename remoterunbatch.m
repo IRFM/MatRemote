@@ -80,13 +80,28 @@ end
 %
 remotehost = remote.host;%  hostname (empty for local host)
 %
-job.pbssearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'qsub'));
-job.condorsearch = ~iscell(remote.cmd) && ~isempty(strfind(remote.cmd,'condor'));
-job.xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
-job.directsearch = ~iscell(remote.cmd) && any(strcmp(remote.cmd,{'csh','bash'}));
+job.pbssearch = 0;
+job.sgesearch = 0;
+job.condorsearch = 0;
+job.xgridsearch = 0;
+job.directsearch = 0;
 %
-if job.condorsearch + job.xgridsearch + job.pbssearch + job.directsearch ~= 1,
-    error('scheduler type identification problem')
+if strcmp(remote.scheduler ,'torque') || strcmp(remote.scheduler ,'pbs')
+    job.pbssearch = 1;
+elseif strcmp(remote.scheduler ,'xgrid'),
+    job.xgridsearch = 1;
+elseif strcmp(remote.scheduler ,'condor'),
+    job.condorsearch = 1;
+elseif strcmp(remote.scheduler ,'sge'),
+    job.sgesearch = 1;
+elseif strcmp(remote.scheduler ,'direct'),
+    job.directsearch = 1;
+else
+    error('Scheduler type not recognized');
+end
+%
+if job.condorsearch + job.xgridsearch + job.sgesearch +job.pbssearch + job.directsearch ~= 1,
+    error('Scheduler type identification problem')
 end
 %
 % local data location
@@ -304,6 +319,8 @@ elseif job.pbssearch,
     %
     remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
     %
+elseif job.sgesearch,
+    error('Scheduler SGE not yet implemented')
 elseif job.condorsearch,
     %
     % scheduler environment variables
