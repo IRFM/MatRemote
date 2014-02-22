@@ -1,17 +1,17 @@
 function [php_post] = phppostremotejob(remote,job,php_post)
 %
-post_job{1} = {'remotedatapath'};
-post_job{2} = {'batch_dir'};
-post_job{3} = {'timeid'};
-post_job{4} = {'id'};
-post_job{5} = {'pbssearch'};
-post_job{6} = {'condorsearch'};
-post_job{7} = {'xgridsearch'};
-post_job{8} = {'directsearch'};
-post_job{9} = {'sgesearch'};
+post_job{1} = {'batch_dir'};
+post_job{2} = {'timeid'};
+post_job{3} = {'id'};
+post_job{4} = {'pbssearch'};
+post_job{5} = {'condorsearch'};
+post_job{6} = {'xgridsearch'};
+post_job{7} = {'directsearch'};
+post_job{8} = {'sgesearch'};
 %
 post_remote{1} = {'remoteuser'};
 post_remote{2} = {'remotehost','host'};
+post_remote{3} = {'remotedatapath'};
 %
 ip = length(php_post);
 %
