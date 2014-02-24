@@ -18,19 +18,19 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 %
 % direct
 %
-remote.bash.joan = default_remote_profile;
-remote.bash.joan.host = 'crpppc82.epfl.ch';
-remote.bash.joan.hostname = 'crpppc82';
-remote.bash.joan.nproc = 8;
-remote.bash.joan.cmd = 'bash';% direct calculation (csh, bash)
-remote.bash.joan.get_jobid = {};%str_before,str_after
-remote.bash.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.bash.joan.matver.mat800.root = '/usr/local/MATLAB/R2012b/bin/';
-remote.bash.joan.matver.mat800.prefdir = '/home/decker/.matlab/R2010a';
-remote.bash.joan.matver.mat801.root = '/usr/local/MATLAB/R2013a/bin/';
-remote.bash.joan.matver.mat801.prefdir = '/home/decker/.matlab/R2013a';
-remote.bash.joan.matver.matdef = remote.bash.joan.matver.mat801;%default matlab on remote machine
-remote.bash.joan.remoteuser = 'decker';
+remote.direct.joan = default_remote_profile;
+remote.direct.joan.host = 'crpppc82.epfl.ch';
+remote.direct.joan.hostname = 'crpppc82';
+remote.direct.joan.nproc = 8;
+remote.direct.joan.cmd = 'bash';% direct calculation (csh, bash)
+remote.direct.joan.get_jobid = {};%str_before,str_after
+remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.joan.matver.mat800.root = '/usr/local/MATLAB/R2012b/bin/';
+remote.direct.joan.matver.mat800.prefdir = '/home/decker/.matlab/R2012b';
+remote.direct.joan.matver.mat801.root = '/usr/local/MATLAB/R2013a/bin/';
+remote.direct.joan.matver.mat801.prefdir = '/home/decker/.matlab/R2013a';
+remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat801;%default matlab on remote machine
+remote.direct.joan.remoteuser = 'decker';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
