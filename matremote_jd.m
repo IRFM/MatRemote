@@ -19,9 +19,9 @@ if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously l
         %
         job = args_in{1}.job;
         %
-        if ~isempty(soutput) && isempty(job.remote.get_jobid),
-            job.id = soutput;
-        elseif ~isempty(soutput) && strfind(soutput,job.remote.get_jobid{1}),
+        if ~isempty(soutput) && ~isempty(strfind(soutput,'pid=')),
+            job.id = soutput(5:length(soutput));%PID extraction by file
+        elseif ~isempty(soutput) && ~isempty(strfind(soutput,remote.get_jobid{1})),
             job.id = soutput(length(job.remote.get_jobid{1})+1:end);
         end
         %
