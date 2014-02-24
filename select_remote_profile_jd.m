@@ -6,7 +6,7 @@ function remote_profile = select_remote_profile_jd(remote,default,schedulername,
 %
 % select scheduler name(s)
 %
-if strcmp(schedulername,'all'),
+if nargin >= 3 && strcmp(schedulername,'all'),
     remote_profile = remote;
     return
 end
