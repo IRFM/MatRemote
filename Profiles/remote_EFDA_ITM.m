@@ -9,7 +9,7 @@ function remote_profile = remote_EFDA_ITM(varargin)
 %   OUTPUTS : 
 %       - remote_profile : name of selected remote profile(s)
 %
-default.scheduler = 'sun';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.scheduler = 'sge';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'yvesp';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
