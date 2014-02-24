@@ -114,7 +114,7 @@ if job.directsearch,% PID as job.id
     %
     remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
-elseif job.pbssearch,
+elseif job.pbssearch || job.slurmsearch
     %
     remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
@@ -188,6 +188,15 @@ elseif job.pbssearch,
         locdisp(displaymode,['Run check failed : ',txt]);
         soutput.err = txt;
         %
+        return
+        %
+    end
+    %
+elseif job.slurmsearch,
+    %
+    if res == 0 && ~isempty(strfind(txt,remoteset_jobid{3})),% run still running
+        %
+        locdisp(displaymode,['Job # ',job.id,' still running...']);
         return
         %
     end
@@ -416,6 +425,23 @@ if job.clean >= 1,%clean remote and batch files
             [res,err] = matremotecmd(remote,job,rmbatchcmd);
             %
         end
+        %
+    elseif job.slurmsearch,
+        %
+        rmbatchcmd = ['rm -f slurm-',job.id,'.out'];
+        %
+        if ~isempty(remotehost)
+            %
+            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
+            %
+        else
+            %
+            locdisp(displaymode,'    --> Removing batch output files ...')
+            [res,err] = matremotecmd(remote,job,rmbatchcmd);
+            %
+        end
+        %
     elseif job.sgesearch,
         %%%% TO DO
         res = 0;
@@ -446,7 +472,7 @@ if job.clean >= 1,%clean remote and batch files
     %
     if res ~= 0,
         locdisp(displaymode,['Warning, batch files delete failed : ',err])
-    elseif job.pbssearch || job.xgridsearch,
+    elseif job.pbssearch || job.slurmsearch || job.xgridsearch,
         locdisp(displaymode,' ... done');          
     end
     %

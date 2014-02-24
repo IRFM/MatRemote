@@ -82,12 +82,15 @@ remotehost = remote.host;%  hostname (empty for local host)
 %
 job.pbssearch = 0;
 job.sgesearch = 0;
+job.slurmsearch = 0;
 job.condorsearch = 0;
 job.xgridsearch = 0;
 job.directsearch = 0;
 %
 if strcmp(remote.scheduler ,'torque') || strcmp(remote.scheduler ,'pbs')
     job.pbssearch = 1;
+elseif strcmp(remote.scheduler ,'slurm'),
+    job.slurmsearch = 1;
 elseif strcmp(remote.scheduler ,'xgrid'),
     job.xgridsearch = 1;
 elseif strcmp(remote.scheduler ,'condor'),
@@ -98,10 +101,6 @@ elseif strcmp(remote.scheduler ,'direct'),
     job.directsearch = 1;
 else
     error('Scheduler type not recognized');
-end
-%
-if job.condorsearch + job.xgridsearch + job.sgesearch +job.pbssearch + job.directsearch ~= 1,
-    error('Scheduler type identification problem')
 end
 %
 % local data location
@@ -239,7 +238,7 @@ if ~isempty(job.save_id),
     %
 end
 %
-pause(5)
+%pause(5)
 %
 % start job
 %
@@ -318,6 +317,45 @@ elseif job.pbssearch,
     end
     %
     remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+    %
+elseif job.slurmsearch,
+    %
+    % command options
+    %
+    comopts = '';
+    %
+    if isfield(job,'nodes') && ~isempty(job.nodes) && ~isnan(job.nodes),
+        comopts = [comopts,' --nodes=',num2str(job.nodes)];
+        %
+        if isfield(job,'ppn') && ~isempty(job.ppn) && ~isnan(job.ppn),
+            comopts = [comopts,' --mincpus=',num2str(job.ppn)];
+        end
+        %
+    end
+    %
+    if isfield(job,'ncpus') && ~isempty(job.ncpus) && ~isnan(job.ncpus),
+        comopts = [comopts,' --cpus-per-task=',num2str(job.ncpus)];
+    end
+    %
+    if isfield(job,'memory') && ~isempty(job.memory) && ~isnan(job.memory),
+        comopts = [comopts,' --mem=',num2str(job.memory)];
+    end
+    %
+    if isfield(job,'walltime') && ~isempty(job.walltime) && ~isnan(job.walltime),
+        comopts = [comopts,' --time=',num2str(job.walltime),':00:00'];
+    end
+    %
+    % job environment variables
+    %
+    jobenvstr = '';
+    if isfield(job,'env') && isstruct(job.env),
+        envnames = fieldnames(job.env);
+        for ienv = 1:length(envnames),
+            jobenvstr = [jobenvstr,',',envnames{ienv},'=',job.env.(envnames{ienv})];    
+        end
+    end
+    %
+    remotecmd = [remote.cmd,comopts,' --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
     %
 elseif job.sgesearch,
     error('Scheduler SGE not yet implemented')
