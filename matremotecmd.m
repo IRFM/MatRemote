@@ -1,14 +1,16 @@
-function [res,txt] = matremotecmd(remote,job,remotecmd,debugmode)
+function [res,txt] = matremotecmd(remote,job,remotecmd)
 %
-if nargin < 4, 
-    debugmode = '0';
+if isfield(remote,'disp_cmd') && remote.disp_cmd,
+    disp('------------------------------------------------------------------------------------')
+    disp(['-----> URL cmd: ',remotecmd])
+    disp('------------------------------------------------------------------------------------')
 end
 %
 if ~isempty(remote.host),
     %
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
-        [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'',debugmode);
+        [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
         error_txt = txt_url(ie+15:end);
