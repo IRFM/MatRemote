@@ -261,20 +261,16 @@ if job.directsearch,
     remenvstr = '';
     %
     for ienv = 1:length(envnames),
-        if strcmp(remote.cmd,'csh'),
+        if strcmp(remote.cmd{1},'csh'),
             remenvstr = ['setenv ',envnames{ienv},' ',remenv.(envnames{ienv}),'; ',remenvstr];
-        elseif strcmp(remote.cmd,'bash'),
+        elseif strcmp(remote.cmd{1},'bash'),
             remenvstr = ['export ',envnames{ienv},'=',remenv.(envnames{ienv}),'; ',remenvstr];
         else
-            error(['case with cmd = ',remote.cmd,' not yet implemented']);
+            error(['case with cmd = ',remote.cmd{1},' not yet implemented']);
         end
     end
     %
-    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script];
-    %
-    if ~isempty(remote.get_jobid) && ~isempty(remote.get_jobid{2}),
-    	remotecmd = [remotecmd,' &;'];% direct command
-    end
+    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,remote.cmd{2}];
     %
 elseif job.pbssearch,
     %

@@ -45,9 +45,9 @@ remote.direct.joan = default_remote_profile;
 remote.direct.joan.host = 'andromede1.partenaires.cea.fr';
 remote.direct.joan.hostname = 'andromede1';
 remote.direct.joan.nproc = 12;
-remote.direct.joan.cmd = 'csh';% direct calculation (csh, bash)
+remote.direct.joan.cmd = {'csh',' &;'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
-remote.direct.joan.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.direct.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
 remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';

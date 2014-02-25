@@ -9,7 +9,7 @@ function remote_profile = remote_CRPP_PC82(varargin)
 %   OUTPUTS : 
 %       - remote_profile : name of selected remote profile(s)
 %
-default.scheduler = 'bash';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'joan';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
@@ -22,7 +22,7 @@ remote.direct.joan = default_remote_profile;
 remote.direct.joan.host = 'crpppc82.epfl.ch';
 remote.direct.joan.hostname = 'crpppc82';
 remote.direct.joan.nproc = 8;
-remote.direct.joan.cmd = 'bash';% direct calculation (csh, bash)
+remote.direct.joan.cmd = {'bash',' &'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {};%str_before,str_after
 remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.joan.matver.mat800.root = '/usr/local/MATLAB/R2012b/bin/';

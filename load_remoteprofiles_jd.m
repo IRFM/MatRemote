@@ -378,7 +378,7 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
         hoststr = hoststr{1};
     end
     %
-    % remote profile cmd string
+    % scheduler profile string
     %
     schedulerstr = remote.scheduler;
     if iscell(schedulerstr),

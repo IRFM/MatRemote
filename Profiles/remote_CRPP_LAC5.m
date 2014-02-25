@@ -9,7 +9,7 @@ function remote_profile = remote_CRPP_LAC5(varargin)
 %   OUTPUTS : 
 %       - remote_profile : name of selected remote profile(s)
 %
-default.scheduler = 'bash';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'decker';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
@@ -22,7 +22,7 @@ remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'lac5.epfl.ch';
 remote.direct.decker.hostname = 'crpppc401';
 remote.direct.decker.nproc = 24;
-remote.direct.decker.cmd = 'bash';% direct calculation (csh, bash)
+remote.direct.decker.cmd = {'bash',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.matver.mat710.root = '/usr/local/matlab710/bin/';
