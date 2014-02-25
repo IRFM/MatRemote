@@ -382,7 +382,7 @@ if ~job.xgridsearch,
 	locdisp(displaymode,['    --> Starting run with command ',remotecmd])
 end
 %
-if (length(remote.cmd) == 4) && ~isempty(remote.cmd(4)),
+if iscell(remote.cmd) && (length(remote.cmd) == 4) && ~isempty(remote.cmd(4)),
     [res,txt] = matremotecmd(remote,job,remotecmd,remote.cmd{4});
 else
     [res,txt] = matremotecmd(remote,job,remotecmd);
