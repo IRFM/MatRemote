@@ -1,10 +1,6 @@
-function [res,txt] = matremoteput(remote,job,debugmode)
+function [res,txt] = matremoteput(remote,job)
 %
 % upload batch dir to the remote computer (through the bridge)
-%
-if nargin < 3, 
-    debugmode = '0';
-end
 %
 if ~isempty(remote.host),       
     %
@@ -14,17 +10,7 @@ if ~isempty(remote.host),
         mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
         close(f);
         %
-        if ~ischar(debugmode) && abs(debugmode) >= 1, 
-            debugmode = '1';
-        end
-        if ~ischar(debugmode) && debugmode == 0, 
-            debugmode = '0';
-        end
-        %
-        php_post{1} = 'debugmode';%php variable
-        php_post{2} = debugmode;
-        %
-        php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
+        php_post = phppostremotejob(remote,job);%add extra data for php filtering
         %
         [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/scp_putdir.php'],'post',php_post);%transfer data from the bridge batch dir to the remote batch dir
         txt_url = strtrim(txt_url);
@@ -41,7 +27,7 @@ if ~isempty(remote.host),
         end
         %
         remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];
-        [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'',debugmode);
+        [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
         error_txt = txt_url(ie+15:end);

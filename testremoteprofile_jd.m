@@ -34,7 +34,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
             disp(['Testing bridge connection to ',remote.host,' via  ',remote.bridge.url.host,' ... ']);
         end
         %
-        [txt_url,res_url] = matremoteurl(remote,'','ls','','0');
+        [txt_url,res_url] = matremoteurl(remote,'','ls','');
         %
         if res_url,
             res = 0;
