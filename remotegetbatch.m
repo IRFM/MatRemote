@@ -160,20 +160,9 @@ txt(double(txt) == 10) = [];
 %
 if job.directsearch,
     %
-    if isempty(remote.get_jobid),%MAC OS X case
-        %
-        if any(strfind(txt,remoteset_jobid{3})),
-            locdisp(displaymode,['Job # ',job.id,' still running...']);
-            return
-        end
-        %
-    else
-        if res == 0 || ~strcmp(txt,remoteset_jobid{3}),% job still running
-            %
-            locdisp(displaymode,['Job # ',job.id,' still running...']);
-            return
-            %
-        end
+    if any(strfind(txt,remoteset_jobid{3})),
+        locdisp(displaymode,['Job # ',job.id,' still running...']);
+        return
     end
     %
 elseif job.pbssearch,
