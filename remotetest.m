@@ -4,5 +4,5 @@ testvar = getenv('TESTVAR');
 %
 dataout.strout = [datain.strin,testvar,' - running under matlab version : ',version];
 %
-pause(10)
+pause(20)
 %
