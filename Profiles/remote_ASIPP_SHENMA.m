@@ -56,7 +56,7 @@ remote.torque.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.torque.yves.bridge.ftp.username = 'matremote';
 remote.torque.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.torque.yves.bridge_enforce = true;
+remote.torque.yves.bridge_enforce = false;
 %
 % direct
 %
@@ -64,7 +64,7 @@ remote.direct.yves = default_remote_profile;
 remote.direct.yves.host = 'shenma.ipp.ac.cn';
 remote.direct.yves.hostname = 'shenma';
 remote.direct.yves.nproc = 20;
-remote.direct.yves.cmd = {'csh',' &'};% direct calculation (csh, bash)
+remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.matver.mat800.root = '/pkg/MATLAB/R2012b/bin/';

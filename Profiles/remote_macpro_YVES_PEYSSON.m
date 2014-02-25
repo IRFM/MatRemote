@@ -22,12 +22,12 @@ remote.direct.yves = default_remote_profile;
 remote.direct.yves.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.hostname = 'macproyves';
 remote.direct.yves.nproc = 6;
-remote.direct.yves.cmd = {'bash',''};% direct calculation (csh, bash)
+remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.matver.mat800.root = '/Applications/MATLAB_R2012b.app/bin/';
 remote.direct.yves.matver.mat800.prefdir = '/Users/yvespeysson/.matlab/R2012b';
-remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';
+remote.direct.yves.matver.mat801.root = '/Applications/MATLAB_R2013a.app/bin/';1
 remote.direct.yves.matver.mat801.prefdir = '/Users/yvespeysson/.matlab/R2013a';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yvespeysson';
@@ -36,7 +36,7 @@ remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.username = 'matremote';
 remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.direct.yves.bridge_enforce = true;
+remote.direct.yves.bridge_enforce = false;
 %
 % condor
 %
@@ -61,7 +61,7 @@ remote.condor.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.condor.yves.bridge.ftp.username = 'matremote';
 remote.condor.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.condor.yves.bridge_enforce = true;
+remote.condor.yves.bridge_enforce = false;
 %
 % xgrid
 %
@@ -120,7 +120,7 @@ remote.xgrid.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.xgrid.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.xgrid.yves.bridge.ftp.username = 'matremote';
 remote.xgrid.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.xgrid.yves.bridge_enforce = true;
+remote.xgrid.yves.bridge_enforce = false;
 %
 % JOAN DECKER
 %
