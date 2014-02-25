@@ -1,14 +1,8 @@
-function [txt_url,res_url] = matremoteurl(remote,job,remotecmd,filename,debugmode)
-%
-if ~ischar(debugmode) && abs(debugmode) >= 1, debugmode = '1';end
-if ~ischar(debugmode) && debugmode == 0, debugmode = '0';end
-%
-php_post{1} = 'debugmode';%php variable
-php_post{2} = debugmode;
+function [txt_url,res_url] = matremoteurl(remote,job,remotecmd,filename)
 %
 if isempty(remotecmd) && ~isempty(filename)
-    php_post{3} = 'filename';%php variable
-    php_post{4} = filename;
+    php_post{1} = 'filename';%php variable
+    php_post{2} = filename;
     %
     php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
     %
@@ -16,8 +10,8 @@ if isempty(remotecmd) && ~isempty(filename)
 end
 %
 if ~isempty(remotecmd) && isempty(filename)
-    php_post{3} = 'remotecmd';%php variable
-    php_post{4} = remotecmd;
+    php_post{1} = 'remotecmd';%php variable
+    php_post{2} = remotecmd;
     %
     php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
     %
@@ -27,8 +21,6 @@ end
 %
 txt_url = strtrim(txt_url);
 %
-if isfield(remote,'disp_cmd') && remote.disp_cmd,
-    disp('------------------------------------------------------------------------------------')
-    disp(['-----> URL cmd: ',remotecmd])
-    disp('------------------------------------------------------------------------------------')
+if ~isempty(strfind(txt_url,'Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...')),
+    error('Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...');
 end
