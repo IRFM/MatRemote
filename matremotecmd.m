@@ -1,4 +1,4 @@
-function [res,txt] = matremotecmd(remote,job,remotecmd)
+function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
 %
 if isfield(remote,'disp_cmd') && remote.disp_cmd,
     disp('------------------------------------------------------------------------------------')
@@ -39,7 +39,11 @@ if ~isempty(remote.host),
         %
     else
         %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
+        if (nargin == 4),
+            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''',ssh_opts]);%execute the remote command by ssh 
+        else
+            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
+        end
         %
     end
 else

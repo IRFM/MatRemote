@@ -200,7 +200,7 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.xgridsearch || job.condorsearch,
+if job.xgridsearch || job.condorsearch|| job.directsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end  
 %
@@ -223,11 +223,11 @@ if ~isempty(job.save_id),
         return
         %
     else
-        if job.xgridsearch || job.condorsearch,
+        if job.xgridsearch || job.condorsearch || job.directsearch,
             [res_chmod,txt_chmod] = matremotecmd(remote,job,remotecmd_chmod);
             %
             if res_chmod ~= 0,
-                locdisp(displaymode,['Warning: for xgrid and condor schedulers only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
+                locdisp(displaymode,['Warning: for xgrid and condor schedulers and direct mode only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
             end
         end
         %
@@ -270,7 +270,7 @@ if job.directsearch,
         end
     end
     %
-    remotecmd = [remenvstr,job.remotedatapath,job.batch_dir,job.script,remote.cmd{2}];
+    remotecmd = [remenvstr,remote.cmd{2},job.remotedatapath,job.batch_dir,job.script,remote.cmd{3}];
     %
 elseif job.pbssearch,
     %
@@ -312,7 +312,11 @@ elseif job.pbssearch,
         end
     end
     %
-    remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+    if iscell(remote.cmd),
+        remotecmd = [remote.cmd{1},comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+    else
+        remotecmd = [remote.cmd,comopts,' -v jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+    end
     %
 elseif job.slurmsearch,
     %
@@ -378,7 +382,11 @@ if ~job.xgridsearch,
 	locdisp(displaymode,['    --> Starting run with command ',remotecmd])
 end
 %
-[res,txt] = matremotecmd(remote,job,remotecmd);
+if (length(remote.cmd) == 4) && ~isempty(remote.cmd(4)),
+    [res,txt] = matremotecmd(remote,job,remotecmd,remote.cmd{4});
+else
+    [res,txt] = matremotecmd(remote,job,remotecmd);
+end
 %
 if res ~= 0,
     %
@@ -393,74 +401,82 @@ txt(double(txt) == 10) = [];
 %
 % Read the job id (if accessible)
 %
-if ~isempty(remote.get_jobid)
-    if ~isempty(remote.get_jobid{1}),
-        if ~iscell(remote.get_jobid{1}),
-            remoteget_jobid = remote.get_jobid(1);% only one test
-        else
-            remoteget_jobid = remote.get_jobid{1};% more than one tests
-        end
-        %
-        for itests = 1:length(remoteget_jobid),% tests in order
-            %
-            if isempty(remoteget_jobid{itests}),% empty case is a valid case
-                istr0 = 1;
-                break
-            end
-            %
-            strl1 = length(remoteget_jobid{itests});
-            istr0 = strl1 + min(strfind(txt,remoteget_jobid{itests}));
-            %
-            if ~isempty(istr0),
-                break
-            end
-            %
-        end
-        if isempty(istr0),
-            error('Job ID could not be retrieved')
-        end
-    else
-        istr0 = 1;
-    end
-    %
-    if ~isempty(remote.get_jobid{2}),
-        if ~iscell(remote.get_jobid{2}),
-            remoteget_jobid = remote.get_jobid(2);% only one test
-        else
-            remoteget_jobid = remote.get_jobid{2};% more than one tests
-        end
-        %
-        for itests = 1:length(remoteget_jobid),% tests in order
-            %
-            if isempty(remoteget_jobid{itests}),% empty case is a valid case
-                istr1 = length(txt);
-                break
-            end
-            %
-            istr1 = min(strfind(txt(istr0:end),remoteget_jobid{itests})) + istr0 - 2;
-            %
-            if ~isempty(istr1),
-                break
-            end
-            %
-        end
-        if isempty(istr1),
-            error('Job ID could not be retrieved')
-        end
-    else
-        istr1 = length(txt);
-    end
-    %
-    job.id = txt(istr0:istr1);
-	%
-	locdisp(displaymode,[' ... started with job id ',job.id]);
-    %
-else
-    %
+if ~res && isempty(txt),
     job.id = '';
 	%
 	locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
     %
+elseif ~res && ~isempty(txt),
+    %
+    if ~isempty(remote.get_jobid)
+        if ~isempty(remote.get_jobid{1}),
+            if ~iscell(remote.get_jobid{1}),
+                remoteget_jobid = remote.get_jobid(1);% only one test
+            else
+                remoteget_jobid = remote.get_jobid{1};% more than one tests
+            end
+            %
+            for itests = 1:length(remoteget_jobid),% tests in order
+                %
+                if isempty(remoteget_jobid{itests}),% empty case is a valid case
+                    istr0 = 1;
+                    break
+                end
+                %
+                strl1 = length(remoteget_jobid{itests});
+                istr0 = strl1 + min(strfind(txt,remoteget_jobid{itests}));
+                %
+                if ~isempty(istr0),
+                    break
+                end
+                %
+            end
+            if isempty(istr0),
+                error('Job ID could not be retrieved')
+            end
+        else
+            istr0 = 1;
+        end
+        %
+        if ~isempty(remote.get_jobid{2}),
+            if ~iscell(remote.get_jobid{2}),
+                remoteget_jobid = remote.get_jobid(2);% only one test
+            else
+                remoteget_jobid = remote.get_jobid{2};% more than one tests
+            end
+            %
+            for itests = 1:length(remoteget_jobid),% tests in order
+                %
+                if isempty(remoteget_jobid{itests}),% empty case is a valid case
+                    istr1 = length(txt);
+                    break
+                end
+                %
+                istr1 = min(strfind(txt(istr0:end),remoteget_jobid{itests})) + istr0 - 2;
+                %
+                if ~isempty(istr1),
+                    break
+                end
+                %
+            end
+            if isempty(istr1),
+                error('Job ID could not be retrieved')
+            end
+        else
+            istr1 = length(txt);
+        end
+        %
+        job.id = txt(istr0:istr1);
+        %
+        locdisp(displaymode,[' ... started with job id ',job.id]);
+        %
+    else
+        %
+        job.id = '';
+        %
+        locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
+        %
+    end
 end
 %
 job.remote = remote;
