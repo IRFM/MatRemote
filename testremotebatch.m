@@ -123,44 +123,49 @@ if isnumeric(sinputs),% start new test
         %
         displaymode = debugmode;% display step by step information in debugmode
         %
-        if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch
-            %
-            test_job.env.remotematfnc = 'remotetest'; % matlab function to be called remotely by remotematrun (case of direct call)
-            %
-            test_job = remoterunbatch(remote,test_job,sinput,displaymode);
-            %
-            if isfield(test_job,'err'),
-                soutputs{irem}.err = test_job.err;
-            else
-                test_job.remtimout = 5;% in minutes
+        try
+            if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch
                 %
-                soutputs{irem} = remotegetbatch(test_job,displaymode,0);
+                test_job.env.remotematfnc = 'remotetest'; % matlab function to be called remotely by remotematrun (case of direct call)
+                %
+                test_job = remoterunbatch(remote,test_job,sinput,displaymode);
+                %
+                if isfield(test_job,'err'),
+                    soutputs{irem}.err = test_job.err;
+                else
+                    test_job.remtimout = 5;% in minutes
+                    %
+                    soutputs{irem} = remotegetbatch(test_job,displaymode,0);
+                end
+                %
+            else% use matremote_jd
+                %
+                test_job.funcopy = true;% to copy function remotetest to remote folder
+                %
+                if sinputs == 1,% use matremote_jd and wait for result
+                    %
+                    remote.remtimout = 5;% in minutes
+                    %
+                else% use matremote_jd and return job for later check
+                    %
+                    remote.remtimout = 0;% in minutes
+                    %
+                end
+                %
+                test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
+                %
+                [err,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
+                %
+                if ~isempty(err),
+                    soutputs{irem}.err = err;
+                else
+                    soutputs{irem} = soutput;
+                end
+                %
             end
+        catch job_err
             %
-        else% use matremote_jd
-            %
-            test_job.funcopy = true;% to copy function remotetest to remote folder
-            %
-            if sinputs == 1,% use matremote_jd and wait for result
-                %
-                remote.remtimout = 5;% in minutes
-                %
-            else% use matremote_jd and return job for later check
-                %
-                remote.remtimout = 0;% in minutes
-                %
-            end
-            %
-            test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
-            %
-            [err,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
-            %
-            if ~isempty(err),
-                soutputs{irem}.err = err;
-            else
-                soutputs{irem} = soutput;
-            end
-            %
+            soutputs{irem}.err = job_err.message;
         end
         %
     end
