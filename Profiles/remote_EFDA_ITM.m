@@ -10,7 +10,7 @@ function remote_profile = remote_EFDA_ITM(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'sge';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'yvesp';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -50,7 +50,7 @@ remote.sge.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.sge.yves.bridge.ftp.username = 'matremote';
 remote.sge.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.sge.yves.bridge_enforce = true;
+remote.sge.yves.bridge_enforce = false;
 
 % direct
 %
@@ -70,7 +70,7 @@ remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.username = 'matremote';
 remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.direct.yves.bridge_enforce = true;
+remote.direct.yves.bridge_enforce = false;
 %
 % JOAN DECKER
 %
