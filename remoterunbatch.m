@@ -97,11 +97,17 @@ elseif strcmp(remote.scheduler ,'condor'),
     job.condorsearch = 1;
 elseif strcmp(remote.scheduler ,'sge'),
     job.sgesearch = 1;
-    job.params = remote.sge;
+    job.params = remote.sge.params;
 elseif strcmp(remote.scheduler ,'direct'),
     job.directsearch = 1;
 else
     error('Scheduler type not recognized');
+end
+%
+% user mail
+%
+if isfield(remote,'usermail') && ~isempty(remote.usermail),
+    job.usermail = remote.usermail;
 end
 %
 % local data location
