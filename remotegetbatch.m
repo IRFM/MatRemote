@@ -389,9 +389,17 @@ if job.clean >= 1,%clean remote and batch files
         end
     end
     %
-    % batch files
+    % batch or temp files
     %
-    if job.pbssearch || job.sgesearch,
+    if job.directsearch,
+    %
+    rmbatchcmd = ['rm -f nohup.out'];
+    %
+    locdisp(displaymode,'    --> Removing nohup.out output file ...')
+    %
+    [res,err] = matremotecmd(remote,job,rmbatchcmd);
+    %
+    elseif job.pbssearch || job.sgesearch,
         %
         batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
         %
