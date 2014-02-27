@@ -6,9 +6,9 @@ if isfield(remote,'disp_cmd') && remote.disp_cmd,
     disp('------------------------------------------------------------------------------------')
 end
 %
-if isfield(remote,'bridge_enforce') && remote.bridge_enforce,
+if isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && remote.bridge_enforce,
     flag_bridge_enforce = 1;
-elseif isfield(remote,'bridge_enforce') && ~remote.bridge_enforce,
+elseif isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && ~remote.bridge_enforce,
     flag_bridge_enforce = 0;
 else
     flag_bridge_enforce = 1;
