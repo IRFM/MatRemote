@@ -21,7 +21,7 @@ default.profile = 'yvesp';% default user profile if 'remoteuser' is not an exist
 remote.sge.yves = default_remote_profile;
 remote.sge.yves.host = 'g01.efda-itm.eu';
 remote.sge.yves.hostname = 'itm.rzg.mpg.de';
-remote.sge.yves.mailuser = 'ypeysson@free.fr';
+remote.sge.yves.usermail = 'ypeysson@free.fr';
 remote.sge.yves.nproc = 16;% limited to two jobs per PBS node to avoid cluster saturation
 remote.sge.yves.wait = 0;% invalid option
 remote.sge.yves.nodes = NaN;% invalid option
@@ -29,7 +29,15 @@ remote.sge.yves.ncpus = NaN;% invalid option
 remote.sge.yves.memory = NaN;% invalid option
 remote.sge.yves.walltime = NaN;% invalid option
 remote.sge.yves.cmd = 'qsub';%
-remote.sge.yves.sge = {'#!/bin/bash','#$ -l h_rt=168:00:00 -l h_vmem=1250M','#$ -cwd',['#$ -M ',remote.sge.yves.mailuser],'#$ -m e','#$ -notify','#$ -N','# load the ITM software environment','#module load itmenv','# load specific modules','# select specific UAL','#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
+remote.sge.yves.sge.params(1) = {'#!/bin/bash'};
+remote.sge.yves.sge.params(2) = {'#$ -l h_rt=168:00:00 -l h_vmem=1250M'};
+remote.sge.yves.sge.params(3) = {'#$ -cwd'};
+remote.sge.yves.sge.params(4) = {'#$ -M'};
+remote.sge.yves.sge.params(5) = {'#$ -m e'};
+remote.sge.yves.sge.params(6) = {'#$ -notify'};
+remote.sge.yves.sge.params(7) = {'#$ -N'};
+remote.sge.yves.sge.params(8) = {'#module load itmenv'};
+remote.sge.yves.sge.params(9) = {'#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
 remote.sge.yves.remotedatapath = '/u/yvesp/tmp/';
 remote.sge.yves.get_jobid = {'Your job ',' '};%str_before,str_after
 remote.sge.yves.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str_before,str_after,str_check
@@ -42,7 +50,7 @@ remote.sge.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.sge.yves.bridge.ftp.username = 'matremote';
 remote.sge.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.sge.yves.bridge_enforce = false;
+remote.sge.yves.bridge_enforce = true;
 
 % direct
 %
