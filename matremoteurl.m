@@ -21,6 +21,6 @@ end
 %
 txt_url = strtrim(txt_url);
 %
-if ~isempty(strfind(txt_url,'Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...')),
+if ~isempty(strfind(txt_url,'Non standard unix command in MatRemote')),
     error('Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...');
 end
