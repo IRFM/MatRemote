@@ -25,6 +25,12 @@ elseif job.xgridsearch,
     %
     job.xgrid_script = xgrid_batch2xml_yp(job);
     %
+elseif job.sgesearch,
+    %
+    % save sge batch file into job directory 
+    %
+    job.sge_script = sge_batchscript_yp(job);
+    %
 end
 %
 save([job.localdatapath,job.batch_dir,savefile],'-struct','sinput');% save input data into file

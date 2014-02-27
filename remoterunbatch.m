@@ -97,6 +97,7 @@ elseif strcmp(remote.scheduler ,'condor'),
     job.condorsearch = 1;
 elseif strcmp(remote.scheduler ,'sge'),
     job.sgesearch = 1;
+    job.params = remote.sge;
 elseif strcmp(remote.scheduler ,'direct'),
     job.directsearch = 1;
 else
@@ -141,6 +142,24 @@ end
 remote = testremoteprofile_jd(remote,job.bridge_enforce,displaymode);% test connection to remote host
 %
 % create remote data folder if needed - this also tests remote connection
+%
+remotecmd = 'echo $SHELL';% test the SHELL type
+%
+[res,txt] = matremotecmd(remote,job,remotecmd);
+%
+if res ~= 0,
+    locdisp(displaymode,['Unable to get the shell type on the remote computer : ',txt]);
+    job.shell = '';
+else
+    if ~isempty(strfind(txt,'bash')),
+        job.shell = 'bash';
+    elseif ~isempty(strfind(txt,'csh')),
+        job.shell = 'csh';
+    else
+        job.shell = '';
+        warning('Unkown shell on the remote computer');
+    end
+end
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
 %
@@ -358,7 +377,9 @@ elseif job.slurmsearch,
     remotecmd = [remote.cmd,comopts,' --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
     %
 elseif job.sgesearch,
-    error('Scheduler SGE not yet implemented')
+    %
+    remotecmd = [remote.cmd,' ',job.remotedatapath,job.save_id,job.sge_script];
+    %
 elseif job.condorsearch,
     %
     % scheduler environment variables

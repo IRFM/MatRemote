@@ -31,8 +31,9 @@ post_job{25} = {'remotematfnc','env','remotematfnc'};
 post_job{26} = {'debugmode'};
 post_job{27} = {'condorscript','condor_script'};
 post_job{28} = {'xgridscript','xgrid_script'};
-post_job{29} = {'hostname'};
-post_job{30} = {'remotedatapath'};
+post_job{29} = {'sgescript','sge_script'};
+post_job{30} = {'hostname'};
+post_job{31} = {'remotedatapath'};
 %
 post_remote{1} = {'remoteuser'};
 post_remote{2} = {'remotehost','host'};
