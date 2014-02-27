@@ -114,7 +114,7 @@ if job.directsearch,% PID as job.id
     %
     remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
-elseif job.pbssearch || job.slurmsearch
+elseif job.pbssearch || job.slurmsearch || job.sgesearch
     %
     remotecmd = [remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
@@ -165,7 +165,7 @@ if job.directsearch,
         return
     end
     %
-elseif job.pbssearch,
+elseif job.pbssearch  || job.sgesearch,
     %
     if res == 0,% job still running
         %
@@ -190,8 +190,6 @@ elseif job.slurmsearch,
         %
     end
     %
-elseif job.sgesearch,
-    error('Scheduler SGE not yet implemented')
 elseif job.condorsearch,
     %
     i_job = strfind(txt,job.id);
@@ -306,7 +304,7 @@ if ~isempty(job.load_id),
     if it == itmax,
         error(['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'])
     end
-    
+    %
     [res,err] = matremoteget(remote,job);
     %
     if res ~= 0,
@@ -393,7 +391,7 @@ if job.clean >= 1,%clean remote and batch files
     %
     % batch files
     %
-    if job.pbssearch,
+    if job.pbssearch || job.sgesearch,
         %
         batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
         %
@@ -431,9 +429,6 @@ if job.clean >= 1,%clean remote and batch files
             %
         end
         %
-    elseif job.sgesearch,
-        %%%% TO DO
-        res = 0;
     elseif job.condorsearch,
         %%%% TO DO
         res = 0;
