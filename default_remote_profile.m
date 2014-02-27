@@ -13,10 +13,12 @@ remote.matver = [];% list of matlab bin and corresponding prefdir locations. Ex 
 remote.cvs = [];%CVS commands for code update
 remote.password = {};% use if password is necessary (xgrid)
 remote.remoteuser = [];% name on the remote cluster
+remote.mailuser = [];% mail adress of the user on the remote cluster
 remote.bridge = [];% bridge address (url or ssh)
 remote.bridge_enforce = [];% enforce bridge (url or ssh) over ssh key pair
 remote.funcopy = [];% (-1) do not copy any executable, (0) copy all functions except the matlab function to be run remotely (1) also copy function to be run remotely
-remote.condor = [];% condor-specific parameters
+remote.condor = [];% condor specific parameters
+remote.sge = [];% sun grid engine specific parameters
 remote.scheduler = [];%scheduler type (because two identical cmd may correspond to different schedulers)
 %
 % The following parameters are for qsub only. Use NaN if option is forbidden 
