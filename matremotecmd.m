@@ -6,9 +6,17 @@ if isfield(remote,'disp_cmd') && remote.disp_cmd,
     disp('------------------------------------------------------------------------------------')
 end
 %
+if isfield(remote,'bridge_enforce') && remote.bridge_enforce,
+    flag_bridge = 1;
+elseif isfield(remote,'bridge_enforce') && ~remote.bridge_enforce,
+    flag_bridge = 0;
+else
+    flag_bridge = 1;
+end
+%
 if ~isempty(remote.host),
     %
-    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
+    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0 && flag_bridge,
         %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
