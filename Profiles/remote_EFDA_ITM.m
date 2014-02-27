@@ -29,7 +29,7 @@ remote.sge.yves.ncpus = NaN;% invalid option
 remote.sge.yves.memory = NaN;% invalid option
 remote.sge.yves.walltime = NaN;% invalid option
 remote.sge.yves.cmd = 'qsub';%
-remote.sge.yves.sge = {'#!/bin/bash','#$ -l h_rt=168:00:00 -l h_vmem=1250M','#$ -cwd',['#$ -M ',remote.sge.yves.mailuser],'#$ -m e','#$ -notify','#$ -N test','# load the ITM software environment','#module load itmenv','# load specific modules','# select specific UAL','#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
+remote.sge.yves.sge = {'#!/bin/bash','#$ -l h_rt=168:00:00 -l h_vmem=1250M','#$ -cwd',['#$ -M ',remote.sge.yves.mailuser],'#$ -m e','#$ -notify','#$ -N','# load the ITM software environment','#module load itmenv','# load specific modules','# select specific UAL','#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
 remote.sge.yves.remotedatapath = '/u/yvesp/tmp/';
 remote.sge.yves.get_jobid = {'Your job ',' '};%str_before,str_after
 remote.sge.yves.set_jobid = {'qstat -j ','','Following jobs do not exist'};%str_before,str_after,str_check
@@ -42,7 +42,7 @@ remote.sge.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.sge.yves.bridge.ftp.username = 'matremote';
 remote.sge.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.sge.yves.bridge_enforce = true;
+remote.sge.yves.bridge_enforce = false;
 
 % direct
 %

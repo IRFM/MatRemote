@@ -18,7 +18,17 @@ fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
 if isfield(job,'params') && iscell(job.params),
     for iparam = 1:length(job.params),
-        fprintf(fileid,[job.params{iparam},'\n']);
+        if strcmp(job.params{iparam},'#$ -N'),
+            batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
+            %
+            if length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
+                batchfileroot = batchfileroot(1:end-3);
+            end
+            %
+            fprintf(fileid,[job.params{iparam},' ',batchfileroot,'\n']);
+        else
+            fprintf(fileid,[job.params{iparam},'\n']);
+        end
     end
 end
 %
