@@ -16,18 +16,36 @@ end
 filename = ['batch_matlab_',job.timeid,'.sh'];
 fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
-if isfield(job,'params') && iscell(job.params),
-    for iparam = 1:length(job.params),
-        if strcmp(job.params{iparam},'#$ -N'),
+if isfield(job,'params'),
+    %
+    for ijp = 1:length(job.params);
+        %
+        param = job.params{ijp};
+        %
+        if strcmp(param,'#$ -N'),
+            %
             batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
             %
             if length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
+                %
                 batchfileroot = batchfileroot(1:end-3);
+                %
+                fprintf(fileid,[param,' ',batchfileroot,'\n']);
+                %
+            else
+                fprintf(fileid,[param,' matremote'\n']);
             end
             %
-            fprintf(fileid,[job.params{iparam},' ',batchfileroot,'\n']);
+        elseif strcmp(param,'#$ -M'),
+            %
+            if isfield(job,'usermail') && ~isempty(job.usermail),
+                %
+                fprintf(fileid,[param,' ',job.usermail,'\n']);
+                %
+            end
+            %
         else
-            fprintf(fileid,[job.params{iparam},'\n']);
+            fprintf(fileid,[param,'\n']);
         end
     end
 end
