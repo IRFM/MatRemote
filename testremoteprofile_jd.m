@@ -25,9 +25,16 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     % test bridged connection
     %
+    if isfield(remote,'bridge_enforce') && remote.bridge_enforce,
+        flag_bridge_enforce = 1;
+    elseif isfield(remote,'bridge_enforce') && ~remote.bridge_enforce,
+        flag_bridge_enforce = 0;
+    else
+        flag_bridge_enforce = 1;
+    end
     flag_bridge = false;
     %
-    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host),% test bridge connection
+    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && flag_bridge_enforce,% test bridge connection
         %
         if display_mode,
             disp(' ');
