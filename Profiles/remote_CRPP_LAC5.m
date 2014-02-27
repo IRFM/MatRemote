@@ -51,7 +51,7 @@ remote.direct.kamleitn = default_remote_profile;
 remote.direct.kamleitn.host = 'lac5.epfl.ch';
 remote.direct.kamleitn.hostname = 'crpppc401';
 remote.direct.kamleitn.nproc = 24;
-remote.direct.kamleitn.cmd = 'bash';% direct calculation (csh, bash)
+remote.direct.kamleitn.cmd ={'bash',' &'};% direct calculation (csh, bash)
 remote.direct.kamleitn.get_jobid = {};%str_before,str_after
 remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.kamleitn.matver.mat710.root = '/usr/local/matlab710/bin/';
