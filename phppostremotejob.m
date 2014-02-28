@@ -5,6 +5,7 @@ if nargin < 3, php_post = {}; end
 % data transfer from job
 %
 ij = 1;
+%
 post_job{ij} = {'batch_dir'};ij = ij + 1;
 post_job{ij} = {'timeid'};ij = ij + 1;
 post_job{ij} = {'id'};ij = ij + 1;
@@ -37,36 +38,46 @@ post_job{ij} = {'xgridscript','xgrid_script'};ij = ij + 1;
 post_job{ij} = {'sgescript','sge_script'};ij = ij + 1;
 post_job{ij} = {'hostname'};ij = ij + 1;
 post_job{ij} = {'remotedatapath'};ij = ij + 1;
-post_job{ij} = {'mailuser'};ij = ij + 1;
-%
-% A maximum of 20 extra job parameters (job.params) are passed to the php
-%
-if isfield(job,'params'),
-    %
-    nparam = length(job.params);
-    %
-    if nparams > 20,
-        error('Only 20 job extra parameters may be transfered to the php');
-    else
-        %
-        post_job{ij} = {'nparam'};ij = ij + 1;
-        job.nparam = int2str(nparam);
-        %
-        for ip = 1:nparam; 
-            %
-            post_job{ij} = {['params',int2str(ip)]};ij = ij + 1;
-            %
-        end
-    end
-end
 %
 % data transfer from remote
 %
-post_remote{1} = {'remoteuser'};
-post_remote{2} = {'remotehost','host'};
-if ~isempty(remote.condor),
-    post_remote{3} = {'condorconfig','condor','CONDOR_CONFIG'};
-    post_remote{4} = {'condorpath','condor','PATH'};
+ij = 1;
+%
+post_remote{ij} = {'remoteuser'};ij = ij + 1;
+post_remote{ij} = {'usermail'};ij = ij + 1;
+post_remote{ij} = {'remotehost','host'};ij = ij + 1;
+post_remote{ij} = {'shell'};ij = ij + 1;
+%
+if ~isempty(remote.condor),%condor specific
+    %
+    post_remote{ij} = {'condorconfig','condor','CONDOR_CONFIG'};ij = ij + 1;
+    post_remote{ij} = {'condorpath','condor','PATH'};ij = ij + 1;
+    %
+end
+%
+if ~isempty(remote.sge),%sge specific
+    %
+    nbatchscriptparams = 0;
+    ip = 1;
+    %
+    while 1,
+        %
+        if isfield(remote.sge,['batchscript_params',int2str(ip)]),
+            %
+            post_remote{ij} = {['batchscriptparams',int2str(ip)],'sge',['batchscript_params',int2str(ip)]};ij = ij + 1;
+            nbatchscriptparams = nbatchscriptparams + 1;
+            ip = ip + 1;
+            %
+        else
+            if nbatchscriptparams > 0,
+                post_remote{ij} = {'nbatchscriptparams','sge','nbatchscriptparams'};ij = ij + 1;
+                remote.sge.nbatchscriptparams = int2str(nbatchscriptparams);%temporary field
+            end
+            %
+            break;
+        end
+        %
+    end
 end
 %
 ip = length(php_post);
@@ -78,24 +89,34 @@ if ~isempty(job),
         %
         if length(post_job{ii}) == 1,
             if isfield(job,post_job{ii}{1}),
-                ip = ip + 1;php_post{ip} = num2str(job.(post_job{ii}{1}));%content transfered by php post     
-            else
-                if ~isempty(strfind(post_job{ii}{1},'params')),
-                    iparam = str2num(post_job{ii}{1}(7:end));
-                    ip = ip + 1;php_post{ip} = num2str(job.params{iparam});%content transfered by php post     
+                ip = ip + 1;
+                if isnumeric(job.(post_job{ii}{1})),
+                    php_post{ip} = num2str(job.(post_job{ii}{1}));%content transfered by php post     
                 else
-                    ip = ip + 1;php_post{ip} = '';
+                    php_post{ip} = job.(post_job{ii}{1});%content transfered by php post
                 end
+            else
+                ip = ip + 1;php_post{ip} = '';
             end
         elseif length(post_job{ii}) == 2,
             if isfield(job,post_job{ii}{2}),
-                ip = ip + 1;php_post{ip} = num2str(job.(post_job{ii}{2}));%content transfered by php post
+                ip = ip + 1;
+                if isnumeric(job.(post_job{ii}{2})),
+                    php_post{ip} = num2str(job.(post_job{ii}{2}));%content transfered by php post
+                else
+                    php_post{ip} = job.(post_job{ii}{2});%content transfered by php post
+                end
             else
                 ip = ip + 1;php_post{ip} = '';
             end
         elseif length(post_job{ii}) == 3,
             if isfield(job.(post_job{ii}{2}),post_job{ii}{3}),
-                ip = ip + 1;php_post{ip} = num2str(job.(post_job{ii}{2}).(post_job{ii}{3}));%content transfered by php post
+                ip = ip + 1;
+                if isnumeric(job.(post_job{ii}{2}).(post_job{ii}{3})),
+                    php_post{ip} = num2str(job.(post_job{ii}{2}).(post_job{ii}{3}));%content transfered by php post
+                else
+                    php_post{ip} = job.(post_job{ii}{2}).(post_job{ii}{3});%content transfered by php post                    
+                end
             else
                 ip = ip + 1;php_post{ip} = '';
             end
@@ -110,27 +131,40 @@ if ~isempty(remote),
         %
         if length(post_remote{ii}) == 1,
             if isfield(remote,post_remote{ii}{1}),
-                ip = ip + 1;php_post{ip} = num2str(remote.(post_remote{ii}{1}));%content transfered by php post
+                ip = ip + 1;
+                if isnumeric(remote.(post_remote{ii}{1}))
+                    php_post{ip} = num2str(remote.(post_remote{ii}{1}));%content transfered by php post
+                else
+                    php_post{ip} = remote.(post_remote{ii}{1});%content transfered by php post
+                end
             else
                 ip = ip + 1;php_post{ip} = '';
             end
         elseif length(post_remote{ii}) == 2,
             if isfield(remote,post_remote{ii}{2}),
-                ip = ip + 1;php_post{ip} = num2str(remote.(post_remote{ii}{2}));%content transfered by php post
+                ip = ip + 1;
+                if isnumeric(remote.(post_remote{ii}{2}))
+                    php_post{ip} = num2str(remote.(post_remote{ii}{2}));%content transfered by php post
+                else
+                    php_post{ip} = remote.(post_remote{ii}{2});%content transfered by php post
+                end     
             else
                 ip = ip + 1;php_post{ip} = '';
             end
         elseif length(post_remote{ii}) == 3,
             if isfield(remote.(post_remote{ii}{2}),post_remote{ii}{3}),
-                ip = ip + 1;php_post{ip} = num2str(remote.(post_remote{ii}{2}).(post_remote{ii}{3}));%content transfered by php post
+                ip = ip + 1;
+                if isnumeric(remote.(post_remote{ii}{2}).(post_remote{ii}{3})),
+                    php_post{ip} = num2str(remote.(post_remote{ii}{2}).(post_remote{ii}{3}));%content transfered by php post
+                else
+                    php_post{ip} = remote.(post_remote{ii}{2}).(post_remote{ii}{3});%content transfered by php post                    
+                end
             else
                 ip = ip + 1;php_post{ip} = '';
             end
         end
-        end
     end
     %    
 end
-
 
 
