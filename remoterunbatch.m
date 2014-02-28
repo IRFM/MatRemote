@@ -97,17 +97,11 @@ elseif strcmp(remote.scheduler ,'condor'),
     job.condorsearch = 1;
 elseif strcmp(remote.scheduler ,'sge'),
     job.sgesearch = 1;
-    job.params = remote.sge.params;
+    job.remote = remote;
 elseif strcmp(remote.scheduler ,'direct'),
     job.directsearch = 1;
 else
     error('Scheduler type not recognized');
-end
-%
-% user mail
-%
-if isfield(remote,'usermail') && ~isempty(remote.usermail),
-    job.usermail = remote.usermail;
 end
 %
 % local data location
@@ -148,24 +142,6 @@ end
 remote = testremoteprofile_jd(remote,job.bridge_enforce,displaymode);% test connection to remote host
 %
 % create remote data folder if needed - this also tests remote connection
-%
-remotecmd = 'echo $SHELL';% test the SHELL type
-%
-[res,txt] = matremotecmd(remote,job,remotecmd);
-%
-if res ~= 0,
-    locdisp(displaymode,['Unable to get the shell type on the remote computer : ',txt]);
-    job.shell = '';
-else
-    if ~isempty(strfind(txt,'bash')),
-        job.shell = 'bash';
-    elseif ~isempty(strfind(txt,'csh')),
-        job.shell = 'csh';
-    else
-        job.shell = '';
-        warning('Unkown shell on the remote computer');
-    end
-end
 %
 remotecmd = ['test -d ',job.remotedatapath];% test if remote directory exists
 %
@@ -225,7 +201,7 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.xgridsearch || job.condorsearch|| job.directsearch,
+if job.xgridsearch || job.condorsearch || job.directsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end  
 %
