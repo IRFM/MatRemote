@@ -20,6 +20,7 @@ remote.funcopy = [];% (-1) do not copy any executable, (0) copy all functions ex
 remote.condor = [];% condor specific parameters
 remote.sge = [];% sun grid engine specific parameters
 remote.scheduler = [];%scheduler type (because two identical cmd may correspond to different schedulers)
+remote.shell = [];%shell type 
 %
 % The following parameters are for qsub only. Use NaN if option is forbidden 
 %
