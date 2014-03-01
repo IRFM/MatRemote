@@ -1,27 +1,32 @@
 <?php 
 
+include "private/functions.php";
 include "private/bridge.php";
 
 // ssh over php for MatRemote Matlab library
 // by Y. Peysson and J. Decker CEA/IRFM
 // 
 
-$remotehost = $_POST["remotehost"];
-$remotecmd = $_POST["remotecmd"];
-$debugmode = $_POST["debugmode"];
-
-if ($debugmode == '1') {
-  echo '-----------------------------------'."\n";
-  echo "remotehost:".$remotehost."\n";
-  echo "remotecmd:".$remotecmd."\n";
-  echo "debugmode:".$debugmode."\n";
-  echo '-----------------------------------'."\n";
-}
+$remotehost = $_POST['remotehost'];
+$remotecmd = $_POST['remotecmd'];
 
 list($remote_host,$remote_login,$remote_password) = login($remotehost);
-//echo $remote_host."\n";
-//echo $remote_login."\n";
-//echo $remote_password."\n";
+
+$safemode = safemode();
+
+if ($safemode >= 1) {
+
+	list($flag_filter,$txt_filter) = filter_cmd($_POST);
+
+	if ($flag_filter == 1){
+	  $flag = sendmail($remotehost,$remotecmd,$remotecmd);
+	  die("*************************************************\nA non standard unix command has been used in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
+	}
+}
+
+//***************** UNCOMMENT the following lines to disable the filtering and check the strings (see also functions.php *************************
+//echo "flag_filter,txt_filter = ".$flag_filter.",".$txt_filter."\n";
+//************************************************************************************************************************************************
 
 
 if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
@@ -29,18 +34,16 @@ if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
 } else {
   $remote_cmd = $remotecmd;
 }
-  
 //echo "cmd=".$remote_cmd."\n";
-
 
 $connection = ssh2_connect($remote_host);
 
 if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
-   if ($debugmode == '1') echo "Successful ssh identification !"."\n";
+   //echo "Successful ssh identification !"."\n";
   
    $stream = ssh2_exec($connection, $remote_cmd);  
    $errorStream = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
-  
+
    stream_set_blocking($errorStream, true);
    stream_set_blocking($stream, true);
   
@@ -54,3 +57,10 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
 }
 
 ?>
+
+
+
+
+
+
+
