@@ -81,6 +81,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         }
         
         if (strcmp($remote_host,"g01.efda-itm.eu") == 0) {
+
+            $localcmd[6] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
+            $localcmd[7] = "ps -p ".$id." -o comm=";
             
         }
 
