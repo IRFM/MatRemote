@@ -216,7 +216,7 @@ function make_batch_script($post){
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabprefdir'.$envcmdbase2.$matlabprefdir."\n";
 
         $batchscript = $batchscript.'cd '.$remotedatapath.$batch_dir."\n";
-        $batchscript = $batchscript.$remotedatapath.$batch_dir.$xgridscript."\n";
+        $batchscript = $batchscript.$remotedatapath.$batch_dir.$script."\n";
         
         $flag_script = fopen($sgescript,'w');
     }
