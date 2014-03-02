@@ -61,10 +61,13 @@ remote.pbs.yves = default_remote_profile;
 remote.pbs.yves.host = 'andromede1.partenaires.cea.fr';
 remote.pbs.yves.hostname = 'andromede1';
 remote.pbs.yves.nproc = 12;
-remote.pbs.yves.cmd = {'qsub','','',' &'};
+%%%remote.pbs.yves.cmd = {'qsub','','',' &'};%because qsub hang with mac ssh
+remote.pbs.yves.cmd = 'qsub';%because qsub hang with mac ssh
 remote.pbs.yves.remotedatapath = '/home/YP105119/tmp/';
 remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.pbs.yves.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
+%%%remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
+%%%remote.pbs.yves.set_jobid = {'ps -p ','','PID TTY          TIME CMD'};%str_before,str_after,str_check
 remote.pbs.yves.shclean = 1;
 remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.pbs.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
@@ -77,7 +80,7 @@ remote.pbs.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.pbs.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.pbs.yves.bridge.ftp.username = 'matremote';
 remote.pbs.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.pbs.yves.bridge_enforce = false;
+remote.pbs.yves.bridge_enforce = true;
 %
 % direct
 %
@@ -85,9 +88,10 @@ remote.direct.yves = default_remote_profile;
 remote.direct.yves.host = 'andromede1.partenaires.cea.fr';
 remote.direct.yves.hostname = 'andromede1';
 remote.direct.yves.nproc = 12;
-remote.direct.yves.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+%%%remote.direct.yves.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.yves.cmd = {'csh','',' &',''};% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=',''};%str_before,str_after,str_check
+remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.direct.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
 remote.direct.yves.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
@@ -99,7 +103,7 @@ remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.username = 'matremote';
 remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.direct.yves.bridge_enforce = false;
+remote.direct.yves.bridge_enforce = true;
 %
 % YVES BURAVAND
 %
