@@ -26,7 +26,7 @@ if ~isempty(remote.host),
             txt = error_txt;
         end
         %
-        remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];
+        remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];%because all files in the bridge have low level rights
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
