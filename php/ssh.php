@@ -9,25 +9,24 @@ include "private/bridge.php";
 
 $remotehost = $_POST['remotehost'];
 $remotecmd = $_POST['remotecmd'];
+$remoteuser = $_POST['remoteuser'];
 
 list($remote_host,$remote_login,$remote_password) = login($remotehost);
 
-$safemode = safemode();
+$safemode = safemode($remotehost);
 
 if ($safemode >= 1) {
 
 	list($flag_filter,$txt_filter) = filter_cmd($_POST);
 
 	if ($flag_filter == 1){
-	  $flag = sendmail($remotehost,$remotecmd,$remotecmd);
-	  die("*************************************************\nA non standard unix command has been used in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
+	  $flag = sendmail($remotehost,$txt_filter,$remoteuser);
+    //***************** UNCOMMENT the following lines to disable the filtering and check the strings (see also functions.php *************************
+    //echo "flag_filter,txt_filter = ".$flag_filter.",".$txt_filter."\n";
+    //************************************************************************************************************************************************
+	  die("*************************************************\nNon standard unix command in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
 	}
 }
-
-//***************** UNCOMMENT the following lines to disable the filtering and check the strings (see also functions.php *************************
-//echo "flag_filter,txt_filter = ".$flag_filter.",".$txt_filter."\n";
-//************************************************************************************************************************************************
-
 
 if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
   $remote_cmd = $remotecmd." -p ".$remote_password;//put hidden password

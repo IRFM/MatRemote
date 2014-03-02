@@ -20,7 +20,7 @@ $script = $_POST["script"];
 
 list($remote_host,$remote_login,$remote_password) = login($remotehost);
 
-$safemode = safemode();
+$safemode = safemode($remotehost);
 
 $connection = ssh2_connect($remote_host);
 

@@ -12,93 +12,115 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         $$key = $post[$key];//only preset keys are loaded (security)
     }
 
-    list($remote_host,$remote_login,$remote_password,$pbssearch,$condorsearch,$xgridsearch,$directsearch,$sgesearch) = login($remotehost);
+//,$pbssearch,$condorsearch,$xgridsearch,$directsearch,$sgesearch
+    list($remote_host,$remote_login,$remote_password) = login($remotehost);
     
-    $safemode = safemode();
+    $safemode = safemode($remotehost);
+
+    // generic commands
 
     $localcmd[0] = "ls";
     $localcmd[1] = "test -d ".$remotedatapath;
     $localcmd[2] = "chmod -R 777 ".$remotedatapath.$batch_dir;
     $localcmd[3] = "ls ".$remotedatapath.$batch_dir;
     $localcmd[4] = "rm -fr ".$remotedatapath.$batch_dir;
-    $localcmd[5] = 'echo $SHELL';
-    $localcmd[6] = "";
-    $localcmd[7] = "";
-    $localcmd[8] = "";
 
+    if (strcmp($remote_host,"tolbachik.hd.free.fr") == 0) {
 
-    if (strcmp($pbssearch,"1") == 0) {
+		if (strcmp($condorsearch,"1") == 0) {
 
-        if (strcmp($wait,"1") == 0) {
-            $cmdextras = " -W block=true";
-        } else {
-            $cmdextras = "";
-        }
+        	$localcmd[5] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
+        	$localcmd[6] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; condor_q ".$id;
 
-        $localcmd[6] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",remotepathfnc=".$remotepathfnc.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
-        $localcmd[7] = "qstat ".$id;
-        $localcmd[8] = "rm -f matlabbatch.sh.e".$id." matlabbatch.sh.o".$id;
+    	} elseif (strcmp($xgridsearch,"1") == 0) {
 
-    }
-
-    if (strcmp($condorsearch,"1") == 0) {
-
-        $localcmd[6] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
-        $localcmd[7] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; condor_q ".$id;
-
-    }
-
-    if (strcmp($xgridsearch,"1") == 0) {
-
-        if (strlen($remote_password) > 0) {
+        	if (strlen($remote_password) > 0) {
   
-            $localcmd[6] = "xgrid -h ".$hostname." -p ".$remote_password." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
-            $localcmd[7] = "xgrid -h ".$hostname." -p ".$remote_password." -job attributes -id ".$id;
+            	$localcmd[5] = "xgrid -h ".$hostname." -p ".$remote_password." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
+            	$localcmd[6] = "xgrid -h ".$hostname." -p ".$remote_password." -job attributes -id ".$id;
+           	    $localcmd[7] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
+				$localcmd[8] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
+				$localcmd[9] = "xgrid -h ".$hostname." -p ".$remote_password." -job delete -id ".$id;
 
-        } else {
+        	} else {
 
-            $localcmd[6] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$condorscript;
-            $localcmd[7] = "xgrid -h ".$hostname." -job attributes -id ".$id;
-        }
-   
-    }
+            	$localcmd[5] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$condorscript;
+            	$localcmd[6] = "xgrid -h ".$hostname." -job attributes -id ".$id;
+            	$localcmd[7] = "xgrid -h ".$hostname." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
+            	$localcmd[8] = "xgrid -h ".$hostname." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
+            	$localcmd[9] = "xgrid -h ".$hostname." -job delete -id ".$id;
 
-    if (strcmp($directsearch,"1") == 0) {
+        	}
 
-        if (strcmp($remote_host,"tolbachik.hd.free.fr") == 0) {
+		} elseif (strcmp($directsearch,"1") == 0) {
 
-            $localcmd[6] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
-            $localcmd[7] = "ps -p ".$id;
-            $localcmd[8] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
-
-        }
-
-        if (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
-
-            $localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
-            $localcmd[7] = "ps -p ".$id." -o comm=";
- 
-        }
-        
-        if (strcmp($remote_host,"g01.efda-itm.eu") == 0) {
-
-            $localcmd[6] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
-            $localcmd[7] = "ps -p ".$id." -o comm=";
-            
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+        	$localcmd[6] = "ps -p ".$id;
+        	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
+        	$localcmd[8] = "rm -f nohup.out";
         }
 
-        if (strcmp($remote_host,"andromede1.partenaires.cea.fr") == 0) {
+    } elseif (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
 
-            $localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &;";
-            $localcmd[7] = "ps -p ".$id." -o comm=";
-        }       
-  
-    }
+    	if (strcmp($directsearch,"1") == 0) {
 
-    if (strcmp($sgesearch,"1") == 0) {
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+        	$localcmd[6] = "ps -p ".$id." -o comm=";
+        	$localcmd[7] = "rm -f nohup.out";
 
-        $localcmd[6] = "qsub ".$remotedatapath.$batch_dir.$sgescript;
-        $localcmd[7] = "qstat -j ".$id;
+        } elseif (strcmp($pbssearch,"1") == 0) {
+
+        	if (strcmp($wait,"1") == 0) {
+            	$cmdextras = " -W block=true";
+        	} else {
+            	$cmdextras = "";
+        	}
+
+        	$localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",remotepathfnc=".$remotepathfnc.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
+			$localcmd[6] = "qstat ".$id;
+			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+
+        }
+
+
+    } elseif (strcmp($remote_host,"g01.efda-itm.eu") == 0) {
+
+    	if (strcmp($directsearch,"1") == 0) {
+
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+        	$localcmd[6] = "ps -p ".$id." -o comm=";
+        	$localcmd[7] = "rm -f nohup.out";
+
+        } elseif (strcmp($sgesearch,"1") == 0) {
+
+        	$localcmd[5] = "qsub ".$remotedatapath.$batch_dir.$sgescript;
+        	$localcmd[6] = "qstat -j ".$id;
+        	$localcmd[7] = "rm -f ".strstr($script,'.',true).".e".$id." ".strstr($script,'.',true).".o".$id;
+
+    	}
+
+    } elseif (strcmp($remote_host,"andromede1.partenaires.cea.fr") == 0) {
+
+		if (strcmp($directsearch,"1") == 0) {
+
+        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
+        	$localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+        	$localcmd[7] = "ps -p ".$id." -o comm=";
+        	$localcmd[8] = "rm -f nohup.out";
+
+   		}  elseif (strcmp($pbssearch,"1") == 0) {
+
+       		if (strcmp($wait,"1") == 0) {
+            	$cmdextras = " -W block=true";
+        	} else {
+            	$cmdextras = "";
+        	}
+
+        	$localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",remotepathfnc=".$remotepathfnc.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
+			$localcmd[6] = "qstat ".$id.'.andromede1';
+        	$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+
+        }
 
     }
 
@@ -106,21 +128,20 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
     $txt = "";
 
     for ($i = 0; $i < count($localcmd); $i++) {
-
         if (strcmp($localcmd[$i],$remotecmd) == 0) {
-            $txt = $localcmd[$i];
-            $flag = 0;
+            $flag = 0; 
+            break;  	
         }
     }
-    
+
     if (((strcmp($remotedatapath,"*") == 0) || (strcmp($remotedatapath,"*.") == 0) || (strcmp($remotedatapath,"*.*") == 0)) AND ($safemode == 1)) $flag = 1;
     if (((strcmp($batch_dir,"*.*") == 0) || (strcmp($batch_dir,".*") == 0) || (strcmp($batch_dir,"*") == 0)) AND ($safemode == 1)) $flag = 1;
 
     //***************** UNCOMMENT the following line to check the output string (see also ssh.php *************************
-    //$txt = $localcmd[0];//$localcmd[5];
+    //$txt = "send command: \n".$remotecmd."\nbridge command: \n".$localcmd[5]."\n";
     //**********************************************************************************************************************************************
     
-    if ($safemode >= 1) {
+    if ($safemode == 0) {
         $flag = 0;//disable the filtering
     }
     
@@ -164,7 +185,7 @@ function make_batch_script($post){
 
     list($remote_host,$remote_login,$remote_password) = login($remotehost);
 
-    $safemode = safemode();
+    $safemode = safemode($remotehost);
 
     $ftp_rootdir = ftprootdir();
 
