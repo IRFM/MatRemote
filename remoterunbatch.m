@@ -404,12 +404,7 @@ txt(double(txt) == 10) = [];
 %
 % Read the job id (if accessible)
 %
-if ~res && isempty(txt),
-    job.id = '';
-	%
-	locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
-    %
-elseif ~res && ~isempty(txt),
+if ~res && ~isempty(txt),
     %
     if ~isempty(remote.get_jobid)
         if ~isempty(remote.get_jobid{1}),
@@ -480,6 +475,11 @@ elseif ~res && ~isempty(txt),
         locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
         %
     end
+else
+	job.id = '';
+    %
+	locdisp(displaymode,[' ... started with job time ID ',job.timeid]);
+    %
 end
 %
 job.remote = remote;
