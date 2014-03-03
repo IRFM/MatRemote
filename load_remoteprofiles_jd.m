@@ -236,6 +236,19 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         newremoteprofiles = feval(RemoteFileNames{iselected},scheduler,profilename);
         nrem = length(newremoteprofiles);
         %
+        flag = true(1,nrem);
+        for irem = 1:nrem,
+            if ~strcmp(remote,'local') && ~isnan(bridge_enforce),
+                newremoteprofiles(irem).bridge_enforce = bridge_enforce;
+                if any(bridge_enforce == 1) && isempty(newremoteprofiles(irem).bridge),% case appears when bridge mode not implemented for all schedulers
+                    flag(irem) = false;
+                end
+            end
+        end    
+        newremoteprofiles = newremoteprofiles(flag);    
+        %
+        nrem = length(newremoteprofiles);
+        %
         profilestr = cell(1,nrem);
         cmdstr = cell(1,nrem);
         schedulerstr = cell(1,nrem);
@@ -349,6 +362,22 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         nrem = length(profilestr);
         %
+        % manage bridge mode
+        %
+        flag = true(1,nrem);
+        for irem = 1:nrem,
+            if ~isnan(bridge_enforce),
+                newremoteprofiles(irem).bridge_enforce = bridge_enforce;
+                if any(bridge_enforce == 1) && isempty(newremoteprofiles(irem).bridge),% case appears for local profiles or when bridge mode not implemented for all schedulers
+                    flag(irem) = false;
+                end
+            end
+        end    
+        profilestr = profilestr(flag);
+        newremoteprofiles = newremoteprofiles(flag);    
+        %
+        nrem = length(profilestr);
+        %
         if display_mode || select,
             disp(' ');
             disp('-------------------------------------------------------------------')
@@ -375,12 +404,6 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             %
         end
     end
-    %
-    for irem = 1:length(remoteprofiles),
-        if ~isnan(bridge_enforce),
-            remoteprofiles(irem).bridge_enforce = bridge_enforce;
-        end
-    end    
 end
 %
 function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
