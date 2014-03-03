@@ -112,7 +112,7 @@ try
                     varargout_array{j_range,1}.err = output.err;
                 elseif ~isstruct(output),
                     if ~isempty(strfind(output,'pid=')),
-                        jobs{j_range}.id = output(5:length(soutput));%PID extraction by file
+                        jobs{j_range}.id = output(5:length(output));%PID extraction by file
                     elseif ~isempty(strfind(output,jobs{j_range}.remote.get_jobid{1})),
                         jobs{j_range}.id = output(length(jobs{j_range}.remote.get_jobid{1})+1:end);
                     end
