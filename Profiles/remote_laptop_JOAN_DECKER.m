@@ -22,7 +22,7 @@ remote.direct.joan = default_remote_profile;
 remote.direct.joan.host = 'CADTS-0096.intra.cea.fr';
 remote.direct.joan.hostname = 'CADTS-0096';
 remote.direct.joan.nproc = 2;
-remote.direct.joan.cmd = {'bash',' &'};% direct calculation (csh, bash)
+remote.direct.joan.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {};%str_before,str_after
 remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.joan.matver.mat712.root = '/opt/MATLAB/R2011A/bin/';
