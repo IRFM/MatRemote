@@ -39,6 +39,28 @@ remote.pbs.joan.matver.mat800.prefdir = '/home/sccp/gsem/decker/.matlab/R2012b';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
 remote.pbs.joan.remoteuser = 'JD211098';
 %
+% direct
+%
+remote.direct.joan = default_remote_profile;
+remote.direct.joan.host = 'cephee15.intra.cea.fr';% empty for local host
+remote.direct.joan.hostname = 'cephee';
+remote.direct.joan.nproc = 8;% cores per node
+remote.direct.joan.nodes = 1;% default number of nodes for job on cephee
+remote.direct.joan.ppn = 2;% default number of cores for job on cephee
+remote.direct.joan.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.joan.get_jobid = {};%str_before,str_after
+remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.joan.matver.mat705.root = '/applications/matlab_2007b/bin/';
+remote.direct.joan.matver.mat705.prefdir = '/home/sccp/gsem/decker/.matlab/R2007b';
+remote.direct.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.direct.joan.matver.mat710.prefdir = '/home/sccp/gsem/decker/.matlab/R2010a';
+remote.direct.joan.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
+remote.direct.joan.matver.mat712.prefdir = '/home/sccp/gsem/decker/.matlab/R2011a';
+remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.direct.joan.matver.mat800.prefdir = '/home/sccp/gsem/decker/.matlab/R2012b';
+remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
+remote.direct.joan.remoteuser = 'JD211098';
+%
 % YVES PEYSSON
 %
 remote.pbs.yves = default_remote_profile;
