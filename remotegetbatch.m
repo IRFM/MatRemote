@@ -302,7 +302,10 @@ if ~isempty(job.load_id),
     end
     %
     if it == itmax,
-        error(['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'])
+       soutput.err = ['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'];
+       locdisp(displaymode,soutput.err);
+       %
+       return
     end
     %
     [res,err] = matremoteget(remote,job);
