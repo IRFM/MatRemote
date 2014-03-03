@@ -158,7 +158,7 @@ else% remote computing mode
         dkecluster.scheduler.mode = 'local';
     end
     %
-    [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,true);% test validity and connection of remote profile
+    [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,true,dkecluster.scheduler.inter);% test validity and connection of remote profile
     %
     if ~isempty(dkecluster.scheduler.remote),
         %
