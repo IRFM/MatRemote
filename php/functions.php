@@ -34,7 +34,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     	} elseif (strcmp($xgridsearch,"1") == 0) {
 
-        	if (strlen($remote_password) > 0) {
+        	if (strlen($password) > 0) {
   
             	$localcmd[5] = "xgrid -h ".$hostname." -p ".$remote_password." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
             	$localcmd[6] = "xgrid -h ".$hostname." -p ".$remote_password." -job attributes -id ".$id;
@@ -44,7 +44,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         	} else {
 
-            	$localcmd[5] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$condorscript;
+            	$localcmd[5] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
             	$localcmd[6] = "xgrid -h ".$hostname." -job attributes -id ".$id;
             	$localcmd[7] = "xgrid -h ".$hostname." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
             	$localcmd[8] = "xgrid -h ".$hostname." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
@@ -125,7 +125,6 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
     }
 
     $flag = 1;
-    $txt = "";
 
     for ($i = 0; $i < count($localcmd); $i++) {
         if (strcmp($localcmd[$i],$remotecmd) == 0) {
@@ -137,9 +136,13 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
     if (((strcmp($remotedatapath,"*") == 0) || (strcmp($remotedatapath,"*.") == 0) || (strcmp($remotedatapath,"*.*") == 0)) AND ($safemode == 1)) $flag = 1;
     if (((strcmp($batch_dir,"*.*") == 0) || (strcmp($batch_dir,".*") == 0) || (strcmp($batch_dir,"*") == 0)) AND ($safemode == 1)) $flag = 1;
 
-    //***************** UNCOMMENT the following line to check the output string (see also ssh.php *************************
-    //$txt = "send command: \n".$remotecmd."\nbridge command: \n".$localcmd[5]."\n";
-    //**********************************************************************************************************************************************
+    
+    $txt = "send command: \n".$remotecmd."\n";
+
+    for ($i = 0; $i < count($localcmd); $i++) {
+        $txt = $txt."bridge command (".$i."): \n".$localcmd[$i]."\n";
+    }
+
     
     if ($safemode == 0) {
         $flag = 0;//disable the filtering
