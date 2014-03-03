@@ -36,7 +36,6 @@ remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.username = 'matremote';
 remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.direct.yves.bridge_enforce = false;
 %
 % condor
 %
@@ -61,7 +60,6 @@ remote.condor.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.condor.yves.bridge.ftp.username = 'matremote';
 remote.condor.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.condor.yves.bridge_enforce = false;
 %
 % xgrid
 %
@@ -120,9 +118,12 @@ remote.xgrid.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.xgrid.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.xgrid.yves.bridge.ftp.username = 'matremote';
 remote.xgrid.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.xgrid.yves.bridge_enforce = false;
 %
 % JOAN DECKER
+%
+% direct
+%
+remote.direct.joan = remote.direct.yves;% same remote user, same options
 %
 % condor
 %
@@ -133,6 +134,10 @@ remote.condor.joan = remote.condor.yves;% same remote user, same options
 remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
 %
 % EMELIE NILSSON
+%
+% direct
+%
+remote.direct.emelie = remote.direct.yves;% same remote user, same options
 %
 % condor
 %
