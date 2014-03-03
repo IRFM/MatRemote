@@ -128,6 +128,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     if display_mode,
         disp(['test output : ',msg]);
+        disp(' ');
     end
     %
 end
