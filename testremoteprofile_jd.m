@@ -24,7 +24,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
         xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
         if xgridsearch, 
             if ~isempty(getenv('XGRID_PWD')),
-                remote.password = {getenv('XGRID_PWD')};
+                remote.password = getenv('XGRID_PWD');
             else
                 error('XGRID password not set up.')
             end
@@ -99,7 +99,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
                 msg = ['completed with following result : ',txt];
                 %
                 if xgridsearch,
-                    remote.password = {getenv('XGRID_PWD')};
+                    remote.password = getenv('XGRID_PWD');
                 end
                 %
                 flag_ssh = true;

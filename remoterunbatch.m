@@ -374,7 +374,7 @@ elseif job.xgridsearch,
         remotecmd = [remote.cmd{1},job.hostname,remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
         locdisp(displaymode,['    --> Starting run with command ',remotecmd]) 
     else
-        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password{1},remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
+        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password,remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
         remotecmd_hiddenpwd = [remote.cmd{1},job.hostname,remote.cmd{2},'*********',remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
         locdisp(displaymode,['    --> Starting run with command ',remotecmd_hiddenpwd]) 
     end

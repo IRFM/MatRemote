@@ -59,7 +59,7 @@ elseif ~strcmp(job.localdatapath,job.remotedatapath),
         if ~isfield(remote,'password') || isempty(remote.password),
             remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
         else
-            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password{1},remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
+            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
         end
         %
         [res,txt] = unix(remotecmd);
