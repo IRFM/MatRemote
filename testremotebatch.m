@@ -1,4 +1,4 @@
-function soutputs = testremotebatch(sinputs,remote,debugmode)
+function soutputs = testremotebatch(sinputs,remote,debugmode,bridge_enforce)
 % ------------------------------------------------
 % test for remote batch using a standard function.
 % ------------------------------------------------
@@ -34,6 +34,12 @@ function soutputs = testremotebatch(sinputs,remote,debugmode)
 %
 %   - debugmode : [0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
 %
+%   - bridge_enforce : [NaN, empty, 0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
+%           o NaN : (default) use value from remote.bridge_enforce
+%           o []  : tests both modes and give priority to ssh key pair
+%           o 0   : tests only ssh key pair,
+%           o 1   : tests only bridge mode
+%
 % OUTPUTS : 
 %
 %   - soutputs is a cell array containing
@@ -57,6 +63,12 @@ addpath(mattools_path);% MatTools toolbox
 %
 sinput.strin = 'The best code is : ';% input to function remotetest
 testvar = 'luke'; % test variable
+%
+% Bridge_enforce
+%
+if nargin < 4,
+    bridge_enforce = NaN;% use value from remote.bridge_enforce
+end
 %
 % Debugmode
 %
@@ -89,7 +101,7 @@ if isnumeric(sinputs),% start new test
     %
     % Select local and remote profiles to be tested
     %
-    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true,debugmode);
+    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true,debugmode,bridge_enforce);
     %
     nrem = length(remoteprofiles);
     %
@@ -112,7 +124,7 @@ if isnumeric(sinputs),% start new test
         %
         test_job = matstandardjob_jd;
         %
-        test_job.wait = 1;%0;% (0) return hand (1) wait for result
+        test_job.wait = 0;%1;% (0) return hand (1) wait for result
         test_job.nodes = 1;%number of nodes required
         test_job.ppn = 1;%number of cores required
         test_job.memory = 2000;% memory required (in mb) - leave empty if no requirement
