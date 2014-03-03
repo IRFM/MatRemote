@@ -41,12 +41,15 @@ remote.pbs.joan.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % direct
 %
+% note : mode direct bridge disabled because nohup does not work
+%
 remote.direct.joan = default_remote_profile;
 remote.direct.joan.host = 'andromede1.partenaires.cea.fr';
 remote.direct.joan.hostname = 'andromede1';
 remote.direct.joan.nproc = 12;
-remote.direct.joan.cmd = {'csh',' &;'};% direct calculation (csh, bash)
-remote.direct.joan.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
+% remote.direct.joan.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
+remote.direct.joan.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.joan.get_jobid = {};%str_before,str_after
 remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.direct.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
@@ -54,6 +57,11 @@ remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.direct.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
 remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
 remote.direct.joan.remoteuser = 'JD211098';
+% remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
+% remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
+% remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+% remote.direct.yves.bridge.ftp.username = 'matremote';
+% remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % YVES PEYSSON
 %
@@ -61,13 +69,10 @@ remote.pbs.yves = default_remote_profile;
 remote.pbs.yves.host = 'andromede1.partenaires.cea.fr';
 remote.pbs.yves.hostname = 'andromede1';
 remote.pbs.yves.nproc = 12;
-%%%remote.pbs.yves.cmd = {'qsub','','',' &'};%because qsub hang with mac ssh
-remote.pbs.yves.cmd = 'qsub';%because qsub hang with mac ssh
+remote.pbs.yves.cmd = 'qsub';
 remote.pbs.yves.remotedatapath = '/home/YP105119/tmp/';
 remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.yves.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
-%%%remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
-%%%remote.pbs.yves.set_jobid = {'ps -p ','','PID TTY          TIME CMD'};%str_before,str_after,str_check
 remote.pbs.yves.shclean = 1;
 remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.pbs.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
@@ -80,17 +85,18 @@ remote.pbs.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.pbs.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.pbs.yves.bridge.ftp.username = 'matremote';
 remote.pbs.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.pbs.yves.bridge_enforce = true;
 %
 % direct
+%
+% note : mode direct bridge disabled because nohup does not work
 %
 remote.direct.yves = default_remote_profile;
 remote.direct.yves.host = 'andromede1.partenaires.cea.fr';
 remote.direct.yves.hostname = 'andromede1';
 remote.direct.yves.nproc = 12;
-%%%remote.direct.yves.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-remote.direct.yves.cmd = {'csh','',' &',''};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
+% remote.direct.yves.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
+remote.direct.yves.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.yves.get_jobid = {};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
 remote.direct.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
@@ -98,12 +104,11 @@ remote.direct.yves.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.direct.yves.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'YP105119';
-remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
-remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ftp.username = 'matremote';
-remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
-remote.direct.yves.bridge_enforce = true;
+% remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
+% remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
+% remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+% remote.direct.yves.bridge.ftp.username = 'matremote';
+% remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % YVES BURAVAND
 %
