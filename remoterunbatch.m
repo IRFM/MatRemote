@@ -87,7 +87,7 @@ job.condorsearch = 0;
 job.xgridsearch = 0;
 job.directsearch = 0;
 %
-if strcmp(remote.scheduler ,'torque') || strcmp(remote.scheduler ,'pbs')
+if strcmp(remote.scheduler ,'torque') || strcmp(remote.scheduler ,'pbs') || strcmp(remote.scheduler ,'sun')
     job.pbssearch = 1;
 elseif strcmp(remote.scheduler ,'slurm'),
     job.slurmsearch = 1;
