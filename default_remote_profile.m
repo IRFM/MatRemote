@@ -11,7 +11,7 @@ remote.env = [];% additional environment variables. Ex : env.PATH = '/usr/local/
 remote.remotedatapath = [];% path to save transfered data on remote cluster. Ex : '/Users/yvespeysson/condor/' 
 remote.matver = [];% list of matlab bin and corresponding prefdir locations. Ex : matver.mat705.root = '/applications/matlab_2007b/bin/';   matver.mat705.prefdir = '/home/sccp/gsem/decker/.matlab/R2007b';
 remote.cvs = [];%CVS commands for code update
-remote.password = {};% use if password is necessary (xgrid)
+remote.password = [];% use if password is necessary (xgrid)
 remote.remoteuser = [];% name on the remote cluster
 remote.usermail = [];% mail adress of the user on the remote cluster
 remote.bridge = [];% bridge address (url or ssh)
