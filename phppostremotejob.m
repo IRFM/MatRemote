@@ -47,6 +47,8 @@ post_remote{ij} = {'remoteuser'};ij = ij + 1;
 post_remote{ij} = {'usermail'};ij = ij + 1;
 post_remote{ij} = {'remotehost','host'};ij = ij + 1;
 post_remote{ij} = {'shell'};ij = ij + 1;
+post_remote{ij} = {'password'};ij = ij + 1;
+
 %
 if ~isempty(remote.condor),%condor specific
     %
