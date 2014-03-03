@@ -1,11 +1,22 @@
 function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
+    % This function tests connections for the remote profile 'remote'.
+    %  - If test not OK, return empty profile
+    %  - If ssh key pair selected, return empty remote.bridge
+    %
+    % If bridge_enforce = NaN : (default) use value from remote.bridge_enforce
+    % If bridge_enforce = []  : tests both modes and give priority to ssh key pair
+    % If bridge_enforce = 0   : tests only ssh key pair,
+    % If bridge_enforce = 1   : tests only bridge mode
+    %
     if nargin < 3,
         display_mode = false;
     end
-    if nargin < 2 || isempty(remote.bridge_enforce),
-        bridge_enforce = false;
-    else
+    %
+    if nargin < 2,
+        bridge_enforce = NaN;
+    end
+    if isnan(bridge_enforce),
         bridge_enforce = remote.bridge_enforce;
     end
     %
@@ -25,16 +36,9 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     % test bridged connection
     %
-    if isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && remote.bridge_enforce,
-        flag_bridge_enforce = 1;
-    elseif isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && ~remote.bridge_enforce,
-        flag_bridge_enforce = 0;
-    else
-        flag_bridge_enforce = 1;
-    end
     flag_bridge = false;
     %
-    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && flag_bridge_enforce,% test bridge connection
+    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~any(bridge_enforce == 0),% test bridge connection
         %
         if display_mode,
             disp(' ');
@@ -66,55 +70,55 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     flag_ssh = false;
     %
-    if display_mode,
-        disp(' ');
-        disp(['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... ']);
-    end
-    %
-    xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
-    %
-    if ~xgridsearch || ~isempty(getenv('XGRID_PWD')),
+    if ~any(bridge_enforce == 1),% test key-pair connection
         %
-        remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
-        %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
-        %
-        if res ~= 0,
-            %
-            if any(strfind(txt,'Connection timed out')),
-                msg = 'failed : connection timed out (10s)';
-            elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
-                msg = 'failed : ssh key pairing not set up or not working';
-            else
-                msg = ['failed with following message : ',txt];            
-            end
-            %
-        else
-            msg = ['completed with following result : ',txt];
-            %
-            if xgridsearch,
-                remote.password = {getenv('XGRID_PWD')};
-            end
-            %
-            flag_ssh = true;
+        if display_mode,
+            disp(' ');
+            disp(['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... ']);
         end
-    elseif xgridsearch, 
-        msg = 'XGRID password not set up'; 
-    end
-    if display_mode,
-        disp(['   ... ',msg]);
+        %
+        xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+        %
+        if ~xgridsearch || ~isempty(getenv('XGRID_PWD')),
+            %
+            remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
+            %
+            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
+            %
+            if res ~= 0,
+                %
+                if any(strfind(txt,'Connection timed out')),
+                    msg = 'failed : connection timed out (10s)';
+                elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
+                    msg = 'failed : ssh key pairing not set up or not working';
+                else
+                    msg = ['failed with following message : ',txt];            
+                end
+                %
+            else
+                msg = ['completed with following result : ',txt];
+                %
+                if xgridsearch,
+                    remote.password = {getenv('XGRID_PWD')};
+                end
+                %
+                flag_ssh = true;
+            end
+        elseif xgridsearch, 
+            msg = 'XGRID password not set up'; 
+        end
+        if display_mode,
+            disp(['   ... ',msg]);
+        end
     end
     %
     if flag_ssh,
         if ~flag_bridge,
             msg = 'connection in ssh key pair mode OK';
-            remote.bridge = [];
-        elseif bridge_enforce,
-            msg = 'connection in bridge mode enforced';
         else
             msg = 'connection in ssh key pair mode enforced';
-            remote.bridge = [];
         end
+        remote.bridge = [];
     elseif flag_bridge,
         msg = 'connection in bridge mode OK';
     else
@@ -123,7 +127,6 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     end
     %
     if display_mode,
-        disp(' ');
         disp(['test output : ',msg]);
     end
     %

@@ -1,4 +1,4 @@
-function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,scheduler,profilename,duplicate,display_mode)
+function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,scheduler,profilename,duplicate,display_mode,bridge_enforce)
     %
     % This function loads remote profiles, identifies local cluster if it
     % exists, and creates a user-friendly list including scheduler type
@@ -25,6 +25,11 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %           o if the name is not specified or does not exist, default profile name is selected.
     %       - duplicate : (boolean - used only if local profile among those selected) duplicate local profile with and without empty host, to test both ways
     %       - display_mode : (boolean) show information in command window 
+    %       - bridge_enforce : [NaN, empty, 0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
+    %           o NaN : (default) use value from remote.bridge_enforce
+    %           o []  : tests both modes and give priority to ssh key pair
+    %           o 0   : tests only ssh key pair,
+    %           o 1   : tests only bridge mode
     %
     %   - OUTPUTS :
     %       - newremoteprofiles : (struct array) list of remote profile, or selection if select == true
@@ -40,6 +45,9 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %       - to load and return all profiles and scheduler with default profilename and without connection test or duplicate local profile, and also load user-friendly description :
     %           >> [remoteprofiles,profilestr] = load_remoteprofiles_jd;
     %
+    if nargin < 8,
+        bridge_enforce = NaN;% use value from remote.bridge_enforce
+    end
     if nargin < 7 || ~isscalar(display_mode) || (~islogical(display_mode) && ~isnumeric(display_mode)),
         display_mode = true;
     end
@@ -126,12 +134,15 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         for irem = 1:length(remote),
             %
             if test,
-                remoteprofile = testremoteprofile_jd(remote(irem),false,display_mode);
+                remoteprofile = testremoteprofile_jd(remote(irem),bridge_enforce,display_mode);
             else
                 remoteprofile = remote(irem);
             end
             %
             if ~isempty(remoteprofile),
+                if ~isnan(bridge_enforce),
+                    remoteprofile.bridge_enforce = bridge_enforce;
+                end
                 remoteprofiles = [remoteprofiles,remoteprofile];
                 profilestr = [profilestr,getremotestr_jd(remoteprofile)];
             else
@@ -164,7 +175,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             return
         end
         %
-        if test && isempty(testremoteprofile_jd(feval(filename,'',profilename),display_mode)),
+        if test && isempty(testremoteprofile_jd(feval(filename,'',profilename),bridge_enforce,display_mode)),
             disp(['WARNING : connection test failed for ',filename,'.m. Empty remoteprofiles returned']);
             return
         end
@@ -211,7 +222,6 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             %
             if sum(LocalFileTest) > 1,
                 disp('WARNING : more than one local cluster found among remote_*.m files. First cluster selected.');
-                return
             end
             %
             iselected = find(LocalFileTest,1,'first');
@@ -275,7 +285,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             end
             %
             for ifile = 1:nremotefiles,
-                RemoteFileTest(ifile) = ~isempty(testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),false,display_mode));
+                RemoteFileTest(ifile) = ~isempty(testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),bridge_enforce,display_mode));
             end
             %
         end
@@ -365,6 +375,12 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             %
         end
     end
+    %
+    for irem = 1:length(remoteprofiles),
+        if ~isnan(bridge_enforce),
+            remoteprofiles(irem).bridge_enforce = bridge_enforce;
+        end
+    end    
 end
 %
 function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
