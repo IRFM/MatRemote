@@ -118,9 +118,7 @@ if isnumeric(sinputs),% start new test
         disp(' ');
         %
         remote = remoteprofiles(irem);
-        %remote.debugmode = 1;
         %remote.disp_cmd = 1;
-        remote.rempause = 1/60;% in minutes
         %
         test_job = matstandardjob_jd;
         %
@@ -129,6 +127,7 @@ if isnumeric(sinputs),% start new test
         test_job.ppn = 1;%number of cores required
         test_job.memory = 2000;% memory required (in mb) - leave empty if no requirement
         test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
+        test_job.rempause = 1/60;% in minutes
         %
         test_job.env.TESTVAR = testvar;
         test_job.debugmode = debugmode;
