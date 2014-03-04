@@ -22,7 +22,7 @@ remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'ppb110.epfl.ch';
 remote.direct.decker.hostname = 'ws0';
 remote.direct.decker.nproc = 4;
-remote.direct.decker.cmd ={'bash',' &'};% direct calculation (csh, bash)
+remote.direct.decker.cmd ={'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.matver.mat801.root = '/usr/local/matlab-8.1/bin/';
