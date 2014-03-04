@@ -184,13 +184,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         % Read local hostname
         %
-        [s,lochostname] = system('hostname -f');% local hostname
-        if s ~= 0,
-            lochostname = getenv('hostname');%For remote computing (xgrid)
-            if isempty(lhostname),
-                error('local hostname could not be retrieved either from ''hostname -f'' or ''getenv(''hostname'')''');
-            end
-        end
+        lochostname = hostname_jd;
         %
         % Load profiles with profilename and default scheduler, and identify local cluster 
         %
@@ -201,7 +195,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             remoteprofile = feval(RemoteFileNames{ifile},'',profilename);
             hostname = remoteprofile.hostname;
             %
-            if any(strfind(lochostname,hostname)),% local cluster,
+            if strcmp(lochostname,hostname),% local cluster,
                 %
                 if display_mode,
                     disp(' ')

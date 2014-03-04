@@ -20,7 +20,7 @@ default.profile = 'decker';% default user profile if 'remoteuser' is not an exis
 %
 remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'crpppc82.epfl.ch';
-remote.direct.decker.hostname = 'crpppc82';
+remote.direct.decker.hostname = 'crpppc82.epfl.ch';
 remote.direct.decker.nproc = 8;
 remote.direct.decker.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after

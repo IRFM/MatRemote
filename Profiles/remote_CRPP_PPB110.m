@@ -20,7 +20,7 @@ default.profile = 'decker';% default user profile if 'remoteuser' is not an exis
 %
 remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'ppb110.epfl.ch';
-remote.direct.decker.hostname = 'ws0';
+remote.direct.decker.hostname = 'ws0.epfl.ch';
 remote.direct.decker.nproc = 4;
 remote.direct.decker.cmd ={'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
@@ -34,7 +34,7 @@ remote.direct.decker.remoteuser = 'joan.decker@cea.fr';
 %
 remote.slurm.decker = default_remote_profile;
 remote.slurm.decker.host = 'ppb110.epfl.ch';
-remote.slurm.decker.hostname = 'ws0';
+remote.slurm.decker.hostname = 'ws0.epfl.ch';
 remote.slurm.decker.nproc = 36;
 remote.slurm.decker.cmd = 'sbatch';% direct calculation (csh, bash)
 remote.slurm.decker.get_jobid = {'Submitted batch job ',''};%str_before,str_after
