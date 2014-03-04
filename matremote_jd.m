@@ -88,7 +88,11 @@ end
 %
 if isfield(output,'err'),
     disp('Remote calculation failed. Calculation started locally if enforced.')
-    err = output.err;
+    if isempty(output.err),
+        err = 'unknown error';
+    else        
+        err = output.err;
+    end
 elseif isfield(output,'varargout'),
     varargout = output.varargout;
 end
