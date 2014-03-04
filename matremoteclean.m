@@ -4,15 +4,7 @@ if ~isempty(remote.host),
     %
     if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
         %
-        f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-        listfiles = dir(f,job.batch_dir(1:end-1));%list all files in batch dir of the bridge
-        for ilf = 1:length(listfiles),
-            delete(f,[job.batch_dir,listfiles(ilf).name]);%delete all files in batch dir of the bridge
-        end
-        if isempty(listfiles),
-            rmdir(f,job.batch_dir(1:end-1));%delete batch dir of the bridge
-        end
-        close(f);
+        [txt,res] = cleanbridge(remote,job);
         %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
