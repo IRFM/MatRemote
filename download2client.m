@@ -1,9 +1,11 @@
 function [res,txt] = download2client(remote,job)
 %
 %try 
-%    f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-%    mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
-%    close(f);
+%   %
+%   f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+%   mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
+%   close(f);
+%   %
 %catch
     %
     filelist_local = dir(job.batch_dir(1:end-1));
