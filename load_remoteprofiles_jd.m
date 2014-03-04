@@ -441,7 +441,11 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
         bridgestr = '';
     end
     %
-    profilestr = [hoststr,' : ',schedulerstr,' (',cmdstr,')',bridgestr];    
+    % remote user
+    %
+    userstr = remote.remoteuser;
+    %
+    profilestr = [hoststr,' : ',schedulerstr,' (',cmdstr,')',bridgestr,' as user ',userstr];    
 end
 %
     
