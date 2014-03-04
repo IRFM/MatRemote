@@ -146,7 +146,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
                 remoteprofiles = [remoteprofiles,remoteprofile];
                 profilestr = [profilestr,getremotestr_jd(remoteprofile)];
             else
-                disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote)]);
+                disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote(irem))]);
             end
         end
         %

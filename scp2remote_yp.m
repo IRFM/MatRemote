@@ -26,6 +26,9 @@ end
 %
 % Check that the file transfer is fully achieved even when network is slow 
 %
+tmax = 1000;% maximum wait time for file transfer
+dt = 0.2;% pause between two checks for filesize
+%
 if res == 0,
     %
     if isdir([local_path,filename]),
@@ -42,57 +45,50 @@ if res == 0,
     %
     for ifile = 1:length(filelist),
         %
-        remotecmd = ['ls -al ',remote_path,filelist{ifile}];
+        remotecmd = ['du -b ',remote_path,filelist{ifile}];
         %
         tstart = tic;
         %
-        while 1,
+        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        %
+        if res ~= 0,
+            return
+        end
+        %
+        ierr = find(err == 9,1,'first');
+        if isempty(ierr) || ierr == 1,
+            err = 'error reading file size on remote machine';
+            res = 1;
+            return
+        end
+        %
+        filesize = str2double(err(1:ierr(1)-1));
+        %
+        while toc(tstart) < tmax 
             %
-            [res0,err0] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            filesize0 = filesize;
             %
-            pause(1);
+            pause(dt);
             %
-            [res1,err1] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
             %
-            day = date;
-            idate = strfind(day,'-');
-            month = day(idate(1)+1:idate(2)-1);
-            %
-            if res0+res1 == 0,
-                %
-                token0 = err0(1:strfind(err0,month)-2);
-                itoken0 = strfind(token0,' ');
-                filesize0 = token0(itoken0(end):end);
-                %
-                token1 = err1(1:strfind(err1,month)-2);
-                itoken1 = strfind(token1,' ');
-                filesize1 = token1(itoken1(end):end);
-                %
-                if strcmp(filesize0,filesize1) && str2num(filesize1) > 0,
-                    break;   
-                end
-                %
-                telapsed = toc(tstart);
-                %
-                if telapsed > 1000,%to leave anyway in case of problem
-                    break; 
-                end
-                %
-            else
-                %
-                if res0 ~= 0,
-                    res = res0;
-                    err = err0;
-                end
-                %
-                if res1 ~= 0,
-                    res = res1;
-                    err = err1;
-                end
-                %
-                break
-                %
+            if res ~= 0,
+                return
             end
+            %
+            ierr = find(err == 9,1,'first');
+            if isempty(ierr) || ierr == 1,
+                err = 'error reading file size on remote machine';
+                res = 1;
+                return
+            end
+            %
+            filesize = str2double(err(1:ierr(1)-1));
+            %
+            if filesize == filesize0,
+                break
+            end
+            %
         end
     end
 end
