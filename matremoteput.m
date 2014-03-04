@@ -5,10 +5,8 @@ function [res,txt] = matremoteput(remote,job)
 if ~isempty(remote.host),       
     %
     if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
-        %
-        f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-        mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
-        close(f);
+        %        
+        [res,txt] = upload2bridge(remote,job);%file transfer to the bridge
         %
         php_post = phppostremotejob(remote,job);%add extra data for php filtering
         %
