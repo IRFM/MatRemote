@@ -65,8 +65,6 @@ dkecluster.scheduler.display = 0;
 dkecluster.scheduler.timeout = 100;%100 s time out for job submission
 dkecluster.scheduler.info = '';
 %
-dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];
-%
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
 if isstruct(param),
@@ -109,6 +107,8 @@ if ~isempty(dkecluster.scheduler.remote),
         %
     end
 end    
+%
+dkecluster.scheduler.temppath = [pwd,filesep,'mdce_',timeid_jd(clock),filesep];
 %
 % Specific operations depending on DC mode
 %
