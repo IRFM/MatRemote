@@ -433,7 +433,15 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     end
     cmdstr = cmdstr(1:min([end,find(cmdstr == ' ' | cmdstr == '_',1,'first') - 1]));
     %
-    profilestr = [hoststr,' : ',schedulerstr,' (',cmdstr,')'];    
+    % bridge
+    % 
+    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~any(remote.bridge_enforce == 0),
+        bridgestr = [' via ',remote.bridge.url.host];
+    else
+        bridgestr = '';
+    end
+    %
+    profilestr = [hoststr,' : ',schedulerstr,' (',cmdstr,')',bridgestr];    
 end
 %
     
