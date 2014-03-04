@@ -1,6 +1,6 @@
 function remote_profile = remote_CRPP_LAC5(varargin)
 %
-% This function regroups the remote profiles run on PC82 at the CRPP
+% This function regroups the remote profiles run on LAC5 at the CRPP
 %
 %   INPUTS : 
 %       - schedulername (optinal) : name of selected scheduler
