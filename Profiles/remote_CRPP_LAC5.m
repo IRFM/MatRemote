@@ -47,29 +47,15 @@ remote.direct.decker.remoteuser = 'decker';
 %
 % direct
 %
-remote.direct.kamleitn = default_remote_profile;
-remote.direct.kamleitn.host = 'lac5.epfl.ch';
-remote.direct.kamleitn.hostname = 'crpppc401';
-remote.direct.kamleitn.nproc = 24;
-remote.direct.kamleitn.cmd ={'bash',' &'};% direct calculation (csh, bash)
-remote.direct.kamleitn.get_jobid = {};%str_before,str_after
-remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.kamleitn.matver.mat710.root = '/usr/local/matlab710/bin/';
+remote.direct.kamleitn = remote.direct.decker;
 remote.direct.kamleitn.matver.mat710.prefdir = '/home/kamleitn/.matlab/R2010a';
-remote.direct.kamleitn.matver.mat711.root = '/usr/local/MATLAB/R2010b/bin/';
 remote.direct.kamleitn.matver.mat711.prefdir = '/home/kamleitn/.matlab/R2010b';
-remote.direct.kamleitn.matver.mat713.root = '/usr/local/MATLAB/R2011b/bin/';
 remote.direct.kamleitn.matver.mat713.prefdir = '/home/kamleitn/.matlab/R2011b';
-remote.direct.kamleitn.matver.mat714.root = '/usr/local/MATLAB/R2012a/bin/';
 remote.direct.kamleitn.matver.mat714.prefdir = '/home/kamleitn/.matlab/R2012a';
-remote.direct.kamleitn.matver.mat800.root = '/usr/local/MATLAB/R2012b/bin/';
 remote.direct.kamleitn.matver.mat800.prefdir = '/home/kamleitn/.matlab/R2012b';
-remote.direct.kamleitn.matver.mat801.root = '/usr/local/MATLAB/R2013a/bin/';
 remote.direct.kamleitn.matver.mat801.prefdir = '/home/kamleitn/.matlab/R2013a';
 remote.direct.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat801;%default matlab on remote machine
 remote.direct.kamleitn.remoteuser = 'kamleitn';
-%
-
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
