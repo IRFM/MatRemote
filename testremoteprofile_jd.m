@@ -41,7 +41,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     flag_bridge = false;
     %
-    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~any(bridge_enforce == 0),% test bridge connection
+    if ~isempty(remote.bridge) && isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host)  && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host) && ~any(bridge_enforce == 0),% test bridge connection
         %
         if display_mode,
             disp(' ');
