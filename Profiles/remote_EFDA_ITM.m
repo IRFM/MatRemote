@@ -47,10 +47,7 @@ remote.sge.yves.matver.mat800.prefdir = '/pfs/home/yvesp/.matlab/R2012b';%warnin
 remote.sge.yves.matver.matdef = remote.sge.yves.matver.mat800;%default matlab on remote machine
 remote.sge.yves.remoteuser = 'yvesp';
 remote.sge.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.sge.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.sge.yves.bridge.ftp.username = 'matremote';
-remote.sge.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 remote.sge.yves.bridge_enforce = 1;
 %
 % direct
@@ -67,10 +64,7 @@ remote.direct.yves.matver.mat800.prefdir = '/pfs/home/yvesp/.matlab/R2012b';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yvesp';
 remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ftp.username = 'matremote';
-remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 remote.direct.yves.bridge_enforce = 1;
 %
 % JOAN DECKER

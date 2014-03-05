@@ -55,10 +55,7 @@ remote.sun.yves.matver.mat705.prefdir = '/home/YP105119/.matlab/R2007b';
 remote.sun.yves.matver.matdef = remote.sun.yves.matver.mat705;%default matlab on remote machine
 remote.sun.yves.remoteuser = 'YP105119';
 remote.sun.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.sun.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.sun.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.sun.yves.bridge.ftp.username = 'matremote';
-remote.sun.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles

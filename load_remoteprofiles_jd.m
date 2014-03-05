@@ -429,8 +429,8 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     %
     % bridge
     % 
-    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~any(remote.bridge_enforce == 0),
-        bridgestr = [' via ',remote.bridge.url.host];
+    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~isempty(remote.bridge.ftp.host) && ~any(remote.bridge_enforce == 0),
+        bridgestr = [' via URL: ',remote.bridge.url.host,' and FTP: ',remote.bridge.ftp.host];
     else
         bridgestr = '';
     end

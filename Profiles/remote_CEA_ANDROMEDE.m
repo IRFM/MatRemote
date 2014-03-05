@@ -33,11 +33,7 @@ remote.pbs.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.pbs.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
 remote.pbs.joan.remoteuser = 'JD211098';
-remote.pbs.joan.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.pbs.joan.bridge.url.path = '~yvespeysson/MatRemote';
-remote.pbs.joan.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.pbs.joan.bridge.ftp.username = 'matremote';
-remote.pbs.joan.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.pbs.joan.bridge = 'tolbachik.hd.free.fr';
 %
 % direct
 %
@@ -57,11 +53,8 @@ remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.direct.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
 remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
 remote.direct.joan.remoteuser = 'JD211098';
-% remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-% remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
-% remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-% remote.direct.yves.bridge.ftp.username = 'matremote';
-% remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.direct.joan.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.joan.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % YVES PEYSSON
 %
@@ -81,10 +74,7 @@ remote.pbs.yves.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
 remote.pbs.yves.matver.matdef = remote.pbs.yves.matver.mat800;%default matlab on remote machine
 remote.pbs.yves.remoteuser = 'YP105119';
 remote.pbs.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.pbs.yves.bridge.url.path = '~yvespeysson/MatRemote';
 remote.pbs.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.pbs.yves.bridge.ftp.username = 'matremote';
-remote.pbs.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
 %
 % direct
 %
@@ -104,11 +94,7 @@ remote.direct.yves.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
 remote.direct.yves.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'YP105119';
-% remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-% remote.direct.yves.bridge.url.path = '~yvespeysson/MatRemote';
-% remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-% remote.direct.yves.bridge.ftp.username = 'matremote';
-% remote.direct.yves.bridge.ftp.password = 'Rq59G4zzPSzZNC9LFMdTK';
+remote.direct.yves.bridge = 'tolbachik.hd.free.fr';
 %
 % YVES BURAVAND
 %
