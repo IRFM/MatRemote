@@ -6,7 +6,7 @@ if isempty(remotecmd) && ~isempty(filename)
     %
     php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
     %
-    [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/scp_getfile.php'],'post',php_post);%transfer data from the bridge batch dir to the remote batch dir
+    [txt_url,res_url] = bridgeurl(remote,php_post,'scp_getfile.php');
 end
 %
 if ~isempty(remotecmd) && isempty(filename)
@@ -15,11 +15,8 @@ if ~isempty(remotecmd) && isempty(filename)
     %
     php_post = phppostremotejob(remote,job,php_post);%add extra data for php filtering
     %
-    [txt_url,res_url] = urlread(['http://',remote.bridge.url.host,'/',remote.bridge.url.path,'/ssh.php'],'post',php_post);%execute the remote command from the bridge (ssh over php) 
-    %
+    [txt_url,res_url] = bridgeurl(remote,php_post,'ssh.php');
 end
-%
-txt_url = strtrim(txt_url);
 %
 if ~isempty(strfind(txt_url,'Non standard unix command in MatRemote')),
     error('Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...');
