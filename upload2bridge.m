@@ -1,10 +1,14 @@
 function [res,txt] = upload2bridge(remote,job)
 %
-%try 
-%    f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-%    mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
-%    close(f);
-%catch
+res = 0;
+txt = '';
+%
+[remote] = bridge_params(remote);
+%
+flag_curl_ftp = testcurl('ftp');
+%
+if flag_curl_ftp,%ftp over curl method
+    %
     filelist = dir(job.batch_dir(1:end-1));
     for ii = 1:length(filelist),
         if ~strcmp(filelist(ii).name,'.') && ~strcmp(filelist(ii).name,'..')
@@ -12,4 +16,11 @@ function [res,txt] = upload2bridge(remote,job)
             [res,txt] = unix(cmd);
         end
     end
-%end
+    %
+else%ftp embedded in matlab (not necessarily operational)
+    %
+    f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+    mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
+    close(f);
+    %
+end
