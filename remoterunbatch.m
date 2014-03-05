@@ -214,7 +214,7 @@ if ~isempty(job.save_id),
         locdisp(displaymode,['    --> Copying data file/folder ',job.localdatapath,job.save_id,' to location ',job.remotedatapath])  
     end
     %
-    [res,txt] = matremoteput(remote,job);
+    [res,err] = matremoteput(remote,job);
     %
     if res ~= 0,
         %
