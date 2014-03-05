@@ -1,12 +1,13 @@
 function [res,txt] = download2client(remote,job)
 %
-%try 
-%   %
-%   f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-%   mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
-%   close(f);
-%   %
-%catch
+res = 0;
+txt = '';
+%
+[remote] = bridge_params(remote);
+%
+flag_curl_ftp = testcurl('ftp');
+%
+if flag_curl_ftp,%ftp over curl method
     %
     filelist_local = dir(job.batch_dir(1:end-1));
     %
@@ -55,4 +56,10 @@ function [res,txt] = download2client(remote,job)
             end
         end
     end
-%end
+else%ftp embedded in matlab (not necessarily operational) 
+   %
+   f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+   mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
+   close(f);
+   %
+end

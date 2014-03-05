@@ -1,20 +1,13 @@
 function [res,txt] = cleanbridge(remote,job)
 %
-%try      
+res = 0;
+txt = '';
 %
-%   f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-%   listfiles = dir(f,job.batch_dir(1:end-1));%list all files in batch dir of the bridge
-%   for ilf = 1:length(listfiles),
-%       delete(f,[job.batch_dir,listfiles(ilf).name]);%delete all files in batch dir of the bridge
-%   end
-%   %
-%   if isempty(listfiles),
-%       rmdir(f,job.batch_dir(1:end-1));%delete batch dir of the bridge
-%   end
-%   %
-%   close(f);
-%   %
-%catch
+remote = bridge_params(remote);
+%
+flag_curl_ftp = testcurl('ftp');
+%
+if flag_curl_ftp,%ftp over curl method
     %
     cmd = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
     %
@@ -42,4 +35,19 @@ function [res,txt] = cleanbridge(remote,job)
     %
     cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD ',job.batch_dir,'" ftp://',remote.bridge.ftp.host];
     [res,txt] = unix(cmd);
-%end
+    %
+else%ftp embedded in matlab (not necessarily operational)
+   %
+   f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+   listfiles = dir(f,job.batch_dir(1:end-1));%list all files in batch dir of the bridge
+   for ilf = 1:length(listfiles),
+       delete(f,[job.batch_dir,listfiles(ilf).name]);%delete all files in batch dir of the bridge
+   end
+   %
+   if isempty(listfiles),
+       rmdir(f,job.batch_dir(1:end-1));%delete batch dir of the bridge
+   end
+   %
+   close(f);
+   %
+end
