@@ -29,6 +29,9 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
                 error('XGRID password not set up.')
             end
         end
+        %
+        remote.bridge = [];
+        %
         return
     end
     %
