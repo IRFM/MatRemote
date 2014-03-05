@@ -260,24 +260,31 @@ elseif job.xgridsearch,
     %
     % extract result files
     %
-    if ~isfield(remote,'password') || isempty(remote.password),
-        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
-    else
-        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
-    end
+    [res,txt] = matremotecheck(remote,job,['MAT_OUT_',job.timeid,'.mat']);%check if the results are already back to the temp batch dir
     %
-    [res,err] = matremotecmd(remote,job,remotecmd);
-    %
-    pause(0.1);
-    %
-    if res == 0,% result file successfuly transfered
-        locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
-    else
-        locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
-        soutput.err = err;
+    if res,
         %
-        return
-    end            
+        if ~isfield(remote,'password') || isempty(remote.password),
+            remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
+        else
+            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
+        end
+        %
+        [res,err] = matremotecmd(remote,job,remotecmd);
+        %
+        pause(0.1);
+        %
+        if res == 0,% result file successfuly transfered
+            locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
+        else
+            locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
+            soutput.err = err;
+            %
+            return
+        end 
+    else
+        locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
+    end
 end
 %
 % data transfer (results are transfered back from the remote to the local computer) 
