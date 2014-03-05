@@ -49,6 +49,10 @@ if ~isfield(job,'timeid') || isempty(job.timeid),
     job.timeid = timeid_jd(clock);
 end
 %
+if ~isfield(job,'userid') || isempty(job.userid),
+    job.userid = [getenv('USER'),'@',hostname_jd];
+end
+%
 % path to matlab if applicable
 %
 if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed by job
