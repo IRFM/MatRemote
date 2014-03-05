@@ -11,7 +11,7 @@ function remote_profile = remote_CEA_ANDROMEDE(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'joan';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'JD211098';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -19,118 +19,109 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 %
 % pbs pro
 %
-remote.pbs.joan = default_remote_profile;
-remote.pbs.joan.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.joan.hostname = 'andromede1';
-remote.pbs.joan.nproc = 12;
-remote.pbs.joan.cmd = 'qsub';
-remote.pbs.joan.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.joan.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.joan.shclean = 1;
-remote.pbs.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.pbs.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
-remote.pbs.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
-remote.pbs.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
-remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
-remote.pbs.joan.remoteuser = 'JD211098';
-remote.pbs.joan.bridge = 'tolbachik.hd.free.fr';
+remote.pbs.JD211098 = default_remote_profile;
+remote.pbs.JD211098.host = 'andromede1.partenaires.cea.fr';
+remote.pbs.JD211098.hostname = 'andromede1';
+remote.pbs.JD211098.nproc = 12;
+remote.pbs.JD211098.cmd = 'qsub';
+remote.pbs.JD211098.get_jobid = {'','.andromede1'};%str_before,str_after
+remote.pbs.JD211098.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.JD211098.shclean = 1;
+remote.pbs.JD211098.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.pbs.JD211098.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
+remote.pbs.JD211098.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.pbs.JD211098.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
+remote.pbs.JD211098.matver.matdef = remote.pbs.JD211098.matver.mat800;%default matlab on remote machine
+remote.pbs.JD211098.remoteuser = 'JD211098';
+remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
 % note : mode direct bridge disabled because nohup does not work
 %
-remote.direct.joan = default_remote_profile;
-remote.direct.joan.host = 'andromede1.partenaires.cea.fr';
-remote.direct.joan.hostname = 'andromede1';
-remote.direct.joan.nproc = 12;
-% remote.direct.joan.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
-remote.direct.joan.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-remote.direct.joan.get_jobid = {};%str_before,str_after
-remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.joan.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.direct.joan.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
-remote.direct.joan.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
-remote.direct.joan.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
-remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
-remote.direct.joan.remoteuser = 'JD211098';
-remote.direct.joan.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.joan.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.JD211098 = default_remote_profile;
+remote.direct.JD211098.host = 'andromede1.partenaires.cea.fr';
+remote.direct.JD211098.hostname = 'andromede1';
+remote.direct.JD211098.nproc = 12;
+%
+% remote.direct.JD211098.cmd = {'csh','',' &;'};% direct calculation (csh, bash)
+% remote.direct.JD211098.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
+% remote.direct.JD211098.set_jobid = {'ps -p ',' -o comm=','csh'};%str_before,str_after,str_check
+%
+% remote.direct.JD211098.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
+remote.direct.JD211098.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.JD211098.get_jobid = {};%str_before,str_after
+remote.direct.JD211098.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.JD211098.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.direct.JD211098.matver.mat710.prefdir = '/home/JD211098/.matlab/R2010a';
+remote.direct.JD211098.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.direct.JD211098.matver.mat800.prefdir = '/home/JD211098/.matlab/R2012b';
+remote.direct.JD211098.matver.matdef = remote.direct.JD211098.matver.mat800;%default matlab on remote machine
+remote.direct.JD211098.remoteuser = 'JD211098';
+remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % YVES PEYSSON
 %
-remote.pbs.yves = default_remote_profile;
-remote.pbs.yves.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.yves.hostname = 'andromede1';
-remote.pbs.yves.nproc = 12;
-remote.pbs.yves.cmd = 'qsub';
-remote.pbs.yves.remotedatapath = '/home/YP105119/tmp/';
-remote.pbs.yves.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.yves.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.yves.shclean = 1;
-remote.pbs.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.pbs.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
-remote.pbs.yves.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
-remote.pbs.yves.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
-remote.pbs.yves.matver.matdef = remote.pbs.yves.matver.mat800;%default matlab on remote machine
-remote.pbs.yves.remoteuser = 'YP105119';
-remote.pbs.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.pbs.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.pbs.YP105119 = default_remote_profile;
+remote.pbs.YP105119.host = 'andromede1.partenaires.cea.fr';
+remote.pbs.YP105119.hostname = 'andromede1';
+remote.pbs.YP105119.nproc = 12;
+remote.pbs.YP105119.cmd = 'qsub';
+remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp/';
+remote.pbs.YP105119.get_jobid = {'','.andromede1'};%str_before,str_after
+remote.pbs.YP105119.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.YP105119.shclean = 1;
+remote.pbs.YP105119.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.pbs.YP105119.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
+remote.pbs.YP105119.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.pbs.YP105119.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
+remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat800;%default matlab on remote machine
+remote.pbs.YP105119.remoteuser = 'YP105119';
+remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
 % note : mode direct bridge disabled because nohup does not work
 %
-remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'andromede1.partenaires.cea.fr';
-remote.direct.yves.hostname = 'andromede1';
-remote.direct.yves.nproc = 12;
-% remote.direct.yves.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
-remote.direct.yves.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.direct.yves.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
-remote.direct.yves.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
-remote.direct.yves.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'YP105119';
-remote.direct.yves.bridge = 'tolbachik.hd.free.fr';
+remote.direct.YP105119 = default_remote_profile;
+remote.direct.YP105119.host = 'andromede1.partenaires.cea.fr';
+remote.direct.YP105119.hostname = 'andromede1';
+remote.direct.YP105119.nproc = 12;
+% remote.direct.YP105119.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
+remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.YP105119.get_jobid = {};%str_before,str_after
+remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.YP105119.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
+remote.direct.YP105119.matver.mat710.prefdir = '/home/YP105119/.matlab/R2010a';
+remote.direct.YP105119.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
+remote.direct.YP105119.matver.mat800.prefdir = '/home/YP105119/.matlab/R2012b';
+remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat800;%default matlab on remote machine
+remote.direct.YP105119.remoteuser = 'YP105119';
+remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % YVES BURAVAND
 %
-remote.pbs.yvesb = default_remote_profile;
-remote.pbs.yvesb.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.yvesb.hostname = 'andromede1';
-remote.pbs.yvesb.nproc = 12;
-remote.pbs.yvesb.cmd = 'qsub';
-remote.pbs.yvesb.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.yvesb.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.yvesb.shclean = 1;
-remote.pbs.yvesb.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.pbs.yvesb.matver.mat710.prefdir = '/home/YB109156/.matlab/R2010a';
-remote.pbs.yvesb.matver.mat712.root = '/Applications/Matlab_2011A/bin/';
-remote.pbs.yvesb.matver.mat712.prefdir = '/home/YB109156/.matlab/R2011a';
-remote.pbs.yvesb.matver.matdef = remote.pbs.yvesb.matver.mat710;%default matlab on remote machine
-remote.pbs.yvesb.remoteuser = 'YB109156';
+% pbs pro
+%
+remote.pbs.YB109156 = remote.pbs.JD211098;
+remote.pbs.YB109156.matver.mat710.prefdir = '/home/YB109156/.matlab/R2010a';
+remote.pbs.YB109156.matver.mat712.prefdir = '/home/YB109156/.matlab/R2011a';
+remote.pbs.YB109156.matver.matdef = remote.pbs.YB109156.matver.mat710;%default matlab on remote machine
+remote.pbs.YB109156.remoteuser = 'YB109156';
 %
 % EMELIE NILSSON
 %
-% andromede (pbs pro)
+% pbs pro
 %
-remote.pbs.emelie = default_remote_profile;
-remote.pbs.emelie.host = 'andromede1.partenaires.cea.fr';% empty for local host
-remote.pbs.emelie.hostname = 'andromede1';
-remote.pbs.emelie.nproc = 12;
-remote.pbs.emelie.cmd = 'qsub';
-remote.pbs.emelie.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.emelie.set_jobid = {'qstat ','.andromede1','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.emelie.shclean = 1;
-remote.pbs.emelie.matver.mat710.root = '/Applications/Matlab_2010A/bin/';
-remote.pbs.emelie.matver.mat710.prefdir = '/home/EN290612/.matlab/R2010a';
-remote.pbs.emelie.matver.mat800.root = '/Applications/Matlab_2012B/bin/';
-remote.pbs.emelie.matver.mat800.prefdir = '/home/EN290612/.matlab/R2012b';
-remote.pbs.emelie.matver.matdef = remote.pbs.emelie.matver.mat800;%default matlab on remote machine
-remote.pbs.emelie.remoteuser = 'EN290612';
+remote.pbs.EN290612 = remote.pbs.JD211098;
+remote.pbs.EN290612.matver.mat710.prefdir = '/home/EN290612/.matlab/R2010a';
+remote.pbs.EN290612.matver.mat800.prefdir = '/home/EN290612/.matlab/R2012b';
+remote.pbs.EN290612.matver.matdef = remote.pbs.EN290612.matver.mat800;%default matlab on remote machine
+remote.pbs.EN290612.remoteuser = 'EN290612';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
