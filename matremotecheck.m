@@ -7,6 +7,7 @@ if ~isempty(remote.host),
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
         %
         remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
+        %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
