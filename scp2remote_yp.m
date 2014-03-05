@@ -45,24 +45,26 @@ if res == 0,
     %
     for ifile = 1:length(filelist),
         %
-        remotecmd = ['du -b ',remote_path,filelist{ifile}];
+        remotecmds = {'stat -f "%z"','stat -c %s'};
+        res = 1;
         %
-        tstart = tic;
-        %
-        [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+        for icmd = 1:length(remotecmds),
+            remotecmd = remotecmds{icmd};
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            if res == 0,
+                break
+            end
+        end
         %
         if res ~= 0,
             return
         end
         %
-        ierr = find(err == 9,1,'first');
-        if isempty(ierr) || ierr == 1,
-            err = 'error reading file size on remote machine';
-            res = 1;
-            return
-        end
+        err(err == 10) = [];%remote EoF
         %
-        filesize = str2double(err(1:ierr(1)-1));
+        filesize = str2double(err);
+        %
+        tstart = tic;
         %
         while toc(tstart) < tmax 
             %
@@ -70,20 +72,15 @@ if res == 0,
             %
             pause(dt);
             %
-            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,'''']);
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
             %
             if res ~= 0,
                 return
             end
             %
-            ierr = find(err == 9,1,'first');
-            if isempty(ierr) || ierr == 1,
-                err = 'error reading file size on remote machine';
-                res = 1;
-                return
-            end
+            err(err == 10) = [];%remote EoF
             %
-            filesize = str2double(err(1:ierr(1)-1));
+            filesize = str2double(err);
             %
             if filesize == filesize0,
                 break
