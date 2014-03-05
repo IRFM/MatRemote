@@ -195,7 +195,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             remoteprofile = feval(RemoteFileNames{ifile},'',profilename);
             hostname = remoteprofile.hostname;
             %
-            if strcmp(lochostname,hostname),% local cluster,
+            if any(strfind(lochostname,hostname)),% local cluster,
                 %
                 if display_mode,
                     disp(' ')
