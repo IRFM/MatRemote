@@ -11,7 +11,7 @@ key = 0;%first job
 filename = ['xgrid_batch_matlab_',job.timeid,'.plist'];
 fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
-env = fieldnames(rmfield(job.env,{'remotebatch_matlabprefdir'}));%fixed syntax imposed by Matlab for prefdir, see below
+env = fieldnames(job.env);
 %
 fprintf(fileid,['<?xml version="1.0" encoding="UTF-8"?>','\n']);
 fprintf(fileid,['<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">','\n']);
@@ -46,8 +46,6 @@ fprintf(fileid,['					<key>hostname</key>','\n']);
 fprintf(fileid,['					<string>',job.hostname,'</string>','\n']);
 fprintf(fileid,['					<key>remotebatchdir</key>','\n']);
 fprintf(fileid,['					<string>',job.remotedatapath,job.batch_dir,'</string>','\n']);
-fprintf(fileid,['					<key>MATLAB_PREFDIR</key>','\n']);
-fprintf(fileid,['					<string>',job.env.remotebatch_matlabprefdir,'</string>','\n']);
 fprintf(fileid,['				</dict>','\n']);
 fprintf(fileid,['			</dict>','\n']);
 fprintf(fileid,['		</dict>','\n']);

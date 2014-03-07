@@ -59,18 +59,14 @@ if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab cal
     matver = matversion_yp;
     if isempty(remote.host),% same version for local calculations
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/'];
-        job.env.remotebatch_matlabprefdir = prefdir;        
     elseif isfield(remote,'matver') && isfield(remote.matver,['mat',matver]) && ~isempty(remote.matver.(['mat',matver])),
         % same version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]).root;
-        job.env.remotebatch_matlabprefdir = remote.matver.(['mat',matver]).prefdir;
+        job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]);
     elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef),
         % default version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matver.matdef.root;
-        job.env.remotebatch_matlabprefdir = remote.matver.matdef.prefdir;
+        job.env.remotebatch_matlabroot = remote.matver.matdef;
     else% default version on remote cluster
         job.env.remotebatch_matlabroot = '';
-        job.env.remotebatch_matlabprefdir = '';
     end
 end
 %
