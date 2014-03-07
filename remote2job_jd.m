@@ -15,6 +15,10 @@ elseif ~isfield(job,'remotedatapath'),
     job.remotedatapath = '';
 end
 %
+if isfield(remote,'startuppath') && ~isempty(remote.startuppath),% path for startup
+    job.env.MATLABPATH = remote.startuppath;
+end
+%
 if isfield(remote,'debugmode'),
     job.debugmode = remote.debugmode;
 elseif ~isfield(job,'debugmode'),
