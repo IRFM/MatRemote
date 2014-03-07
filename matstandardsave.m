@@ -48,10 +48,6 @@ if job.funcopy >= 0,
         safecopyfile(job.env.remotebatch_matlabfun,[job.localdatapath,job.batch_dir]);% matlab function (ex : remotematrun) to be called by batch script (only with matlabbatch.sh)
     end
     %
-    if isfield(job,'env') && isfield(job.env,'remotepathfnc') && ~isempty(job.env.remotepathfnc) && isempty(fileparts(job.env.remotepathfnc)),
-        safecopyfile(job.env.remotepathfnc,[job.localdatapath,job.batch_dir]);% matlab function (ex : setlukepath) to set remote matlab path (only with remotematrun)
-    end
-    %
     if isfield(job,'env') && isfield(job.env,'remotematfnc') && ~isempty(job.env.remotematfnc),
         safecopyfile(job.env.remotematfnc,[job.localdatapath,job.batch_dir]);% matlab function to take the input structure 'sinput' (only with remotematrun)
     end

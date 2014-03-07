@@ -1,4 +1,4 @@
-function remotematrun(timeid,debugmode,remotepathfnc,remotematfnc)
+function remotematrun(timeid,debugmode,remotematfnc)
 %
 % This function is a generic matlab function to be called when matlab is
 % started in a remote location. The following variables are set by environment 
@@ -6,7 +6,6 @@ function remotematrun(timeid,debugmode,remotepathfnc,remotematfnc)
 %
 %   - timeid : identification for the job
 %   - debugmode : debugging mode
-%   - remotepathfnc : function setting remote matlab path
 %   - remotematfnc : function called by remotematrun
 %
 % in debugmode, it is assumed that the function is called from the remotedatath location
@@ -47,20 +46,6 @@ try
     fileout = [remotebatchdir,'MAT_OUT_',timeid,'.mat'];
     %
     if nargin < 3,
-        remotepathfnc = getenv('remotepathfnc');
-    end
-    %
-    if ~isempty(remotepathfnc) && exist([remotepathfnc,'.m'],'file'),
-        [remotepath,remotepathfnc] = fileparts(remotepathfnc);
-        if ~isempty(remotepath),% function on the remote filesystem
-            addpath(remotepath);
-        end
-        feval(remotepathfnc);% setup remote matlab path
-    else
-        remotepath = '';
-    end
-    %
-    if nargin < 4,
         remotematfnc = getenv('remotematfnc');
     end
     %
@@ -80,8 +65,6 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
-        disp(['remotepath = ',remotepath]);
-        disp(['remotepathfnc = ',remotepathfnc]);
         disp('------------------------------');
     end
     %
