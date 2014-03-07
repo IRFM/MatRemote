@@ -26,7 +26,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
             if ~isempty(getenv('XGRID_PWD')),
                 remote.password = getenv('XGRID_PWD');
             else
-                error('XGRID password not set up.')
+                disp('WARNING: XGRID password not set up. Create an environment variable ''XGRID_PWD''.')
             end
         end
         %
