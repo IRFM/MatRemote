@@ -80,55 +80,8 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %
     MatRemoteDir = fileparts(which(mfilename));
     %
-    tmp_profiles = '';
-    %
-    if ~ischar(profilename) && ~isstruct(remote),
-        %
-        if ischar(remote) && ~isempty(remote) && ~strcmp(remote,'local'),% case where a specified remote file is requested
-            %  
-            if exist([MatRemoteDir,'/Profiles/remote_',remote,'.m'],'file')
-                tmp_remote = eval(['remote_',remote,'(''all'')']);
-                tmp_remote_fields = fieldnames(tmp_remote);
-                %
-                for itmprem = 1:length(tmp_remote_fields),
-                     tmp_profile_fields = fieldnames(tmp_remote.(tmp_remote_fields{itmprem}));
-                     for itmpprof = 1:length(tmp_profile_fields),
-                        if isempty(strfind(tmp_profiles,tmp_profile_fields{itmpprof})),
-                            if ~isempty(tmp_profiles),
-                                tmp_profiles = [tmp_profiles,', ',tmp_profile_fields{itmpprof}];
-                            else
-                                 tmp_profiles = tmp_profile_fields{itmpprof};
-                            end
-                        end
-                     end
-                end
-            end
-        end
-        %
-        if inter,
-            if ~isempty(tmp_profiles),
-            	profilename = input_dke_yp(['Identify profile name in the list ''',tmp_profiles,''', or leave empty to use default remote profile'],'');
-            else
-             	profilename = input_dke_yp(['Identify profile name like ''yves, joan, ...'', or leave empty to use default for each remote profile'],'');
-            end
-        elseif strcmp(remote,'local'),
-            profilename = 'local';
-        else
-            profilename = '';
-        end
-    end
-    %
     remoteprofiles = [];
     profilestr = {};
-    %
-    % List all files from Matremote/Profiles directory of the form remote_[...].m that contain profiles
-    %
-    RemoteProfDirContents = dir([MatRemoteDir,filesep,'Profiles/remote_*.m']);
-    nremotefiles = length(RemoteProfDirContents);
-    RemoteFileNames = cell(1,nremotefiles);
-    for ifile = 1:nremotefiles,
-        RemoteFileNames{ifile} = RemoteProfDirContents(ifile).name(1:end-2);
-    end
     %
     if isstruct(remote),% case where structure or structure array was input
         for irem = 1:length(remote),
@@ -163,6 +116,15 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         select = false;
     end
     %
+    % List all files from Matremote/Profiles directory of the form remote_[...].m that contain profiles
+    %
+    RemoteProfDirContents = dir([MatRemoteDir,filesep,'Profiles/remote_*.m']);
+    nremotefiles = length(RemoteProfDirContents);
+    RemoteFileNames = cell(1,nremotefiles);
+    for ifile = 1:nremotefiles,
+        RemoteFileNames{ifile} = RemoteProfDirContents(ifile).name(1:end-2);
+    end
+    %
     if ~isempty(remote) && ~strcmp(remote,'local'),
         %
         % case where profile was specified by function input
@@ -172,11 +134,6 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         if ~any(iselected),
             disp(['WARNING : file ',filename,'.m not found on the matlab path. Empty remoteprofiles returned']);
-            return
-        end
-        %
-        if test && isempty(testremoteprofile_jd(feval(filename,'',profilename),bridge_enforce,display_mode)),
-            disp(['WARNING : connection test failed for ',filename,'.m. Empty remoteprofiles returned']);
             return
         end
         %
@@ -192,7 +149,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         for ifile = 1:nremotefiles,
             %
-            remoteprofile = feval(RemoteFileNames{ifile},'',profilename);
+            remoteprofile = feval(RemoteFileNames{ifile});
             hostname = remoteprofile.hostname;
             %
             if any(strfind(lochostname,hostname)),% local cluster,
@@ -223,25 +180,63 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         end
     end
     %
+    if ~ischar(profilename),
+        if inter,
+            profilenamelist = {};
+            if ~isempty(remote),% case where a specified remote file is requested
+                %
+                fullremote = feval(RemoteFileNames{iselected},'all');% all schedulers & profilenames
+                default = fullremote.default;
+                schedulerlist = fieldnames(rmfield(fullremote,'default'));
+                profilenamelist = {};
+                for isched = 1:length(schedulerlist),
+                    profilenamelist = unique([profilenamelist,fieldnames(fullremote.(schedulerlist{isched})).']);
+                end
+                iprof = find(strcmp(profilenamelist,default.profile));
+                profilenamelist = profilenamelist([iprof,1:iprof-1,iprof+1:end]);
+                %
+            end
+            if ~isempty(profilenamelist),
+                profilename = profilenamelist{iselect_jd(profilenamelist,'Select profile name : ',0,struct,1)};
+            else
+             	profilename = input_dke_yp('Identify profile name such as ''yves'', ''joan'', ... or leave empty to use default.','');
+            end
+        elseif strcmp(remote,'local'),
+            profilename = 'local';
+        else
+            profilename = '';
+        end
+    end
+    %
     if ~isempty(remote),
         %
         % case where profile was specified by function input
         %
+        if test,
+            testedprofile = testremoteprofile_jd(feval(RemoteFileNames{iselected},'',''),bridge_enforce,display_mode);
+            if isempty(testedprofile),
+                disp(['WARNING : connection test failed for ',RemoteFileNames{iselected},'.m. Empty remoteprofiles returned']);
+                return
+            end
+            Bridgemode = ~isempty(testedprofile.bridge);
+        else
+            testedprofile = feval(RemoteFileNames{iselected},'','');
+            if ~isempty(testedprofile.bridge) && (any(bridge_enforce == 1) || (any(isnan(bridge_enforce)) && any(testedprofile.bridge_enforce == 1))),
+                Bridgemode = true;
+            else
+                Bridgemode = false;
+            end
+        end
+        %
         newremoteprofiles = feval(RemoteFileNames{iselected},scheduler,profilename);
         nrem = length(newremoteprofiles);
         %
-        flag = true(1,nrem);
-        for irem = 1:nrem,
-            if ~strcmp(remote,'local') && ~isnan(bridge_enforce),
-                newremoteprofiles(irem).bridge_enforce = bridge_enforce;
-                if any(bridge_enforce == 1) && isempty(newremoteprofiles(irem).bridge),% case appears when bridge mode not implemented for all schedulers
-                    flag(irem) = false;
-                end
+        if ~Bridgemode,
+            %
+            for irem = 1:nrem,
+                newremoteprofiles(irem).bridge = [];
             end
         end    
-        newremoteprofiles = newremoteprofiles(flag);    
-        %
-        nrem = length(newremoteprofiles);
         %
         profilestr = cell(1,nrem);
         cmdstr = cell(1,nrem);
@@ -250,6 +245,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         for irem = 1:nrem,
             if strcmp(remote,'local'),
                 newremoteprofiles(irem).host = '';% local cluster
+                newremoteprofiles(irem).bridge = [];
             end
             %
             [profilestr{irem},~,cmdstr{irem},schedulerstr{irem}] = getremotestr_jd(newremoteprofiles(irem));
@@ -277,6 +273,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     else% other cases
         %
         RemoteFileTest = true(1,nremotefiles);
+        Bridgemode = false(1,nremotefiles);
         %
         if test,
             %
@@ -292,7 +289,18 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             end
             %
             for ifile = 1:nremotefiles,
-                RemoteFileTest(ifile) = ~isempty(testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),bridge_enforce,display_mode));
+                testedprofile = testremoteprofile_jd(feval(RemoteFileNames{ifile},'',''),bridge_enforce,display_mode);
+                RemoteFileTest(ifile) = ~isempty(testedprofile);
+                Bridgemode(ifile) = RemoteFileTest(ifile) && ~isempty(testedprofile.bridge);
+            end
+            %
+        else
+            %
+            for ifile = 1:nremotefiles,
+                testedprofile = feval(RemoteFileNames{ifile},'','');
+                if ~isempty(testedprofile.bridge) && (any(bridge_enforce == 1) || (any(isnan(bridge_enforce)) && any(testedprofile.bridge_enforce == 1))),
+                    Bridgemode(ifile) = true;
+                end
             end
             %
         end
@@ -301,6 +309,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         RemoteFileNames = [RemoteFileNames(LocalFileTest),RemoteFileNames(~LocalFileTest)];
         RemoteFileTest = [RemoteFileTest(LocalFileTest),RemoteFileTest(~LocalFileTest)];
+        Bridgemode = [Bridgemode(LocalFileTest),Bridgemode(~LocalFileTest)];
         LocalFileTest = [LocalFileTest(LocalFileTest),LocalFileTest(~LocalFileTest)];
         %
         % Select local and remotely working profiles 
@@ -309,12 +318,14 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         RemoteFileNames = RemoteFileNames(SelectedProfiles);
         LocalFileTest = LocalFileTest(SelectedProfiles);
         RemoteFileTest = RemoteFileTest(SelectedProfiles);
+        Bridgemode = Bridgemode(SelectedProfiles);
         %
         % Load profiles with profilename including all schedulers
         %
         remoteprofiles = [];
         localprofiletest = [];
         remoteprofiletest = [];
+        bridgemodes = [];
         %
         for irem = 1:length(RemoteFileNames),
             newremoteprofiles = feval(RemoteFileNames{irem},NaN,profilename);
@@ -322,13 +333,13 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
             remoteprofiles = [remoteprofiles,newremoteprofiles];
             localprofiletest = [localprofiletest,repmat(LocalFileTest(irem),[1,length(newremoteprofiles)])];
             remoteprofiletest = [remoteprofiletest,repmat(RemoteFileTest(irem),[1,length(newremoteprofiles)])];
+            bridgemodes = [bridgemodes,repmat(Bridgemode(irem),[1,length(newremoteprofiles)])];
         end
         nrem = length(remoteprofiles);
         %
         % Duplicate (if duplicate==true) possible local profile(s);
         % Generate user-friendly title
         %
-        profilestr = {};
         newremoteprofiles = [];
         %
         for irem = 1:nrem,
@@ -337,16 +348,18 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
                 %
                 remoteprofile = remoteprofiles(irem);% remote profile selected
                 remoteprofile.host = '';
+                remoteprofile.bridge = [];
                 newremoteprofiles = [newremoteprofiles,remoteprofile];
-                profilestr = [profilestr,getremotestr_jd(remoteprofile)];
                 %
             end
             %
             if remoteprofiletest(irem) && (~localprofiletest(irem) || (localprofiletest(irem) && duplicate)),% remote cluster or local cluster with full host field (if duplicate == true)
                 %
                 remoteprofile = remoteprofiles(irem);% remote profile selected
+                if ~bridgemodes(irem),
+                    remoteprofile.bridge = [];
+                end
                 newremoteprofiles = [newremoteprofiles,remoteprofile];
-                profilestr = [profilestr,getremotestr_jd(remoteprofile)];
                 %
             end
             %
@@ -354,23 +367,12 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         % List (& select if select == true) all valid remote (and local) profiles
         %
-        nrem = length(profilestr);
+        nrem = length(newremoteprofiles);
         %
-        % manage bridge mode
-        %
-        flag = true(1,nrem);
+        profilestr = cell(1,nrem);
         for irem = 1:nrem,
-            if ~isnan(bridge_enforce),
-                newremoteprofiles(irem).bridge_enforce = bridge_enforce;
-                if any(bridge_enforce == 1) && isempty(newremoteprofiles(irem).bridge),% case appears for local profiles or when bridge mode not implemented for all schedulers
-                    flag(irem) = false;
-                end
-            end
-        end    
-        profilestr = profilestr(flag);
-        newremoteprofiles = newremoteprofiles(flag);    
-        %
-        nrem = length(profilestr);
+            profilestr{irem} = getremotestr_jd(newremoteprofiles(irem));
+        end
         %
         if display_mode || select,
             disp(' ');

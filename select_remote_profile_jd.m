@@ -8,6 +8,7 @@ function remote_profile = select_remote_profile_jd(remote,default,schedulername,
 %
 if nargin >= 3 && strcmp(schedulername,'all'),
     remote_profile = remote;
+    remote_profile.default = default;
     return
 end
 %
