@@ -35,6 +35,7 @@ remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat800;%default mat
 remote.torque.yves.remoteuser = 'PEYSSON';
 remote.torque.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.torque.yves.bridge_enforce = true;
 %
 % JOAN DECKER
 %

@@ -31,6 +31,7 @@ remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default mat
 remote.direct.yves.remoteuser = 'yvespeysson';
 remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.yves.bridge_enforce = true;
 %
 % condor
 %
@@ -50,6 +51,7 @@ remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default mat
 remote.condor.yves.remoteuser = 'yvespeysson';
 remote.condor.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.condor.yves.bridge_enforce = true;
 %
 % xgrid
 %
@@ -104,6 +106,7 @@ remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matla
 remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
 remote.xgrid.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.xgrid.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yves.bridge_enforce = true;
 %
 % JOAN DECKER
 %
