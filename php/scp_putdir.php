@@ -43,6 +43,34 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    //echo $ftp_rootdir.$batch_dir."\n";
    //echo "Bridge folder: ".getcwd()."\n";
 
+   if ($safemode >= 1) {
+
+      $bridgetype = 'bridge_';
+      $script_name = make_batch_script($_POST,$bridgetype);//make batch script on the bridge (security enforced)
+      
+      $crc1 = strtoupper(dechex(crc32(file_get_contents($ftp_rootdir.$batch_dir.$script_name))));
+      $crc2 = strtoupper(dechex(crc32(file_get_contents($ftp_rootdir.$batch_dir.$bridgetype.$script_name))));
+      //echo "scrc1 : ".$crc1."\n";
+      //echo "scrc2 : ".$crc2."\n";
+
+     if ($crc1 != $crc2) {// files not the same
+         
+         
+         $fp = fopen($ftp_rootdir.$batch_dir.$script_name, 'r');
+         $content1 = fread($fp,filesize($ftp_rootdir.$batch_dir.$script_name));
+         fclose($fp);
+
+         $fp = fopen($ftp_rootdir.$batch_dir.$bridgetype.$script_name, 'r');
+         $content2 = fread($fp,filesize($ftp_rootdir.$batch_dir.$bridgetype.$script_name));
+         fclose($fp);
+
+         $flag = sendmail($remotehost,$script_name.": ".$crc1."\n".$content1."\n".$bridgetype.$script_name.": ".$crc2."\n".$content2,$remoteuser);
+         die("*************************************************\nNon standard script file command in MatRemote:\n".$script_name."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
+         
+      }   
+      
+   } 
+
    $files = scandir($ftp_rootdir.$batch_dir);
    
    while ($i < sizeof($files)) {
@@ -72,7 +100,7 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    }
 
    if ($safemode >= 1) {
-      $flag_script = make_batch_script($_POST);//make batch script on the bridge (security enforced)
+      $script_name = make_batch_script($_POST,'');//make batch script on the bridge (security enforced)
    } 
 
    $i = 0;
