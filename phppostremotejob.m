@@ -29,7 +29,6 @@ post_job{ij} = {'script'};ij = ij + 1;
 post_job{ij} = {'savefcn'};ij = ij + 1;
 post_job{ij} = {'loadfcn'};ij = ij + 1;
 post_job{ij} = {'matlabroot','env','remotebatch_matlabroot'};ij = ij + 1;
-post_job{ij} = {'testvar','env','TESTVAR'};ij = ij + 1;
 post_job{ij} = {'matlabfun','env','remotebatch_matlabfun'};ij = ij + 1;
 post_job{ij} = {'matlabpath','env','MATLABPATH'};ij = ij + 1;
 post_job{ij} = {'remotematfnc','env','remotematfnc'};ij = ij + 1;
@@ -39,6 +38,9 @@ post_job{ij} = {'xgridscript','xgrid_script'};ij = ij + 1;
 post_job{ij} = {'sgescript','sge_script'};ij = ij + 1;
 post_job{ij} = {'hostname'};ij = ij + 1;
 post_job{ij} = {'remotedatapath'};ij = ij + 1;
+%
+post_job{ij} = {'testvar','env','TESTVAR'};ij = ij + 1;
+post_job{ij} = {'lukeroot','env','luke_root'};ij = ij + 1;
 %
 % data transfer from remote
 %
