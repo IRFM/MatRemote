@@ -6,6 +6,8 @@ if nargin < 3, php_post = {}; end
 %
 ij = 1;
 %
+% WARNING: check that the variable exist in the list of POST variables on the PHP side
+%
 post_job{ij} = {'batch_dir'};ij = ij + 1;
 post_job{ij} = {'timeid'};ij = ij + 1;
 post_job{ij} = {'id'};ij = ij + 1;
