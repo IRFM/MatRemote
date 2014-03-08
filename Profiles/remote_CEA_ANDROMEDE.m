@@ -75,7 +75,6 @@ remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat800;%default m
 remote.pbs.YP105119.remoteuser = 'YP105119';
 remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.pbs.YP105119.bridge_enforce = true;
 %
 % direct
 %
@@ -95,7 +94,6 @@ remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat800;%def
 remote.direct.YP105119.remoteuser = 'YP105119';
 remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.YP105119.bridge_enforce = true;
 %
 % YVES BURAVAND
 %
