@@ -17,15 +17,15 @@ $safemode = safemode($remotehost);
 
 if ($safemode >= 1) {
 
-	list($flag_filter,$txt_filter) = filter_cmd($_POST);
+  list($flag_filter,$txt_filter) = filter_cmd($_POST);
 
-	if ($flag_filter == 1){
-	  $flag = sendmail($remotehost,$txt_filter,$remoteuser);
+  if ($flag_filter == 1){
+    $flag = sendmail($remotehost,$txt_filter,$remoteuser);
     //***************** UNCOMMENT the following lines to disable the filtering and check the strings (see also functions.php *************************
     //echo "flag_filter,txt_filter = ".$flag_filter.",".$txt_filter."\n";
     //************************************************************************************************************************************************
-	  die("*************************************************\nNon standard unix command in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
-	}
+    die("*************************************************\nNon standard unix command in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
+  }
 }
 
 if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
