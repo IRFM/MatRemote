@@ -54,7 +54,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
 		} elseif (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
         	$localcmd[6] = "ps -p ".$id;
         	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
         	$localcmd[8] = "rm -f nohup.out";
@@ -62,13 +62,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     } elseif (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
 
-    	if (strcmp($directsearch,"1") == 0) {
-
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
-        	$localcmd[6] = "ps -p ".$id." -o comm=";
-        	$localcmd[7] = "rm -f nohup.out";
-
-        } elseif (strcmp($pbssearch,"1") == 0) {
+        if (strcmp($pbssearch,"1") == 0) {
 
         	if (strcmp($wait,"1") == 0) {
             	$cmdextras = " -W block=true";
@@ -76,7 +70,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$cmdextras = "";
         	}
 
-        	$localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",remotepathfnc=".$remotepathfnc.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
+        	$localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot." ".$remotedatapath.$batch_dir.$script;
 			$localcmd[6] = "qstat ".$id;
 			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
@@ -87,7 +81,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     	if (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabprefdir=".$matlabprefdir."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotepathfnc=".$remotepathfnc."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
         	$localcmd[6] = "ps -p ".$id." -o comm=";
         	$localcmd[7] = "rm -f nohup.out";
 
@@ -103,8 +97,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
 		if (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
-        	$localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabprefdir ".$matlabprefdir."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotepathfnc ".$remotepathfnc."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
+        	$localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
         	$localcmd[7] = "ps -p ".$id." -o comm=";
         	$localcmd[8] = "rm -f nohup.out";
 
@@ -116,7 +110,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$cmdextras = "";
         	}
 
-        	$localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",remotepathfnc=".$remotepathfnc.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
+        	$localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",matlabpath=".$matlabpath.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
 			$localcmd[6] = "qstat ".$id.'.andromede1';
         	$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
@@ -233,7 +227,7 @@ function make_batch_script($post){
         $batchscript = $batchscript.$envcmdbase1.'jobtimeid'.$envcmdbase2.$timeid."\n";
         $batchscript = $batchscript.$envcmdbase1.'debugmode'.$envcmdbase2.$debugmode."\n";
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabfun'.$envcmdbase2.$matlabfun."\n";
-        $batchscript = $batchscript.$envcmdbase1.'remotepathfnc'.$envcmdbase2.$remotepathfnc."\n";
+        $batchscript = $batchscript.$envcmdbase1.'matlabpath'.$envcmdbase2.$matlabpath."\n";
         $batchscript = $batchscript.$envcmdbase1.'remotematfnc'.$envcmdbase2.$remotematfnc."\n";
         $batchscript = $batchscript.$envcmdbase1.'TESTVAR'.$envcmdbase2.$testvar."\n";
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabroot'.$envcmdbase2.$matlabroot."\n";
@@ -291,7 +285,7 @@ function make_batch_script($post){
             $batchscript = $batchscript.' '."\n";
         }
 
-        $jobenvstr = "remotebatch_matlabfun=".$matlabfun.";remotepathfnc=".$remotepathfnc.";TESTVAR=".$testvar.";remotematfnc=".$remotematfnc.";remotebatch_matlabroot=".$matlabroot.";remotebatch_matlabprefdir=".$matlabprefdir;
+        $jobenvstr = "remotebatch_matlabfun=".$matlabfun.";matlabpath=".$matlabpath.";TESTVAR=".$testvar.";remotematfnc=".$remotematfnc.";remotebatch_matlabroot=".$matlabroot.";remotebatch_matlabprefdir=".$matlabprefdir;
 
         $batchscript = $batchscript.'#'."\n";
         $batchscript = $batchscript.'environment = '.$jobenvstr."\n";//***************YP
@@ -347,18 +341,16 @@ function make_batch_script($post){
         $batchscript = $batchscript.'               <string>/bin/sh</string>'."\n";
         $batchscript = $batchscript.'               <key>environment</key>'."\n";
         $batchscript = $batchscript.'               <dict>'."\n";
-
         $batchscript = $batchscript.'                   <key>remotebatch_matlabfun</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$matlabfun.'</string>'."\n";
-        $batchscript = $batchscript.'                   <key>remotepathfnc</key>'."\n";
-        $batchscript = $batchscript.'                   <string>'.$remotepathfnc.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>remotematfnc</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$remotematfnc.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>TESTVAR</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$testvar.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>remotebatch_matlabroot</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$matlabroot.'</string>'."\n";
-
+        $batchscript = $batchscript.'                   <key>MATLABPATH</key>'."\n";
+        $batchscript = $batchscript.'                   <string>'.$matlabpath.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>jobtimeid</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$timeid.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>debugmode</key>'."\n";
@@ -367,8 +359,6 @@ function make_batch_script($post){
         $batchscript = $batchscript.'                   <string>'.$hostname.'</string>'."\n";
         $batchscript = $batchscript.'                   <key>remotebatchdir</key>'."\n";
         $batchscript = $batchscript.'                   <string>'.$remotedatapath.$batch_dir.'</string>'."\n";
-        $batchscript = $batchscript.'                   <key>MATLAB_PREFDIR</key>'."\n";
-        $batchscript = $batchscript.'                   <string>'.$remotebatch_matlabprefdir.'</string>'."\n";
         $batchscript = $batchscript.'               </dict>'."\n";
         $batchscript = $batchscript.'           </dict>'."\n";
         $batchscript = $batchscript.'       </dict>'."\n";
