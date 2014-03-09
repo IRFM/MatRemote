@@ -67,9 +67,9 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
          $flag = sendmail($remotehost,$script_name.": ".$crc1."\n".$content1."\n".$bridgetype.$script_name.": ".$crc2."\n".$content2,$remoteuser);
          die("*************************************************\nNon standard script file command in MatRemote:\n".$script_name."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
          
-      }   
+      }
       
-   } 
+   }
 
    $files = scandir($ftp_rootdir.$batch_dir);
    
