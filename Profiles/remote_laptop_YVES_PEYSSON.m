@@ -95,6 +95,7 @@ remote.xgrid.yves.cmd = {'xgrid -h ',' -p ',' -job batch '};
 remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
 remote.xgrid.yves.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
 remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
+remote.xgrid.yves.startuppath = '/Users/yves/Documents/MATLAB';%path to add for matlab startup
 remote.xgrid.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
 remote.xgrid.yves.remoteuser = 'yves';
