@@ -66,7 +66,12 @@ end
 % job environment variables
 %
 fprintf(fileid,[envcmd{1},'jobtimeid',envcmd{2},job.timeid,'\n']);
-fprintf(fileid,[envcmd{1},'debugmode',envcmd{2},job.debugmode,'\n']);
+%
+if isfield(job,'debugmode') && ~ischar(job.debugmode),
+    fprintf(fileid,[envcmd{1},'debugmode',envcmd{2},num2str(job.debugmode),'\n']);
+elseif isfield(job,'debugmode') && ischar(job.debugmode),
+    fprintf(fileid,[envcmd{1},'debugmode',envcmd{2},job.debugmode,'\n']);
+end
 %
 if isfield(job,'env') && isstruct(job.env),
     envnames = fieldnames(job.env);
@@ -77,8 +82,6 @@ end
 %
 fprintf(fileid,['cd ',job.remotedatapath,job.batch_dir,'\n']);
 fprintf(fileid,[job.remotedatapath,job.batch_dir,job.script,'\n']);
-%
-fprintf(fileid,[' ','\n']);
 %
 fclose(fileid);
 %
