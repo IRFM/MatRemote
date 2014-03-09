@@ -251,13 +251,17 @@ function make_batch_script($post,$bridgetype){
         }
 
         $batchscript = $batchscript.$envcmdbase1.'jobtimeid'.$envcmdbase2.$timeid."\n";
-        $batchscript = $batchscript.$envcmdbase1.'debugmode'.$envcmdbase2.$debugmode."\n";
+
+		if (strlen($debugmode) > 0) $batchscript = $batchscript.$envcmdbase1.'debugmode'.$envcmdbase2.$debugmode."\n";
+
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabfun'.$envcmdbase2.$matlabfun."\n";
-        $batchscript = $batchscript.$envcmdbase1.'matlabpath'.$envcmdbase2.$matlabpath."\n";
+        
+        if (strlen($testvar) > 0) $batchscript = $batchscript.$envcmdbase1.'TESTVAR'.$envcmdbase2.$testvar."\n";
         $batchscript = $batchscript.$envcmdbase1.'remotematfnc'.$envcmdbase2.$remotematfnc."\n";
-        $batchscript = $batchscript.$envcmdbase1.'TESTVAR'.$envcmdbase2.$testvar."\n";
+
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabroot'.$envcmdbase2.$matlabroot."\n";
-        $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabprefdir'.$envcmdbase2.$matlabprefdir."\n";
+
+        if (strlen($lukeroot) > 0) $batchscript = $batchscript.$envcmdbase1.'luke_root'.$envcmdbase2.$lukeroot."\n";
 
         $batchscript = $batchscript.'cd '.$remotedatapath.$batch_dir."\n";
         $batchscript = $batchscript.$remotedatapath.$batch_dir.$script."\n";
