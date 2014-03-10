@@ -95,7 +95,7 @@ if ~isempty(job),
         if length(post_job{ii}) == 1,
             if isfield(job,post_job{ii}{1}),
                 ip = ip + 1;
-                if isnumeric(job.(post_job{ii}{1})),
+                if isnumeric(job.(post_job{ii}{1})) || islogical(job.(post_job{ii}{1})),
                     php_post{ip} = num2str(job.(post_job{ii}{1}));%content transfered by php post     
                 else
                     php_post{ip} = job.(post_job{ii}{1});%content transfered by php post
@@ -106,7 +106,7 @@ if ~isempty(job),
         elseif length(post_job{ii}) == 2,
             if isfield(job,post_job{ii}{2}),
                 ip = ip + 1;
-                if isnumeric(job.(post_job{ii}{2})),
+                if isnumeric(job.(post_job{ii}{2})) || islogical(job.(post_job{ii}{2})),
                     php_post{ip} = num2str(job.(post_job{ii}{2}));%content transfered by php post
                 else
                     php_post{ip} = job.(post_job{ii}{2});%content transfered by php post
@@ -117,7 +117,7 @@ if ~isempty(job),
         elseif length(post_job{ii}) == 3,
             if isfield(job.(post_job{ii}{2}),post_job{ii}{3}),
                 ip = ip + 1;
-                if isnumeric(job.(post_job{ii}{2}).(post_job{ii}{3})),
+                if isnumeric(job.(post_job{ii}{2}).(post_job{ii}{3})) || islogical(job.(post_job{ii}{2}).(post_job{ii}{3})),
                     php_post{ip} = num2str(job.(post_job{ii}{2}).(post_job{ii}{3}));%content transfered by php post
                 else
                     php_post{ip} = job.(post_job{ii}{2}).(post_job{ii}{3});%content transfered by php post                    
@@ -137,7 +137,7 @@ if ~isempty(remote),
         if length(post_remote{ii}) == 1,
             if isfield(remote,post_remote{ii}{1}),
                 ip = ip + 1;
-                if isnumeric(remote.(post_remote{ii}{1}))
+                if isnumeric(remote.(post_remote{ii}{1})) || islogical(remote.(post_remote{ii}{1})),
                     php_post{ip} = num2str(remote.(post_remote{ii}{1}));%content transfered by php post
                 else
                     php_post{ip} = remote.(post_remote{ii}{1});%content transfered by php post
@@ -148,7 +148,7 @@ if ~isempty(remote),
         elseif length(post_remote{ii}) == 2,
             if isfield(remote,post_remote{ii}{2}),
                 ip = ip + 1;
-                if isnumeric(remote.(post_remote{ii}{2}))
+                if isnumeric(remote.(post_remote{ii}{2})) || islogical(remote.(post_remote{ii}{2})),
                     php_post{ip} = num2str(remote.(post_remote{ii}{2}));%content transfered by php post
                 else
                     php_post{ip} = remote.(post_remote{ii}{2});%content transfered by php post
@@ -159,7 +159,7 @@ if ~isempty(remote),
         elseif length(post_remote{ii}) == 3,
             if isfield(remote.(post_remote{ii}{2}),post_remote{ii}{3}),
                 ip = ip + 1;
-                if isnumeric(remote.(post_remote{ii}{2}).(post_remote{ii}{3})),
+                if isnumeric(remote.(post_remote{ii}{2}).(post_remote{ii}{3})) || islogical(remote.(post_remote{ii}{2}).(post_remote{ii}{3})),
                     php_post{ip} = num2str(remote.(post_remote{ii}{2}).(post_remote{ii}{3}));%content transfered by php post
                 else
                     php_post{ip} = remote.(post_remote{ii}{2}).(post_remote{ii}{3});%content transfered by php post                    
