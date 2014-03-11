@@ -408,7 +408,7 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     %
     hoststr = remote.host;
     if isempty(hoststr),
-        hoststr = 'local batch calculation';
+        hoststr = 'Local batch calculation';
     elseif iscell(hoststr),
         hoststr = hoststr{1};
     end
