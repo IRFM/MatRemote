@@ -20,40 +20,41 @@ end
 filename = ['batch_matlab_',job.timeid,'.sh'];
 fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
+fprintf(fileid,['#!/bin/bash\n']);
+%
+fprintf(fileid,['#$ -l h_rt=',num2str(job.walltime),':00:00\n']);
+fprintf(fileid,['#$ -l h_vmem=',num2str(job.memory),'M\n']);
+%
+fprintf(fileid,['#$ -cwd\n']);
+%
+batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
+%
+if length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
+    %
+    batchfileroot = batchfileroot(1:end-3);
+    %
+    fprintf(fileid,['#$ -N ',batchfileroot,'\n']);
+    %
+else
+    fprintf(fileid,['#$ -N matremote'\n']);%name of the sge job
+end
+%
+if isfield(job.remote,'usermail') && ~isempty(job.remote.usermail),
+    fprintf(fileid,['#$ -M ',job.remote.usermail,'\n']);%mail about the sge job
+else
+    fprintf(fileid,['#$ -M\n']);
+end
+
+fprintf(fileid,['#$ -m e\n']);
+fprintf(fileid,['#$ -notify\n']);
+%
 ip = 1;
 %
 while 1,
     %
     if isfield(job.remote.sge,['batchscript_params',int2str(ip)]),
         %
-        param = job.remote.sge.(['batchscript_params',int2str(ip)]){1};
-        %
-        if strcmp(param,'#$ -N'),
-            %
-            batchfileroot = job.script(max(1+[0,strfind(job.script,filesep)]):end);
-            %
-            if length(batchfileroot) > 3 && strcmp(batchfileroot(end-2:end),'.sh'),
-                %
-                batchfileroot = batchfileroot(1:end-3);
-                %
-                fprintf(fileid,[param,' ',batchfileroot,'\n']);
-                %
-            else
-                fprintf(fileid,[param,' matremote'\n']);
-            end
-            %
-        elseif strcmp(param,'#$ -M'),
-            %
-            if isfield(job.remote,'usermail') && ~isempty(job.remote.usermail),
-                %
-                fprintf(fileid,[param,' ',job.remote.usermail,'\n']);
-                %
-            end
-            %
-        else
-            fprintf(fileid,[param,'\n']);
-        end
-        %
+        fprintf(fileid,[job.remote.sge.(['batchscript_params',int2str(ip)]){1},'\n']);
         ip = ip + 1;
         %
     else
