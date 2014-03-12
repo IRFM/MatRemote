@@ -7,6 +7,10 @@ php_post = phppostremotejob(remote,job);%add extra data for php filtering
 %
 [txt_url,res_url] = bridgeurl(remote,php_post,'scp_putdir.php');
 %
+if ~isempty(strfind(txt_url,'Non standard script file command in MatRemote')),
+    error('Non standard script file command in MatRemote. An automatic message has been  send to the administrator. Job aborted...');
+end
+%
 ie = strfind(txt_url,'scp2php_error:');%the 'scp2php_error:' separates the scp output from the error in scp.php
 error_txt = txt_url(ie+15:end);
 %
