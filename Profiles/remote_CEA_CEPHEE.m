@@ -20,7 +20,7 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 % JOAN DECKER
 %
 remote.pbs.joan = default_remote_profile;
-remote.pbs.joan.host = 'cephee15.intra.cea.fr';% empty for local host
+remote.pbs.joan.host = 'cephee16.intra.cea.fr';% empty for local host
 remote.pbs.joan.hostname = 'cephee';
 remote.pbs.joan.nproc = 28;% limited to two jobs per PBS node to avoid cluster saturation
 remote.pbs.joan.nodes = 1;% default number of nodes for job on cephee
@@ -38,7 +38,7 @@ remote.pbs.joan.remoteuser = 'JD211098';
 % direct
 %
 remote.direct.joan = default_remote_profile;
-remote.direct.joan.host = 'cephee15.intra.cea.fr';% empty for local host
+remote.direct.joan.host = 'cephee16.intra.cea.fr';% empty for local host
 remote.direct.joan.hostname = 'cephee';
 remote.direct.joan.nproc = 8;% cores per node
 remote.direct.joan.nodes = 1;% default number of nodes for job on cephee
@@ -56,7 +56,7 @@ remote.direct.joan.remoteuser = 'JD211098';
 % YVES PEYSSON
 %
 remote.pbs.yves = default_remote_profile;
-remote.pbs.yves.host = 'cephee15.intra.cea.fr';
+remote.pbs.yves.host = 'cephee16.intra.cea.fr';
 remote.pbs.yves.hostname = 'cephee';
 remote.pbs.yves.nproc = 28;% limited to two jobs per PBS node to avoid cluster saturation
 remote.pbs.yves.nodes = 1;% default number of nodes for job on cephee
@@ -75,7 +75,7 @@ remote.pbs.yves.remoteuser = 'YP105119';
 % YVES BURAVAND
 %
 remote.pbs.yvesb = default_remote_profile;
-remote.pbs.yvesb.host = 'cephee15.intra.cea.fr';
+remote.pbs.yvesb.host = 'cephee16.intra.cea.fr';
 remote.pbs.yvesb.hostname = 'cephee';
 remote.pbs.yvesb.nproc = 28;% limited to two jobs per PBS node to avoid cluster saturation
 remote.pbs.yvesb.nodes = 1;% default number of nodes for job on cephee
