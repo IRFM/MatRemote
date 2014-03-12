@@ -112,8 +112,16 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
 		if (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
-        	$localcmd[6] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode."; setenv jobtimeid ".$timeid."; setenv remotebatch_matlabroot ".$matlabroot."; setenv remotematfnc ".$remotematfnc."; setenv TESTVAR ".$testvar."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode;
+            $localcmd[5] = $localcmd[5]."; setenv jobtimeid ".$timeid;
+            if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; setenv luke_root ".$lukeroot;
+            $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabroot ".$matlabroot;
+            $localcmd[5] = $localcmd[5]."; setenv remotematfnc ".$remotematfnc;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; setenv TESTVAR ".$testvar;
+            $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
+
+        	$localcmd[6] = $localcmd[5]." &";
+
         	$localcmd[7] = "ps -p ".$id." -o comm=";
         	$localcmd[8] = "rm -f nohup.out";
 
@@ -171,7 +179,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 function sendmail($remotehost,$remotecmd,$remoteuser){ 
 
 
-    $mailadress = mailadresslist();
+    $mailadress = mailadresslist($remoteuser);
 
     $to = $mailadress[1];
     //echo "to:".$to."\n";
