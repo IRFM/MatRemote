@@ -19,8 +19,8 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 % nunki (pbs pro)
 %
 remote.pbs.joan = default_remote_profile;
-remote.pbs.joan.host = 'pleione.intra.cea.fr';% empty for local host
-remote.pbs.joan.hostname = 'pleione';
+remote.pbs.joan.host = 'nashira.intra.cea.fr';% empty for local host
+remote.pbs.joan.hostname = 'nashira';
 remote.pbs.joan.nproc = 48;
 remote.pbs.joan.cmd = 'qsub';
 remote.pbs.joan.get_jobid = {'','.pleione'};%str_before,str_after
@@ -34,8 +34,8 @@ remote.pbs.joan.remoteuser = 'JD211098';
 % YVES PEYSSON
 %
 remote.pbs.yves = default_remote_profile;
-remote.pbs.yves.host = 'pleione.intra.cea.fr';
-remote.pbs.yves.hostname = 'pleione';
+remote.pbs.yves.host = 'nashira.intra.cea.fr';
+remote.pbs.yves.hostname = 'nashira';
 remote.pbs.yves.nproc = 48;
 remote.pbs.yves.cmd = 'qsub';
 remote.pbs.yves.get_jobid = {'','.pleione'};%str_before,str_after
@@ -48,8 +48,8 @@ remote.pbs.yves.remoteuser = 'YP105119';
 % YVES BURAVAND
 %
 remote.pbs.yvesb = default_remote_profile;
-remote.pbs.yvesb.host = 'pleione.intra.cea.fr';
-remote.pbs.yvesb.hostname = 'pleione';
+remote.pbs.yvesb.host = 'nashira.intra.cea.fr';
+remote.pbs.yvesb.hostname = 'nashira';
 remote.pbs.yvesb.nproc = 48;
 remote.pbs.yvesb.cmd = 'qsub';
 remote.pbs.yvesb.get_jobid = {'','.pleione'};%str_before,str_after
