@@ -21,7 +21,7 @@ if ~isempty(remote.host),
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-        error_txt = txt_url(ie+15:end);
+        error_txt = strtrim(txt_url(ie+15:end));
         %
         if isempty(error_txt),
             res = 0;%force standard unix error.
@@ -31,14 +31,25 @@ if ~isempty(remote.host),
             if strfind(remotecmd,'xgrid')
                 if strfind(error_txt,'ulimit:'),%wrong error
                     res = 0;%force standard unix error.
+                    txt = strtrim(txt_url(1:ie-1));
                 else
                     res = 1;%force standard unix error.
-                end          
+                    txt = error_txt; 
+                end
+            elseif strfind(remotecmd,'condor')
+                if strfind(error_txt,'was unused by condor_submit. Is it a typo'),%wrong warning
+                    res = 0;%force standard unix error.
+                    txt = strtrim(txt_url(1:ie-1));
+                else
+                    res = 1;%force standard unix error.
+                    txt = error_txt; 
+                end
             else
                 res = 1;%force standard unix error.
+                txt = error_txt; 
             end
             %
-            txt = error_txt;     
+                
         end
         %
     elseif isfield(remote,'remote'),
