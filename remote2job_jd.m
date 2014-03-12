@@ -99,11 +99,13 @@ if ~isfield(job,'memory'),
     job.memory = [];% default value in mb
 end
 if isfield(remote,'memory') && ~isempty(remote.memory),
-    if isnan(remote.memory),
+    if any(isnan(remote.memory)),
         job.memory = NaN;
-    elseif ~isempty(job.memory) && remote.memory < job.memory,% max memory on remote computer
+    elseif ~isempty(job.memory) && remote.memory(end) < job.memory,% remote(end) is max memory on remote computer
         disp('WARNING : memory request limited by remote host')
-        job.memory = remote.memory;
+        job.memory = remote.memory(end);
+    elseif isempty(job.memory) && length(remote.memory) > 1,% remote(1) is default memory on remote computer
+        job.memory = remote.memory(1);
     end
 end
 %
