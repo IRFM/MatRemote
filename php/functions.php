@@ -96,8 +96,13 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     	if (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc."; export TESTVAR=".$testvar."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
-        	$localcmd[6] = "ps -p ".$id." -o comm=";
+        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
+            if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+
+            $localcmd[6] = "ps -p ".$id." -o comm=";
         	$localcmd[7] = "rm -f nohup.out";
 
         } elseif (strcmp($sgesearch,"1") == 0) {
