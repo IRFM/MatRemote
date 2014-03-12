@@ -31,6 +31,6 @@ remote.ppn = [];% use if ressources are specified by nodes=?:ppn=?
 remote.ncpus = [];% use if ressources are specified by ncpus=?
 remote.walltime = [];% use if walltime necessary or one hour imposed
 remote.wait = [];% use to specify if musy wait for job completion
-remote.memory = [];% use to limit the maximum memory per job
+remote.memory = [];% [a,b] or [b] where "a" is the default value and "b" is the max value (in mb)
 remote.shclean = [];% use for job output file syntax (put '0' if .sh appears in job output files)
 
