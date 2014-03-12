@@ -22,8 +22,17 @@ fileid = fopen([job.localdatapath,job.batch_dir,filename],'w');
 %
 fprintf(fileid,['#!/bin/bash\n']);
 %
-fprintf(fileid,['#$ -l h_rt=',num2str(job.walltime),':00:00\n']);
-fprintf(fileid,['#$ -l h_vmem=',num2str(job.memory),'M\n']);
+if isempty(job.walltime),
+    error('Undefined job walltime value.');
+else
+    fprintf(fileid,['#$ -l h_rt=',num2str(job.walltime),':00:00\n']);
+end
+%
+if isempty(job.memory),
+    error('Undefined job memory value.');
+else
+    fprintf(fileid,['#$ -l h_vmem=',num2str(job.memory),'M\n']);
+end
 %
 fprintf(fileid,['#$ -cwd\n']);
 %
