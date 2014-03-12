@@ -11,7 +11,7 @@ $remotehost = $_POST['remotehost'];
 $remotecmd = $_POST['remotecmd'];
 $remoteuser = $_POST['remoteuser'];
 
-list($remote_host,$remote_login,$remote_password) = login($remotehost);
+list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
 
 $safemode = safemode($remotehost);
 

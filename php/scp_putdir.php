@@ -17,8 +17,9 @@ $directsearch = $_POST["directsearch"];
 $sgesearch = $_POST["sgesearch"];
 $timeid = $_POST["timeid"];
 $script = $_POST["script"];
+$remoteuser = $_POST['remoteuser'];
 
-list($remote_host,$remote_login,$remote_password) = login($remotehost);
+list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
 
 $safemode = safemode($remotehost);
 
@@ -42,6 +43,7 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    $ftp_rootdir = ftprootdir();
    //echo $ftp_rootdir.$batch_dir."\n";
    //echo "Bridge folder: ".getcwd()."\n";
+
 
    if ($safemode >= 1) {
 
@@ -80,18 +82,18 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
 
 
       if ((strcmp($files[$i],"MAT_RUN_".$timeid.".mat") == 0) OR (similar_text($ext, "m") == 1) OR (strcmp($files[$i],$script) == 0)) {
-      	//echo "non unlink : ".$files[$i]." - ".$ext."\n";
-			if (($safemode >= 2) AND (strcmp($files[$i],$script) == 0)){
-         		//echo "unlink : ".$files[$i]." - ".$ext."\n";
-         		unlink($ftp_rootdir.$batch_dir.$script);//remove non authorized files
-         	} elseif ($safemode >= 3) {
-         		//echo "unlink : ".$files[$i]." - ".$ext."\n";
-				unlink($ftp_rootdir.$batch_dir.$script);//remove non authorized files
-         	}
+         //echo "non unlink : ".$files[$i]." - ".$ext."\n";
+         if (($safemode >= 2) AND (strcmp($files[$i],$script) == 0)){
+               //echo "unlink : ".$files[$i]." - ".$ext."\n";
+               unlink($ftp_rootdir.$batch_dir.$script);//remove non authorized files
+            } elseif ($safemode >= 3) {
+               //echo "unlink : ".$files[$i]." - ".$ext."\n";
+            unlink($ftp_rootdir.$batch_dir.$script);//remove non authorized files
+            }
 
       } else {
          if ($safemode >= 1) {
-         	//echo "unlink : ".$files[$i]." - ".$ext."\n";
+            //echo "unlink : ".$files[$i]." - ".$ext."\n";
             unlink($ftp_rootdir.$batch_dir.$files[$i]);//remove non authorized files
          }
       }

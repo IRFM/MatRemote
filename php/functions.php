@@ -12,8 +12,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         $$key = $post[$key];//only preset keys are loaded (security)
     }
 
-//,$pbssearch,$condorsearch,$xgridsearch,$directsearch,$sgesearch
-    list($remote_host,$remote_login,$remote_password) = login($remotehost);
+    list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
     
     $safemode = safemode($remotehost);
 
@@ -124,10 +123,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$cmdextras = " -W block=true";
         	} else {
             	$cmdextras = "";
-        	}
-
-        	//$localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus." -l mem=".$memory."mb -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun.",matlabpath=".$matlabpath.",TESTVAR=".$testvar.",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot.",remotebatch_matlabprefdir=".$matlabprefdir." ".$remotedatapath.$batch_dir.$script;
-			
+        	}			
 
             $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
@@ -206,7 +202,7 @@ function make_batch_script($post,$bridgetype){
     }
 
 
-    list($remote_host,$remote_login,$remote_password) = login($remotehost);
+    list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
 
     $safemode = safemode($remotehost);
 
@@ -232,17 +228,21 @@ function make_batch_script($post,$bridgetype){
 
     if ((strcmp($sgesearch,'1') == 0) AND ($safemode >= 1)) {
 
+
+        $batchscript = $batchscript."#!/bin/bash\n";
+        $batchscript = $batchscript."#$ -l h_rt=".$walltime.":00:00\n";
+        $batchscript = $batchscript."#$ -l h_vmem=".$memory."M\n";
+        $batchscript = $batchscript."#$ -cwd\n";
+        $batchscript = $batchscript."#$ -N ".strstr($script,'.',true)."\n";
+        $batchscript = $batchscript."#$ -M ".$usermail."\n";
+        $batchscript = $batchscript."#$ -m e\n";
+        $batchscript = $batchscript."#$ -notify\n";
+
         $i = 1; 
 
         while ($i <= $nbatchscriptparams) {
 
             $cmd = $post["batchscriptparams".$i];
-
-            if (strcmp($cmd,'#$ -N') == 0) {
-                $cmd = $cmd.' '.strstr($script,'.',true);
-            } elseif (strcmp($cmd,'#$ -M') == 0) {
-                $cmd = $cmd.' '.$usermail;
-            } 
             
             $batchscript = $batchscript.$cmd."\n";
 

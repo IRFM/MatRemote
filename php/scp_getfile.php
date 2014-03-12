@@ -9,8 +9,9 @@ include "private/bridge.php";
 $remotehost = $_POST["remotehost"];
 $remotedatapath = $_POST["remotedatapath"];
 $filename = $_POST["filename"];
+$remoteuser = $_POST['remoteuser'];
 
-list($remote_host,$remote_login,$remote_password) = login($remotehost);
+list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
 
 $ftp_rootdir = ftprootdir();
 //echo $ftp_rootdir."\n";
