@@ -109,6 +109,13 @@ remote.pbs.YB109156.remoteuser = 'YB109156';
 remote.pbs.EN290612 = remote.pbs.JD211098;
 remote.pbs.EN290612.remoteuser = 'EN290612';
 %
+% JOSEF KAMLEITNER
+%
+% pbs pro
+%
+remote.pbs.kamleitn = remote.pbs.JD211098;
+remote.pbs.kamleitn.remoteuser = 'jkamleitner';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
