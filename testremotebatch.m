@@ -189,7 +189,11 @@ else% check previously started job
     %
     % loop on tested profiles
     %
+    profilestr = cell(1,nrem);
+    %
     for irem = 1:nrem,
+        %
+        profilestr{irem} = sinputs{irem}.profilestr;
         %
         if isfield(sinputs{irem},'job'),% previously running job
             %
@@ -200,8 +204,6 @@ else% check previously started job
             else
                 soutputs{irem} = soutput;
             end
-            %
-            soutputs{irem}.remoteprofile = list_remoteprofiles_jd(sinputs{irem}.job.remote);
             %
         else% completed jobs
             %
@@ -272,11 +274,7 @@ for irem = 1:nrem,
     disp(' ');
     disp('-------------------------------------------------------------------')
     disp(' ');
-    if isnumeric(sinputs),
-        disp([' ---> Profile [',profilestr{irem},']']);
-    else
-        disp([' ---> Profile [',soutputs{irem}.remoteprofile{end},']']);% here {end} is used to select batch mode when localhost
-    end
+    disp([' ---> Profile [',profilestr{irem},']']);
     disp(' ');
     %
     if isfield(soutputs{irem},'err'),
@@ -290,7 +288,17 @@ for irem = 1:nrem,
         %
         % job started and returned for later check
         %
-        disp(['The remote job is running under id ',soutputs{irem}.job.id]);
+        soutputs{irem}.profilestr = profilestr{irem};
+        %
+        if ~isempty(soutputs{irem}.job.id),
+            %
+            disp(['The remote job is running under id ',soutputs{irem}.job.id]);
+            %
+        else
+            %
+            disp(['The remote job is running under time id ',soutputs{irem}.job.timeid]);
+            %
+        end
         %
     elseif isfield(soutputs{irem},'strout'),
         %
