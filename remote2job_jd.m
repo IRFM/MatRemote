@@ -71,7 +71,7 @@ end
 %
 if isfield(remote,'select') && ~isempty(remote.select), 
     job.select = remote.select;%Number of nodes required by remote cluster  
-elseif ~isfield(job,'select'),
+elseif isnan(job.nodes) && ~isfield(job,'select'),
     job.select = 1;
 end
 %
