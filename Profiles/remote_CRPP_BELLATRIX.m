@@ -1,0 +1,51 @@
+function remote_profile = remote_CRPP_BELLATRIX(varargin)
+%
+% This function regroups the remote profiles run on BELLATRIX cluster at the CRPP
+%
+%   INPUTS : 
+%       - schedulername (optinal) : name of selected scheduler
+%       - profilename (optinal) : name of selected profile
+%
+%   OUTPUTS : 
+%       - remote_profile : name of selected remote profile(s)
+%
+default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.profile = 'kamleitn';% default user profile if 'remoteuser' is not an existing user profile
+%
+% --------------------------------------------------
+%
+% JOSEF KAMLEITNER
+%
+% direct
+%
+remote.direct.kamleitn = default_remote_profile;
+remote.direct.kamleitn.host = 'bellatrix.epfl.ch';
+remote.direct.kamleitn.hostname = 'bellatrix.cluster';
+remote.direct.kamleitn.nproc = 8;
+remote.direct.kamleitn.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.kamleitn.get_jobid = {};%str_before,str_after
+remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
+remote.direct.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
+remote.direct.kamleitn.remoteuser = 'kamleitn';
+%
+% pbs
+%
+remote.pbs.kamleitn = default_remote_profile;
+remote.pbs.kamleitn.host = 'bellatrix.epfl.ch';
+remote.pbs.kamleitn.hostname = 'bellatrix.cluster';
+remote.pbs.kamleitn.nproc = 6784;
+remote.pbs.kamleitn.cmd = 'qsub -q Q_free ';% direct calculation (csh, bash)
+remote.pbs.kamleitn.select = 1;% number of nodes
+remote.pbs.kamleitn.get_jobid = {'','.bellatrix'};%str_before,str_after
+remote.pbs.kamleitn.set_jobid = {'qstat ','.bellatrix','Job has finished'};%str_before,str_after,str_check
+remote.pbs.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
+remote.pbs.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
+remote.pbs.kamleitn.remoteuser = 'kamleitn';
+%
+% -------------------------------------------------
+% this part should be common to all remote profiles
+% -------------------------------------------------
+%
+remote_profile = select_remote_profile_jd(remote,default,varargin{:});
+%
