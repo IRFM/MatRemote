@@ -16,11 +16,21 @@ if flag_curl_ftp,%ftp over curl method
             [res,txt] = unix(cmd);
         end
     end
+end
+if ~flag_curl_ftp || res~= 0,%ftp embedded in matlab (not necessarily operational)
     %
-else%ftp embedded in matlab (not necessarily operational)
+    res = 0;
+    txt = '';
     %
-    f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-    mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
-    close(f);
-    %
+    try
+        %
+        f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+        mput(f,job.batch_dir(1:end-1));%Transfer data from the local batch dir to the bridge batch dir
+        close(f);
+        %
+    catch err
+        %
+        res = 1;
+        txt = err.message;
+    end
 end
