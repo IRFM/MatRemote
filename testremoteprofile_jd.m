@@ -22,6 +22,12 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     if isempty(remote.host), %local calculation
         %
+        if any(bridge_enforce == 1),
+            remote = [];% no bridge mode without host
+            %
+            return
+        end
+        %
         remote.bridge = [];
         %
         xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));

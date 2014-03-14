@@ -243,9 +243,8 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         schedulerstr = cell(1,nrem);
         %
         for irem = 1:nrem,
-            if strcmp(remote,'local'),
+            if strcmp(remote,'local') && ~Bridgemode,
                 newremoteprofiles(irem).host = '';% local cluster
-                newremoteprofiles(irem).bridge = [];
             end
             %
             [profilestr{irem},~,cmdstr{irem},schedulerstr{irem}] = getremotestr_jd(newremoteprofiles(irem));
@@ -344,7 +343,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         for irem = 1:nrem,
             %
-            if localprofiletest(irem),% local cluster with empty host field
+            if localprofiletest(irem) && ~bridgemodes(irem),% local cluster with empty host field
                 %
                 remoteprofile = remoteprofiles(irem);% remote profile selected
                 remoteprofile.host = '';
