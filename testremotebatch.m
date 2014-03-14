@@ -213,6 +213,26 @@ else% check previously started job
     %
 end
 %
+if ~isempty(bridge_enforce) && ~isnan(bridge_enforce),
+    bridgestr = ['_bridge_',num2str(bridge_enforce)];
+else
+    bridgestr = '';
+end
+%
+diaryname = ['res_testremotebatch_',datestr(now,29),bridgestr,'.log'];
+%
+if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y',
+    %
+    if exist(diaryname,'file'),
+        delete(diaryname);
+    end
+    %
+    diary(diaryname);
+    %
+else
+    diaryname = '';
+end
+%
 % Display results
 %
 disp(' ');
@@ -285,6 +305,10 @@ for irem = 1:nrem,
         disp('The remote job failed for unknown reasons');
         %
     end
+end
+%
+if ~isempty(diaryname),
+    diary off
 end
 %
 
