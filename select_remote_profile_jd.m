@@ -37,7 +37,7 @@ for ischeduler = 1:nschedulers,
     elseif ischar(profilename) && strcmp(profilename,'local'),% select local user
         profilenames{ischeduler}{1} = default.profile;% default profile name if no remoteuser match
         for iname = 1:length(fnames),
-            if strcmp(remote.(schedulernames{ischeduler}).(fnames{iname}).remoteuser,getenv('USER')),
+            if strcmp(fnames{iname},getenv('USER')),
                 profilenames{ischeduler}{1} = fnames{iname};% local user profile name
                 break
             end
