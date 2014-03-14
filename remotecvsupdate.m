@@ -11,12 +11,12 @@ function remotecvsupdate(remote,remotefunctions)
 % (default) o ('')      : load & return all profiles 
 %           o ('local') : idendify and return local cluster
 %
-%       - remotefunctions : list of functions. default values include
+%       - remotefunctions : list of functions (if ends by '.m') or name of environment variable for path to update. default values include
 %           o select_LUKE_jd -> MatTools
 %           o load_remoteprofiles_jd -> MatTools
 %
 if nargin < 2,
-    remotefunctions = {'select_LUKE_jd','load_remoteprofiles_jd'};
+    remotefunctions = {'select_LUKE_jd.m','load_remoteprofiles_jd.m'};
 end
 %
 if nargin < 1,
@@ -32,7 +32,7 @@ for irem = 1:nrem,
     %
     disp(' ');
     disp('------------------------------------------------------------------');
-    disp(['updating remote profile :',profilestr{irem}]);
+    disp(['updating remote profile : ',profilestr{irem}]);
     disp('------------------------------------------------------------------');
     disp(' ');
     %
@@ -42,8 +42,16 @@ for irem = 1:nrem,
         %
         for ifnc = 1:nfncs,
             remotefnc = remotefunctions{ifnc};
+            %
+            if length(remotefnc) > 2 && strcmp(remotefnc(end-1:end),'.m'),%case of function within folder
+                remotefnc = remotefnc(1:end-2);
+                msg = 'containing ';
+            else
+                msg = 'set by environment variable ';
+            end
+            %
             if res.(remotefnc) == 0,
-                disp(['CVS update successful for folder containing : ',remotefnc]);
+                disp(['CVS update successful for folder ',msg,': ',remotefnc]);
             else
                 disp(['CVS update failed : ',txt.(remotefnc)]);
             end
