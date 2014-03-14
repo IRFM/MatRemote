@@ -27,6 +27,7 @@ remote.rempause = [];% pause between job checks (in minutes)
 % The following parameters are for qsub only. Use NaN if option is forbidden 
 %
 remote.nodes = [];% use if ressources are specified by nodes=?:ppn=? 
+remote.select = [];% use if ressources are specified by select=?:ncpus=?
 remote.ppn = [];% use if ressources are specified by nodes=?:ppn=? 
 remote.ncpus = [];% use if ressources are specified by ncpus=?
 remote.walltime = [];% use if walltime necessary or one hour imposed

@@ -291,7 +291,14 @@ elseif job.pbssearch,
         %
     end
     %
-    if isfield(job,'ncpus') && ~isempty(job.ncpus) && ~isnan(job.ncpus),
+    if isfield(job,'select') && ~isempty(job.select) && ~isnan(job.select),
+        comopts = [comopts,' -l select=',num2str(job.select)];
+        %
+        if isfield(job,'ncpus') && ~isempty(job.ncpus) && ~isnan(job.ncpus),
+            comopts = [comopts,':ncpus=',num2str(job.ncpus)];
+        end
+        %
+    elseif isfield(job,'ncpus') && ~isempty(job.ncpus) && ~isnan(job.ncpus),
         comopts = [comopts,' -l ncpus=',num2str(job.ncpus)];
     end
     %

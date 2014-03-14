@@ -69,6 +69,12 @@ elseif ~isfield(job,'nodes'),
     job.nodes = 1;
 end
 %
+if isfield(remote,'select') && ~isempty(remote.select), 
+    job.select = remote.select;%Number of nodes required by remote cluster  
+elseif ~isfield(job,'select'),
+    job.select = 1;
+end
+%
 if isfield(remote,'ppn') && ~isempty(remote.ppn), 
     job.ppn = remote.ppn;%Number of nodes required by remote cluster  
 elseif ~isfield(job,'ppn') 
