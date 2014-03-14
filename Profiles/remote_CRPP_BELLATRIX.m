@@ -38,6 +38,7 @@ remote.pbs.kamleitn.nproc = 6784;
 remote.pbs.kamleitn.cmd = 'qsub -q Q_free ';% direct calculation (csh, bash)
 remote.pbs.kamleitn.nodes = NaN;% number of nodes (set to NaN to use select);
 remote.pbs.kamleitn.memory = NaN;% memory not compatible with select;
+remote.pbs.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.pbs.kamleitn.get_jobid = {'','.bellatrix'};%str_before,str_after
 remote.pbs.kamleitn.set_jobid = {'qstat ','.bellatrix','Job has finished'};%str_before,str_after,str_check
 remote.pbs.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
