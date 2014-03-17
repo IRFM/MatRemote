@@ -61,7 +61,7 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
     end
     %
     if isempty(output),
-        if displaymode,
+        if job.debugmode,
             disp('Timeout reached. Calculation started locally if enforced.')
         end
         err = 'timout';
