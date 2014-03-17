@@ -15,6 +15,8 @@ job.loadfcn = 'matstandardload';% function reading the data locally
 %
 job.localdatapath = '';%'';%forder where local data is stored - leave empty for local data folder
 %
+job.ppn = 2;
+%
 job.env.remotebatch_matlabfun = 'remotematrun';% (required by matlabbatch.sh) matlab function to be called by batch script on remote cluster
 %
 if nargin > 0 && ~isempty(remotematfnc),
