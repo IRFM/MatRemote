@@ -52,33 +52,30 @@ for irem = 1:nrem,
     disp('------------------------------------------------------------------');
     disp(['updating remote profile : ',profilestr{irem}]);
     disp('------------------------------------------------------------------');
-    disp(' ');
     %
-    [err,res,txt] = matremote_jd('cvsupdate_jd',{remotefunctions},remoteprofiles(irem));
-    %
-    if isempty(err),
+    for ifnc = 1:nfncs,
         %
-        for ifnc = 1:nfncs,
-            remotefnc = remotefunctions{ifnc};
-            %
-            if length(remotefnc) > 2 && strcmp(remotefnc(end-1:end),'.m'),%case of function within folder
-                remotefnc = remotefnc(1:end-2);
-                msg = 'containing ';
-            else
-                msg = 'set by environment variable ';
-            end
+        job = matstandardjob_jd('runmat');
+        job.remtimout = 5;% timeout in minutes
+        %
+        [err,res,txt,workpath] = matremote_jd('cvsupdate_jd',{remotefunctions{ifnc}},remoteprofiles(irem),job);
+        %
+        if isempty(err),            
             %
             if display_mode >= 1,
-                if res.(remotefnc) == 0,
-                    disp(['CVS update successful for folder ',msg,': ',remotefnc]);
+                disp(' ');
+                disp('------------------------------------------------------------------');
+                disp(' ');
+                if res == 0,
+                    disp(['CVS update successful for folder ',workpath]);
                 else
-                    disp(['CVS update failed : ',txt.(remotefnc)]);
+                    disp(['CVS update failed : ',txt]);
                 end
             end
             %
-            if display_mode >= 2,
+            if display_mode >= 2 && res == 0,
                 %
-                isep = [0,find(txt.(remotefnc) == 10)];
+                isep = [0,find(txt == 10)];
                 %
                 nseps = length(isep) - 1;
                 %
@@ -91,7 +88,7 @@ for irem = 1:nrem,
                 flag_O = false(1,nseps);
                 %
                 for iisep = 1:nseps,
-                    txts{iisep} = txt.(remotefnc)(isep(iisep)+1:isep(iisep+1)-1);
+                    txts{iisep} = txt(isep(iisep)+1:isep(iisep+1)-1);
                     %
                     % CVS outputs
                     %
@@ -135,6 +132,7 @@ for irem = 1:nrem,
                 %
                 % display results
                 %
+                disp(' ');
                 disp('    -----------------------');
                 disp(['    - Files in conflict : ',num2str(nC)]);
                 disp(' ');
@@ -143,6 +141,7 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
+                disp(' ');
                 disp('    ------------------------------');
                 disp(['    - Files with modifications : ',num2str(nM)]);
                 disp(' ');
@@ -151,6 +150,7 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
+                disp(' ');
                 disp('    -----------------');
                 disp(['    - Files added : ',num2str(nA)]);
                 disp(' ');
@@ -159,6 +159,7 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
+                disp(' ');
                 disp('    -------------------');
                 disp(['    - Files removed : ',num2str(nR)]);
                 disp(' ');
@@ -167,6 +168,7 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
+                disp(' ');
                 disp('    -------------------');
                 disp(['    - Files updated : ',num2str(nU)]);
                 disp(' ');
@@ -175,8 +177,9 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
+                disp(' ');
                 disp('    ----------------------------------------');
-                disp(['    - Selected files outside CVS control : ',num2str(nO)]);
+                disp(['    - Selected files & folders outside CVS control : ',num2str(nO)]);
                 disp(' ');
                 %
                 for iisep = find(flag_O),
@@ -184,13 +187,14 @@ for irem = 1:nrem,
                 end
                 %
             end
+            %
+        else
+            %
+            disp(' ');
+            disp('Remote call failed : ');
+            disperr_jd(err);
+            %
         end
-        %
-    else
-        %
-        disp('Remote call failed : ');
-        disperr_jd(err);
-        %
     end
 end
 
