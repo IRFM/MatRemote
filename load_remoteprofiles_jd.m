@@ -1,6 +1,6 @@
 function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,scheduler,profilename,duplicate,display_mode,bridge_enforce)
     %
-    % This function loads remote profiles, identifies local cluster if it
+    % This function loads remote profiles, identifies local cluster if it 
     % exists, and creates a user-friendly list including scheduler type
     %
     % The function can test the connection, and return either all profiles, all
