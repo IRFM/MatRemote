@@ -239,8 +239,6 @@ if ~isempty(job.save_id),
     %
 end
 %
-%pause(5)
-%
 % start job
 %
 if job.directsearch,
@@ -411,7 +409,7 @@ txt(double(txt) == 10) = [];
 %
 % Read the job id (if accessible)
 %
-if ~isempty(remote.get_jobid)
+if ~job.directsearch && ~isempty(remote.get_jobid)
     if ~isempty(remote.get_jobid{1}),
         if ~iscell(remote.get_jobid{1}),
             remoteget_jobid = remote.get_jobid(1);% only one test
