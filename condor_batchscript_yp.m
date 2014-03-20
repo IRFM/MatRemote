@@ -60,8 +60,10 @@ if isfield(job,'env') && isstruct(job.env),
     for ienv = 1:length(envnames),
         jobenvstr = [jobenvstr,envnames{ienv},'=',job.env.(envnames{ienv}),';'];    
     end
-    jobenvstr = jobenvstr(1:end-1);
 end
+%
+jobenvstr = [jobenvstr,'remotebatchdir=',job.remotedatapath,job.batch_dir];
+%
 fprintf(fileid,['#','\n']);
 fprintf(fileid,['environment = ',jobenvstr,'\n']);
 fprintf(fileid,[' ','\n']);
