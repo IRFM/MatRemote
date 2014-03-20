@@ -25,7 +25,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %           o if the name is not specified or does not exist, default profile name is selected.
     %       - duplicate : (boolean - used only if local profile among those selected) duplicate local profile with and without empty host, to test both ways
     %       - display_mode : (boolean) show information in command window 
-    %       - bridge_enforce : [NaN, empty, 0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
+    %       - bridge_enforce : [NaN, empty, 0 or 1]
     %           o NaN : (default) use value from remote.bridge_enforce
     %           o []  : tests both modes and give priority to ssh key pair
     %           o 0   : tests only ssh key pair,
