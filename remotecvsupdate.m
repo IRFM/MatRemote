@@ -110,7 +110,7 @@ for irem = 1:nrem,
                         %
                         flag_excl = false;
                         for iext = 1:nexts,
-                            if strcmp(exclude{iext},txts{iisep}(end-length(exclude{iext})+1:end)),
+                            if (length(txts{iisep})-length(exclude{iext})+1 > 0) && strcmp(exclude{iext},txts{iisep}(end-length(exclude{iext})+1:end)),
                                 flag_excl = true;
                                 break
                             end
