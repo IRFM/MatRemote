@@ -43,7 +43,7 @@ remote.direct.yves.host = 'shenma.ipp.ac.cn';
 remote.direct.yves.hostname = 'shenma';
 remote.direct.yves.nproc = 20;
 remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
+remote.direct.yves.get_jobid = {};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
 remote.direct.yves.matver.mat801 = '/pkg/MATLAB/R2013a/bin/';
