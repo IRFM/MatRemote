@@ -4,15 +4,11 @@ function [res,txt] = matremoteput(remote,job)
 %
 if ~isempty(remote.host),       
     %
-    if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
+    if isfield(remote,'bridge') && ~isempty(remote.bridge) > 0,
         %        
         [res,txt] = upload2bridge(remote,job);%file transfer from the client to the bridge
         %
         [res,txt] = bridge2remote(remote,job);%file transfer from the bridge to the remote
-        %
-    elseif isfield(remote,'remote'),
-        %
-        % TODO    
         %
     else
         [res,txt] = scp2remote_yp(remote.remoteuser,remote.host,job.save_id,job.localdatapath,job.remotedatapath);%transfer data from the local batch dir to the remote batch dir
