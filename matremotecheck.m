@@ -2,11 +2,9 @@ function [res,txt] = matremotecheck(remote,job,mask)
 %
 if ~isempty(remote.host),
     %
-    remotecmd = '';
+    remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
     %
     if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
-        %
-        remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
         %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
@@ -22,58 +20,38 @@ if ~isempty(remote.host),
             return
         end
         %
-        if ~res,
-            %
-            txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
-            %
-            icheck0 = strfind(txt,mask);
-            %
-            if ~isempty(icheck0),
-                %
-                res = 0;%force standard unix error.
-                txt = '';
-            else
-                res = 1;
-                txt = '';
-            end
-        else
-             res = 1;
-             txt = '';
-        end
+    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
         %
-        return;
-        %
-    elseif isfield(remote,'remote'),
-        %
-        % TODO    
+        [txt,res] = matremotessh(remote,remotecmd);
         %
     else
         %
-        remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
         [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
         %
-        if ~res,
+    end
+    %
+    if ~res,
+        %
+        txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
+        %
+        icheck0 = strfind(txt,mask);
+        %
+        if ~isempty(icheck0),
             %
-            txt = regexprep(txt,'\r\n|\n|\r','');%remove carriage return
-            %
-            icheck0 = strfind(txt,mask);
-            %
-            if ~isempty(icheck0),
-                %
-                res = 0; 
-                txt = '';%
-            else
-                res = 1;
-                txt = '';
-            end
+            res = 0; 
+            txt = '';%
         else
             res = 1;
             txt = '';
         end
-        %
-        return;
+    else
+        res = 1;
+        txt = '';
     end
+    %
+    return;
 else
+    %
     matoutfile_search = ls([job.remotedatapath,job.batch_dir]);
     %
     if ~isempty(strfind(matoutfile_search,mask)),
