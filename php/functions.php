@@ -70,7 +70,18 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     } elseif (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
 
-        if (strcmp($pbssearch,"1") == 0) {
+        if (strcmp($directsearch,"1") == 0) {
+
+            $localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
+            if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+
+            $localcmd[6] = "ps -p ".$id." -o comm=";
+            $localcmd[7] = "rm -f nohup.out";
+
+        } elseif (strcmp($pbssearch,"1") == 0) {
 
         	if (strcmp($wait,"1") == 0) {
             	$cmdextras = " -W block=true";
@@ -336,6 +347,7 @@ function make_batch_script($post,$bridgetype){
         if (strlen($remotematfnc) > 0) $jobenvstr = $jobenvstr.";remotematfnc=".$remotematfnc;
         if (strlen($remotematfnc) > 0) $jobenvstr = $jobenvstr.";remotebatch_matlabroot=".$matlabroot;
         if (strlen($lukeroot) > 0) $jobenvstr = $jobenvstr.";luke_root=".$lukeroot;
+        if (strlen($batch_dir) > 0) $jobenvstr = $jobenvstr.";remotebatchdir=".$remotedatapath.$batch_dir;
 
         $batchscript = $batchscript.'#'."\n";
         $batchscript = $batchscript.'environment = '.$jobenvstr."\n";//***************YP
@@ -394,12 +406,14 @@ function make_batch_script($post,$bridgetype){
         $batchscript = $batchscript.'<dict>'."\n";
         $batchscript = $batchscript.'<key>remotebatch_matlabfun</key>'."\n";
         $batchscript = $batchscript.'<string>'.$matlabfun.'</string>'."\n";
-        $batchscript = $batchscript.'<key>remotematfnc</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$remotematfnc.'</string>'."\n";
+
         if (strlen($testvar) > 0) {
             $batchscript = $batchscript.'<key>TESTVAR</key>'."\n";
             $batchscript = $batchscript.'<string>'.$testvar.'</string>'."\n";
         }
+        $batchscript = $batchscript.'<key>remotematfnc</key>'."\n";
+        $batchscript = $batchscript.'<string>'.$remotematfnc.'</string>'."\n";
+        
         $batchscript = $batchscript.'<key>remotebatch_matlabroot</key>'."\n";
         $batchscript = $batchscript.'<string>'.$matlabroot.'</string>'."\n";
         $batchscript = $batchscript.'<key>MATLABPATH</key>'."\n";
