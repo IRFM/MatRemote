@@ -16,7 +16,7 @@ if ~isempty(remote.bridge),
         %
         if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr')
             remote.bridge.ssh.username = 'yvespeysson';
-            remote.bridge.ssh.temppath = 'tmp/';
+            remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.ports = {'1080','9999'};
         end
         %
