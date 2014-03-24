@@ -49,21 +49,39 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     flag_bridge = false;
     %
-    if ~isempty(remote.bridge) && isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host)  && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host) && ~any(bridge_enforce == 0),% test bridge connection
+    if ~isempty(remote.bridge) && ~any(bridge_enforce == 0),% test bridge connection (url or ssh)
         %
-        if display_mode,
-            disp(' ');
-            disp(['Testing bridge connection to ',remote.host,' via ',remote.bridge.url.host,' ... ']);
+        if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host)  && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url
+            %
+            if display_mode,
+                disp(' ');
+                disp(['Testing bridge connection (url) to ',remote.host,' via ',remote.bridge.url.host,' ... ']);
+            end
+            %
+            [txt_url,res_url] = matremoteurl(remote,'','ls','');
+            %
+            if res_url,
+                res = 0;
+            else
+                res = 1;
+                txt = txt_url;
+            end
         end
         %
-        [txt_url,res_url] = matremoteurl(remote,'','ls','');
+        if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
+            %
+            if display_mode,
+                disp(' ');
+                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
+            end
+            %
+            [txt,res] = matremotessh(remote,'ls');
+            %
+
+        end
         %
-        if res_url,
-            res = 0;
+        if ~res,
             txt = 'test ok';
-        else
-            res = 1;
-            txt = txt_url;
         end
         %
         if res ~= 0,% bridge connection failed,
@@ -72,9 +90,11 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
             msg = ['completed with following result : ',txt];
             flag_bridge = true;
         end
+        %
         if display_mode,
             disp(['   ... ',msg]);
         end
+        %                    
     end
     % 
     % test connection with key-pair
