@@ -52,9 +52,9 @@ if ~isempty(remote.host),
                 
         end
         %
-    elseif isfield(remote,'remote'),
+    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0 && flag_bridge_enforce,
         %
-        % TODO    
+        [txt,res] = matremotessh(remote,remotecmd);
         %
     else
         %
