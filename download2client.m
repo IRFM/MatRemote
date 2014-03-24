@@ -72,5 +72,5 @@ if isfield(remote.bridge,'ftp'),
         %
     end
 elseif isfield(remote.bridge,'ssh'),
-    [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',remote.bridge.ssh.temppath,'/',job.load_id,' ',job.localdatapath,job.load_id]); 
+    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',job.load_id,' ',job.localdatapath,job.load_id]); 
 end

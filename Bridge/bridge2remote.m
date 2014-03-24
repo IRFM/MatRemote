@@ -58,7 +58,7 @@ elseif isfield(remote.bridge,'ssh'),
     [remote] = bridge_params(remote);
     %
     remotecmd = ['scp -r ',remote.bridge.ssh.temppath,'/',job.save_id,' ',remote.remoteuser,'@',remote.host,':',job.remotedatapath];
-    [txt1,res1] = matremotessh(remote,remotecmd);  
+    [res1,txt1] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
     %
     remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];%because all files in the bridge have low level rights
     [txt2,res2] = matremotessh(remote,remotecmd);  

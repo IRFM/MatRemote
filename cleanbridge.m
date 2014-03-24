@@ -65,6 +65,6 @@ if isfield(remote.bridge,'ftp'),
 elseif isfield(remote.bridge,'ssh'),
     %
     remotecmd = ['rm -fr ',remote.bridge.ssh.temppath,'/',job.save_id];
-    [txt,res] = matremotessh(remote,remotecmd);
+    [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
     %
 end
