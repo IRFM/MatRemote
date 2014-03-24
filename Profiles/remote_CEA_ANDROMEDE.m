@@ -33,6 +33,7 @@ remote.pbs.JD211098.matver.matdef = remote.pbs.JD211098.matver.mat800;%default m
 remote.pbs.JD211098.remoteuser = 'JD211098';
 remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
@@ -57,6 +58,7 @@ remote.direct.JD211098.matver.matdef = remote.direct.JD211098.matver.mat800;%def
 remote.direct.JD211098.remoteuser = 'JD211098';
 remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % YVES PEYSSON
 %
@@ -75,6 +77,7 @@ remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat800;%default m
 remote.pbs.YP105119.remoteuser = 'YP105119';
 remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
@@ -94,6 +97,7 @@ remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat800;%def
 remote.direct.YP105119.remoteuser = 'YP105119';
 remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % YVES BURAVAND
 %

@@ -35,6 +35,7 @@ remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat800;%default mat
 remote.torque.yves.remoteuser = 'PEYSSON';
 remote.torque.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.torque.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
@@ -49,6 +50,9 @@ remote.direct.yves.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
 remote.direct.yves.matver.mat801 = '/pkg/MATLAB/R2013a/bin/';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'PEYSSON';
+remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % JOAN DECKER
 %
