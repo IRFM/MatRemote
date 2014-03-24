@@ -33,7 +33,7 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     if isempty(remote.host), %local calculation
         %
-        if any(bridge_enforce == 1),
+        if any(bridge_enforce >= 1),
             remote = [];% no bridge mode without host
             %
             return
@@ -52,6 +52,31 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
     %
     if ~isempty(remote.bridge) && ~any(bridge_enforce == 0),% test bridge connection (url or ssh)
         %
+        if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
+            %
+            if display_mode,
+                disp(' ');
+                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
+            end
+            %
+            [txt_bridge1,res_bridge1] = matremotessh(remote,'ls');
+            %
+            if ~res_bridge1,
+                txt_bridge1 = 'test bridge ssh ok';
+                msg_bridge1 = ['completed with following result : ',txt_bridge1];
+                flag_bridge1 = true;
+            else
+                msg_bridge1 = ['failed with following message : ',txt_bridge1];
+            end    
+            %
+            if display_mode,
+                disp(['   ... ',msg_bridge1]);
+            end
+        else
+            txt_bridge1 = '';
+            flag_bridge1 = false;
+        end
+        %
         if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host)  && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url
             %
             if display_mode,
@@ -62,47 +87,35 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
             [txt_url,res_url] = matremoteurl(remote,'','ls','');
             %
             if res_url,
-                res = 0;
+                res_bridge2 = 0;
             else
-                res = 1;
-                txt = txt_url;
+                res_bridge2 = 1;
+                txt_bridge2 = txt_url;
             end
-        end
-        %
-        if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
+            %
+            if ~res_bridge2,
+                txt_bridge2 = 'test bridge url ok';
+                msg_bridge2 = ['completed with following result : ',txt_bridge2];
+                flag_bridge2 = true;
+            else
+                msg_bridge2 = ['failed with following message : ',txt_bridge2];
+            end
             %
             if display_mode,
-                disp(' ');
-                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
+                disp(['   ... ',msg_bridge2]);
             end
             %
-            [txt,res] = matremotessh(remote,'ls');
-            %
-
-        end
-        %
-        if ~res,
-            txt = 'test ok';
-        end
-        %
-        if res ~= 0,% bridge connection failed,
-            msg = ['failed with following message : ',txt];
         else
-            msg = ['completed with following result : ',txt];
-            flag_bridge = true;
-        end
-        %
-        if display_mode,
-            disp(['   ... ',msg]);
-        end
-        %                    
+            txt_bridge2 = '';
+            flag_bridge2 = false;
+        end                   
     end
     % 
     % test connection with key-pair
     %
     flag_ssh = false;
     %
-    if ~any(bridge_enforce == 1),% test key-pair connection
+    if ~any(bridge_enforce >= 1),% test key-pair connection
         %
         if display_mode,
             disp(' ');
@@ -142,6 +155,12 @@ function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
         if display_mode,
             disp(['   ... ',msg]);
         end
+    end
+    %
+    if flag_bridge1 || flag_bridge2,
+        flag_bridge = true;
+    else
+        flag_bridge = false;
     end
     %
     if flag_ssh,
