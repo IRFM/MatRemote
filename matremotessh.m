@@ -1,5 +1,9 @@
-function [txt,res] = matremotessh(remote,remotecmd)
+function [txt,res] = matremotessh(remote,remotecmd,ssh_opts)
 %
 [remote] = bridge_params(remote);
 %
-[res,txt] = unix(['ssh ',remote.sshopts,' -L',remote.bridge.ssh.ports{1},':localhost:',remote.bridge.ssh.ports{2},' ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''ssh -L',remote.bridge.ssh.ports{2},':localhost:22 ',remote.remoteuser,'@',remote.host,' "',remotecmd,'"''']);%execute the remote command by ssh 
+if nargin == 3,
+    [res,txt] = unix(['ssh ',remote.sshopts,' -L',remote.bridge.ssh.ports{1},':localhost:',remote.bridge.ssh.ports{2},' ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''ssh -L',remote.bridge.ssh.ports{2},':localhost:22 ',remote.remoteuser,'@',remote.host,' "',remotecmd,'"''',ssh_opts]);%execute the remote command by ssh     
+else
+    [res,txt] = unix(['ssh ',remote.sshopts,' -L',remote.bridge.ssh.ports{1},':localhost:',remote.bridge.ssh.ports{2},' ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''ssh -L',remote.bridge.ssh.ports{2},':localhost:22 ',remote.remoteuser,'@',remote.host,' "',remotecmd,'"''']);%execute the remote command by ssh 
+end
