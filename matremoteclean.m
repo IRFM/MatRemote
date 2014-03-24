@@ -4,7 +4,7 @@ if ~isempty(remote.host),
     %
     if isfield(remote,'bridge') && ~isempty(remote.bridge) > 0,
         %
-        [txt1,res1] = cleanbridge(remote,job);
+        [res1,txt1] = cleanbridge(remote,job);
         %
         if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
             %
@@ -20,10 +20,6 @@ if ~isempty(remote.host),
                 res2 = 1;%force standard unix error.
                 txt2 = error_txt;
             end
-            %
-            txt = strcat(txt1,';',txt2);
-            %
-            res = res1*res2;
             %
         elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
             %
