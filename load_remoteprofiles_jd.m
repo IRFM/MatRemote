@@ -428,10 +428,14 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     end
     cmdstr = cmdstr(1:min([end,find(cmdstr == ' ' | cmdstr == '_',1,'first') - 1]));
     %
-    % bridge
+    % bridge (url or ssh)
     % 
-    if ~isempty(remote.bridge) && ~isempty(remote.bridge.url.host) && ~isempty(remote.bridge.ftp.host) && ~any(remote.bridge_enforce == 0),
-        bridgestr = [' via URL: ',remote.bridge.url.host,' and FTP: ',remote.bridge.ftp.host];
+    if ~isempty(remote.bridge) && ~any(remote.bridge_enforce == 0)
+        if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) && ~isempty(remote.bridge.ftp.host),
+            bridgestr = [' via URL: ',remote.bridge.url.host,' and FTP: ',remote.bridge.ftp.host];
+        elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) ,
+            bridgestr = [' via SSH: ',remote.bridge.ssh.host];
+        end
     else
         bridgestr = '';
     end
