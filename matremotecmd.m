@@ -54,7 +54,11 @@ if ~isempty(remote.host),
         %
     elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0 && flag_bridge_enforce,
         %
-        [txt,res] = matremotessh(remote,remotecmd);
+        if (nargin == 4),
+            [txt,res] = matremotessh(remote,remotecmd,ssh_opts);
+        else
+            [txt,res] = matremotessh(remote,remotecmd);
+        end
         %
     else
         %
