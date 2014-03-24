@@ -26,9 +26,31 @@ if ~isempty(remote.host),
         %
         [res,txt] = download2client(remote,job);
         %
-    elseif isfield(remote,'remote'),
+    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
         %
-        % TODO    
+        [remote] = bridge_params(remote);
+        %
+        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
+            %
+            remotecmd = ['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'output_file ',remote.bridge.ssh.temppath,'/',job.batch_dir,'output_file'];
+            [txt,res] = matremotessh(remote,remotecmd);
+            %
+            if res ~= 0,
+                return
+            end            
+            %
+            remotecmd = ['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'error_file ',remote.bridge.ssh.temppath,'/',job.batch_dir,'error_file'];
+            [txt,res] = matremotessh(remote,remotecmd);
+            %
+            if res ~= 0,
+                return
+            end           
+        end
+        %
+        remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',job.remotedatapath,job.load_id,' ',remote.bridge.ssh.temppath,'/',job.load_id];%download from remote to bridge
+        [txt,res] = matremotessh(remote,remotecmd);
+        %
+        [res,txt] = download2client(remote,job);        
         %
     else
         %
