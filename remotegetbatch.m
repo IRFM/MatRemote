@@ -453,8 +453,9 @@ if job.clean >= 1,%clean remote and batch files
         end
         %
     elseif job.condorsearch,
-        %%%% TO DO
+        %
         res = 0;
+        %
     elseif job.xgridsearch,
         %
         if ~isfield(remote,'password') || isempty(remote.password),
