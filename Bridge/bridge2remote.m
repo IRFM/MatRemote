@@ -55,7 +55,9 @@ if isfield(remote.bridge,'url') && isfield(remote.bridge,'ftp'),
     %
 elseif isfield(remote.bridge,'ssh'),
     %
-    remotecmd = ['scp -r ',remote.bridge.ssh.temppath,job.save_id,' ',remote.remoteuser,'@',remote.host,':',job.remotedatapath];
+    [remote] = bridge_params(remote);
+    %
+    remotecmd = ['scp -r ',remote.bridge.ssh.temppath,'/',job.save_id,' ',remote.remoteuser,'@',remote.host,':',job.remotedatapath];
     [txt1,res1] = matremotessh(remote,remotecmd);  
     %
     remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];%because all files in the bridge have low level rights
