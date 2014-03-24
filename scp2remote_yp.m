@@ -49,8 +49,14 @@ if res == 0,
         res = 1;
         %
         for icmd = 1:length(remotecmds),
+            %
             remotecmd = remotecmds{icmd};
-            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            %
+            if strcmp(remote_path(end),'/'),
+                [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            else
+                [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,'/',filelist{ifile},'''']);
+            end
             if res == 0,
                 break
             end
