@@ -139,7 +139,7 @@ end
 %
 % test remote connection - select ssh mode over bridge mode if possible
 %
-remote = testremoteprofile_jd(remote,NaN,displaymode);% test connection to remote host
+remote = testremoteprofile_jd(remote,NaN,true,displaymode);% test connection to remote host
 %
 % create remote data folder if needed - this also tests remote connection
 %

@@ -1,185 +1,208 @@
-function remote = testremoteprofile_jd(remote,bridge_enforce,display_mode)
-    %
-    % This function tests connections for the remote profile 'remote'.
-    %  - If test not OK, return empty profile
-    %  - If ssh key pair selected, return empty remote.bridge
-    %
-    % If bridge_enforce = NaN : (default) use value from remote.bridge_enforce
-    % If bridge_enforce = []  : tests both modes and give priority to ssh key pair
-    % If bridge_enforce = 0   : tests only ssh key pair,
-    % If bridge_enforce = 1   : tests only bridge mode
-    %
-    if nargin < 3,
-        display_mode = false;
-    end
-    %
-    if nargin < 2,
-        bridge_enforce = NaN;
-    end
-    if isnan(bridge_enforce),
-        bridge_enforce = remote.bridge_enforce;
-    end
-    %
-    xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
-    %
-    if xgridsearch, 
-        if ~isempty(getenv('XGRID_PWD')),
-            remote.password = getenv('XGRID_PWD');
-        else
-            disp('WARNING: XGRID password not set up. Create an environment variable ''XGRID_PWD''.')
-            remote = [];
+function remote = testremoteprofile_jd(remote,link_mode,test,display_mode)
+%
+% This function tests connections for the remote profile 'remote'.
+%
+%   Inputs :
+%       - remote : input remote structure
+%       - link_mode : connection mode prescription
+%           o NaN : (default) use value from remote.link_mode
+%           o []  : give priority to (0) ssh key pair, (1) ssh bridge, (2) url/ftp bridge
+%           o 0   : ssh key pair enforced, or test fails
+%           o 1   : ssh bridge enforced, or test fails
+%           o 2   : url/ftp bridge enforced, or test fails
+%       - test : (false/true) flag for testing connection (default = true)
+%       - display_mode : (0) no display, (2) display test results
+%
+%   Outputs :
+%       - remote : input remote structure
+%           o If test OK     : remote.link_mode is specified (0,1 or 2) according to test results and priorities
+%           o If test not OK : return empty profile
+%
+if nargin < 4,
+    display_mode = false;
+end
+if nargin < 3,
+    test = true;
+end
+if nargin < 2,
+    link_mode = NaN;%use value from remote.link_mode
+end
+if isempty(link_mode) || ~isnan(link_mode),% remote.link_mode enforced by input
+    remote.link_mode = link_mode;
+end
+%
+xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+%
+if xgridsearch, 
+    if ~isempty(getenv('XGRID_PWD')),
+        remote.password = getenv('XGRID_PWD');
+    else
+        if display_mode,
+            disp(' ');
+            disp('Remote connection test failed : XGRID password not set up. Create an environment variable ''XGRID_PWD''.');
         end
-    end
-    %
-    if isempty(remote.host), %local calculation
         %
-        if any(bridge_enforce >= 1),
-            remote = [];% no bridge mode without host
-            %
-            return
-        end
-        %
-        remote.bridge = [];
-        %
+        remote = [];
         return
     end
-    %
-    remotecmd = 'echo test ok';
-    %
-    % test bridged connection
-    %
-    flag_bridge = false;
-    %
-    if ~isempty(remote.bridge) && ~any(bridge_enforce == 0),% test bridge connection (url or ssh)
-        %
-        if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
-            %
-            if display_mode,
-                disp(' ');
-                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
-            end
-            %
-            [txt_bridge1,res_bridge1] = matremotessh(remote,'ls');
-            %
-            if ~res_bridge1,
-                txt_bridge1 = 'test bridge ssh ok';
-                msg_bridge1 = ['completed with following result : ',txt_bridge1];
-                flag_bridge1 = true;
-            else
-                msg_bridge1 = ['failed with following message : ',txt_bridge1];
-            end    
-            %
-            if display_mode,
-                disp(['   ... ',msg_bridge1]);
-            end
-        else
-            txt_bridge1 = '';
-            flag_bridge1 = false;
+end
+%
+if isempty(remote.host), %local calculation
+    if ~isempty(remote.link_mode),% local host not compatible with enforced link mode
+        if display_mode,
+            disp(' ');
+            disp('Remote connection test failed : local host not compatible with enforced link mode.');
         end
         %
-        if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host)  && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url
-            %
-            if display_mode,
-                disp(' ');
-                disp(['Testing bridge connection (url) to ',remote.host,' via ',remote.bridge.url.host,' ... ']);
-            end
-            %
-            [txt_url,res_url] = matremoteurl(remote,'','ls','');
-            %
-            if res_url,
-                res_bridge2 = 0;
-            else
-                res_bridge2 = 1;
-                txt_bridge2 = txt_url;
-            end
-            %
-            if ~res_bridge2,
-                txt_bridge2 = 'test bridge url ok';
-                msg_bridge2 = ['completed with following result : ',txt_bridge2];
-                flag_bridge2 = true;
-            else
-                msg_bridge2 = ['failed with following message : ',txt_bridge2];
-            end
-            %
-            if display_mode,
-                disp(['   ... ',msg_bridge2]);
-            end
-            %
-        else
-            txt_bridge2 = '';
-            flag_bridge2 = false;
-        end                   
-    end
-    % 
-    % test connection with key-pair
-    %
-    flag_ssh = false;
-    %
-    if ~any(bridge_enforce >= 1),% test key-pair connection
+        remote = [];% no connection mode without host
         %
+    else
+        if display_mode,
+            disp(' ');
+            disp('Remote connection test skipped : local calculation.');
+        end            
+    end
+    %
+    return
+end
+%
+remotecmd = 'echo test ok';
+%
+% test ssh key-pair connection
+%
+if isempty(remote.link_mode) || remote.link_mode == 0,
+    if test,% test ssh key-pair connection
         if display_mode,
             disp(' ');
             disp(['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... ']);
         end
         %
-        xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
+        remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
         %
-        if ~xgridsearch || ~isempty(getenv('XGRID_PWD')),
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
+        %
+        if res ~= 0,
+            if any(strfind(txt,'Connection timed out')),
+                msg = 'failed : connection timed out (10s)';
+            elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
+                msg = 'failed : ssh key pairing not set up or not working';
+            else
+                msg = ['failed with following message : ',txt];            
+            end
             %
-            remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
+            if display_mode,
+                disp(['   ... ',msg]);
+            end
+        else
+            if display_mode,
+                disp(['   ... completed with following result : ',txt]);
+                disp(' ');
+                disp(' ---> ssh key-pair mode selected');
+            end
             %
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
+            remote.link_mode = 0;% ssh key-pair mode selected
+            return
+        end
+    else
+        return
+    end        
+end
+%
+% test ssh bridge connection
+%
+if (isempty(remote.link_mode) || remote.link_mode == 1),
+    if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
+        if test,% test ssh bridge connection
+            if display_mode,
+                disp(' ');
+                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
+            end
+            %
+            [txt,res] = matremotessh(remote,'ls');
             %
             if res ~= 0,
-                %
-                if any(strfind(txt,'Connection timed out')),
-                    msg = 'failed : connection timed out (10s)';
-                elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
-                    msg = 'failed : ssh key pairing not set up or not working';
-                else
-                    msg = ['failed with following message : ',txt];            
+                if display_mode,
+                    disp(['   ... failed with following message : ',txt]);
                 end
-                %
             else
-                msg = ['completed with following result : ',txt];
-                %
-                if xgridsearch,
-                    remote.password = getenv('XGRID_PWD');
+                if display_mode,
+                    disp('   ... completed with following result : test ok');
+                    disp(' ');
+                    disp(' ---> ssh bridge mode selected');
                 end
                 %
-                flag_ssh = true;
-            end
-        elseif xgridsearch, 
-            msg = 'XGRID password not set up'; 
-        end
-        if display_mode,
-            disp(['   ... ',msg]);
-        end
-    end
-    %
-    if flag_bridge1 || flag_bridge2,
-        flag_bridge = true;
-    else
-        flag_bridge = false;
-    end
-    %
-    if flag_ssh,
-        if ~flag_bridge,
-            msg = 'connection in ssh key pair mode OK';
+                remote.link_mode = 1;% ssh bridge mode selected
+                return
+            end    
         else
-            msg = 'connection in ssh key pair mode enforced';
-        end
-        remote.bridge = [];
-    elseif flag_bridge,
-        msg = 'connection in bridge mode OK';
+            remote.link_mode = 1;% ssh bridge mode selected
+            return
+        end            
     else
-        msg = 'no valid connection mode';
-        remote = [];
+        if display_mode,
+            disp(' ');
+            disp('ssh bridge mode connection not set up.');
+        end
     end
-    %
-    if display_mode,
-        disp(['test output : ',msg]);
-        disp(' ');
-    end
-    %
 end
+%
+% test url/ftp bridge connection
+%
+if (isempty(remote.link_mode) || remote.link_mode == 2),
+    if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host) &&...
+       isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url/ftp
+        %
+        if test,
+            if display_mode,
+                disp(' ');
+                disp(['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... ']);
+            end
+            %
+            [txt,res] = matremoteurl(remote,'','ls','');
+            %
+            if res == 0,
+                if display_mode,
+                    disp(['   ... failed with following message : ',txt]);
+                end
+            else
+                if display_mode,
+                    disp('   ... completed with following result : test ok');
+                    disp(' ');
+                    disp(' ---> url/ftp bridge mode selected');
+                end
+                %
+                remote.link_mode = 2;% ssh bridge mode selected
+                return
+            end    
+        else
+            remote.link_mode = 2;% ssh bridge mode selected
+            return
+        end
+    else
+        if display_mode,
+            disp(' ');
+            disp('url/ftp bridge mode connection not set up.');
+        end
+    end
+end
+% 
+% no valid connection mode
+%
+if display_mode,
+    %
+    if isempty(remote.link_mode),
+        msg = 'ssh key-pair, ssh bridge and url/ftp bridge modes not set up, or test failed.';
+    elseif remote.link_mode == 0,
+        msg = 'ssh key-pair mode not set up, or test failed.';
+    elseif remote.link_mode == 1,
+        msg = 'ssh bridge mode not set up, or test failed.';
+    elseif remote.link_mode == 2,
+        msg = 'url/ftp bridge mode not set up, or test failed.';
+    end            
+    disp(' ');
+    disp(['Remote connection test failed : ',msg]);
+end            
+%
+remote = [];
+return
+%
