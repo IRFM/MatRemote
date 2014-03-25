@@ -4,7 +4,7 @@ function [res,txt] = matremoteget(remote,job)
 %
 if ~isempty(remote.host),
     %
-    if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
+    if remote.link_mode == 2,
         %
         if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
             %
@@ -26,7 +26,7 @@ if ~isempty(remote.host),
         %
         [res,txt] = download2client(remote,job);
         %
-    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
+    elseif remote.link_mode == 1,
         %
         [remote] = bridge_params(remote);
         %

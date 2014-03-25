@@ -5,7 +5,7 @@ txt = '';
 %
 [remote] = bridge_params(remote);
 %
-if isfield(remote.bridge,'ftp'),
+if remote.link_mode == 2,
     %
     flag_curl_ftp = testcurl('ftp');
     %
@@ -37,7 +37,7 @@ if isfield(remote.bridge,'ftp'),
         end
     end
     %
-elseif isfield(remote.bridge,'ssh'),
+elseif remote.link_mode == 1,
     %
     [res,txt] = scp2remote_yp(remote.bridge.ssh.username,remote.bridge.ssh.host,job.save_id,job.localdatapath,remote.bridge.ssh.temppath);%transfer data from the local batch dir to the remote batch dir
     %

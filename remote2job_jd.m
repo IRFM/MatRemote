@@ -37,10 +37,10 @@ elseif ~isfield(job,'funcopy'),
     job.funcopy = 0;
 end
 %
-if isfield(remote,'bridge_enforce') && ~isempty(remote.bridge_enforce),
-    job.bridge_enforce = remote.bridge_enforce;
-elseif ~isfield(job,'bridge_enforce'),
-    job.bridge_enforce = false;
+if isfield(remote,'link_mode') && ~isempty(remote.link_mode),
+    job.link_mode = remote.link_mode;
+elseif ~isfield(job,'link_mode'),
+    job.link_mode = [];
 end
 %
 if isfield(remote,'env') && ~isempty(remote.env),

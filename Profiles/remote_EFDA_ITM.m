@@ -40,7 +40,6 @@ remote.sge.yves.matver.matdef = remote.sge.yves.matver.mat800;%default matlab on
 remote.sge.yves.remoteuser = 'yvesp';
 remote.sge.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.sge.yves.bridge_enforce = 1;
 %
 % direct
 %
@@ -56,7 +55,6 @@ remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default mat
 remote.direct.yves.remoteuser = 'yvesp';
 remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge_enforce = 1;
 %
 % JOAN DECKER
 %

@@ -5,7 +5,7 @@ txt = '';
 %
 [remote] = bridge_params(remote);
 %
-if isfield(remote.bridge,'ftp'),
+if remote.link_mode == 2,
     flag_curl_ftp = testcurl('ftp');
     %
     if flag_curl_ftp,%ftp over curl method
@@ -71,6 +71,6 @@ if isfield(remote.bridge,'ftp'),
         end
         %
     end
-elseif isfield(remote.bridge,'ssh'),
+elseif remote.link_mode == 1,
     [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',job.load_id,' ',job.localdatapath,job.load_id]); 
 end

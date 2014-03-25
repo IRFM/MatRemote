@@ -1,4 +1,4 @@
-function soutputs = testremotebatch(sinputs,remote,debugmode,bridge_enforce)
+function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode)
 % ------------------------------------------------
 % test for remote batch using a standard function.
 % ------------------------------------------------
@@ -34,11 +34,12 @@ function soutputs = testremotebatch(sinputs,remote,debugmode,bridge_enforce)
 %
 %   - debugmode : [0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
 %
-%   - bridge_enforce : [NaN, empty, 0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
-%           o NaN : (default) use value from remote.bridge_enforce
-%           o []  : tests both modes and give priority to ssh key pair
-%           o 0   : tests only ssh key pair,
-%           o 1   : tests only bridge mode
+%   - link_mode : connection mode prescription
+%           o NaN : (default) use value from remote.link_mode
+%           o []  : give priority to (0) ssh key pair, (1) ssh bridge, (2) url/ftp bridge
+%           o 0   : ssh key pair enforced
+%           o 1   : ssh bridge enforced
+%           o 2   : url/ftp bridge enforced
 %
 % OUTPUTS : 
 %
@@ -64,10 +65,10 @@ addpath(mattools_path);% MatTools toolbox
 sinput.strin = 'The best code is : ';% input to function remotetest
 testvar = 'luke'; % test variable
 %
-% Bridge_enforce
+% link_mode
 %
 if nargin < 4,
-    bridge_enforce = NaN;% use value from remote.bridge_enforce
+    link_mode = NaN;% use value from remote.link_mode
 end
 %
 % Debugmode
@@ -101,7 +102,7 @@ if isnumeric(sinputs),% start new test
     %
     % Select local and remote profiles to be tested
     %
-    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true,debugmode,bridge_enforce);
+    [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,true,NaN,NaN,true,debugmode,link_mode);
     %
     nrem = length(remoteprofiles);
     %
@@ -215,13 +216,13 @@ else% check previously started job
     %
 end
 %
-if ~isempty(bridge_enforce) && ~isnan(bridge_enforce),
-    bridgestr = ['_bridge_',num2str(bridge_enforce)];
+if ~isempty(link_mode) && ~isnan(link_mode),
+    link_modestr = ['_link_mode_',num2str(link_mode)];
 else
-    bridgestr = '';
+    link_modestr = '';
 end
 %
-diaryname = ['res_testremotebatch_',datestr(now,29),bridgestr,'.log'];
+diaryname = ['res_testremotebatch_',datestr(now,29),link_modestr,'.log'];
 %
 if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y',
     %

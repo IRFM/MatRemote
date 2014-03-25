@@ -4,7 +4,7 @@ function [res,txt] = matremoteput(remote,job)
 %
 if ~isempty(remote.host),       
     %
-    if isfield(remote,'bridge') && ~isempty(remote.bridge) > 0,
+    if remote.link_mode > 0,
         %        
         [res1,txt1] = upload2bridge(remote,job);%file transfer from the client to the bridge
         %

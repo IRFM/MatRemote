@@ -1,22 +1,18 @@
 function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
 %
+if nargin < 4,
+    ssh_opts = '';
+end
+%
 if isfield(remote,'disp_cmd') && remote.disp_cmd,
     disp('------------------------------------------------------------------------------------')
     disp(['-----> URL cmd: ',remotecmd])
     disp('------------------------------------------------------------------------------------')
 end
 %
-if isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && remote.bridge_enforce,
-    flag_bridge_enforce = 1;
-elseif isfield(remote,'bridge_enforce') && islogical(remote.bridge_enforce) && ~remote.bridge_enforce,
-    flag_bridge_enforce = 0;
-else
-    flag_bridge_enforce = 1;
-end
-%
 if ~isempty(remote.host),
     %
-    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0 && flag_bridge_enforce,
+    if remote.link_mode == 2,
         %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
@@ -52,21 +48,13 @@ if ~isempty(remote.host),
                 
         end
         %
-    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0 && flag_bridge_enforce,
+    elseif remote.link_mode == 1,
         %
-        if (nargin == 4),
-            [txt,res] = matremotessh(remote,remotecmd,ssh_opts);
-        else
-            [txt,res] = matremotessh(remote,remotecmd);
-        end
+        [txt,res] = matremotessh(remote,remotecmd,ssh_opts);
         %
     else
         %
-        if (nargin == 4),
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''',ssh_opts]);%execute the remote command by ssh 
-        else
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
-        end
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''',ssh_opts]);%execute the remote command by ssh 
         %
     end
 else

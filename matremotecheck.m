@@ -4,7 +4,7 @@ if ~isempty(remote.host),
     %
     remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
     %
-    if isfield(remote.bridge,'url') && ~isempty(remote.bridge.url.host) > 0,
+    if remote.link_mode == 2,
         %
         [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
         %
@@ -20,7 +20,7 @@ if ~isempty(remote.host),
             return
         end
         %
-    elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
+    elseif remote.link_mode == 1,
         %
         [txt,res] = matremotessh(remote,remotecmd);
         %

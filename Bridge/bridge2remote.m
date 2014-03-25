@@ -3,7 +3,7 @@ function [res,txt] = bridge2remote(remote,job)
 res = 0;
 txt = '';
 %
-if isfield(remote.bridge,'url') && isfield(remote.bridge,'ftp'),
+if remote.link_mode == 2,
     %
     php_post = phppostremotejob(remote,job);%add extra data for php filtering
     %
@@ -53,7 +53,7 @@ if isfield(remote.bridge,'url') && isfield(remote.bridge,'ftp'),
     %
     res = res1*res2;
     %
-elseif isfield(remote.bridge,'ssh'),
+elseif remote.link_mode == 1,
     %
     [remote] = bridge_params(remote);
     %

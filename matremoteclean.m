@@ -2,11 +2,11 @@ function [res,txt] = matremoteclean(remote,job,remotecmd)
 %
 if ~isempty(remote.host),
     %
-    if isfield(remote,'bridge') && ~isempty(remote.bridge) > 0,
+    if remote.link_mode > 0,
         %
         [res1,txt1] = cleanbridge(remote,job);
         %
-        if isfield(remote.bridge,'ftp') && ~isempty(remote.bridge.ftp.host) > 0,
+        if  remote.link_mode == 2,
             %
             [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
             %
@@ -21,7 +21,7 @@ if ~isempty(remote.host),
                 txt2 = error_txt;
             end
             %
-        elseif isfield(remote.bridge,'ssh') && ~isempty(remote.bridge.ssh.host) > 0,
+        elseif remote.link_mode == 1,
             %
             [txt2,res2] = matremotessh(remote,remotecmd);
             %

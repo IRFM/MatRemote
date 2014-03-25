@@ -5,7 +5,7 @@ txt = '';
 %
 remote = bridge_params(remote);
 %
-if isfield(remote.bridge,'ftp'),
+if remote.link_mode == 2,
     %
     flag_curl_ftp = testcurl('ftp');
     %
@@ -62,7 +62,7 @@ if isfield(remote.bridge,'ftp'),
         %
     end
     %
-elseif isfield(remote.bridge,'ssh'),
+elseif remote.link_mode == 1,
     %
     remotecmd = ['rm -fr ',remote.bridge.ssh.temppath,'/',job.save_id];
     [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''',remotecmd,'''']);%execute the remote command by ssh 

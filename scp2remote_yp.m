@@ -21,6 +21,9 @@ function [res,err] = scp2remote_yp(remotelogname,remotehost,filename,local_path,
 if nargin < 3,
     error('Not enough input arguments in scp2remote_yp.m.');
 end
+if ~strcmp(remote_path(end),filesep),
+    remote_path = [remote_path,filesep];
+end
 %
 [res,err] = unix(['scp -r ',local_path,filename,' ',remotelogname,'@',remotehost,':',remote_path]);
 %
@@ -52,11 +55,8 @@ if res == 0,
             %
             remotecmd = remotecmds{icmd};
             %
-            if strcmp(remote_path(end),'/'),
-                [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
-            else
-                [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,'/',filelist{ifile},'''']);
-            end
+            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            %
             if res == 0,
                 break
             end
