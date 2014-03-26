@@ -28,6 +28,7 @@ remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str
 remote.direct.decker.matver.mat801 = '/usr/local/matlab-8.1/bin/';
 remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat801;%default matlab on remote machine
 remote.direct.decker.remoteuser = 'joan.decker@cea.fr';
+remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 %
 % slurm
 %
@@ -41,6 +42,7 @@ remote.slurm.decker.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,s
 remote.slurm.decker.matver.mat801 = '/usr/local/matlab-8.1/bin/';
 remote.slurm.decker.matver.matdef = remote.slurm.decker.matver.mat801;%default matlab on remote machine
 remote.slurm.decker.remoteuser = 'joan.decker@cea.fr';
+remote.slurm.decker.bridge.ssh.host = 'lac911.epfl.ch';
 %
 % JOSEF KAMLEITNER
 %

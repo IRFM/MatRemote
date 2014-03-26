@@ -28,6 +28,7 @@ remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str
 remote.direct.decker.matver.mat710 = '/usr/local/matlab710/bin/';
 remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat710;%default matlab on remote machine
 remote.direct.decker.remoteuser = 'decker';
+remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 %
 %
 % --------------------------------------------------

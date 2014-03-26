@@ -29,6 +29,7 @@ remote.direct.decker.matver.mat800 = '/usr/local/MATLAB/R2012b/bin/';
 remote.direct.decker.matver.mat801 = '/usr/local/MATLAB/R2013a/bin/';
 remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat801;%default matlab on remote machine
 remote.direct.decker.remoteuser = 'decker';
+remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 %
 % JOSEF KAMLEITNER
 %

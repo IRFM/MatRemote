@@ -20,6 +20,12 @@ if ~isempty(remote.bridge),
             remote.bridge.ssh.ports = {'1080','9999'};
         end
         %
+        if strcmp(remote.bridge.ssh.host,'lac911.epfl.ch')
+            remote.bridge.ssh.username = 'decker';
+            remote.bridge.ssh.temppath = '/home/decker/tmp';
+            remote.bridge.ssh.ports = {'1080','9999'};
+        end
+        %
     end
     %
     if isfield(remote.bridge,'url') && ~isfield(remote.bridge.url,'path'),
