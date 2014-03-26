@@ -1,4 +1,4 @@
-function remotecvsupdate(remote,remotefunctions,display_mode,exclude)
+function flag = remotecvsupdate(remote,remotefunctions,display_mode,exclude)
 %
 % This function cvs updates the folders containing the functions listed in remotefunctions 
 % over the profiles defined by remote
@@ -24,6 +24,14 @@ function remotecvsupdate(remote,remotefunctions,display_mode,exclude)
 %       - exclude : 
 %           Ignore extensions from list of files outside CVS control (only used if display_mode >= 3)
 %
+%   - OUTPUTS : 
+%       - flag : matrix of size (nrem x nfncs) with values :
+%           o -2 if the remote process failed
+%           o -1 if the cvs update process failed
+%           o  0 if the cvs update succeeded without remote conflicts or remote modified files
+%           o  1 if the cvs update succeeded without remote conflicts and with remote modified files
+%           o  2 if the cvs update succeeded with remote conflicts
+%
 if nargin < 4,
     exclude = {};
 end
@@ -46,6 +54,8 @@ nrem = length(remoteprofiles);
 nfncs = length(remotefunctions);
 nexts = length(exclude);
 %
+flag = NaN(nrem,nfncs);
+%
 for irem = 1:nrem,
     %
     disp(' ');
@@ -62,18 +72,9 @@ for irem = 1:nrem,
         %
         if isempty(err),            
             %
-            if display_mode >= 1,
-                disp(' ');
-                disp('------------------------------------------------------------------');
-                disp(' ');
-                if res == 0,
-                    disp(['CVS update successful for folder ',workpath]);
-                else
-                    disp(['CVS update failed : ',txt]);
-                end
-            end
-            %
-            if display_mode >= 2 && res == 0,
+            if res ~= 0,
+                flag(irem,ifnc) = -1;% failed cvs update
+            else
                 %
                 isep = [0,find(txt == 10)];
                 %
@@ -130,6 +131,28 @@ for irem = 1:nrem,
                 nU = sum(flag_U);
                 nO = sum(flag_O);
                 %
+                if nC > 0,
+                    flag(irem,ifnc) = 2;% files in conflict on remote folder
+                elseif nM > 0,
+                    flag(irem,ifnc) = 1;% files modified and not commited on remote folder
+                else
+                    flag(irem,ifnc) = 0;% cvs udpate OK
+                end                    
+            end
+            %
+            if display_mode >= 1,
+                disp(' ');
+                disp('------------------------------------------------------------------');
+                disp(' ');
+                if res == 0,
+                    disp(['CVS update successful for folder ',workpath]);
+                else
+                    disp(['CVS update failed : ',txt]);
+                end
+            end
+            %
+            if display_mode >= 2 && res == 0,
+                %
                 % display results
                 %
                 disp(' ');
@@ -177,18 +200,22 @@ for irem = 1:nrem,
                     disp(['        o ',txts{iisep}]);
                 end
                 %
-                disp(' ');
-                disp('    ----------------------------------------');
-                disp(['    - Selected files & folders outside CVS control : ',num2str(nO)]);
-                disp(' ');
-                %
-                for iisep = find(flag_O),
-                    disp(['        o ',txts{iisep}]);
+                if display_mode >= 3,
+                    disp(' ');
+                    disp('    ----------------------------------------');
+                    disp(['    - Selected files & folders outside CVS control : ',num2str(nO)]);
+                    disp(' ');
+                    %
+                    for iisep = find(flag_O),
+                        disp(['        o ',txts{iisep}]);
+                    end
                 end
                 %
             end
             %
         else
+            %
+            flag(irem,ifnc) = -2;
             %
             disp(' ');
             disp('Remote call failed : ');
