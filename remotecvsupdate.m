@@ -12,7 +12,7 @@ function flag = remotecvsupdate(remote,remotefunctions,display_mode,exclude)
 %           o ('local') : idendify and return local cluster
 %
 %       - remotefunctions : list of functions (if ends by '.m') or name of environment variable for path to update. default values include
-%           o select_LUKE_jd -> MatTools
+%           o select_LUKE -> MatTools
 %           o load_remoteprofiles_jd -> MatTools
 %
 %       - display_mode : 
@@ -41,7 +41,7 @@ if nargin < 3,
 end
 %
 if nargin < 2,
-    remotefunctions = {'select_LUKE_jd.m','load_remoteprofiles_jd.m'};
+    remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m'};
 end
 %
 if nargin < 1,
