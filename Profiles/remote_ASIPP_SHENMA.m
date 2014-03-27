@@ -57,6 +57,7 @@ remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
 % JOAN DECKER
 %
 remote.torque.joan = remote.torque.PEYSSON;
+remote.direct.joan = remote.direct.PEYSSON;
 %
 % BOJIANG DING
 %
