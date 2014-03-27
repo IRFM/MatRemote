@@ -28,6 +28,7 @@ remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,s
 remote.direct.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
 remote.direct.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
 remote.direct.kamleitn.remoteuser = 'kamleitn';
+remote.direct.kamleitn.bridge.ssh.host = 'lac911.epfl.ch';
 %
 % pbs
 %
@@ -45,6 +46,7 @@ remote.pbs.kamleitn.set_jobid = {'qstat ','.bellatrix','Job has finished'};%str_
 remote.pbs.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
 remote.pbs.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
 remote.pbs.kamleitn.remoteuser = 'kamleitn';
+remote.pbs.kamleitn.bridge.ssh.host = 'lac911.epfl.ch';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
