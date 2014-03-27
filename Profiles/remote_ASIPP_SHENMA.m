@@ -10,7 +10,7 @@ function remote_profile = remote_ASIPP_SHENMA(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'torque';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'PEYSSON';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -20,55 +20,55 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 % torque
 %
-remote.torque.yves = default_remote_profile;
-remote.torque.yves.host = 'shenma.ipp.ac.cn';% empty for local host
-remote.torque.yves.hostname = 'shenma';
-remote.torque.yves.nproc = 20;% default number of nodes for job on shenma
-remote.torque.yves.wait = 0;
-remote.torque.yves.shclean = 1;
-remote.torque.yves.cmd = 'qsub -q batch';%'qsub -q batch -o /scratch/PEYSSON';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
-remote.torque.yves.remotedatapath = '/scratch/PEYSSON/';
-remote.torque.yves.get_jobid = {'','.master'};%str_before,str_after
-remote.torque.yves.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
-remote.torque.yves.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
-remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat800;%default matlab on remote machine
-remote.torque.yves.remoteuser = 'PEYSSON';
-remote.torque.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.torque.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.torque.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+remote.torque.PEYSSON = default_remote_profile;
+remote.torque.PEYSSON.host = 'shenma.ipp.ac.cn';% empty for local host
+remote.torque.PEYSSON.hostname = 'shenma';
+remote.torque.PEYSSON.nproc = 20;% default number of nodes for job on shenma
+remote.torque.PEYSSON.wait = 0;
+remote.torque.PEYSSON.shclean = 1;
+remote.torque.PEYSSON.cmd = 'qsub -q batch';%'qsub -q batch -o /scratch/PEYSSON';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
+remote.torque.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
+remote.torque.PEYSSON.get_jobid = {'','.master'};%str_before,str_after
+remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
+remote.torque.PEYSSON.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
+remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat800;%default matlab on remote machine
+remote.torque.PEYSSON.remoteuser = 'PEYSSON';
+remote.torque.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
-remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'shenma.ipp.ac.cn';
-remote.direct.yves.hostname = 'shenma';
-remote.direct.yves.nproc = 20;
-remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
-remote.direct.yves.matver.mat801 = '/pkg/MATLAB/R2013a/bin/';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'PEYSSON';
-remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+remote.direct.PEYSSON = default_remote_profile;
+remote.direct.PEYSSON.host = 'shenma.ipp.ac.cn';
+remote.direct.PEYSSON.hostname = 'shenma';
+remote.direct.PEYSSON.nproc = 20;
+remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.PEYSSON.get_jobid = {};%str_before,str_after
+remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.PEYSSON.matver.mat800 = '/pkg/MATLAB/R2012b/bin/';
+remote.direct.PEYSSON.matver.mat801 = '/pkg/MATLAB/R2013a/bin/';
+remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat800;%default matlab on remote machine
+remote.direct.PEYSSON.remoteuser = 'PEYSSON';
+remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % JOAN DECKER
 %
-remote.torque.joan = remote.torque.yves;
+remote.torque.joan = remote.torque.PEYSSON;
 %
 % BOJIANG DING
 %
-remote.torque.bojiang = remote.torque.yves;
-remote.torque.bojiang.remoteuser = 'bjding';
-remote.torque.bojiang.remotedatapath = '/scratch/bjding/';
+remote.torque.bjding= remote.torque.PEYSSON;
+remote.torque.bjding.remoteuser = 'bjding';
+remote.torque.bjding.remotedatapath = '/scratch/bjding/';
 %
 % MIAOHUI LI
 %
-remote.torque.miaohui = remote.torque.yves;
-remote.torque.miaohui.remoteuser = 'limiaohui';
-remote.torque.miaohui.remotedatapath = '/scratch/limiaohui/';
+remote.torque.limiaohui = remote.torque.PEYSSON;
+remote.torque.limiaohui.remoteuser = 'limiaohui';
+remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles

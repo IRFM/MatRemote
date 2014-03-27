@@ -10,7 +10,7 @@ function remote_profile = remote_EFDA_ITM(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'sge';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'yvesp';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -18,48 +18,48 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 % sun grid engine (sge)
 %
-remote.sge.yves = default_remote_profile;
-remote.sge.yves.host = 'g01.efda-itm.eu';
-remote.sge.yves.hostname = 'itm.rzg.mpg.de';
-remote.sge.yves.usermail = 'ypeysson@free.fr';
-remote.sge.yves.shell = 'bash';
-remote.sge.yves.nproc = 16;% limited to two jobs per PBS node to avoid cluster saturation
-remote.sge.yves.wait = 0;% invalid option
-remote.sge.yves.nodes = [];% invalid option
-remote.sge.yves.ncpus = [];% invalid option
-remote.sge.yves.memory = [2000,15000];% default/max values
-remote.sge.yves.walltime = [];% invalid option
-remote.sge.yves.cmd = 'qsub';%
-remote.sge.yves.sge.batchscript_params1 = {'#module load itmenv'};
-remote.sge.yves.sge.batchscript_params2 = {'#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
-remote.sge.yves.remotedatapath = '/u/yvesp/tmp/';
-remote.sge.yves.get_jobid = {'Your job ',' '};%str_before,str_after
-remote.sge.yves.set_jobid = {'qstat -j ','','jobs do not exist'};%str_before,str_after,str_check
-remote.sge.yves.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/';
-remote.sge.yves.matver.matdef = remote.sge.yves.matver.mat800;%default matlab on remote machine
-remote.sge.yves.remoteuser = 'yvesp';
-remote.sge.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.sge.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.sge.yvesp = default_remote_profile;
+remote.sge.yvesp.host = 'g01.efda-itm.eu';
+remote.sge.yvesp.hostname = 'itm.rzg.mpg.de';
+remote.sge.yvesp.usermail = 'ypeysson@free.fr';
+remote.sge.yvesp.shell = 'bash';
+remote.sge.yvesp.nproc = 16;% limited to two jobs per PBS node to avoid cluster saturation
+remote.sge.yvesp.wait = 0;% invalid option
+remote.sge.yvesp.nodes = [];% invalid option
+remote.sge.yvesp.ncpus = [];% invalid option
+remote.sge.yvesp.memory = [2000,15000];% default/max values
+remote.sge.yvesp.walltime = [];% invalid option
+remote.sge.yvesp.cmd = 'qsub';%
+remote.sge.yvesp.sge.batchscript_params1 = {'#module load itmenv'};
+remote.sge.yvesp.sge.batchscript_params2 = {'#source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};
+remote.sge.yvesp.remotedatapath = '/u/yvesp/tmp/';
+remote.sge.yvesp.get_jobid = {'Your job ',' '};%str_before,str_after
+remote.sge.yvesp.set_jobid = {'qstat -j ','','jobs do not exist'};%str_before,str_after,str_check
+remote.sge.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/';
+remote.sge.yvesp.matver.matdef = remote.sge.yvesp.matver.mat800;%default matlab on remote machine
+remote.sge.yvesp.remoteuser = 'yvesp';
+remote.sge.yvesp.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.sge.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % direct
 %
-remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'g01.efda-itm.eu';
-remote.direct.yves.hostname = 'itm.rzg.mpg.de';
-remote.direct.yves.nproc = 16;
-remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat800;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'yvesp';
-remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.yvesp = default_remote_profile;
+remote.direct.yvesp.host = 'g01.efda-itm.eu';
+remote.direct.yvesp.hostname = 'itm.rzg.mpg.de';
+remote.direct.yvesp.nproc = 16;
+remote.direct.yvesp.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.yvesp.get_jobid = {};%str_before,str_after
+remote.direct.yvesp.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/';
+remote.direct.yvesp.matver.matdef = remote.direct.yvesp.matver.mat800;%default matlab on remote machine
+remote.direct.yvesp.remoteuser = 'yvesp';
+remote.direct.yvesp.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr';
 %
 % JOAN DECKER
 %
-remote.sge.joan = remote.sge.yves;
-remote.direct.joan = remote.direct.yves;
+remote.sge.joan = remote.sge.yvesp;
+remote.direct.joan = remote.direct.yvesp;
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles

@@ -10,7 +10,7 @@ function remote_profile = remote_macpro_YVES_PEYSSON(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'condor';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'yves';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'yvespeysson';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -18,40 +18,40 @@ default.profile = 'yves';% default user profile if 'remoteuser' is not an existi
 %
 % direct
 %
-remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.hostname = 'macproyves';
-remote.direct.yves.nproc = 6;
-remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
-remote.direct.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'yvespeysson';
-remote.direct.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+remote.direct.yvespeysson = default_remote_profile;
+remote.direct.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.direct.yvespeysson.hostname = 'macproyves';
+remote.direct.yvespeysson.nproc = 6;
+remote.direct.yvespeysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
+remote.direct.yvespeysson.get_jobid = {};%str_before,str_after
+remote.direct.yvespeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
+remote.direct.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
+remote.direct.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat801;%default matlab on remote machine
+remote.direct.yvespeysson.remoteuser = 'yvespeysson';
+remote.direct.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % condor
 %
-remote.condor.yves = default_remote_profile;
-remote.condor.yves.host = 'tolbachik.hd.free.fr';
-remote.condor.yves.hostname = 'macproyves';
-remote.condor.yves.nproc = 6;
-remote.condor.yves.cmd = 'condor_submit';
-remote.condor.yves.get_jobid = {'** Proc ',':'};
-remote.condor.yves.set_jobid = {'condor_q ',''};
-remote.condor.yves.condor.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
-remote.condor.yves.condor.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
-remote.condor.yves.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
-remote.condor.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
-remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
-remote.condor.yves.remoteuser = 'yvespeysson';
-remote.condor.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.condor.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.condor.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+remote.condor.yvespeysson = default_remote_profile;
+remote.condor.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.condor.yvespeysson.hostname = 'macproyves';
+remote.condor.yvespeysson.nproc = 6;
+remote.condor.yvespeysson.cmd = 'condor_submit';
+remote.condor.yvespeysson.get_jobid = {'** Proc ',':'};
+remote.condor.yvespeysson.set_jobid = {'condor_q ',''};
+remote.condor.yvespeysson.condor.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
+remote.condor.yvespeysson.condor.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
+remote.condor.yvespeysson.remotedatapath = '/Users/yvespeysson/condor/';
+remote.condor.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
+remote.condor.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat801;%default matlab on remote machine
+remote.condor.yvespeysson.remoteuser = 'yvespeysson';
+remote.condor.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % xgrid
 %
@@ -91,50 +91,36 @@ remote.condor.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % YVES PEYSSON
 %
-remote.xgrid.yves = default_remote_profile;
-remote.xgrid.yves.host = 'tolbachik.hd.free.fr';
-remote.xgrid.yves.hostname = 'macproyves';
-remote.xgrid.yves.nproc = 6;
-remote.xgrid.yves.cmd = {'xgrid -h ',' -p ',' -job batch '};
-remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
-remote.xgrid.yves.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
-remote.xgrid.yves.remotedatapath = '/Users/yvespeysson/xgrid/';
-remote.xgrid.yves.startuppath = '/Users/yvespeysson/Documents/MATLAB';%path to add for matlab startup
-remote.xgrid.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
-remote.xgrid.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
-remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
-remote.xgrid.yves.remoteuser = 'yvespeysson';%'joandecker';
-remote.xgrid.yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.xgrid.yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.xgrid.yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yvespeysson = default_remote_profile;
+remote.xgrid.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yvespeysson.hostname = 'macproyves';
+remote.xgrid.yvespeysson.nproc = 6;
+remote.xgrid.yvespeysson.cmd = {'xgrid -h ',' -p ',' -job batch '};
+remote.xgrid.yvespeysson.get_jobid = {'jobIdentifier = ',';'};
+remote.xgrid.yvespeysson.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
+remote.xgrid.yvespeysson.remotedatapath = '/Users/yvespeysson/xgrid/';
+remote.xgrid.yvespeysson.startuppath = '/Users/yvespeysson/Documents/MATLAB';%path to add for matlab startup
+remote.xgrid.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
+remote.xgrid.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.xgrid.yvespeysson.matver.matdef = remote.xgrid.yvespeysson.matver.mat801;%default matlab on remote machine
+remote.xgrid.yvespeysson.remoteuser = 'yvespeysson';%'joandecker';
+remote.xgrid.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.xgrid.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % JOAN DECKER
 %
 % direct
 %
-remote.direct.joan = remote.direct.yves;% same remote user, same options
+remote.direct.joan = remote.direct.yvespeysson;% same remote user, same options
 %
 % condor
 %
-remote.condor.joan = remote.condor.yves;% same remote user, same options
+remote.condor.joan = remote.condor.yvespeysson;% same remote user, same options
 %
 % xgrid
 %
-remote.xgrid.joan = remote.xgrid.yves;% same remote user, same options
-%
-% EMELIE NILSSON
-%
-% direct
-%
-remote.direct.emelie = remote.direct.yves;% same remote user, same options
-%
-% condor
-%
-remote.condor.emelie = remote.condor.yves;% same remote user, same options
-%
-% xgrid
-%
-remote.xgrid.emelie = remote.xgrid.yves;% same remote user, same options
+remote.xgrid.joan = remote.xgrid.yvespeysson;% same remote user, same options
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
