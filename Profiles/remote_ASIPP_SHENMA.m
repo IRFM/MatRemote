@@ -62,11 +62,13 @@ remote.torque.joan = remote.torque.yves;
 %
 remote.torque.bojiang = remote.torque.yves;
 remote.torque.bojiang.remoteuser = 'bjding';
+remote.torque.bojiang.remotedatapath = '/scratch/bjding/';
 %
 % MIAOHUI LI
 %
 remote.torque.miaohui = remote.torque.yves;
 remote.torque.miaohui.remoteuser = 'limiaohui';
+remote.torque.miaohui.remotedatapath = '/scratch/limiaohui/';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
