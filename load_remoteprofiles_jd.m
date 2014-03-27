@@ -92,7 +92,24 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
                 remoteprofiles = [remoteprofiles,remoteprofile];
                 profilestr = [profilestr,getremotestr_jd(remoteprofile)];
             else
-                disp(['WARNING : connection test failed for structure remote : ',getremotestr_jd(remote(irem))]);
+                hoststr = remote(irem).host;
+                if isempty(hoststr),
+                    hoststr = 'Local batch calculation';
+                elseif iscell(hoststr),
+                    hoststr = hoststr{1};
+                end
+                if ~isempty(link_mode) && isnan(link_mode),
+                    link_modestr = num2str(remote(irem).link_mode);
+                else
+                    link_modestr = num2str(link_mode);
+                end
+                if isempty(link_modestr),
+                    link_modestr = 'empty link_mode';
+                else
+                    link_modestr = ['link_mode = ',link_modestr];
+                end
+                %
+                disp(['WARNING : connection test failed for remote host : ',hoststr,' with ',link_modestr]);
             end
         end
         %
