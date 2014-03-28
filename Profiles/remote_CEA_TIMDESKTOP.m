@@ -27,9 +27,9 @@ remote.torque.joan.shclean = 1;
 remote.torque.joan.cmd = 'qsub';
 remote.torque.joan.get_jobid = {'','.cadts-0412'};%str_before,str_after
 remote.torque.joan.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
-remote.torque.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.torque.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/';
-remote.torque.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/';
+remote.torque.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.torque.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
+remote.torque.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.torque.joan.matver.matdef = remote.torque.joan.matver.mat800;%default matlab on remote machine
 remote.torque.joan.remoteuser = 'joan';
 %
@@ -46,8 +46,8 @@ remote.torque.yves.shclean = 1;
 remote.torque.yves.cmd = 'qsub';
 remote.torque.yves.get_jobid = {'','.cadts-0412'};%str_before,str_after
 remote.torque.yves.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
-remote.torque.yves.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.torque.yves.matver.mat712 = '/Applications/Matlab_2011A/bin/';
+remote.torque.yves.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.torque.yves.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
 remote.torque.yves.matver.matdef = remote.torque.yves.matver.mat710;%default matlab on remote machine
 remote.torque.yves.remoteuser = 'YP105119';
 %
@@ -64,8 +64,8 @@ remote.torque.yvesb.shclean = 1;
 remote.torque.yvesb.cmd = 'qsub';
 remote.torque.yvesb.get_jobid = {'','.cadts-0412'};%str_before,str_after
 remote.torque.yvesb.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
-remote.torque.yvesb.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.torque.yvesb.matver.mat712 = '/Applications/Matlab_2011A/bin/';
+remote.torque.yvesb.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.torque.yvesb.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
 remote.torque.yvesb.matver.matdef = remote.torque.yvesb.matver.mat710;%default matlab on remote machine
 remote.torque.yvesb.remoteuser = 'YB109156';
 %

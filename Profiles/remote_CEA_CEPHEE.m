@@ -28,10 +28,10 @@ remote.pbs.joan.ppn = 2;% default number of cores for job on cephee
 remote.pbs.joan.cmd = 'qsub -l inter=false';% -l walltime=1:59:00 -l nodes=1:ppn=1
 remote.pbs.joan.get_jobid = {'','.cephee'};%str_before,str_after
 remote.pbs.joan.set_jobid = {'qstat ','.cephee','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.joan.matver.mat705 = '/applications/matlab_2007b/bin/';
-remote.pbs.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.pbs.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/';
-remote.pbs.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/';
+remote.pbs.joan.matver.mat705 = '/applications/matlab_2007b/bin/matlab';
+remote.pbs.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.pbs.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
+remote.pbs.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.pbs.joan.matver.matdef = remote.pbs.joan.matver.mat800;%default matlab on remote machine
 remote.pbs.joan.remoteuser = 'JD211098';
 %
@@ -46,10 +46,10 @@ remote.direct.joan.ppn = 2;% default number of cores for job on cephee
 remote.direct.joan.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {};%str_before,str_after
 remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.joan.matver.mat705 = '/applications/matlab_2007b/bin/';
-remote.direct.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.direct.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/';
-remote.direct.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/';
+remote.direct.joan.matver.mat705 = '/applications/matlab_2007b/bin/matlab';
+remote.direct.joan.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.direct.joan.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
+remote.direct.joan.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat800;%default matlab on remote machine
 remote.direct.joan.remoteuser = 'JD211098';
 %
@@ -65,10 +65,10 @@ remote.pbs.yves.cmd = 'qsub -l inter=false';% -l walltime=1:59:00 -l nodes=1:ppn
 remote.pbs.yves.get_jobid = {'','.cephee'};%str_before,str_after
 remote.pbs.yves.set_jobid = {'qstat ','.cephee','Unknown Job Id'};%str_before,str_after,str_check
 remote.pbs.yves.remotedatapath = '/home/sccp/gsem/peysson/tmp/';
-remote.pbs.yves.matver.mat705 = '/applications/matlab_2007b/bin/';
-remote.pbs.yves.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.pbs.yves.matver.mat712 = '/Applications/Matlab_2011A/bin/';
-remote.pbs.yves.matver.mat800 = '/Applications/Matlab_2012B/bin/';
+remote.pbs.yves.matver.mat705 = '/applications/matlab_2007b/bin/matlab';
+remote.pbs.yves.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.pbs.yves.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
+remote.pbs.yves.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.pbs.yves.matver.matdef = remote.pbs.yves.matver.mat800;%default matlab on remote machine
 remote.pbs.yves.remoteuser = 'YP105119';
 %
@@ -83,10 +83,10 @@ remote.pbs.yvesb.ppn = 2;% default number of cores for job on cephee
 remote.pbs.yvesb.cmd = 'qsub -l inter=false';% -l walltime=1:59:00 -l nodes=1:ppn=1
 remote.pbs.yvesb.get_jobid = {'','.cephee'};%str_before,str_after
 remote.pbs.yvesb.set_jobid = {'qstat ','.cephee','Unknown Job Id'};%str_before,str_after,str_check
-remote.pbs.yvesb.matver.mat705 = '/applications/matlab_2007b/bin/';
-remote.pbs.yvesb.matver.mat710 = '/Applications/Matlab_2010A/bin/';
-remote.pbs.yvesb.matver.mat712 = '/Applications/Matlab_2011A/bin/';
-remote.pbs.yvesb.matver.mat800 = '/Applications/Matlab_2012B/bin/';
+remote.pbs.yvesb.matver.mat705 = '/applications/matlab_2007b/bin/matlab';
+remote.pbs.yvesb.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+remote.pbs.yvesb.matver.mat712 = '/Applications/Matlab_2011A/bin/matlab';
+remote.pbs.yvesb.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.pbs.yvesb.matver.matdef = remote.pbs.yvesb.matver.mat800;%default matlab on remote machine
 remote.pbs.yvesb.remoteuser = 'YB109156';
 %

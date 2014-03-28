@@ -25,8 +25,8 @@ remote.direct.yves.nproc = 4;
 remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
-remote.direct.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.direct.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/matlab';
+remote.direct.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat801;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yves';
 %
@@ -42,8 +42,8 @@ remote.condor.yves.set_jobid = {'condor_q ',''};
 remote.condor.yves.condor.CONDOR_CONFIG = '/usr/local/condor/etc/condor_config';
 remote.condor.yves.condor.PATH = '/usr/local/condor/sbin:/usr/local/condor/bin:${PATH}';
 remote.condor.yves.remotedatapath = '/Users/yves/condor/';
-remote.condor.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/';
-remote.condor.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.condor.yves.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/matlab';
+remote.condor.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
 remote.condor.yves.remoteuser = 'yves';
 %
@@ -96,7 +96,7 @@ remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
 remote.xgrid.yves.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
 remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
 remote.xgrid.yves.startuppath = '/Users/yves/Documents/MATLAB';%path to add for matlab startup
-remote.xgrid.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/';
+remote.xgrid.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
 remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
 remote.xgrid.yves.remoteuser = 'yves';
 %

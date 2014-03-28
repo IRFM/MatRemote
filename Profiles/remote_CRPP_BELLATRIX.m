@@ -25,7 +25,7 @@ remote.direct.kamleitn.nproc = 8;
 remote.direct.kamleitn.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.kamleitn.get_jobid = {};%str_before,str_after
 remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
+remote.direct.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/matlab';
 remote.direct.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 remote.direct.kamleitn.bridge.ssh.host = 'lac911.epfl.ch';
@@ -43,7 +43,7 @@ remote.pbs.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.pbs.kamleitn.shclean = 1;
 remote.pbs.kamleitn.get_jobid = {'','.bellatrix'};%str_before,str_after
 remote.pbs.kamleitn.set_jobid = {'qstat ','.bellatrix','Job has finished'};%str_before,str_after,str_check
-remote.pbs.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/';
+remote.pbs.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/matlab';
 remote.pbs.kamleitn.matver.matdef = remote.direct.kamleitn.matver.mat800;%default matlab on remote machine
 remote.pbs.kamleitn.remoteuser = 'kamleitn';
 remote.pbs.kamleitn.bridge.ssh.host = 'lac911.epfl.ch';
