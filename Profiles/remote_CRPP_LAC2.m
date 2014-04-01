@@ -25,7 +25,7 @@ remote.direct.decker.nproc = 12;
 remote.direct.decker.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.decker.matver.mat710 = '/usr/local/matlab710/bin/';
+remote.direct.decker.matver.mat710 = '/usr/local/matlab710/bin/matlab';
 remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat710;%default matlab on remote machine
 remote.direct.decker.remoteuser = 'decker';
 remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
