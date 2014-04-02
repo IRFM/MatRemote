@@ -169,8 +169,15 @@ elseif job.pbssearch  || job.sgesearch,
     %
     if res == 0,% job still running
         %
-        locdisp(displaymode,['Job # ',job.id,' still running...']);
-        return
+        if ~isempty(strfind(txt,job.id)),
+            if isempty(strfind(txt,remoteset_jobid{3})),
+                locdisp(displaymode,['Job # ',job.id,' still running...']);
+                return;
+            end
+        else
+            locdisp(displaymode,['Job # ',job.id,' still running...']);
+            return
+        end
         %
     elseif isempty(strfind(txt,remoteset_jobid{3})),% run check failed
         %
