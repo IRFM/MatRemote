@@ -222,7 +222,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         %
         % case where profile was specified by function input
         %
-        testedprofile = testremoteprofile_jd(feval(RemoteFileNames{iselected},'',''),link_mode,test,display_mode);
+        testedprofile = testremoteprofile_jd(feval(RemoteFileNames{iselected},'',profilename),link_mode,test,display_mode);
         if isempty(testedprofile),
             disp(['WARNING : connection test failed for ',RemoteFileNames{iselected},'.m. Empty remoteprofiles returned']);
             return
