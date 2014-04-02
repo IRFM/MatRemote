@@ -68,7 +68,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[8] = "rm -f nohup.out";
         }
 
-    } elseif (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
+    } elseif ((strcmp($remote_host,"shenma.ipp.ac.cn") == 0) || (strcmp($remote_host,"cluster02.swip.ac.cn") == 0)) {
 
         if (strcmp($directsearch,"1") == 0) {
 
@@ -89,7 +89,12 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$cmdextras = "";
         	}
 
-        	$localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+            if (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
+                $localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+            } elseif (strcmp($remote_host,"cluster02.swip.ac.cn") == 0) {
+                $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+            }
+
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
             $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
