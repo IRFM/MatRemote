@@ -1,0 +1,50 @@
+function remote_profile = remote_IPP_ABACUS(varargin)
+%
+% This function regroups the remote profiles run on ABACUS cluster at the IPP Prague
+%
+%   INPUTS : 
+%       - schedulername (optinal) : name of selected scheduler
+%       - profilename (optinal) : name of selected profile
+%
+%   OUTPUTS : 
+%       - remote_profile : name of selected remote profile(s)
+%
+default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.profile = 'decker';% default user profile if 'remoteuser' is not an existing user profile
+%
+% --------------------------------------------------
+%
+% JOAN DECKER
+%
+% direct
+%
+remote.direct.decker = default_remote_profile;
+remote.direct.decker.host = 'abacus.tok.ipp.cas.cz';
+remote.direct.decker.hostname = 'abacus';
+remote.direct.decker.nproc = 12;
+remote.direct.decker.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.decker.get_jobid = {};%str_before,str_after
+remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.decker.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
+remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat801;%default matlab on remote machine
+remote.direct.decker.remoteuser = 'decker';
+%
+% pbs
+%
+remote.pbs.decker = default_remote_profile;
+remote.pbs.decker.host = 'abacus.tok.ipp.cas.cz';
+remote.pbs.decker.hostname = 'abacus';
+remote.pbs.decker.nproc = 36;
+remote.pbs.decker.cmd = 'qsub ';% direct calculation (csh, bash)
+remote.pbs.decker.shclean = 1;
+remote.pbs.decker.get_jobid = {'','.abacus'};%str_before,str_after
+remote.pbs.decker.set_jobid = {'qstat ','.abacus',' C '};%str_before,str_after,str_check
+remote.pbs.decker.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
+remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat801;%default matlab on remote machine
+remote.pbs.decker.remoteuser = 'decker';
+% -------------------------------------------------
+% this part should be common to all remote profiles
+% -------------------------------------------------
+%
+remote_profile = select_remote_profile_jd(remote,default,varargin{:});
+%
