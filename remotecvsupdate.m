@@ -68,15 +68,15 @@ for irem = 1:nrem,
         job = matstandardjob_jd('runmat');
         job.remtimout = 5;% timeout in minutes
         %
-        [err,res,txt,workpath] = matremote_jd('cvsupdate_jd',{remotefunctions{ifnc}},remoteprofiles(irem),job);
+        [err,res,txt,workpath] = matremote_jd('cvsupdate_jd',{remotefunctions{ifnc},remoteprofiles(irem).cvsrights},remoteprofiles(irem),job);
         %
         if isempty(err),            
             %
-            if res ~= 0,
+            if res(1) ~= 0,
                 flag(irem,ifnc) = -1;% failed cvs update
             else
                 %
-                isep = [0,find(txt == 10)];
+                isep = [0,find(txt{1} == 10)];
                 %
                 nseps = length(isep) - 1;
                 %
@@ -89,7 +89,7 @@ for irem = 1:nrem,
                 flag_O = false(1,nseps);
                 %
                 for iisep = 1:nseps,
-                    txts{iisep} = txt(isep(iisep)+1:isep(iisep+1)-1);
+                    txts{iisep} = txt{1}(isep(iisep)+1:isep(iisep+1)-1);
                     %
                     % CVS outputs
                     %
@@ -144,14 +144,24 @@ for irem = 1:nrem,
                 disp(' ');
                 disp('------------------------------------------------------------------');
                 disp(' ');
-                if res == 0,
+                if res(1) == 0,
                     disp(['CVS update successful for folder ',workpath]);
+                    %
+                    if ~isnan(res(2)),
+                        %
+                        if res(2) == 0,
+                            disp(['CVS rights successfully set up for folder ',workpath]);
+                        else
+                            disp(['CVS rights setup failed : ',txt{2}]);
+                        end
+                    end
+                    %
                 else
-                    disp(['CVS update failed : ',txt]);
+                    disp(['CVS update failed : ',txt{1}]);
                 end
             end
             %
-            if display_mode >= 2 && res == 0,
+            if display_mode >= 2 && res(1) == 0,
                 %
                 % display results
                 %
