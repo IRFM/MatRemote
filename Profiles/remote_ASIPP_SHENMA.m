@@ -71,6 +71,12 @@ remote.torque.limiaohui = remote.torque.PEYSSON;
 remote.torque.limiaohui.remoteuser = 'limiaohui';
 remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
 %
+% YONGCHUN LI 
+%
+remote.torque.ycunli = remote.torque.PEYSSON;
+remote.torque.ycunli.remoteuser = 'ycunli';
+remote.torque.ycunli.remotedatapath = '/scratch/ycunli/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
