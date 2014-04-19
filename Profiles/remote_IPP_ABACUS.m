@@ -42,6 +42,36 @@ remote.pbs.decker.set_jobid = {'qstat ','.abacus',' C '};%str_before,str_after,s
 remote.pbs.decker.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat801;%default matlab on remote machine
 remote.pbs.decker.remoteuser = 'decker';
+%
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.peysson = default_remote_profile;
+remote.direct.peysson.host = 'abacus.tok.ipp.cas.cz';
+remote.direct.peysson.hostname = 'abacus';
+remote.direct.peysson.nproc = 12;
+remote.direct.peysson.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.peysson.get_jobid = {};%str_before,str_after
+remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
+remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%default matlab on remote machine
+remote.direct.peysson.remoteuser = 'decker';
+%
+% pbs
+%
+remote.pbs.peysson = default_remote_profile;
+remote.pbs.peysson.host = 'abacus.tok.ipp.cas.cz';
+remote.pbs.peysson.hostname = 'abacus';
+remote.pbs.peysson.nproc = 36;
+remote.pbs.peysson.cmd = 'qsub ';% direct calculation (csh, bash)
+remote.pbs.peysson.remotedatapath = '/compass/home/peysson/tmp/';
+remote.pbs.peysson.shclean = 1;
+remote.pbs.peysson.get_jobid = {'','.abacus'};%str_before,str_after
+remote.pbs.peysson.set_jobid = {'qstat ','.abacus',' C '};%str_before,str_after,str_check
+remote.pbs.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
+remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat801;%default matlab on remote machine
+remote.pbs.peysson.remoteuser = 'decker';
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
