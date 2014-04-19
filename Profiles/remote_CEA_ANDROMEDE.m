@@ -112,6 +112,7 @@ remote.pbs.YB109156.remoteuser = 'YB109156';
 %
 remote.pbs.EN290612 = remote.pbs.JD211098;
 remote.pbs.EN290612.remoteuser = 'EN290612';
+remote.pbs.EN290612.remotedatapath = '/home/EN290612/tmp/';
 %
 % JOSEF KAMLEITNER
 %
