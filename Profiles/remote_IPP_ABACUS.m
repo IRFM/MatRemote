@@ -56,7 +56,10 @@ remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%default matlab on remote machine
-remote.direct.peysson.remoteuser = 'decker';
+remote.direct.peysson.remoteuser = 'peysson';
+remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 % pbs
 %
@@ -71,7 +74,10 @@ remote.pbs.peysson.get_jobid = {'','.abacus'};%str_before,str_after
 remote.pbs.peysson.set_jobid = {'qstat ','.abacus',' C '};%str_before,str_after,str_check
 remote.pbs.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat801;%default matlab on remote machine
-remote.pbs.peysson.remoteuser = 'decker';
+remote.pbs.peysson.remoteuser = 'peysson';
+remote.pbs.peysson.bridge.url.host = 'tolbachik.hd.free.fr';
+remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
+remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
