@@ -68,7 +68,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[8] = "rm -f nohup.out";
         }
 
-    } elseif ((strcmp($remote_host,"shenma.ipp.ac.cn") == 0) || (strcmp($remote_host,"cluster02.swip.ac.cn") == 0)) {
+    } elseif ((strcmp($remote_host,"shenma.ipp.ac.cn") == 0) || (strcmp($remote_host,"cluster02.swip.ac.cn") == 0)  || (strcmp($remote_host,"abacus.tok.ipp.cas.cz") == 0)) {
 
         if (strcmp($directsearch,"1") == 0) {
 
@@ -91,18 +91,22 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             if (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
                 $localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+                $localcmd[6] = "qstat ".$id;
             } elseif (strcmp($remote_host,"cluster02.swip.ac.cn") == 0) {
                 $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+                $localcmd[6] = "qstat ".$id;
+            } elseif (strcmp($remote_host,"abacus.tok.ipp.cas.cz") == 0) {
+                $localcmd[5] = "qsub ".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+                $localcmd[6] = "qstat ".$id.".abacus";
             }
 
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
-            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
+            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
             $localcmd[5] = $localcmd[5].",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot;
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
-			$localcmd[6] = "qstat ".$id;
 			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
         }
