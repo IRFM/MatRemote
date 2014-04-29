@@ -26,7 +26,7 @@ remote.scheduler = [];%scheduler type (because two identical cmd may correspond 
 remote.shell = [];%shell type 
 remote.rempause = [];% pause between job checks (in minutes)
 %
-% The following parameters are for qsub only. Use NaN if option is forbidden 
+% The following parameters are for qsub or torque only. Use NaN if option is forbidden 
 %
 remote.nodes = [];% use if ressources are specified by nodes=?:ppn=? 
 remote.select = [];% use if ressources are specified by select=?:ncpus=?
@@ -36,4 +36,4 @@ remote.walltime = [];% use if walltime necessary or one hour imposed
 remote.wait = [];% use to specify if musy wait for job completion
 remote.memory = [];% [a,b] or [b] where "a" is the default value and "b" is the max value (in mb)
 remote.shclean = [];% use for job output file syntax (put '0' if .sh appears in job output files)
-
+remote.queue = [];% queue mode
