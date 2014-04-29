@@ -25,7 +25,7 @@ function job = remoterunbatch(remote,job,sinput,displaymode)
 %           o nodes (optional) : number of nodes required)
 %           o nproc (optional) : number of cores required
 %           o memory (optional) : memory allocated to the job (in mb)
-%           o walltime (optional) :  time required (in hours) - leave empty if no requirement
+%           o walltime (optional) :  time required (in hours if walltime is a number) or ('hh:mm' if walltime is a string), and if remote.queue exists, walltime is defined by remote.***.queue.maxtime(remote.**.queue.qdef)) - leave empty if no requirement
 %
 %       - sinput (optional) : input data structure
 %       - displaymode : display mode : (0) no display; (1) operation display (default : debugmode)
