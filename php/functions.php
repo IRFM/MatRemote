@@ -83,17 +83,38 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         } elseif (strcmp($pbssearch,"1") == 0) {
 
+
+            $cmdextras = "";
+
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"00:15") == 0)) {
+                $cmdextras = "debug";
+            }
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"05:00") == 0)) {
+                $cmdextras = "express";
+            }
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"10:00") == 0)) {
+                $cmdextras = "small";
+            }
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"24:00") == 0)) {
+                $cmdextras = "medium";
+            }
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"168:00") == 0)) {
+                $cmdextras = "long";
+            }
+            if ((strcmp($remote_host,"cluster02.swip.ac.cn") == 0) && (strcmp($walltime,"360:00") == 0)) {
+                $cmdextras = "verylong";
+            }
+
+
         	if (strcmp($wait,"1") == 0) {
-            	$cmdextras = " -W block=true";
-        	} else {
-            	$cmdextras = "";
+            	$cmdextras = $cmdextras." -W block=true";
         	}
 
             if (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
                 $localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
                 $localcmd[6] = "qstat ".$id;
             } elseif (strcmp($remote_host,"cluster02.swip.ac.cn") == 0) {
-                $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+                $localcmd[5] = "qsub -q ".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
                 $localcmd[6] = "qstat ".$id;
             } elseif (strcmp($remote_host,"abacus.tok.ipp.cas.cz") == 0) {
                 $localcmd[5] = "qsub ".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
