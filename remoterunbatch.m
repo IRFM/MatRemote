@@ -276,6 +276,12 @@ elseif job.pbssearch,
     % command options
     %
     comopts = '';
+    %
+    if isfield(remote,'queue') && ~isempty(remote.queue),
+        job.walltime = remote.queue.maxtime{remote.queue.qdef};
+        comopts = [comopts,' -q ',remote.queue.name{remote.queue.qdef}];
+    end
+    %
     if isfield(job,'wait') && ~isempty(job.wait) && ~isnan(job.wait) && job.wait == 1,
         comopts = [comopts,' -W block=true'];
     end
@@ -304,11 +310,7 @@ elseif job.pbssearch,
         comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
     end
     %
-    if isfield(remote,'queue') && ~isempty(remote.queue),
-        job.walltime = remote.queue.maxtime{remote.queue.qdef};%
-    end
-    %
-    if isfield(job,'walltime') && ~isempty(job.walltime) && ~isnan(job.walltime),
+    if isfield(job,'walltime') && ~isempty(job.walltime) && ~sum(isnan(job.walltime)),
         if ~ischar(job.walltime),%if walltime is a number, it corresponds to hours only
             job.walltime = [num2str(job.walltime),':00'];
         end
