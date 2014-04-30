@@ -48,7 +48,8 @@ remote.direct.yvesp = default_remote_profile;
 remote.direct.yvesp.host = 'g01.efda-itm.eu';
 remote.direct.yvesp.hostname = 'itm.rzg.mpg.de';
 remote.direct.yvesp.nproc = 16;
-remote.direct.yvesp.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
+%remote.direct.yvesp.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
+remote.direct.yvesp.cmd = {'bash','',' &',''};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
 remote.direct.yvesp.get_jobid = {};%str_before,str_after
 remote.direct.yvesp.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab import_ual';%for UAL
