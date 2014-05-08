@@ -12,7 +12,7 @@ function make_matremote_help(verbose)
 %By Yves Peysson (CEA/DSM/IRFM, yves.peysson@cea.fr) and Joan Decker (CEA/DSM/IRFM, joan.decker@cea.fr) 
 %
 if nargin == 0,
-    verbose = 1;
+    verbose = 'off';
 end
 %
 excludedfoldernames = {};%update if necessary
