@@ -30,6 +30,8 @@ helptools = '';
 texfilelist = '';
 %
 ref_folder = what('MatRemote');
-make_help(ref_folder.path,texfilelist,excludedfoldernames,helptools,verbose)
+redminepath = 'http://tolbachik.hd.free.fr:8080/redmine/';
+%
+make_help(ref_folder.path,redminepath,texfilelist,excludedfoldernames,helptools,verbose);
 %
 cd(dirinit);
