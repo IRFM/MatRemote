@@ -52,6 +52,7 @@ remote.direct.yvesp.nproc = 16;
 remote.direct.yvesp.cmd = {'bash','',' &',''};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
 remote.direct.yvesp.get_jobid = {};%str_before,str_after
 remote.direct.yvesp.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.yvesp.remotedatapath = '/pfs/home/yvesp/';
 remote.direct.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab import_ual';%for UAL
 remote.direct.yvesp.matver.matdef = remote.direct.yvesp.matver.mat800;%default matlab on remote machine
 remote.direct.yvesp.remoteuser = 'yvesp';
