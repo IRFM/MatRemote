@@ -25,6 +25,7 @@ remote.direct.yvespeysson.nproc = 6;
 remote.direct.yvespeysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
 remote.direct.yvespeysson.get_jobid = {};%str_before,str_after
 remote.direct.yvespeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
+remote.direct.yvespeysson.remotedatapath = '/Users/yvespeysson/';
 remote.direct.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
 remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat801;%default matlab on remote machine

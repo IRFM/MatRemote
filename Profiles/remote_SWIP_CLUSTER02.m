@@ -53,6 +53,7 @@ remote.direct.Yves.nproc = 20;
 remote.direct.Yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.Yves.get_jobid = {};%str_before,str_after
 remote.direct.Yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.Yves.remotedatapath = '/home/Yves/';
 remote.direct.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.direct.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
 remote.direct.Yves.matver.matdef = remote.direct.Yves.matver.mat801;%default matlab on remote machine

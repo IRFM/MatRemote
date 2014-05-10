@@ -54,6 +54,7 @@ remote.direct.peysson.nproc = 12;
 remote.direct.peysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.peysson.remotedatapath = '/compass/home/peysson/';
 remote.direct.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
