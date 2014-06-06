@@ -61,6 +61,37 @@ end
 %
 remote = job.remote;
 %
+if ~isfield(job,'timestartremote'),
+    %
+    [res,txt] = matremotecheck(remote,job,'pid_');
+    %
+    if ~res, 
+        job.timestartremote = get_datetime_yp(txt);%considered to be the time at which the simulation starts
+        soutput.job = job;%refresh job state
+    end  
+end
+%
+if isfield(job,'timestartremote'),
+    %
+    if ~isfield(remote,'shell'),
+        set_lang = 'export LANG=en_us_8859_1;';%bash is considered as default otherwise setup in the profile
+    else
+        if ~isempty(remote.shell) && strcmp(remote.shell,'csh')
+            set_lang = 'setenv LANG en_us_8859_1;';%csh
+        else
+            set_lang = 'export LANG=en_us_8859_1;';%bash
+        end
+    end
+    %
+    remotecmd = [set_lang,'date '];% get the current remote date
+    %
+    [res,txt] = matremotecmd(remote,job,remotecmd);
+    if ~res, 
+        job.timecurrentremote = get_datetime_yp(txt);%considered to be the time at which the remote simulation is checked
+        soutput.job = job;%refresh job state
+    end      
+end
+%
 if check == 0,
     %
     if isfield(job,'remtimout'),% in minutes
@@ -103,7 +134,13 @@ if check == 0,
     %
 end
 %
-soutput = '';
+if exist('soutput','var'),
+    if ~isfield(soutput,'job'),
+        soutput = '';
+    end
+else
+    soutput = '';
+end
 %
 remotehost = remote.host;%  hostname (empty for local host)
 remoteset_jobid = remote.set_jobid;% syntax to read the job status 
@@ -171,11 +208,11 @@ elseif job.pbssearch  || job.sgesearch,
         %
         if ~isempty(strfind(txt,job.id)),
             if isempty(strfind(txt,remoteset_jobid{3})),
-                locdisp(displaymode,['Job # ',job.id,' still running...']);
+                displayrunningjob(displaymode,job);
                 return;
             end
         else
-            locdisp(displaymode,['Job # ',job.id,' still running...']);
+            displayrunningjob(displaymode,job);
             return
         end
         %
@@ -192,7 +229,7 @@ elseif job.slurmsearch,
     %
     if res == 0 && ~isempty(strfind(txt,remoteset_jobid{3})),% run still running
         %
-        locdisp(displaymode,['Job # ',job.id,' still running...']);
+        displayrunningjob(displaymode,job);
         return
         %
     end
@@ -210,7 +247,7 @@ elseif job.condorsearch,
     %
     if ~isempty(i_job),% job not completed
         if ~isempty(i_running)
-            locdisp(displaymode,['Job # ',job.id,' still running...']);
+            displayrunningjob(displaymode,job);
         elseif ~isempty(i_pending),
             locdisp(displaymode,['Job # ',job.id,' still pending...']);
         elseif ~isempty(i_held),
@@ -311,6 +348,7 @@ if ~isempty(job.load_id),
     %
     itmax = 10;
     it = 0;
+    %
     while matremotecheck(remote,job,'MAT_OUT_') && it < itmax,
         it = it + 1;%check that the MAT_OUT file is well written
     end
@@ -320,6 +358,14 @@ if ~isempty(job.load_id),
        locdisp(displaymode,soutput.err);
        %
        return
+    end
+    %
+    if ~isfield(job,'timestopremote'),
+        [res,txt] = matremotecheck(remote,job,'MAT_OUT_');
+        if ~res,
+            job.timestopremote = get_datetime_yp(txt);%considered to be the time at which the simulation stops
+            soutput.job = job;%refresh job state
+        end
     end
     %
     [res,err] = matremoteget(remote,job);
@@ -344,7 +390,16 @@ if nargout > 0,% data transfer back to matlab,
     if ~isfield(job,'loadfcn') || ~exist(job.loadfcn,'file'),
         error('No existing function provided to process loaded data')
     else
+        keyboard
         soutput = feval(job.loadfcn,job);% note : job.load_id is the output data file/folder location
+        %
+        % Transfer characteristic times for postprocesssing of the
+        % performances
+        %
+        soutput.varargout{2}.simul_times.timestartremote = job.timestartremote;
+        soutput.varargout{2}.simul_times.timestopremote = job.timestopremote;
+        soutput.varargout{2}.simul_times.timecurrentremote = job.timecurrentremote;
+        soutput.varargout{2}.simul_times.timestartlocal = job.timestartlocal;
     end
     %
 end
@@ -530,11 +585,20 @@ if isfield(remote,'disp_cmd') && remote.disp_cmd,
     remote
     disp('------------------------------------------------------------------------------------')
 end
+end
 %
 function locdisp(mode,s)
-%
-if mode == 1,
-    disp(s)
+    if mode == 1,
+        disp(s)
+    end
 end
 
+function displayrunningjob(displaymode,job)
+    if ~isfield(job,'timecurrentremote') && ~isfield(job,'timestartremote')
+        locdisp(displaymode,[' - Job # ',job.id,' still running...']);
+    else
+        job_runtime = datestr(etime(datevec(job.timecurrentremote),datevec(job.timestartremote))/86400,'HH:MM:SS');
+        locdisp(displaymode,[' - Job # ',job.id,' still running since ',job_runtime,' (HH:MM:SS)']);
+    end
+end
 
