@@ -45,8 +45,14 @@ if nargin < 3,
     sinput = '';
 end
 %
+time_ref = clock;
+%
+if ~isfield(job,'timestart') || isempty(job.timestart),%can be used with etime
+    job.timestart = time_ref;
+end
+%
 if ~isfield(job,'timeid') || isempty(job.timeid),
-    job.timeid = timeid_jd(clock);
+    job.timeid = timeid_jd(time_ref);
 end
 %
 if ~isfield(job,'userid') || isempty(job.userid),
