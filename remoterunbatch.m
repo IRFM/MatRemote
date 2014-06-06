@@ -47,8 +47,8 @@ end
 %
 time_ref = clock;
 %
-if ~isfield(job,'timestart') || isempty(job.timestart),%can be used with etime
-    job.timestart = time_ref;
+if ~isfield(job,'timestartlocal') || isempty(job.timestartlocal),
+    job.timestartlocal = datestr(time_ref);
 end
 %
 if ~isfield(job,'timeid') || isempty(job.timeid),
