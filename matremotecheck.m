@@ -2,14 +2,24 @@ function [res,txt] = matremotecheck(remote,job,mask)
 %
 txt = '';
 %
+if ~isfield(remote,'shell'),
+    set_lang = 'export LANG=en_us_8859_1;';%bash is considered as default otherwise setup in the profile
+else
+    if ~isempty(remote.shell) && strcmp(remote.shell,'csh')
+        set_lang = 'setenv LANG en_us_8859_1;';%csh
+    else
+        set_lang = 'export LANG=en_us_8859_1;';%bash
+    end
+end
+%
 if ~isempty(remote.host),
     %
-    remotecmd{1} = ['ls -l --full-time --time-style=full-iso ',job.remotedatapath,job.batch_dir];%GNU 
-    remotecmd{2} = ['ls -lT ',job.remotedatapath,job.batch_dir];%POSIX (OS X)
+    remotecmd_gnu = [set_lang,'ls -l --full-time --time-style=full-iso ',job.remotedatapath,job.batch_dir];%GNU 
+    remotecmd_posix = [set_lang,'ls -lT ',job.remotedatapath,job.batch_dir];%POSIX (OS X)
     %
     if remote.link_mode == 2,
         %
-        [txt_url,res_url] = matremoteurl(remote,job,remotecmd{1},'');
+        [txt_url,res_url] = matremoteurl(remote,job,remotecmd_gnu,'');
         %
         ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
         error_txt = txt_url(ie+15:end);
@@ -21,7 +31,7 @@ if ~isempty(remote.host),
             %
         else
             %
-            [txt_url,res_url] = matremoteurl(remote,job,remotecmd{2},'');
+            [txt_url,res_url] = matremoteurl(remote,job,remotecmd_posix,'');
             %
             ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
             error_txt = txt_url(ie+15:end);
@@ -39,24 +49,51 @@ if ~isempty(remote.host),
         %
     elseif remote.link_mode == 1,
         %
-        [txt,res] = matremotessh(remote,remotecmd{1});
+        [txt,res] = matremotessh(remote,remotecmd_gnu);
         %
         if res,
-            [txt,res] = matremotessh(remote,remotecmd{2});
+            [txt,res] = matremotessh(remote,remotecmd_posix);
         end
         %
     else
         %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd{1},'''']);%execute the remote command by ssh 
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_gnu,'''']);%execute the remote command by ssh 
         %
         if res,
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd{2},'''']);%execute the remote command by ssh 
+            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_posix,'''']);%execute the remote command by ssh 
         end
     end
     %
     if ~res,
-        %
-        sep ='==========';
+        [res,txt] = searchstring(txt,mask);
+    else
+        res = 1;
+    end
+    %
+    return;
+else
+    %
+    localcmd_gnu = [set_lang,'ls -l --full-time --time-style=full-iso ',job.remotedatapath,job.batch_dir];%GNU 
+    localcmd_posix = [set_lang,'ls -lT ',job.remotedatapath,job.batch_dir];%POSIX (OS X)
+    %
+    [res,txt] = unix(localcmd_gnu);
+    %
+    if res,
+        [res,txt] = unix(localcmd_posix);
+    end
+    %
+    if ~res,
+        [res,txt] = searchstring(txt,mask);
+    else
+        res = 1;
+    end
+   
+end  
+
+end
+
+function [res,txt] = searchstring(txt,mask)
+            sep ='==========';
         %
         txt1 = regexprep(txt,'\r\n|\n|\r',sep);%replace carriage return
         %
@@ -75,21 +112,4 @@ if ~isempty(remote.host),
         else
             res = 1;
         end
-    else
-        res = 1;
-    end
-    %
-    return;
-else
-    %
-    matoutfile_search = ls([job.remotedatapath,job.batch_dir]);
-    %
-    if ~isempty(strfind(matoutfile_search,mask)),
-        %
-        res = 0;
-    else
-        res = 1;
-    end
-    %
-end   
-
+end
