@@ -31,7 +31,11 @@ if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously l
         output.varargout{1}.job = job;
         %
     else
-        output = soutput;
+        if isfield(soutput,'job'),
+            output.varargout{1}.job = soutput.job;%modified job with new times 
+        else
+            output = soutput;
+        end
     end
     %
 elseif nargin > 2 && ~isempty(remote),% batch job received   
