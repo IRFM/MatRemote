@@ -100,7 +100,7 @@ try
         %
         for j_range = find(abs(flag) == 0),
             %
-            output = remotegetbatch(jobs{j_range},debugmode,1);
+            [jobparams,output] = remotegetbatch(jobs{j_range},debugmode,1);
             %
             if ~isempty(output),
                 %

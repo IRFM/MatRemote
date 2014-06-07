@@ -81,7 +81,7 @@ end
 %
 if debugmode,
     setenv('TESTVAR',testvar);
-    [err,soutput_init] = matremote_jd('remotetest',{sinput});
+    [err,jobparams,soutput_init] = matremote_jd('remotetest',{sinput});
     %
     if ~isempty(err),
         soutput_init.err = err;
@@ -147,7 +147,7 @@ if isnumeric(sinputs),% start new test
                 else
                     test_job.remtimout = 5;% in minutes
                     %
-                    soutputs{irem} = remotegetbatch(test_job,displaymode,0);
+                    [jobparams,soutputs{irem}] = remotegetbatch(test_job,displaymode,0);
                 end
                 %
             else% use matremote_jd
@@ -166,7 +166,7 @@ if isnumeric(sinputs),% start new test
                 %
                 test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
                 %
-                [err,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
+                [err,jobparams,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
                 %
                 if ~isempty(err),
                     soutputs{irem}.err = err;
@@ -198,7 +198,7 @@ else% check previously started job
         %
         if isfield(sinputs{irem},'job'),% previously running job
             %
-            [err,soutput] = matremote_jd('remotetest',sinputs(irem));
+            [err,jobparams,soutput] = matremote_jd('remotetest',sinputs(irem));
             %
             if ~isempty(err),
                 soutputs{irem}.err = err;

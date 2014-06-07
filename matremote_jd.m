@@ -1,4 +1,4 @@
-function [err,varargout] = matremote_jd(fun,args_in,remote,job)
+function [err,jobparams,varargout] = matremote_jd(fun,args_in,remote,job)
 %
 % This is a generic matlab function exectuting the function fun with
 % arguments args_in remotely according to profile remote
@@ -10,10 +10,11 @@ function [err,varargout] = matremote_jd(fun,args_in,remote,job)
 varargout = cell(1,nargout-1);
 %
 err = '';
+jobparams = '';
 %
 if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously launched job
     %
-    soutput = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
+    [jobparams,soutput] = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
     %
     if isempty(soutput) || ~isstruct(soutput),
         %
@@ -58,7 +59,7 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
         if isfield(job,'remtimout') && job.remtimout == 0,% return and check later
             output.varargout{1}.job = job;
         else
-            output = remotegetbatch(job,[],0);% wait for result
+            [jobparams,output] = remotegetbatch(job,[],0);% wait for result
         end
     else
         output.err = job.err;

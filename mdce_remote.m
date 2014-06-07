@@ -48,7 +48,7 @@ mdce_input.nargout = nargout;
 mdce_job = remoterunbatch(remote,mdce_job,mdce_input,debugmode);
 %
 if ~isfield(mdce_job,'err'),% no error occured in the remote job start,
-    output = remotegetbatch(mdce_job,debugmode,0);
+    [jobparams,output] = remotegetbatch(mdce_job,debugmode,0);
 else
     output.err = mdce_job.err;
 end
