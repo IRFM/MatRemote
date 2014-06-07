@@ -55,6 +55,11 @@ if ~isempty(remote.host),
             [txt,res] = matremotessh(remote,remotecmd_posix);
         end
         %
+        if ~isempty(strfind(txt,'bind:')) && ~isempty(strfind(txt,'forwarding.'))
+            refstr = 'forwarding.';
+            txt = txt(strfind(txt,refstr)+length(refstr):end);         
+        end
+        %
     else
         %
         [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_gnu,'''']);%execute the remote command by ssh 
@@ -93,7 +98,10 @@ end
 end
 
 function [res,txt] = searchstring(txt,mask)
-            sep ='==========';
+        %
+        txt = strtrim(txt);
+        %
+        sep ='==========';
         %
         txt1 = regexprep(txt,'\r\n|\n|\r',sep);%replace carriage return
         %
