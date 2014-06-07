@@ -7,7 +7,7 @@ function [err,jobparams,varargout] = matremote_jd(fun,args_in,remote,job)
 %        or return the job for later check (remote.remtimeout == 0)
 %        later check is done by calling the function again with the field args_in.job
 %
-varargout = cell(1,nargout-1);
+varargout = cell(1,nargout-2);
 %
 err = '';
 jobparams = '';
@@ -51,7 +51,7 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
     %
     mat_input.fun = fun;
     mat_input.args_in = args_in;
-    mat_input.nargout = nargout;
+    mat_input.nargout = nargout-1;
     %
     job = remoterunbatch(remote,job,mat_input);
     %
