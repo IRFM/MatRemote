@@ -214,12 +214,12 @@ elseif job.pbssearch  || job.sgesearch,
         %
         if ~isempty(strfind(txt,job.id)),
             if isempty(strfind(txt,remoteset_jobid{3})),
-                displayrunningjob(displaymode,job);
+                displayrunningjob(job,displaymode);
                 jobparams = filterjob(job);
                 return;
             end
         else
-            displayrunningjob(displaymode,job);
+            displayrunningjob(job,displaymode);
             jobparams = filterjob(job);
             return
         end
@@ -238,7 +238,7 @@ elseif job.slurmsearch,
     %
     if res == 0 && ~isempty(strfind(txt,remoteset_jobid{3})),% run still running
         %
-        displayrunningjob(displaymode,job);
+        displayrunningjob(job,displaymode);
         jobparams = filterjob(job);
         return
         %
@@ -257,7 +257,7 @@ elseif job.condorsearch,
     %
     if ~isempty(i_job),% job not completed
         if ~isempty(i_running)
-            displayrunningjob(displaymode,job);
+            displayrunningjob(job,displaymode);
         elseif ~isempty(i_pending),
             locdisp(displaymode,['Job # ',job.id,' still pending...']);
         elseif ~isempty(i_held),
@@ -607,14 +607,6 @@ function locdisp(mode,s)
     end
 end
 
-function displayrunningjob(displaymode,job)
-    if ~isfield(job,'timecurrentremote') && ~isfield(job,'timestartremote')
-        locdisp(displaymode,[' - Job # ',job.id,' still running...']);
-    else
-        job_runtime = datestr(etime(datevec(job.timecurrentremote),datevec(job.timestartremote))/86400,'HH:MM:SS');
-        locdisp(displaymode,[' - Job # ',job.id,' still running since ',job_runtime,' (HH:MM:SS)']);
-    end
-end
 
 function jobparams = filterjob(job)
     jobparams = struct;
