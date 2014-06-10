@@ -60,6 +60,11 @@ if ~isempty(remote.host),
             txt = txt(strfind(txt,refstr)+length(refstr):end);         
         end
         %
+        if ~isempty(strfind(txt,'export:')) && ~isempty(strfind(txt,'found.'))
+            refstr = 'found.';
+            txt1 = txt(strfind(txt,refstr)+length(refstr):end);          
+        end
+        %
     else
         %
         [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_gnu,'''']);%execute the remote command by ssh 
