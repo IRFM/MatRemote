@@ -31,6 +31,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[5] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
             $localcmd[6] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; condor_q ".$id;
 
+            $localcmd[7] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+    		$localcmd[8] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+    		$localcmd[9] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+    		$localcmd[10] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+    		$localcmd[11] = "export LANG=en_us_8859_1;date ";
+    		$localcmd[12] = "setenv LANG en_us_8859_1;date ";
+
     	} elseif (strcmp($xgridsearch,"1") == 0) {
 
         	if (strlen($password) > 0) {
@@ -41,6 +50,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 				$localcmd[8] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
 				$localcmd[9] = "xgrid -h ".$hostname." -p ".$remote_password." -job delete -id ".$id;
 
+				$localcmd[10] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        		$localcmd[11] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        		$localcmd[12] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        		$localcmd[13] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        		$localcmd[14] = "export LANG=en_us_8859_1;date ";
+        		$localcmd[15] = "setenv LANG en_us_8859_1;date ";
+
         	} else {
 
             	$localcmd[5] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
@@ -48,6 +66,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$localcmd[7] = "xgrid -h ".$hostname." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
             	$localcmd[8] = "xgrid -h ".$hostname." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
             	$localcmd[9] = "xgrid -h ".$hostname." -job delete -id ".$id;
+
+            	$localcmd[10] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        		$localcmd[11] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        		$localcmd[12] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        		$localcmd[13] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        		$localcmd[14] = "export LANG=en_us_8859_1;date ";
+        		$localcmd[15] = "setenv LANG en_us_8859_1;date ";
 
         	}
 
@@ -66,6 +93,16 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[6] = "ps -p ".$id;
         	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
         	$localcmd[8] = "rm -f nohup.out";
+
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[10] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[12] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[13] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[14] = "setenv LANG en_us_8859_1;date ";
+
         }
 
     } elseif ((strcmp($remote_host,"shenma.ipp.ac.cn") == 0) || (strcmp($remote_host,"cluster02.swip.ac.cn") == 0)  || (strcmp($remote_host,"abacus.tok.ipp.cas.cz") == 0)) {
@@ -80,6 +117,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             $localcmd[6] = "ps -p ".$id." -o comm=";
             $localcmd[7] = "rm -f nohup.out";
+
+            $localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
 
         } elseif (strcmp($pbssearch,"1") == 0) {
 
@@ -128,7 +174,16 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
-			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+			$localcmd[6] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+
+			$localcmd[7] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[8] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[9] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[11] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[12] = "setenv LANG en_us_8859_1;date ";
 
         }
 
@@ -141,16 +196,36 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
-            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+            //$localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
 
             $localcmd[6] = "ps -p ".$id." -o comm=";
         	$localcmd[7] = "rm -f nohup.out";
+
+        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
+
 
         } elseif (strcmp($sgesearch,"1") == 0) {
 
         	$localcmd[5] = "qsub ".$remotedatapath.$batch_dir.$sgescript;
         	$localcmd[6] = "qstat -j ".$id;
         	$localcmd[7] = "rm -f ".strstr($script,'.',true).".e".$id." ".strstr($script,'.',true).".o".$id;
+
+        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
 
     	}
 
@@ -171,6 +246,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[7] = "ps -p ".$id." -o comm=";
         	$localcmd[8] = "rm -f nohup.out";
 
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[10] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[12] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[13] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[14] = "setenv LANG en_us_8859_1;date ";
+
    		}  elseif (strcmp($pbssearch,"1") == 0) {
 
        		if (strcmp($wait,"1") == 0) {
@@ -189,6 +273,15 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             $localcmd[6] = "qstat ".$id.'.andromede1';
         	$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+
+        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
+        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+
+        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
+        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
 
         }
 
