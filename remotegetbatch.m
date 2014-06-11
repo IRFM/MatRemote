@@ -121,7 +121,10 @@ if check == 0,
             if ~isstruct(soutput) && ~isempty(strfind(soutput,'pid=')),
                 job.id = soutput(5:length(soutput));%PID extraction by file
             elseif ~isstruct(soutput) && ~isempty(strfind(soutput,remote.get_jobid{1})),
-                job.id = soutput(length(remote.get_jobid{1})+1:end);              
+                job.id = soutput(length(remote.get_jobid{1})+1:end);  
+            elseif isstruct(soutput) && isfield(soutput,'job')
+                job = soutput.job;
+                soutput = '';
             else
                 break
             end
