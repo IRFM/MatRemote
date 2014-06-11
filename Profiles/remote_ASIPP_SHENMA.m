@@ -69,7 +69,8 @@ remote.torque.bjding.remotedatapath = '/scratch/bjding/';
 % BOJIANG DING (LAPTOP)
 %
 remote.torque.bjdingLinux= remote.torque.PEYSSON;
-remote.torque.bjdingLinux.remotedatapath = '/scratch/PEYSSON/bjding/';
+remote.torque.bjdingLinux.remoteuser = 'bjding';
+remote.torque.bjdingLinux.remotedatapath = '/scratch/bjding/';
 %
 % MIAOHUI LI  (SHENMA)
 %
