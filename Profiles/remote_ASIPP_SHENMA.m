@@ -55,24 +55,29 @@ remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
-% JOAN DECKER
+% JOAN DECKER (SHENMA)
 %
 remote.torque.joan = remote.torque.PEYSSON;
 remote.direct.joan = remote.direct.PEYSSON;
 %
-% BOJIANG DING
+% BOJIANG DING (SHENMA)
 %
 remote.torque.bjding= remote.torque.PEYSSON;
 remote.torque.bjding.remoteuser = 'bjding';
 remote.torque.bjding.remotedatapath = '/scratch/bjding/';
 %
-% MIAOHUI LI
+% BOJIANG DING (LAPTOP)
+%
+remote.torque.bjdingLinux= remote.torque.PEYSSON;
+remote.torque.bjdingLinux.remotedatapath = '/scratch/PEYSSON/bjding/';
+%
+% MIAOHUI LI  (SHENMA)
 %
 remote.torque.limiaohui = remote.torque.PEYSSON;
 remote.torque.limiaohui.remoteuser = 'limiaohui';
 remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
 %
-% YONGCHUN LI 
+% YONGCHUN LI (SHENMA)
 %
 remote.torque.ycunli = remote.torque.PEYSSON;
 remote.torque.ycunli.remoteuser = 'ycunli';
