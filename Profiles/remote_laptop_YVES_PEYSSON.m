@@ -48,60 +48,6 @@ remote.condor.yves.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
 remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat801;%default matlab on remote machine
 remote.condor.yves.remoteuser = 'yves';
 %
-% --------------------------------------------------
-%
-% macproyves (xgrid)
-%
-% WARNING about Xgrid scheduler for mac OSX (> 10.5.x)
-% Xgrid runs tasks using the "sandbox" facility. Tasks running as 'nobody' ie, 
-% any task where either the submitting client or the receiving agent 
-% are NOT using Kerberos authentication) have very restricted access to the
-% filesystem. To by-pass this strong protection (no password) on a local
-% cluster or a multi-core multi-processor machine, go to
-% /usr/share/sandbox/xgridagentd_task_nobody.sb file (root rights needed)
-% then, comment the following line (with a ';' at the beginning of the line):
-% (allow process* sysctl* mach* network* system-socket)
-% and replace it by
-% (allow process* sysctl* mach* file-read* file-write* network* system-socket)
-% omment the following lines (with a ';' at the beginning of the line):
-% (allow file-read* (regex "^/(bin|dev|(private/)?(etc|tmp|var)|usr|System|Library)(/|$)"))
-% (allow file-read* file-write* (regex "^/(private/)?(tmp|var)(/|$)"))
-% and replace it by
-% (allow file-read* file-write* (regex "^/all(/|$)"))
-%
-% NOTE that it should be done each time the system is updated.
-% furthermore, all *.m and *.mex* files must be read by anybody.
-% This lack of protection make the cluster more vulnerable to an external
-% attack, but on a personal computer, this risk is limited.
-%
-% Furthermore, on the remote session, before any calculation, it is
-% necessary to create a folder named 'xgrid' (~/xgrid)
-% that will contain all the files for the remote calculations. The owner is the
-% USER , and the group is 'nobody(-2)'. The rights are 777. It is also
-% necessary to done it the same for the Matlab_R20xx_y application (all the
-% package and inside) in such a way Matlab can write in the ~/xgrid folder.
-%
-% The IP address of the hostname must be given in the file /etc/hosts
-%
-% WARNING: most of the problems come from the SSH without login
-% authentication, rights of the target directory and Matlab !
-%
-% YVES PEYSSON
-%
-remote.xgrid.yves = default_remote_profile;
-remote.xgrid.yves.host = '127.0.0.1';
-remote.xgrid.yves.hostname = 'macbookyves';
-remote.xgrid.yves.nproc = 2;
-remote.xgrid.yves.cmd = {'xgrid -h ',' -p ',' -job batch '};
-remote.xgrid.yves.get_jobid = {'jobIdentifier = ',';'};
-remote.xgrid.yves.set_jobid = {'xgrid -h ',' -job attributes -id ','jobStatus = Running','jobStatus = Pending','jobStatus = Finished',' -job results -id ',' -se ',' -so ',' -out ',' -job delete -id '};%
-remote.xgrid.yves.remotedatapath = '/Users/yves/xgrid/';
-remote.xgrid.yves.startuppath = '/Users/yves/Documents/MATLAB';%path to add for matlab startup
-remote.xgrid.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
-remote.xgrid.yves.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
-remote.xgrid.yves.matver.matdef = remote.xgrid.yves.matver.mat801;%default matlab on remote machine
-remote.xgrid.yves.remoteuser = 'yves';
-%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
