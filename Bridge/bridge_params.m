@@ -3,7 +3,7 @@ function [remote] = bridge_params(remote)
 if ~isempty(remote.bridge),
     if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host'),
         if strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr')
-            remote.bridge.url.path = '~yvespeysson/MatRemote';
+            remote.bridge.url.path = 'MatRemote';
         end
         %
         if strcmp(remote.bridge.ftp.host,'tolbachik.hd.free.fr')
