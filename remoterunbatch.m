@@ -316,8 +316,8 @@ elseif job.pbssearch,
         comopts = [comopts,' -l mem=',num2str(job.memory),'mb'];
     end
     %
-    if isfield(job,'walltime') && ~isempty(job.walltime) && ~sum(isnan(job.walltime)),
-        if ~ischar(job.walltime),%if walltime is a number, it corresponds to hours only
+    if isfield(job,'walltime') && ~isempty(job.walltime) && (all(ischar(job.walltime)) || ~isnan(job.walltime)),
+        if ~all(ischar(job.walltime)),%if walltime is a number, it corresponds to hours only
             job.walltime = [num2str(job.walltime),':00'];
         end
         %
@@ -363,8 +363,12 @@ elseif job.slurmsearch,
         comopts = [comopts,' --mem=',num2str(job.memory)];
     end
     %
-    if isfield(job,'walltime') && ~isempty(job.walltime) && ~isnan(job.walltime),
-        comopts = [comopts,' --time=',num2str(job.walltime),':00:00'];
+    if isfield(job,'walltime') && ~isempty(job.walltime) && (all(ischar(job.walltime)) || ~isnan(job.walltime)),
+        if ~all(ischar(job.walltime)),%if walltime is a number, it corresponds to hours only
+            job.walltime = [num2str(job.walltime),':00'];
+        end
+        %
+        comopts = [comopts,' --time=',job.walltime,':00'];
     end
     %
     % job environment variables
@@ -377,7 +381,7 @@ elseif job.slurmsearch,
         end
     end
     %
-    remotecmd = [remote.cmd,comopts,' --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+    remotecmd = [remote.cmd,comopts,' --output=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.out --error=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.err --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
     %
 elseif job.sgesearch,
     %
