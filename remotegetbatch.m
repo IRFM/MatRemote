@@ -215,8 +215,8 @@ elseif job.pbssearch  || job.sgesearch,
     %
     if res == 0,% job still running
         %
-        if ~isempty(strfind(txt,job.id)),
-            if isempty(strfind(txt,remoteset_jobid{3})),
+        if ~isempty(strfind(txt,job.id)) && length(remoteset_jobid) > 3,% case where qstat shows completed job status for a while (ex : abacus)
+            if isempty(strfind(txt,remoteset_jobid{4})),
                 displayrunningjob(job,displaymode);
                 jobparams = filterjob(job);
                 return;
@@ -239,11 +239,14 @@ elseif job.pbssearch  || job.sgesearch,
     %
 elseif job.slurmsearch,
     %
-    if res == 0 && ~isempty(strfind(txt,remoteset_jobid{3})),% run still running
-        %
-        displayrunningjob(job,displaymode);
-        jobparams = filterjob(job);
-        return
+    if res == 0,% if remoteset_jobid{3} == '', search for job.id in txt, otherwise search for remoteset_jobid{3}
+        if (~isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,remoteset_jobid{3})))...
+        || (isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,job.id))),
+            %
+            displayrunningjob(job,displaymode);
+            jobparams = filterjob(job);
+            return% run still running
+        end
         %
     end
     %
