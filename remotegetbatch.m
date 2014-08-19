@@ -76,17 +76,7 @@ end
 %
 if isfield(job,'timestartremote'),
     %
-    if ~isfield(remote,'shell'),
-        set_lang = 'export LANG=en_us_8859_1;';%bash is considered as default otherwise setup in the profile
-    else
-        if ~isempty(remote.shell) && strcmp(remote.shell,'csh')
-            set_lang = 'setenv LANG en_us_8859_1;';%csh
-        else
-            set_lang = 'export LANG=en_us_8859_1;';%bash
-        end
-    end
-    %
-    remotecmd = [set_lang,'date '];% get the current remote date
+    remotecmd = 'date +%Y%m%d%H%M%S';% get the current remote date
     %
     [res,txt] = matremotecmd(remote,job,remotecmd);
     if ~res, 
@@ -124,6 +114,7 @@ if check == 0,
                 job.id = soutput(length(remote.get_jobid{1})+1:end);  
             elseif isstruct(soutput) && isfield(soutput,'job')
                 job = soutput.job;
+                jobparams = filterjob(job);
                 soutput = '';
             else
                 break
@@ -136,7 +127,10 @@ if check == 0,
         %
     end
     %
-    jobparams = filterjob(job);
+    if toc(trem) >= 60*remtimout && isempty(soutput),
+        soutput.err = 'Time out';
+    end
+    %
     return
     %
 end
@@ -367,28 +361,31 @@ if ~isempty(job.load_id),
         %
     end    
     %
-    itmax = 10;
-    it = 0;
+    itmax = 50;
+    remotefilemtime = 0;
     %
-    while matremotecheck(remote,job,'MAT_OUT_') && it < itmax,
-        it = it + 1;%check that the MAT_OUT file is well written
-    end
-    %
-    if it == itmax,
-       soutput.err = ['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' while the job is done.'];
-       locdisp(displaymode,soutput.err);
-       %
-       jobparams = filterjob(job);
-       return
-    end
-    %
-    if ~isfield(job,'timestopremote'),
+    for it = 0:itmax,% check that the MAT_OUT file is written completely
         [res,txt] = matremotecheck(remote,job,'MAT_OUT_');
-        if ~res,
-            job.timestopremote = get_datetime_yp(txt);%considered to be the time at which the simulation stops
-            soutput.job = job;%refresh job state
+        if res == 0,% MAT_OUT file exists
+            if strcmp(remotefilemtime,txt),% MAT_OUT file is written completely
+                break
+            else
+                remotefilemtime = txt;
+            end
         end
     end
+    %
+    if res,
+        soutput.err = ['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' whereas the job is done.'];
+        locdisp(displaymode,soutput.err);
+        %
+        jobparams = filterjob(job);
+        return
+    elseif ~strcmp(remotefilemtime,txt)
+        locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been writtten completely before being copied.']);
+    end
+    %
+    job.timestopremote = get_datetime_yp(txt);%considered to be the time at which the simulation stops
     %
     [res,err] = matremoteget(remote,job);
     %
@@ -488,7 +485,7 @@ if job.clean >= 1,%clean remote and batch files
         for ii = 1:length(remote.cmd),
             if iscell(remote.cmd) && ~isempty(strfind(remote.cmd{ii},'nohup')),
                 %
-                rmbatchcmd = ['rm -f nohup.out'];
+                rmbatchcmd = 'rm -f nohup.out';
                 locdisp(displaymode,'    --> Removing nohup.out output file ...')
                 [res,err] = matremotecmd(remote,job,rmbatchcmd);
                 break;
