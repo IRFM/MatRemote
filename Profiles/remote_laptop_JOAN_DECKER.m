@@ -19,15 +19,16 @@ default.profile = 'joan';% default user profile if 'remoteuser' is not an existi
 % direct
 %
 remote.direct.joan = default_remote_profile;
-remote.direct.joan.host = 'CADTS-0096.intra.cea.fr';
-remote.direct.joan.hostname = 'CADTS-0096';
+remote.direct.joan.host = '128.178.125.161';% IP address on EPFL network
+remote.direct.joan.hostname = 'chalmers-PC-joan';
 remote.direct.joan.nproc = 2;
 remote.direct.joan.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {};%str_before,str_after
 remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.joan.matver.mat712 = '/opt/MATLAB/R2011A/bin/matlab';
 remote.direct.joan.matver.mat801 = '/opt/MATLAB/R2013A/bin/matlab';
-remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat712;%default matlab on remote machine
+remote.direct.joan.matver.mat803 = '/opt/MATLAB/R2014A/bin/matlab';
+remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat803;%default matlab on remote machine
 remote.direct.joan.remoteuser = 'joan';
 %
 % -------------------------------------------------
