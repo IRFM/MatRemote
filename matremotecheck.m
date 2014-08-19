@@ -1,128 +1,32 @@
 function [res,txt] = matremotecheck(remote,job,mask)
 %
-txt = '';
+% This function checks whether an instance with standard expression 'mask'
+% can be found in the remote directory 'job.remotedatapath,job.batch_dir'
 %
-if ~isfield(remote,'shell'),
-    set_lang = 'export LANG=en_us_8859_1;';%bash is considered as default otherwise setup in the profile
-else
-    if ~isempty(remote.shell) && strcmp(remote.shell,'csh')
-        set_lang = 'setenv LANG en_us_8859_1;';%csh
-    else
-        set_lang = 'export LANG=en_us_8859_1;';%bash
-    end
-end
+% If so, the timestamp (mtime) of the file is returned.
 %
-if ~isempty(remote.host),
-    %
-    remotecmd_gnu = [set_lang,'ls -l --full-time --time-style=full-iso ',job.remotedatapath,job.batch_dir];%GNU 
-    remotecmd_posix = [set_lang,'ls -lT ',job.remotedatapath,job.batch_dir];%POSIX (OS X)
-    %
-    if remote.link_mode == 2,
-        %
-        [txt_url,res_url] = matremoteurl(remote,job,remotecmd_gnu,'');
-        %
-        ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-        error_txt = txt_url(ie+15:end);
-        %
-        if isempty(error_txt),
-            %
-            res = 0;%force standard unix error.
-            txt = strtrim(txt_url(1:ie-1));
-            %
-        else
-            %
-            [txt_url,res_url] = matremoteurl(remote,job,remotecmd_posix,'');
-            %
-            ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-            error_txt = txt_url(ie+15:end);
-            %
-            if isempty(error_txt),
-                %
-                res = 0;%force standard unix error.
-                txt = strtrim(txt_url(1:ie-1));
-            else
-                res = 1;%force standard unix error.
-                txt = error_txt;
-                return
-            end
-        end
-        %
-    elseif remote.link_mode == 1,
-        %
-        [txt,res] = matremotessh(remote,remotecmd_gnu);
-        %
-        if res,
-            [txt,res] = matremotessh(remote,remotecmd_posix);
-        end
-        %
-        if ~isempty(strfind(txt,'bind:')) && ~isempty(strfind(txt,'forwarding.'))
-            refstr = 'forwarding.';
-            txt = txt(strfind(txt,refstr)+length(refstr):end);         
-        end
-        %
-        if ~isempty(strfind(txt,'export:')) && ~isempty(strfind(txt,'found.'))
-            refstr = 'found.';
-            txt1 = txt(strfind(txt,refstr)+length(refstr):end);          
-        end
-        %
-    else
-        %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_gnu,'''']);%execute the remote command by ssh 
-        %
-        if res,
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd_posix,'''']);%execute the remote command by ssh 
-        end
-    end
-    %
-    if ~res,
-        [res,txt] = searchstring(txt,mask);
-    else
+remotecmd = ['ls ',job.remotedatapath,job.batch_dir];
+%
+[res,txt] = matremotecmd(remote,job,remotecmd);
+%
+if ~res,
+    itxt = strfind(txt,mask);
+    if isempty(itxt),
         res = 1;
-    end
-    %
-    return;
-else
-    %
-    localcmd_gnu = [set_lang,'ls -l --full-time --time-style=full-iso ',job.remotedatapath,job.batch_dir];%GNU 
-    localcmd_posix = [set_lang,'ls -lT ',job.remotedatapath,job.batch_dir];%POSIX (OS X)
-    %
-    [res,txt] = unix(localcmd_gnu);
-    %
-    if res,
-        [res,txt] = unix(localcmd_posix);
-    end
-    %
-    if ~res,
-        [res,txt] = searchstring(txt,mask);
+        txt = ['Expression ''',mask,''' not found in filelist under remote directory ''',job.remotedatapath,job.batch_dir,''''];
     else
-        res = 1;
-    end
-   
-end  
-
-end
-
-function [res,txt] = searchstring(txt,mask)
         %
-        txt = strtrim(txt);
-        %
-        sep ='==========';
-        %
-        txt1 = regexprep(txt,'\r\n|\n|\r',sep);%replace carriage return
-        %
-        icheck0 = strfind(txt1,mask);
-        %
-        if ~isempty(icheck0),
-            %
-            res = 0;
-            isep = strfind(txt1,sep);
-            %
-            for ii = 1:length(isep)-1,
-                if isep(ii) < icheck0 && icheck0 < isep(ii+1)
-                    txt = txt1(isep(ii)+length(sep):isep(ii+1)-1);
-                end
-            end
-        else
-            res = 1;
+        if length(itxt) > 1,
+            disp(' ')
+            disp(['WARNING : There are more than one instances of expression ''',mask,''' in filelist under remote directory ''',job.remotedatapath,job.batch_dir,''''])
+            disp( 'WARNING : First instance selected.')
+            disp(' ')
+            itxt = itxt(1);
         end
+        %
+        filename = txt(itxt+(0:min([find(double(txt(itxt:end)) == 32 | double(txt(itxt:end)) == 10)-1,length(txt)+1-itxt])-1));
+        %
+        remotecmd = ['python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
+        [res,txt] = matremotecmd(remote,job,remotecmd);
+    end
 end
