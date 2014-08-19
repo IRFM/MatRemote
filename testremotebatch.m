@@ -216,13 +216,20 @@ else% check previously started job
     %
 end
 %
-if ~isempty(link_mode) && ~isnan(link_mode),
-    link_modestr = ['_link_mode_',num2str(link_mode)];
+if isempty(link_mode)
+    link_modestr = '_empty_link_mode';
+    link_modestr2 = 'empty link mode';
+elseif isnan(link_mode),
+    link_modestr = '_link_mode_NaN';
+    link_modestr2 = 'link mode = NaN';
 else
-    link_modestr = '';
+    link_modestr = ['_link_mode_',num2str(link_mode)];
+    link_modestr2 = ['link mode = ',num2str(link_mode)];
 end
 %
-diaryname = ['res_testremotebatch_',datestr(now,29),link_modestr,'.log'];
+testdate = datestr(now,29);
+%
+diaryname = ['res_testremotebatch_',matversion_yp,'_',testdate,link_modestr,'.log'];
 %
 if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y',
     %
@@ -241,6 +248,9 @@ end
 disp(' ');
 disp('-------------------------------------------------------------------')
 disp('                     TEST RESULTS');
+disp(' ');
+disp([' test on ',testdate,' with ',link_modestr2,' from guest ',hostname_jd,' running Matlab version ',version]);
+disp(' ');
 disp('-------------------------------------------------------------------')
 disp(' ');
 %
