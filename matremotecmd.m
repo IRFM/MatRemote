@@ -54,7 +54,7 @@ if ~isempty(remote.host),
         %
     else
         %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''',ssh_opts]);%execute the remote command by ssh 
+        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' "',remotecmd,'"',ssh_opts]);%execute the remote command by ssh 
         %
     end
 else
