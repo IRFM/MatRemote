@@ -151,11 +151,11 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
-			$localcmd[6] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
-            $localcmd[7] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[9] = "date +%Y%m%d%H%M%S";
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
 
 
         }
@@ -226,7 +226,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
-            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00:00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
+            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
             $localcmd[5] = $localcmd[5].",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot;
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
