@@ -19,5 +19,5 @@ if ~isempty(remotecmd) && isempty(filename)
 end
 %
 if ~isempty(strfind(txt_url,'Non standard unix command in MatRemote')),
-    error('Non standard unix command in MatRemote. An automatic message has been  send to the administrator. Job aborted...');
+    error('Non standard unix command in matremoteurl.m. An automatic message has been  send to the administrator. Job aborted...');
 end
