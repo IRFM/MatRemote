@@ -66,7 +66,7 @@ remote = job.remote;
 %
 if ~isfield(job,'timestartremote'),
     %
-    [res,txt] = matremotecheck(remote,job,'pid_');
+    [res,txt] = matremotecheck(remote,job,['pid_',job.timeid]);
     %
     if ~res, 
         job.timestartremote = get_datetime_yp(txt);%considered to be the time at which the simulation starts
@@ -179,10 +179,15 @@ if ~isempty(job.id),
     %
 else
     %
-    [res,txt] = matremotepid(remote,job);%Retrieve job id by file
-    %
-    if ~res,
-        soutput = txt;
+    if isfield(job,'timestartremote'),% pid file exists
+        remotecmd = ['cat ',job.remotedatapath,job.batch_dir,'pid_',job.timeid];
+        [res,txt] = matremotecmd(remote,job,remotecmd);
+        %
+        if ~res,
+            soutput = ['pid=',strtrim(txt)];
+        else
+            soutput.err = ['Could not read the pid file : ',txt];
+        end
     else
         soutput = '';
     end
@@ -382,7 +387,7 @@ if ~isempty(job.load_id),
         jobparams = filterjob(job);
         return
     elseif ~strcmp(remotefilemtime,txt)
-        locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been writtten completely before being copied.']);
+        locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been written completely before being copied.']);
     end
     %
     job.timestopremote = get_datetime_yp(txt);%considered to be the time at which the simulation stops

@@ -40,7 +40,7 @@ try
     remotebatchdir = getenv('remotebatchdir');
     %
     proc_id = int2str(feature('getpid'));
-    save([remotebatchdir,'pid_',proc_id]);
+    unix(['echo ',proc_id,' > ',remotebatchdir,'pid_',timeid]);
     %
     filein = [remotebatchdir,'MAT_RUN_',timeid,'.mat'];
     fileout = [remotebatchdir,'MAT_OUT_',timeid,'.mat'];
