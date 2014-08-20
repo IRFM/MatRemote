@@ -50,7 +50,7 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
             %
         elseif remote.link_mode == 1,
             %
-            [txt,res] = matremotessh(remote,fixquotes(remotecmd,'"'),ssh_opts);
+            [txt,res] = matremotessh(remote,fixquotes(fixquotes(remotecmd,'"'),''''),ssh_opts);
             %
         else
             %
