@@ -187,9 +187,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[6] = "qstat -j ".$id;
         	$localcmd[7] = "rm -f ".strstr($script,'.',true).".e".$id." ".strstr($script,'.',true).".o".$id;
 
-            $localcmd[14] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[15] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[16] = "date +%Y%m%d%H%M%S";
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
 
     	}
 
