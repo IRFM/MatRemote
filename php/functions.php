@@ -31,14 +31,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[5] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
             $localcmd[6] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; condor_q ".$id;
 
-            $localcmd[7] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-    		$localcmd[8] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-    		$localcmd[9] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-    		$localcmd[10] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-    		$localcmd[11] = "export LANG=en_us_8859_1;date ";
-    		$localcmd[12] = "setenv LANG en_us_8859_1;date ";
+            $localcmd[7] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[9] = "date +%Y%m%d%H%M%S";
 
     	} elseif (strcmp($xgridsearch,"1") == 0) {
 
@@ -50,14 +45,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 				$localcmd[8] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
 				$localcmd[9] = "xgrid -h ".$hostname." -p ".$remote_password." -job delete -id ".$id;
 
-				$localcmd[10] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        		$localcmd[11] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        		$localcmd[12] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        		$localcmd[13] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        		$localcmd[14] = "export LANG=en_us_8859_1;date ";
-        		$localcmd[15] = "setenv LANG en_us_8859_1;date ";
+                $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+                $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+                $localcmd[12] = "date +%Y%m%d%H%M%S";
 
         	} else {
 
@@ -67,14 +57,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             	$localcmd[8] = "xgrid -h ".$hostname." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
             	$localcmd[9] = "xgrid -h ".$hostname." -job delete -id ".$id;
 
-            	$localcmd[10] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        		$localcmd[11] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        		$localcmd[12] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        		$localcmd[13] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        		$localcmd[14] = "export LANG=en_us_8859_1;date ";
-        		$localcmd[15] = "setenv LANG en_us_8859_1;date ";
+                $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+                $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+                $localcmd[12] = "date +%Y%m%d%H%M%S";
 
         	}
 
@@ -94,14 +79,10 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
         	$localcmd[8] = "rm -f nohup.out";
 
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[10] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[12] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[13] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[14] = "setenv LANG en_us_8859_1;date ";
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
 
         }
 
@@ -118,14 +99,10 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[6] = "ps -p ".$id." -o comm=";
             $localcmd[7] = "rm -f nohup.out";
 
-            $localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
+            $localcmd[11] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
 
         } elseif (strcmp($pbssearch,"1") == 0) {
 
@@ -176,14 +153,10 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
 			$localcmd[6] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
-			$localcmd[7] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[8] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+            $localcmd[7] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[9] = "date +%Y%m%d%H%M%S";
 
-        	$localcmd[9] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[11] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[12] = "setenv LANG en_us_8859_1;date ";
 
         }
 
@@ -202,14 +175,10 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[6] = "ps -p ".$id." -o comm=";
         	$localcmd[7] = "rm -f nohup.out";
 
-        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
+        	$localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
+            $localcmd[11] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
 
 
         } elseif (strcmp($sgesearch,"1") == 0) {
@@ -218,14 +187,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[6] = "qstat -j ".$id;
         	$localcmd[7] = "rm -f ".strstr($script,'.',true).".e".$id." ".strstr($script,'.',true).".o".$id;
 
-        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
+            $localcmd[14] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[15] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[16] = "date +%Y%m%d%H%M%S";
 
     	}
 
@@ -246,14 +210,11 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         	$localcmd[7] = "ps -p ".$id." -o comm=";
         	$localcmd[8] = "rm -f nohup.out";
 
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[10] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
 
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[12] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[13] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[14] = "setenv LANG en_us_8859_1;date ";
 
    		}  elseif (strcmp($pbssearch,"1") == 0) {
 
@@ -274,16 +235,10 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[6] = "qstat ".$id.'.andromede1';
         	$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
-        	$localcmd[8] = "export LANG=en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[9] = "export LANG=en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[10] = "setenv LANG en_us_8859_1;ls -l --full-time --time-style=full-iso ".$remotedatapath.$batch_dir;
-        	$localcmd[11] = "setenv LANG en_us_8859_1;ls -lT ".$remotedatapath.$batch_dir;
-
-        	$localcmd[12] = "export LANG=en_us_8859_1;date ";
-        	$localcmd[13] = "setenv LANG en_us_8859_1;date ";
-
-        }
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.localtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
+       }
 
     }
 
