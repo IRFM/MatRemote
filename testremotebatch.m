@@ -81,7 +81,7 @@ end
 %
 if debugmode,
     setenv('TESTVAR',testvar);
-    [err,jobparams,soutput_init] = matremote_jd('remotetest',{sinput});
+    [err,~,soutput_init] = matremote_jd('remotetest',{sinput});
     %
     if ~isempty(err),
         soutput_init.err = err;
@@ -130,6 +130,12 @@ if isnumeric(sinputs),% start new test
         test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
         test_job.rempause = 1/60;% in minutes
         %
+        if sinputs <= 1,% wait for result
+            test_job.remtimout = 5;% in minutes
+        else% return hand for later check
+            test_job.remtimout = 0;% in minutes
+        end
+        %
         test_job.env.TESTVAR = testvar;
         test_job.debugmode = debugmode;
         %
@@ -145,28 +151,15 @@ if isnumeric(sinputs),% start new test
                 if isfield(test_job,'err'),
                     soutputs{irem}.err = test_job.err;
                 else
-                    test_job.remtimout = 5;% in minutes
-                    %
-                    [jobparams,soutputs{irem}] = remotegetbatch(test_job,displaymode,0);
+                    [~,soutputs{irem}] = remotegetbatch(test_job,displaymode,0);
                 end
                 %
             else% use matremote_jd
                 %
                 test_job.funcopy = true;% to copy function remotetest to remote folder
-                %
-                if sinputs == 1,% use matremote_jd and wait for result
-                    %
-                    remote.remtimout = 5;% in minutes
-                    %
-                else% use matremote_jd and return job for later check
-                    %
-                    remote.remtimout = 0;% in minutes
-                    %
-                end
-                %
                 test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
                 %
-                [err,jobparams,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
+                [err,~,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
                 %
                 if ~isempty(err),
                     soutputs{irem}.err = err;
@@ -176,7 +169,6 @@ if isnumeric(sinputs),% start new test
                 %
             end
         catch job_err
-            %
             soutputs{irem}.err = job_err.message;
         end
         %
@@ -198,7 +190,7 @@ else% check previously started job
         %
         if isfield(sinputs{irem},'job'),% previously running job
             %
-            [err,jobparams,soutput] = matremote_jd('remotetest',sinputs(irem));
+            [err,~,soutput] = matremote_jd('remotetest',sinputs(irem));
             %
             if ~isempty(err),
                 soutputs{irem}.err = err;
@@ -288,6 +280,8 @@ for irem = 1:nrem,
     disp([' ---> Profile [',profilestr{irem},']']);
     disp(' ');
     %
+    soutputs{irem}.profilestr = profilestr{irem};
+    %
     if isfield(soutputs{irem},'err'),
         %
         % failed test
@@ -298,8 +292,6 @@ for irem = 1:nrem,
     elseif isfield(soutputs{irem},'job'),
         %
         % job started and returned for later check
-        %
-        soutputs{irem}.profilestr = profilestr{irem};
         %
         if ~isempty(soutputs{irem}.job.id),
             %
