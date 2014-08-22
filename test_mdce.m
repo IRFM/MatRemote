@@ -1,4 +1,4 @@
-function test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,debugmode)
+function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_size,mdce_memory,debugmode,displaymode)
 %
 % Test function of the distributed computing calculation 
 %
@@ -10,7 +10,7 @@ function test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_
 %       o remote cluster identification (see "INPUTS") 
 %   - b : if ~isempty(b), the calculation is sent (possibly recursively) to the remote host b{1} (using mdce_remote.m) and distributed there using the modes (a,b{2:end})
 %
-% Note that the use of mdce_remote.m [when ~isempty(b)] requires the MatRemote and MatTools toolboxes to be installed on the remote machibe b{1,2,3...}
+% Note that the use of mdce_remote.m [when ~isempty(b)] requires the MatRemote and MatTools toolboxes to be installed on the remote machine b{1,2,3...}
 %
 % ex : 
 %   - to run locally and sequentially :
@@ -51,10 +51,10 @@ function test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_
 %           (default = {})
 %        
 %       cluster identification (mdce_mode or remote{irem})
-%           o (struct)       : calculation distributed to the profile stored in the structure 'remote'
-%           o (NaN)          : prompt user for profile
+%           o (struct)  : calculation distributed to the profile stored in the structure 'remote'
+%           o (NaN)     : prompt user for profile
 %           o ('local') : identifies and select local cluster
-%           o (string)       : profile from remote_(remote).m (ex : 'macpro_YVES_PEYSSON')
+%           o (string)  : profile from remote_(remote).m (ex : 'macpro_YVES_PEYSSON')
 %
 %       - force_error: force an error to check how a possible error in calculation is managed, 0 (no error), (1) error in batch run only for arg = 5, (2) error in any run for arg = 5 [1,1]
 %           (default = 1)
@@ -66,8 +66,15 @@ function test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertype,mdce_
 %           (default = 8)
 %       - mdce_memory: memory allocated to batch runs, in MBytes (NaN to set no limit, not valid for GPU) [1,1]
 %           (default = 200)
+%       - debugmode : [0 or 1] if 1, provides step by step information, and save diary file in remote job folder 
+%           (default = 0)
+%       - displaymode : 
+%           o (0) display results only, 
+%           o (1) (default) display job status evolution 
+%           o (2) display step by step
+%           (default = 1)
 %
-%   OUTPUT : none
+%   OUTPUT : flag = flag(1);
 %
 % by J. Decker DRFC-CEA <joan.decker@cea.fr> and Y. Peysson DRFC-CEA <yves.peysson@cea.fr>
 %
@@ -103,7 +110,11 @@ if nargin < 8,
     debugmode = 0;
 end
 %
-if isscalar(mdce_mode) && any(real(mdce_mode) == 0:2),
+if nargin < 9,
+    displaymode = 1;
+end
+%
+if isnumeric(mdce_mode) && any(real(mdce_mode) == 0:2),
     param.mode = real(mdce_mode);
     param.gpu = imag(mdce_mode);
 else
@@ -119,12 +130,11 @@ param.clustersize = mdce_size;
 param.memory = mdce_memory;
 param.enforce = mdce_enforce;
 param.debugmode = debugmode;
+param.display = displaymode;
 %
 if debugmode,
     param.cleanmode = 0;  
 end
-%
-param.display = 1;
 %
 dkecluster = mdce_clustermode(param);
 %
@@ -135,13 +145,17 @@ dkecluster = mdce_clustermode(param);
 %
 [flag,a,b] = mdce_run(@ftest_mdce,{NaN,1,force_error},1,1:mdce_size,dkecluster);
 %
-if any(imag(flag) ~= 0),
-    disp(['Rem Flag : ',num2str(real(flag))]);
-    disp(['Loc Flag : ',num2str(imag(flag))]);
-    disp(['a (2->9) : ',num2str([a{:}])]);
-    disp(['b (0->7) : ',num2str([b{:}])]);
-else
-    disp(['Flag : ',num2str(flag)]);
-    disp(['a (2->9) : ',num2str([a{:}])]);
-    disp(['b (0->7) : ',num2str([b{:}])]);
-end    
+if displaymode,
+    if any(imag(flag) ~= 0),
+        disp(['Rem Flag : ',num2str(real(flag))]);
+        disp(['Loc Flag : ',num2str(imag(flag))]);
+        disp(['a (2->9) : ',num2str([a{:}])]);
+        disp(['b (0->7) : ',num2str([b{:}])]);
+    else
+        disp(['Flag : ',num2str(flag)]);
+        disp(['a (2->9) : ',num2str([a{:}])]);
+        disp(['b (0->7) : ',num2str([b{:}])]);
+    end    
+end
+%
+flag = flag(1);
