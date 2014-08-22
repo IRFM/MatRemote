@@ -65,6 +65,9 @@ dkecluster.scheduler.display = 0;
 dkecluster.scheduler.timeout = 100;%100 s time out for job submission
 dkecluster.scheduler.info = '';
 %
+dkecluster.scheduler.remtimout = Inf;% calculation timeout (in mins) (use of remcomputing only)
+dkecluster.scheduler.rempause = 1/6;% calculation status check period (in mins) (use of remcomputing only)
+%
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
 if isstruct(param),
@@ -145,7 +148,7 @@ elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% 
     %
 	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
     %
-    [vmatlab,dummy,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
+    [vmatlab,~,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
     %
     if str2double(vmatlab) < 77 || ~testtoolbox,
         disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
