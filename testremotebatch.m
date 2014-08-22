@@ -1,4 +1,4 @@
-function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode)
+function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode,displaymode)
 % ------------------------------------------------
 % test for remote batch using a standard function.
 % ------------------------------------------------
@@ -41,6 +41,11 @@ function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode)
 %           o 1   : ssh bridge enforced
 %           o 2   : url/ftp bridge enforced
 %
+%   - displaymode : 
+%           o (0) display results only, 
+%           o (1) (default) display job status evolution 
+%           o (2) display step by step
+%
 % OUTPUTS : 
 %
 %   - soutputs is a cell array containing
@@ -64,6 +69,12 @@ addpath(mattools_path);% MatTools toolbox
 %
 sinput.strin = 'The best code is : ';% input to function remotetest
 testvar = 'luke'; % test variable
+%
+% Displaymode
+%
+if nargin < 5,
+    displaymode = 1;% display job status evolution 
+end
 %
 % link_mode
 %
@@ -138,8 +149,6 @@ if isnumeric(sinputs),% start new test
         %
         test_job.env.TESTVAR = testvar;
         test_job.debugmode = debugmode;
-        %
-        displaymode = debugmode;% display step by step information in debugmode
         %
         try
             if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch

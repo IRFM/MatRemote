@@ -19,7 +19,7 @@ function remote = testremoteprofile_jd(remote,link_mode,test,display_mode)
 %           o If test not OK : return empty profile
 %
 if nargin < 4,
-    display_mode = false;
+    display_mode = 0;
 end
 if nargin < 3,
     test = true;
@@ -37,10 +37,7 @@ if xgridsearch,
     if ~isempty(getenv('XGRID_PWD')),
         remote.password = getenv('XGRID_PWD');
     else
-        if display_mode,
-            disp(' ');
-            disp('Remote connection test failed : XGRID password not set up. Create an environment variable ''XGRID_PWD''.');
-        end
+        locdisp(display_mode,'Remote connection test failed : XGRID password not set up. Create an environment variable ''XGRID_PWD''.')
         %
         remote = [];
         return
@@ -49,18 +46,12 @@ end
 %
 if isempty(remote.host), %local calculation
     if ~isempty(remote.link_mode),% local host not compatible with enforced link mode
-        if display_mode,
-            disp(' ');
-            disp('Remote connection test failed : local host not compatible with enforced link mode.');
-        end
+        locdisp(display_mode,'Remote connection test failed : local host not compatible with enforced link mode.')
         %
         remote = [];% no connection mode without host
         %
     else
-        if display_mode,
-            disp(' ');
-            disp('Remote connection test skipped : local calculation.');
-        end            
+        locdisp(display_mode,'Remote connection test skipped : local calculation.')
     end
     %
     return
@@ -72,10 +63,7 @@ remotecmd = 'echo test ok';
 %
 if isempty(remote.link_mode) || remote.link_mode == 0,
     if test,% test ssh key-pair connection
-        if display_mode,
-            disp(' ');
-            disp(['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... ']);
-        end
+        locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
         %
         remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
         %
@@ -90,15 +78,10 @@ if isempty(remote.link_mode) || remote.link_mode == 0,
                 msg = ['failed with following message : ',txt];            
             end
             %
-            if display_mode,
-                disp(['   ... ',msg]);
-            end
+            locdisp(display_mode,['   ... ',msg])
         else
-            if display_mode,
-                disp(['   ... completed with following result : ',txt]);
-                disp(' ');
-                disp(' ---> ssh key-pair mode selected');
-            end
+            locdisp(display_mode,['   ... completed with following result : ',txt])
+            locdisp(display_mode,' ---> ssh key-pair mode selected')
             %
             remote.link_mode = 0;% ssh key-pair mode selected
             return
@@ -113,23 +96,15 @@ end
 if (isempty(remote.link_mode) || remote.link_mode == 1),
     if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
         if test,% test ssh bridge connection
-            if display_mode,
-                disp(' ');
-                disp(['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... ']);
-            end
+            locdisp(display_mode,['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... '])
             %
             [txt,res] = matremotessh(remote,'ls');
             %
             if res ~= 0,
-                if display_mode,
-                    disp(['   ... failed with following message : ',txt]);
-                end
+                locdisp(display_mode,['   ... failed with following message : ',txt])
             else
-                if display_mode,
-                    disp('   ... completed with following result : test ok');
-                    disp(' ');
-                    disp(' ---> ssh bridge mode selected');
-                end
+                locdisp(display_mode,'   ... completed with following result : test ok')
+                locdisp(display_mode,' ---> ssh bridge mode selected')
                 %
                 remote.link_mode = 1;% ssh bridge mode selected
                 return
@@ -139,10 +114,7 @@ if (isempty(remote.link_mode) || remote.link_mode == 1),
             return
         end            
     else
-        if display_mode,
-            disp(' ');
-            disp('ssh bridge mode connection not set up.');
-        end
+        locdisp(display_mode,'ssh bridge mode connection not set up.')
     end
 end
 %
@@ -153,23 +125,15 @@ if (isempty(remote.link_mode) || remote.link_mode == 2),
        isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url/ftp
         %
         if test,
-            if display_mode,
-                disp(' ');
-                disp(['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... ']);
-            end
+            locdisp(display_mode,['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... '])
             %
             [txt,res] = matremoteurl(remote,'','ls','');
             %
             if res == 0,
-                if display_mode,
-                    disp(['   ... failed with following message : ',txt]);
-                end
+                locdisp(display_mode,['   ... failed with following message : ',txt])
             else
-                if display_mode,
-                    disp('   ... completed with following result : test ok');
-                    disp(' ');
-                    disp(' ---> url/ftp bridge mode selected');
-                end
+                locdisp(display_mode,'   ... completed with following result : test ok')
+                locdisp(display_mode,' ---> url/ftp bridge mode selected')
                 %
                 remote.link_mode = 2;% ssh bridge mode selected
                 return
@@ -179,30 +143,31 @@ if (isempty(remote.link_mode) || remote.link_mode == 2),
             return
         end
     else
-        if display_mode,
-            disp(' ');
-            disp('url/ftp bridge mode connection not set up.');
-        end
+        locdisp(display_mode,'url/ftp bridge mode connection not set up.')
     end
 end
 % 
 % no valid connection mode
 %
-if display_mode,
-    %
-    if isempty(remote.link_mode),
-        msg = 'ssh key-pair, ssh bridge and url/ftp bridge modes not set up, or test failed.';
-    elseif remote.link_mode == 0,
-        msg = 'ssh key-pair mode not set up, or test failed.';
-    elseif remote.link_mode == 1,
-        msg = 'ssh bridge mode not set up, or test failed.';
-    elseif remote.link_mode == 2,
-        msg = 'url/ftp bridge mode not set up, or test failed.';
-    end            
-    disp(' ');
-    disp(['Remote connection test failed : ',msg]);
-end            
+if isempty(remote.link_mode),
+    msg = 'ssh key-pair, ssh bridge and url/ftp bridge modes not set up, or test failed.';
+elseif remote.link_mode == 0,
+    msg = 'ssh key-pair mode not set up, or test failed.';
+elseif remote.link_mode == 1,
+    msg = 'ssh bridge mode not set up, or test failed.';
+elseif remote.link_mode == 2,
+    msg = 'url/ftp bridge mode not set up, or test failed.';
+end   
+locdisp(display_mode,['Remote connection test failed : ',msg])
 %
 remote = [];
 return
 %
+%
+function locdisp(mode,s)
+%
+if mode > 1,
+    disp(' ');
+    disp(s)
+end
+
