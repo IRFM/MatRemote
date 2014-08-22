@@ -114,7 +114,11 @@ for j_range = 1:nrange,
 end
 %
 submit(job);
-waitForState(job)
+if str2double(matversion_yp) <= 801,%old matlab syntax
+    waitForState(job)
+else
+    wait(job)
+end
 %
 if strcmp(get(job,'State'),'finished')
     out = getAllOutputArguments(job);
@@ -144,7 +148,14 @@ end
 %   
 destroy(job);
 %
-set(jm,jminit)%restore original scheduler properties
+if str2double(matversion_yp) <= 801,%old matlab syntax
+    set(jm,jminit)%restore original scheduler properties
+else
+    fnames = fieldnames(jminit);
+    for iname = 1:length(fnames),
+        set(jm,fnames{iname},jminit.(fnames{iname}));
+    end
+end
 %
 %[varargout{:}] = deal(cell(N_range,1)); keep this line as an example of use of the function deal
 %
