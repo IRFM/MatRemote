@@ -85,8 +85,12 @@ end
 %
 job = remote2job_jd(remote,job);
 %
-if nargin < 4,
-    displaymode = 1 + job.debugmode;
+if nargin < 4 || isempty(displaymode),
+    if isfield(job,'displaymode') && ~isempty(job.displaymode),
+        displaymode = job.displaymode;
+    else
+        displaymode = 1 + job.debugmode;
+    end
 end
 %
 remotehost = remote.host;%  hostname (empty for local host)

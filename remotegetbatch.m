@@ -35,8 +35,12 @@ if nargin < 3,
 end
 %
 if nargin < 2 || isempty(displaymode),
-    displaymode = job.debugmode;
-end
+    if isfield(job,'displaymode') && ~isempty(job.displaymode),
+        displaymode = job.displaymode;
+    else
+        displaymode = 1 + job.debugmode;
+    end
+end 
 %
 if ~isfield(job,'id'),
     %

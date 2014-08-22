@@ -18,7 +18,7 @@ function [flag,waitime,runtime,jobtime,message] = displayrunningjob(job,isim,dis
 %       - message : status message
 %
 if nargin < 3,
-    displaymode = 1;
+    displaymode = job.debugmode;
 end
 %
 if nargin < 2,
