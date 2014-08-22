@@ -45,15 +45,20 @@ if nargin < 3,
     sinput = '';
 end
 %
-time_ref = clock;
-%
-if ~isfield(job,'timestartlocal') || isempty(job.timestartlocal),
-    job.timestartlocal = datestr(time_ref);
-end
-%
 if ~isfield(job,'timeid') || isempty(job.timeid),
-    job.timeid = timeid_jd(time_ref);
+    job.timeid = timeid_jd(clock);
 end
+%
+% job time structure to follow status (GMT time)
+%
+job.time.created = utctime_jd;% time of job creation
+job.time.transfered = '';% time of job transfer on remote machine (creation of remote MAT_RUN file)
+job.time.launched = '';% time of job command sent
+job.time.started = '';% time of job started (pid file created)
+job.time.finished = '';% time of job finished (creation of remote MAT_OUT file)
+job.time.retrieved = '';% time of result transfer back to local machine
+job.time.processed = '';% time to process the results and generate outputs
+job.time.cleaned = '';% time of clean job temp files & folders
 %
 if ~isfield(job,'userid') || isempty(job.userid),
     job.userid = [getenv('USER'),'@',hostname_jd];
@@ -81,7 +86,7 @@ end
 job = remote2job_jd(remote,job);
 %
 if nargin < 4,
-    displaymode = job.debugmode;
+    displaymode = 1 + job.debugmode;
 end
 %
 remotehost = remote.host;%  hostname (empty for local host)
@@ -244,6 +249,12 @@ if ~isempty(job.save_id),
     end
     %
 end
+%
+[timeres,timestr] = matremotecheck(remote,job,['MAT_RUN_',job.timeid,'.mat']);
+%
+if ~timeres, 
+    job.time.transfered = get_datetime_yp(timestr);% time of job transfer on remote machine (creation of remote MAT_RUN file)
+end  
 %
 % start job
 %
@@ -423,6 +434,8 @@ if res ~= 0,
     %
     return
     %
+else
+    job.time.launched = utctime_jd;% time of job command sent
 end
 %
 txt(double(txt) == 10) = [];
@@ -503,7 +516,7 @@ job.remote = remote;
 %
 function locdisp(mode,s)
 %
-if mode == 1,
+if mode > 1,
     disp(s)
 end
 

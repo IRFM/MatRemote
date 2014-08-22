@@ -1,14 +1,11 @@
-function [jobparams,soutput] = remotegetbatch(job,displaymode,check)
+function [job,soutput] = remotegetbatch(job,displaymode,check)
 %
-% This function retrieve results from a batch job on a local or remote host
+% This function checks runs status and retrieves results from a batch or direct job on a local or remote host
 %
 %   INPUTS :
 %   
-%       - remote : cluster information structure
-%
-%
 %       - job : job parameters structure
-%           o id : cluster id for the job
+%           o id : cluster id or process id for the job
 %           o timeid : time id for the job
 %           o remotelogname : user name on cluster
 %           o load_id : output file/folder expected (leave empty if no output file)
@@ -20,6 +17,7 @@ function [jobparams,soutput] = remotegetbatch(job,displaymode,check)
 %           	- cmd : batch command. ex: qsub
 %           	- set_jobid : syntax to read the job status : set_jobid{1},jobid,set_jobid{2}
 %           	- (logname) : user name correspondance. ex : remote.joan = 'JD211098' (same as local user if empty or missing)
+%           o time : job evolution time structure
 %
 %       - displaymode : display mode : (0) no display; (1) operation display (default : 0)
 %
@@ -27,7 +25,7 @@ function [jobparams,soutput] = remotegetbatch(job,displaymode,check)
 %
 %   OUTPUTS : 
 %   
-%       - jobparams : output some filtered job parameters
+%       - job : job with updated parameters (time, id, ...)
 %       - soutput : output data structure (optional)
 %
 % by J. Decker, Y. Peysson and M. Schneider, CEA/IRFM
@@ -46,9 +44,10 @@ if ~isfield(job,'id'),
     %
     if isfield(job,'err')
         soutput.err = job.err;
+    else
+        soutput.err = 'No id field in job structure';
     end
     %
-    jobparams = filterjob(job);
     return
 end
 %
@@ -58,34 +57,12 @@ if ~isfield(job,'remote'),
     %
     locdisp(displaymode,soutput.err);
     %
-    jobparams = filterjob(job);
     return
 end
 %
 remote = job.remote;
 %
-if ~isfield(job,'timestartremote'),
-    %
-    [res,txt] = matremotecheck(remote,job,['pid_',job.timeid]);
-    %
-    if ~res, 
-        job.timestartremote = get_datetime_yp(txt);%considered to be the time at which the simulation starts
-        soutput.job = job;%refresh job state
-    end  
-end
-%
-if isfield(job,'timestartremote'),
-    %
-    remotecmd = 'date +%Y%m%d%H%M%S';% get the current remote date
-    %
-    [res,txt] = matremotecmd(remote,job,remotecmd);
-    if ~res, 
-        job.timecurrentremote = get_datetime_yp(txt);%considered to be the time at which the remote simulation is checked
-        soutput.job = job;%refresh job state
-    end      
-end
-%
-if check == 0,
+if check == 0,% set up wait loop
     %
     if isfield(job,'remtimout'),% in minutes
         remtimout = job.remtimout;
@@ -105,24 +82,12 @@ if check == 0,
         %
         pause(60*rempause);
         %
-        [jobparams,soutput] = remotegetbatch(job,displaymode,1);
+        [job,soutput] = remotegetbatch(job,displaymode,1);
+        %
+        displayrunningjob(job,[],displaymode);
         %
         if ~isempty(soutput),
-            if ~isstruct(soutput) && ~isempty(strfind(soutput,'pid=')),
-                job.id = soutput(5:length(soutput));%PID extraction by file
-            elseif ~isstruct(soutput) && ~isempty(strfind(soutput,remote.get_jobid{1})),
-                job.id = soutput(length(remote.get_jobid{1})+1:end);  
-            elseif isstruct(soutput) && isfield(soutput,'job')
-                job = soutput.job;
-                jobparams = filterjob(job);
-                soutput = '';
-            else
-                break
-            end
-        end
-        %
-        if displaymode,
-            disp(['Run still executed remotely. Elapsed time (mins) ',num2str(toc(trem)/60),'/',num2str(remtimout)])
+            break
         end
         %
     end
@@ -135,12 +100,43 @@ if check == 0,
     %
 end
 %
-if exist('soutput','var'),
-    if ~isfield(soutput,'job'),
-        soutput = '';
+soutput = '';
+%
+% check if pid file was created
+%
+if isempty(job.time.started),
+    %
+    [timeres,timestr] = matremotecheck(remote,job,['pid_',job.timeid]);
+    %
+    if ~timeres,% pid file is created, job has started
+        %
+        job.time.started = get_datetime_yp(timestr);% time of job started (pid file created)
+        %
+    end  
+end
+%
+% update job.id as pid in direct mode
+%
+if isempty(job.id),
+    %
+    if ~isempty(job.time.started),% pid file is created
+        %
+        remotecmd = ['cat ',job.remotedatapath,job.batch_dir,'pid_',job.timeid];
+        [res,txt] = matremotecmd(remote,job,remotecmd);
+        %
+        if ~res,% read pid
+            %
+            job.id = strtrim(txt);
+            %
+        else% could not read pid
+            %
+            soutput.err = ['Could not read the pid file : ',txt];
+            return
+            %
+        end
+    else% job not started yet
+        return
     end
-else
-    soutput = '';
 end
 %
 remotehost = remote.host;%  hostname (empty for local host)
@@ -172,29 +168,8 @@ elseif job.xgridsearch,
     %
 end
 %
-if ~isempty(job.id),
-    %
-    locdisp(displaymode,['    --> Checking status of job # ',job.id]);
-    [res,txt] = matremotecmd(remote,job,remotecmd);
-    %
-else
-    %
-    if isfield(job,'timestartremote'),% pid file exists
-        remotecmd = ['cat ',job.remotedatapath,job.batch_dir,'pid_',job.timeid];
-        [res,txt] = matremotecmd(remote,job,remotecmd);
-        %
-        if ~res,
-            soutput = ['pid=',strtrim(txt)];
-        else
-            soutput.err = ['Could not read the pid file : ',txt];
-        end
-    else
-        soutput = '';
-    end
-    %
-    jobparams = filterjob(job);
-    return
-end
+locdisp(displaymode,['    --> Checking status of job # ',job.id]);
+[res,txt] = matremotecmd(remote,job,remotecmd);
 %
 pause(0.1);
 %
@@ -206,7 +181,6 @@ if job.directsearch,
     %
     if any(strfind(txt,remoteset_jobid{3})),
         locdisp(displaymode,['Job # ',job.id,' still running...']);
-        jobparams = filterjob(job);
         return
     end
     %
@@ -216,13 +190,9 @@ elseif job.pbssearch  || job.sgesearch,
         %
         if ~isempty(strfind(txt,job.id)) && length(remoteset_jobid) > 3,% case where qstat shows completed job status for a while (ex : abacus)
             if isempty(strfind(txt,remoteset_jobid{4})),
-                displayrunningjob(job,displaymode);
-                jobparams = filterjob(job);
                 return;
             end
         else
-            displayrunningjob(job,displaymode);
-            jobparams = filterjob(job);
             return
         end
         %
@@ -231,7 +201,6 @@ elseif job.pbssearch  || job.sgesearch,
         locdisp(displaymode,['Run check failed : ',txt]);
         soutput.err = txt;
         %
-        jobparams = filterjob(job);
         return
         %
     end
@@ -241,9 +210,6 @@ elseif job.slurmsearch,
     if res == 0,% if remoteset_jobid{3} == '', search for job.id in txt, otherwise search for remoteset_jobid{3}
         if (~isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,remoteset_jobid{3})))...
         || (isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,job.id))),
-            %
-            displayrunningjob(job,displaymode);
-            jobparams = filterjob(job);
             return% run still running
         end
         %
@@ -262,7 +228,7 @@ elseif job.condorsearch,
     %
     if ~isempty(i_job),% job not completed
         if ~isempty(i_running)
-            displayrunningjob(job,displaymode);
+            locdisp(displaymode,['Job # ',job.id,' still running...']);
         elseif ~isempty(i_pending),
             locdisp(displaymode,['Job # ',job.id,' still pending...']);
         elseif ~isempty(i_held),
@@ -282,7 +248,6 @@ elseif job.condorsearch,
             %
         end
         %
-        jobparams = filterjob(job);
         return
         %
     end
@@ -290,15 +255,12 @@ elseif job.condorsearch,
 elseif job.xgridsearch,  
     %
     if ~isempty(strfind(txt,remoteset_jobid{3})), % job still running
-        jobparams = filterjob(job);
         return
     elseif ~isempty(strfind(txt,remoteset_jobid{4})), % job pending
-        jobparams = filterjob(job);
         return
     else
         if isempty(strfind(txt,remoteset_jobid{5})), % job has a problem (check if xgrid is in operation on the remote machine)
             disp(['Remote run check failed : ',txt]);
-            jobparams = filterjob(job);
             return
         end
     end
@@ -323,7 +285,7 @@ elseif job.xgridsearch,
     %
     % extract result files
     %
-    [res,txt] = matremotecheck(remote,job,['MAT_OUT_',job.timeid,'.mat']);%check if the results are already back to the temp batch dir
+    res = matremotecheck(remote,job,['MAT_OUT_',job.timeid,'.mat']);%check if the results are already back to the temp batch dir
     %
     if res,
         %
@@ -343,7 +305,6 @@ elseif job.xgridsearch,
             locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
             soutput.err = err;
             %
-            jobparams = filterjob(job);
             return
         end 
     else
@@ -370,27 +331,26 @@ if ~isempty(job.load_id),
     remotefilemtime = 0;
     %
     for it = 0:itmax,% check that the MAT_OUT file is written completely
-        [res,txt] = matremotecheck(remote,job,'MAT_OUT_');
-        if res == 0,% MAT_OUT file exists
-            if strcmp(remotefilemtime,txt),% MAT_OUT file is written completely
+        [timeres,timestr] = matremotecheck(remote,job,['MAT_OUT_',job.timeid,'.mat']);
+        if timeres == 0,% MAT_OUT file exists
+            if strcmp(remotefilemtime,timestr),% MAT_OUT file is written completely
                 break
             else
-                remotefilemtime = txt;
+                remotefilemtime = timestr;
             end
         end
     end
     %
-    if res,
+    if timeres,
         soutput.err = ['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' whereas the job is done.'];
         locdisp(displaymode,soutput.err);
         %
-        jobparams = filterjob(job);
         return
-    elseif ~strcmp(remotefilemtime,txt)
+    elseif ~strcmp(remotefilemtime,timestr)
         locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been written completely before being copied.']);
     end
     %
-    job.timestopremote = get_datetime_yp(txt);%considered to be the time at which the simulation stops
+    job.time.finished = get_datetime_yp(timestr);%considered to be the time at which the simulation stops
     %
     [res,err] = matremoteget(remote,job);
     %
@@ -398,8 +358,10 @@ if ~isempty(job.load_id),
         locdisp(displaymode,['File transfer failed : ',err]);
         soutput.err = err;
         %
-        jobparams = filterjob(job);
         return
+        %
+    else
+        job.time.retrieved = utctime_jd;% time of result transfer back to local machine
     end
     %
     if ~isempty(remotehost) || ~strcmp(job.localdatapath,job.remotedatapath),
@@ -417,11 +379,7 @@ if nargout > 0,% data transfer back to matlab,
     else
         soutput = feval(job.loadfcn,job);% note : job.load_id is the output data file/folder location
         %
-        % Transfer some job infos useful for managing remote simulations like characteristic times 
-        % for postprocesssing of the performances, etc.
-        %
-        jobparams = filterjob(job);
-        %
+        job.time.processed = utctime_jd;% time to process the results and generate outputs
     end
     %
 end
@@ -599,29 +557,13 @@ if job.clean >= 2,%clean local files
     end
 end
 %
-if isfield(remote,'disp_cmd') && remote.disp_cmd,
-    disp('------------------------------------------------------------------------------------')
-    job
-    disp('------------------------------------------------------------------------------------')
-    disp('------------------------------------------------------------------------------------')
-    remote
-    disp('------------------------------------------------------------------------------------')
-end
+job.time.cleaned = utctime_jd;% time of clean job temp files & folders
+%
 end
 %
 function locdisp(mode,s)
-    if mode == 1,
+    if mode > 1,
         disp(s)
     end
 end
-
-
-function jobparams = filterjob(job)
-    jobparams = struct;
-    %
-    if isfield(job,'timestartremote'),jobparams.timestartremote = job.timestartremote;end
-    if isfield(job,'timestopremote'),jobparams.timestopremote = job.timestopremote;end
-    if isfield(job,'timecurrentremote'),jobparams.timecurrentremote = job.timecurrentremote;end
-    if isfield(job,'timestartlocal'),jobparams.timestartlocal = job.timestartlocal;end
-end
-
+%
