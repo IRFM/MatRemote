@@ -93,7 +93,7 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
         %
         flag = zeros(size(flag_remote));
         %
-        if any(mask_loc),%back to local computing 
+        if any(mask_loc) && (~isfield(dkecluster,'scheduler') || ~isfield(dkecluster.scheduler,'enforce') || dkecluster.scheduler.enforce == 1),%back to local computing 
             %
             disp(['WARNING: Remote distributed computing failed for ',num2str(sum(mask_loc)),'/',num2str(length(mask_loc)),' cases. Switching to local computing for these cases.']);
             %
