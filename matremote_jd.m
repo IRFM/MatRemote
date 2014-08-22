@@ -1,45 +1,29 @@
-function [err,jobparams,varargout] = matremote_jd(fun,args_in,remote,job)
+function [err,job,varargout] = matremote_jd(arg1,args_in,remote,job)
 %
 % This is a generic matlab function exectuting the function fun with
 % arguments args_in remotely according to profile remote
 %
-% Note : this function can be used with a wait loop (remote.remtimeout > 0)
-%        or return the job for later check (remote.remtimeout == 0)
-%        later check is done by calling the function again with the field args_in.job
+% Note : this function can be used with a wait loop (job.remtimeout or remote.remtimeout > 0)
+%                 or return the job for later check (job.remtimeout or remote.remtimeout == 0)
+%
+% Use : 
+%   - [err,job,varargout] = matremote_jd(fun,args_in,remote,[job])
+%       -> run the function [varargout] = fun(args_in) remotely 
+%          according to remote profile 'remote' and optionnal job parameters 'job'
+% 
+%   - [err,job,varargout] = matremote_jd(job)
+%       -> check the status of the job 'job' and return the result if completed
 %
 varargout = cell(1,nargout-2);
 %
 err = '';
-jobparams = '';
 %
-if ~isempty(args_in) && isfield(args_in{1},'job'),% check result of previously launched job
+if nargin == 1,% check the status of the job 'job' and return the result if completed
     %
-    [jobparams,soutput] = remotegetbatch(args_in{1}.job,args_in{1}.job.debugmode,1);
+    [job,output] = remotegetbatch(arg1,[],1);% arg1=job;
+    displayrunningjob(job);
     %
-    if isempty(soutput) || ~isstruct(soutput),
-        %
-        job = args_in{1}.job;
-        %
-        if ~isempty(soutput) && ~isempty(strfind(soutput,'pid=')),
-            job.id = soutput(5:length(soutput));%PID extraction by file
-        elseif ~isempty(soutput) && ~isempty(strfind(soutput,remote.get_jobid{1})),
-            job.id = soutput(length(job.remote.get_jobid{1})+1:end);
-        end
-        %
-        if job.debugmode,
-            disp('Job still running.')
-        end
-        output.varargout{1}.job = job;
-        %
-    else
-        if isfield(soutput,'job'),
-            output.varargout{1}.job = soutput.job;%modified job with new times 
-        else
-            output = soutput;
-        end
-    end
-    %
-elseif nargin > 2 && ~isempty(remote),% batch job received   
+elseif nargin > 2 && ~isempty(remote),% new batch job 
     %
     if nargin < 4,
         job = matstandardjob_jd('runmat');
@@ -49,7 +33,7 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
         job.funcopy = true;
     end
     %
-    mat_input.fun = fun;
+    mat_input.fun = arg1;% arg1=fun;
     mat_input.args_in = args_in;
     mat_input.nargout = nargout-1;
     %
@@ -57,42 +41,33 @@ elseif nargin > 2 && ~isempty(remote),% batch job received
     %
     if ~isfield(job,'err'),% no error occured in the remote job start,
         if isfield(job,'remtimout') && job.remtimout == 0,% return and check later
-            output.varargout{1}.job = job;
+            output = '';
         else
-            [jobparams,output] = remotegetbatch(job,[],0);% wait for result
+            [job,output] = remotegetbatch(job,[],0);% wait for result
+            displayrunningjob(job);
         end
     else
         output.err = job.err;
     end
     %
-    if isempty(output),
-        if job.debugmode,
-            disp('Timeout reached. Calculation started locally if enforced.')
-        end
-        err = 'timout';
-    end
+elseif nargin == 2 || (nargin > 2 && isempty(remote)),
     %
-else% direct calculation
+    % direct calculation
+    %
+    job = '';
     %
     try 
-        [varargout{:}] = feval(fun,args_in{:});
+        [varargout{:}] = feval(arg1,args_in{:});% arg1=fun;
         output.varargout = varargout;
-    catch
-        %
-        lsterr = lasterror;
-        %
-        err = {'The action was cancelled due to the following error:','',lsterr.message};
-        for il = 1:length(lsterr.stack),
-            err = [err,['In ',lsterr.stack(il).file,' at line ',num2str(lsterr.stack(il).line)]];
-        end
-        %
-        output.err = err;
-        %
+    catch lsterr
+        output.err = disperr_jd(lsterr);
     end
+else
+    error('Wrong number of inputs calling matremote_jd')
 end
 %
 if isfield(output,'err'),
-    disp('Remote calculation failed. Calculation started locally if enforced.')
+    disp('Remote calculation failed.')
     if isempty(output.err),
         err = 'unknown error';
     else        
