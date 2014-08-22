@@ -3,7 +3,7 @@ function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode,displaymo
 % test for remote batch using a standard function.
 % ------------------------------------------------
 %
-% This function tests the MatRemote package using eitehr batch or direct
+% This function tests the MatRemote package using either batch or direct
 % calculations. Given the option sinputs, three modes can be tested :
 %
 %   - the direct use of remoterunbatch and remotegetbatch
@@ -167,13 +167,16 @@ if isnumeric(sinputs),% start new test
                 %
                 test_job.funcopy = true;% to copy function remotetest to remote folder
                 test_job.env.remotematfnc = 'runmat'; % matlab function to be called remotely by remotematrun (case of standard call using runmat)
+                test_job.displaymode = displaymode;
                 %
-                [err,~,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
+                [err,test_job,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
                 %
                 if ~isempty(err),
                     soutputs{irem}.err = err;
-                else
+                elseif ~isempty(soutput),% job completed
                     soutputs{irem} = soutput;
+                else
+                    soutputs{irem}.job = test_job;
                 end
                 %
             end
@@ -199,15 +202,17 @@ else% check previously started job
         %
         if isfield(sinputs{irem},'job'),% previously running job
             %
-            [err,~,soutput] = matremote_jd('remotetest',sinputs(irem));
+            [err,test_job,soutput] = matremote_jd(sinputs{irem}.job);
             %
             if ~isempty(err),
                 soutputs{irem}.err = err;
-            else
+            elseif ~isempty(soutput),% job completed
                 soutputs{irem} = soutput;
+            else
+                soutputs{irem}.job = test_job;
             end
             %
-        else% completed jobs
+        else% previously completed jobs
             %
             soutputs{irem} = sinputs{irem};
             %
@@ -228,9 +233,15 @@ else
     link_modestr2 = ['link mode = ',num2str(link_mode)];
 end
 %
+if isnumeric(sinputs),
+    calcmodestr = num2str(sinputs);
+else
+    calcmodestr = '2';
+end
+%
 testdate = datestr(now,29);
 %
-diaryname = ['res_testremotebatch_',matversion_yp,'_',testdate,link_modestr,'.log'];
+diaryname = ['res_testremotebatch_',matversion_yp,'_',testdate,link_modestr,'_calc_mode_',calcmodestr,'.log'];
 %
 if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y',
     %
@@ -250,7 +261,7 @@ disp(' ');
 disp('-------------------------------------------------------------------')
 disp('                     TEST RESULTS');
 disp(' ');
-disp([' test on ',testdate,' with ',link_modestr2,' from guest ',hostname_jd,' running Matlab version ',version]);
+disp([' test on ',testdate,' with ',link_modestr2,' and calc mode = ',calcmodestr,' from guest ',hostname_jd,' running Matlab version ',version]);
 disp(' ');
 disp('-------------------------------------------------------------------')
 disp(' ');
