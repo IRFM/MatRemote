@@ -34,7 +34,11 @@ try
         scheduler.clustersize = min([scheduler.clustersize,configuration.NumWorkers]);
     end
     %
-    matlabpool('open',scheduler.configuration,scheduler.clustersize);
+    if str2double(matversion_yp) < 803
+        matlabpool('open',scheduler.configuration,scheduler.clustersize);
+    else
+        poolid = parpool(scheduler.configuration,scheduler.clustersize);
+    end
 catch err
     info_dke_yp(2,['WARNING: exiting parcomputing for function ',func2str(fun),'.m (mode 3) because of error: ',err.message]);
     flag(:) = -2;
@@ -102,7 +106,11 @@ parfor j_argout = 1:nargout_in,
     %
 end
 %
-matlabpool close force
+if str2double(matversion_yp) < 803,
+    matlabpool close force
+else
+    delete(poolid);
+end
 %
 function ok = selectGPUDeviceForLab()
 persistent hasGPU;
