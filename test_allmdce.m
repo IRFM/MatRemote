@@ -161,7 +161,7 @@ disp(' Local MDCE [mode,1]');
 disp(' ');
 disp(locflag);
 disp(' ');
-disp(' Remote MDCE with remcoputing [1,remprofile]');
+disp(' Remote MDCE with remcomputing [1,remprofile]');
 disp(' ');
 disp(remflag(1,:));
 disp(' ');
