@@ -19,8 +19,14 @@ if ~isempty(remote.host),
     end
     %
 elseif ~strcmp(job.localdatapath,job.remotedatapath),
+    %	
+    if strcmp(job.save_id(end),filesep),% to avoid cp problems on MAC OSX
+        save_id = job.save_id(1:end-1);
+    else
+        save_id = job.save_id;
+    end
     %
-    [res,txt] = unix(['cp -r ',job.localdatapath,job.save_id,' ',job.remotedatapath]);%transfer data from the local batch dir to the local batch dir
+    [res,txt] = unix(['cp -r ',job.localdatapath,save_id,' ',job.remotedatapath]);%transfer data from the local batch dir to the local batch dir
     %
 else
     res = 0;
