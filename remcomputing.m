@@ -135,6 +135,7 @@ try
         %
         if remtimout == 0,%return job for later process,
             varargout_array{j_range,1}.job = jobs{j_range};
+            varargout_array{j_range,1}.job.temppath = scheduler.temppath;
             flag(j_range) = 4;
         else
             if displaymode,
