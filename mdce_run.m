@@ -218,17 +218,21 @@ function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_ran
         disp(['---> Method ''',func2str(method),''' to process loop for the function ',func2str(fun),'.m']);
     end
     %
-    mkdir(scheduler.temppath);
+    if ~exist(scheduler.temppath,'dir')
+        mkdir(scheduler.temppath);
+    end
     fileattrib(scheduler.temppath,'+w');
     %
     varargout = cell(1,nargout-1);
     %
     [flag,varargout{:}] = method(fun,args_in,arg_index,arg_range,scheduler);
     %
-    try
-        rmdir(scheduler.temppath,'s');
-    catch
-        disp(['WARNING : tmp directory ',scheduler.temppath,' could not be removed.'])
+    if scheduler.mode < 3 || scheduler.remtimout > 0,%jobs completed
+        try
+            rmdir(scheduler.temppath,'s');
+        catch
+            disp(['WARNING : tmp directory ',scheduler.temppath,' could not be removed.'])
+        end
     end
     %
     mask_seq = (flag < 0);%flagged for sequential computing
