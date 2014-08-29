@@ -53,7 +53,7 @@ dkecluster.scheduler.gpu = 0;
 dkecluster.scheduler.type = 'local';
 dkecluster.scheduler.inter = 0;% interactive mode (for profile, scheduler and profile name)
 dkecluster.scheduler.configurations = struct;
-dkecluster.scheduler.remote = {};% for remcomputing (mode == 3)
+dkecluster.scheduler.remote = {};% for use of mdce_remote
 dkecluster.scheduler.funcopy = false;% copy distributed function to remote cluster
 %
 dkecluster.scheduler.clustersize = Inf;%8 is maximum for local configuration
@@ -95,10 +95,30 @@ if ~isempty(dkecluster.scheduler.remote),
     end
     [remote,profilestr] = load_remoteprofiles_jd(remote,true);
     %
+    % parameters set recursively
+    %
+    if length(dkecluster.scheduler.remtimout) == 1,% prescription is for mdce_remote, and downstream calls are with dkecluster.scheduler.remtimout = Inf
+        remtimout = dkecluster.scheduler.remtimout;
+        dkecluster.scheduler.remtimout = Inf;
+    else% prescriptions are given for each remote step
+        remtimout = dkecluster.scheduler.remtimout(1);
+        dkecluster.scheduler.remtimout = dkecluster.scheduler.remtimout(2:end);
+    end
+    %
+    if length(dkecluster.scheduler.rempause) == 1,% prescription is for mdce_remote, and downstream calls are with dkecluster.scheduler.rempause = 1/6;
+        rempause = dkecluster.scheduler.rempause;
+        dkecluster.scheduler.rempause = 1/6;
+    else% prescriptions are given for each remote step
+        rempause = dkecluster.scheduler.rempause(1);
+        dkecluster.scheduler.rempause = dkecluster.scheduler.rempause(2:end);
+    end
+    %
     disp(' ');
     if ~isempty(remote),
         %
         dkecluster.remote = remote;
+        dkecluster.remtimout = remtimout;
+        dkecluster.rempause = rempause;
         %
         disp(['==> Distributed calculation transfered to : ',profilestr{1}])
         %
