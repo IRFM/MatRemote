@@ -18,7 +18,11 @@ function [flag,waitime,runtime,jobtime,message] = displayrunningjob(job,isim,dis
 %       - message : status message
 %
 if nargin < 3,
-    displaymode = job.debugmode;
+    if ~isfield(job,'debugmode'),
+        displaymode = 0;
+    else
+        displaymode = job.debugmode;
+    end
 end
 %
 if nargin < 2,
@@ -41,38 +45,45 @@ waitime = '';
 runtime = '';
 jobtime = '';
 %
-if ~isempty(job.time.cleaned),
+if isfield(job,'time'),
     %
-    % job completed
-    %
-    flag = 2;
-    jobtime = datestr(etime(datevec(job.time.cleaned),datevec(job.time.created))/86400,'HH:MM:SS');
-    message = [jobstr,' is completed in ',jobtime,' (HH:MM:SS).'];
-    %
-    if ~isempty(job.time.started),% remote wait time accessible
-        waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
-        message = [message,' Remote wait time was ',waitime,' (HH:MM:SS).'];
-        if ~isempty(job.time.finished)% remote run time accessible
-            runtime = datestr(etime(datevec(job.time.finished),datevec(job.time.started))/86400,'HH:MM:SS');
-            message = [message,' Remote run time was ',runtime,' (HH:MM:SS).'];
+    if ~isempty(job.time.cleaned),
+        %
+        % job completed
+        %
+        flag = 2;
+        jobtime = datestr(etime(datevec(job.time.cleaned),datevec(job.time.created))/86400,'HH:MM:SS');
+        message = [jobstr,' is completed in ',jobtime,' (HH:MM:SS).'];
+        %
+        if ~isempty(job.time.started),% remote wait time accessible
+            waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
+            message = [message,' Remote wait time was ',waitime,' (HH:MM:SS).'];
+            if ~isempty(job.time.finished)% remote run time accessible
+                runtime = datestr(etime(datevec(job.time.finished),datevec(job.time.started))/86400,'HH:MM:SS');
+                message = [message,' Remote run time was ',runtime,' (HH:MM:SS).'];
+            end
         end
+        %
+    elseif ~isempty(job.time.started),
+        %
+        % job started but not completed
+        % 
+        flag = 1;
+        runtime = datestr(etime(datevec(utctime_jd),datevec(job.time.started))/86400,'HH:MM:SS');
+        waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
+        message = [jobstr,' has been running for ',runtime,' (HH:MM:SS). Remote wait time was ',waitime,' (HH:MM:SS).'];
+        %
+    else% job launched but not started
+        %
+        flag = 0;
+        waitime = datestr(etime(datevec(utctime_jd),datevec(job.time.launched))/86400,'HH:MM:SS');
+        message = [jobstr,' was launched ',waitime,' (HH:MM:SS) ago.'];
+        %
     end
-    %
-elseif ~isempty(job.time.started),
-    %
-    % job started but not completed
-    % 
-    flag = 1;
-    runtime = datestr(etime(datevec(utctime_jd),datevec(job.time.started))/86400,'HH:MM:SS');
-    waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
-    message = [jobstr,' has been running for ',runtime,' (HH:MM:SS). Remote wait time was ',waitime,' (HH:MM:SS).'];
-    %
-else% job launched but not started
-    %
-    flag = 0;
-    waitime = datestr(etime(datevec(utctime_jd),datevec(job.time.launched))/86400,'HH:MM:SS');
-    message = [jobstr,' was launched ',waitime,' (HH:MM:SS) ago.'];
-    %
+else%backward compatibility
+	flag = NaN;
+	waitime = '';
+	message = '';
 end
 %
 if displaymode,
