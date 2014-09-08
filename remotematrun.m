@@ -53,12 +53,22 @@ try
         error('remotematfnc not prescribed')
     end
     %
-    if debugmode,
-        filediary = [remotebatchdir,'matlab_diary.',timeid];
-        diary(filediary);
+    datain = load(filein);
+    %
+    datadir = [remotebatchdir,'datadir_',timeid,filesep];%output data directory
+    %
+    if ~exist(datadir,'dir'),
+        datadir = remotebatchdir;
     end
     %
+    initdir = pwd;
+    %
+    cd(datadir);
+    %
     if debugmode,
+        filediary = ['matlab_diary.',timeid];
+        diary(filediary);
+        %
         disp('-------- in remotematrun.m --------');
         disp(['pid:',proc_id]);
         disp(['remotebatchdir = ',remotebatchdir]);
@@ -68,15 +78,13 @@ try
         disp('------------------------------');
     end
     %
-    datain = load(filein);
-    %
     dataout = feval(remotematfnc,datain);
+    %
+    cd(initdir);
     %
     save(fileout,'-struct','dataout','-v7.3');
     %
-catch
-    %
-    lsterr = lasterror;
+catch lsterr
     %
     err = {'The action was cancelled due to the following error:','',lsterr.message};
     for il = 1:length(lsterr.stack),

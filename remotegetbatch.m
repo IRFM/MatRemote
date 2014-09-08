@@ -356,9 +356,33 @@ if ~isempty(job.load_id),
     %
     job.time.finished = get_datetime_yp(timestr);%considered to be the time at which the simulation stops
     %
-    [res,err] = matremoteget(remote,job);
+    [res(1),err{1}] = matremoteget(remote,job.load_id,job.remotedatapath,job.localdatapath);
+    if isfield(job,'datadir'),
+        [res(2),err{2}] = matremoteget(remote,job.datadir,job.remotedatapath,job.localdatapath);
+        %
+        if length(dir([job.localdatapath,job.datadir])) > 2,
+            if ~isfield(job,'localdatadir') || isempty(job.localdatadir),
+                job.localdatadir = job.localdatapath;
+            elseif ~strcmp(job.localdatadir(end),filesep),
+                job.localdatadir = [job.localdatadir,filesep];
+            end
+            %
+            if ~exist(job.localdatadir,'dir'),
+                mkdir(job.localdatadir);
+            end
+            %
+            datamvcmd = ['mv ',job.localdatapath,job.datadir,'* ',job.localdatadir];%transfer content of datadir to localdatadir
+            [res(3),err{3}] = unix(datamvcmd);
+        end
+    end
+    %    
+    if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
+        [res(4),err{4}] = matremoteget(remote,[job.batch_dir,'output_file'],job.remotedatapath,job.localdatapath);
+        [res(5),err{5}] = matremoteget(remote,[job.batch_dir,'error_file'],job.remotedatapath,job.localdatapath);
+    end
     %
-    if res ~= 0,
+    if any(res ~= 0),
+        err = err{find(res ~= 0,1,'first')};
         locdisp(displaymode,['File transfer failed : ',err]);
         soutput.err = err;
         %

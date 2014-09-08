@@ -45,6 +45,14 @@ else
     rempause = 1/6;
 end
 %
+if isfield(dkecluster,'localdatadir'),% in minutes
+    localdatadir = dkecluster.localdatadir;
+elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'localdatadir'),% inherit MDCE rempause
+    localdatadir = dkecluster.scheduler.localdatadir;
+else
+    localdatadir = [pwd,filesep];
+end
+%
 remote = dkecluster.remote;
 %
 mdce_job = matstandardjob_jd('runmdce');
@@ -61,6 +69,7 @@ mdce_job.debugmode = debugmode;
 mdce_job.clean = cleanmode;
 mdce_job.remtimout = remtimout;
 mdce_job.rempause = rempause;
+mdce_job.localdatadir = localdatadir;
 %
 mdce_input.fun = fun;
 mdce_input.args_in = args_in;

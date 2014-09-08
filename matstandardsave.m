@@ -10,6 +10,8 @@ mkdir([job.localdatapath,job.batch_dir]);% create batch directory
 %
 savefile = ['MAT_RUN_',job.timeid,'.mat'];%input data filename
 loadfile = ['MAT_OUT_',job.timeid,'.mat'];%output data filename
+datadir = ['datadir_',job.timeid,filesep];%output data directory
+mkdir([job.localdatapath,job.batch_dir,datadir])
 %
 % create specific scripts for condor and xgrid jobs
 %
@@ -59,6 +61,7 @@ end
 %
 job.save_id = job.batch_dir;% batch directory to be transfered if remote cluster
 job.load_id = [job.batch_dir,loadfile];
+job.datadir = [job.batch_dir,datadir];
 %
 end
 %

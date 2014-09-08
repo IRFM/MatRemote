@@ -65,6 +65,12 @@ try
         job.localdatapath = scheduler.temppath;
     end
     %
+    if isfield(scheduler,'localdatadir') && ~isempty(scheduler.localdatadir),
+        job.localdatadir = scheduler.localdatadir;% path to save data files
+    else
+        job.localdatadir = [pwd,filesep];% enforce otherwise data is saved in localdatapath = temppath
+    end
+    %
     if isfield(scheduler,'cleanmode'),
         job.clean = scheduler.cleanmode;
     else
