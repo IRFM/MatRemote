@@ -1,4 +1,4 @@
-function [res,txt] = download2client(remote,job)
+function [res,txt] = download2client(remote,target,locpath)
 %
 res = 0;
 txt = '';
@@ -6,13 +6,23 @@ txt = '';
 [remote] = bridge_params(remote);
 %
 if remote.link_mode == 2,
+    %
+    initdir = pwd;
+    cd(locpath);
+    %
     flag_curl_ftp = testcurl('ftp');
     %
     if flag_curl_ftp,%ftp over curl method
         %
-        filelist_local = dir(job.batch_dir(1:end-1));
+        parentdir = fileparts(target);
+        if isempty(parentdir),
+            parentdir = '.';
+        end
+        parentdir = [parentdir,filesep];
+        %   
+        filelist_local = dir(parentdir);
         %
-        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
         [res,txt] = unix(cmd);
         %
@@ -46,7 +56,7 @@ if remote.link_mode == 2,
                     %
                     if ~flag,
                         %
-                        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',job.batch_dir,filelist_remote_parsed{end}];
+                        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
                         %
                         [res,txt] = unix(cmd);
                         %
@@ -63,7 +73,7 @@ if remote.link_mode == 2,
         %
         try
             f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-            mget(f,job.load_id);%Transfer ouput data from the bridge batch dir to the local batch dir
+            mget(f,target);%Transfer ouput data from the bridge batch dir to the local batch dir
             close(f);
         catch err
             res = 1;
@@ -71,6 +81,9 @@ if remote.link_mode == 2,
         end
         %
     end
+    %
+    cd(initdir);
+    %
 elseif remote.link_mode == 1,
-    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',job.load_id,' ',job.localdatapath,job.load_id]); 
+    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath,target]); 
 end

@@ -1,118 +1,65 @@
-function [res,txt] = matremoteget(remote,job)
-%
-% download batch dir from the remote computer (through the bridge)
-%
-if ~isempty(remote.host),
+function [res,txt] = matremoteget(remote,target,rempath,locpath)
     %
-    if remote.link_mode == 2,
-        %
-        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-            %
-            [res,txt] = scp_over_php(remote,job,[job.batch_dir,'output_file']);
-            %
-            if res ~= 0,
-                return
-            end            
-            %
-            %
-            [res,txt] = scp_over_php(remote,job,[job.batch_dir,'error_file']);
-            %
-            if res ~= 0,
-                return
-            end
-        end
-        %
-        [res,txt] = scp_over_php(remote,job,job.load_id);
-        %
-        [res,txt] = download2client(remote,job);
-        %
-    elseif remote.link_mode == 1,
-        %
-        [remote] = bridge_params(remote);
-        %
-        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-            %
-            remotecmd = ['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'output_file ',remote.bridge.ssh.temppath,'/',job.batch_dir,'output_file'];
-            [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
-            %
-            if res ~= 0,
-                return
-            end            
-            %
-            remotecmd = ['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'error_file ',remote.bridge.ssh.temppath,'/',job.batch_dir,'error_file'];
-            [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
-            %
-            if res ~= 0,
-                return
-            end           
-        end
-        %
-        remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',job.remotedatapath,job.load_id,' ',remote.bridge.ssh.temppath,'/',job.load_id];%download from remote to bridge
-        [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
-        %
-        [res,txt] = download2client(remote,job);        
-        %
-    else
-        %
-        if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-            %
-            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
-            %
-            if res ~= 0,
-                return
-            end            
-            %
-            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote.host,':',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
-            %
-            if res ~= 0,
-                return
-            end
-        end
-        %
-        [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);
-        %
+    % This function transfers a file or folder 'target' 
+    % from the remote (or local) location 'rempath' 
+    % to a local location 'locpath' 
+    % using the 'remote' structure
+    %
+    if nargin < 4,
+        locpath = './';
     end
-elseif ~strcmp(job.localdatapath,job.remotedatapath),
+    if nargin < 3,
+        rempath = './';
+    end
+    if nargin < 2,
+        error('Not enough arguments')
+    end
     %
-    if job.xgridsearch,%data must be first transfered from xgrid temp folder to the job folder
+    if ~isempty(remote.host),
         %
-        if ~isfield(remote,'password') || isempty(remote.password),
-            remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
+        if remote.link_mode == 2,
+            %
+            [res,txt] = scp_over_php(remote,target,rempath);
+            %
+            if res ~= 0,
+                return
+            end
+            %
+            [res,txt] = download2client(remote,target,locpath);
+            %
+        elseif remote.link_mode == 1,
+            %
+            [remote] = bridge_params(remote);
+            %
+            remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',remote.bridge.ssh.temppath,'/',target];%download from remote to bridge
+            [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
+            %
+            if res ~= 0,
+                return
+            end
+            %
+            [res,txt] = download2client(remote,target,locpath);        
+            %
         else
-            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];
+            %
+            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,target]);
+            %
         end
         %
-        [res,txt] = unix(remotecmd);
-        %           
-        if res ~= 0,
-            return
-        end            
+    elseif ~strcmp(locpath,rempath),
         %
-        [res,txt] = unix(['cp -r ',job.remotedatapath,job.batch_dir,'output_file ',job.localdatapath,job.batch_dir,'output_file']);
+        [res,txt] = unix(['cp -r ',rempath,target,' ',locpath,target]);        
         %
-        if res ~= 0,
-            return
-        end            
+    else% nothing to do
         %
-        [res,txt] = unix(['cp -r ',job.remotedatapath,job.batch_dir,'error_file ',job.localdatapath,job.batch_dir,'error_file']);
-        %
-        if res ~= 0,
-            return
-        end
-        %
+        res = 0;
+        txt = '';
     end
-    %
-    [res,txt] = unix(['cp -r ',job.remotedatapath,job.load_id,' ',job.localdatapath,job.load_id]);        
-    %
-else
-    res = 0;
-    txt = '';
-end
 end
 %
-function [res,txt] = scp_over_php(remote,job,filename)
+function [res,txt] = scp_over_php(remote,target,rempath)
     %
-    [txt_url,res_url] = matremoteurl(remote,job,'',filename);
+    txt_url = matremoteurl(remote,struct('remotedatapath',rempath),'',target);% remotedatapath is only requested information for file transfer
     %
     ie = strfind(txt_url,'scp2php_error:');%the 'scp2php_error:' separates the scp output from the error in scp.php
     error_txt = txt_url(ie+15:end);
