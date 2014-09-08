@@ -115,7 +115,7 @@ if ~isempty(job),
                 ip = ip + 1;php_post{ip} = '';
             end
         elseif length(post_job{ii}) == 3,
-            if isfield(job.(post_job{ii}{2}),post_job{ii}{3}),
+            if isfield(job,post_job{ii}{2}) && isfield(job.(post_job{ii}{2}),post_job{ii}{3}),
                 ip = ip + 1;
                 if isnumeric(job.(post_job{ii}{2}).(post_job{ii}{3})) || islogical(job.(post_job{ii}{2}).(post_job{ii}{3})),
                     php_post{ip} = num2str(job.(post_job{ii}{2}).(post_job{ii}{3}));%content transfered by php post
