@@ -67,6 +67,7 @@ dkecluster.scheduler.info = '';
 %
 dkecluster.scheduler.remtimout = Inf;% calculation timeout (in mins) (use of remcomputing only)
 dkecluster.scheduler.rempause = 1/6;% calculation status check period (in mins) (use of remcomputing only)
+dkecluster.scheduler.localdatadir = '';% data saved locally
 %
 % Parameters for parallel computing specific to a function given in dkeparam or C3POparam for example
 %
@@ -113,12 +114,21 @@ if ~isempty(dkecluster.scheduler.remote),
         dkecluster.scheduler.rempause = dkecluster.scheduler.rempause(2:end);
     end
     %
+    if iscell(dkecluster.scheduler.localdatadir),
+        localdatadir = dkecluster.scheduler.localdatadir{1};
+        dkecluster.scheduler.localdatadir = dkecluster.scheduler.localdatadir(2:end);% if recursive use of mdce_remote.m 
+    else
+        localdatadir = dkecluster.scheduler.localdatadir;% non-recursive case
+        dkecluster.scheduler.localdatadir = '';
+    end
+    %
     disp(' ');
     if ~isempty(remote),
         %
         dkecluster.remote = remote;
         dkecluster.remtimout = remtimout;
         dkecluster.rempause = rempause;
+        dkecluster.localdatadir = localdatadir;
         %
         disp(['==> Distributed calculation transfered to : ',profilestr{1}])
         %
