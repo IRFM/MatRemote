@@ -150,6 +150,12 @@ if isnumeric(sinputs),% start new test
         test_job.env.TESTVAR = testvar;
         test_job.debugmode = debugmode;
         %
+        % uncomment the next two lines to try local calc. with different
+        % local and remote folders
+        %
+%         test_job.localdatapath = [pwd,filesep];
+%         test_job.remotedatapath = '/tmp/';
+        %
         try
             if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch
                 %
