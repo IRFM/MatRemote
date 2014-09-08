@@ -33,7 +33,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             $localcmd[7] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[9] = "date +%Y%m%d%H%M%S";
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
+            $localcmd[10] = "date +%Y%m%d%H%M%S";
 
     	} elseif (strcmp($xgridsearch,"1") == 0) {
 
@@ -47,7 +48,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
                 $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
                 $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-                $localcmd[12] = "date +%Y%m%d%H%M%S";
+                $localcmd[12] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
+                $localcmd[13] = "date +%Y%m%d%H%M%S";
 
         	} else {
 
