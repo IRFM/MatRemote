@@ -13,6 +13,20 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
     end
     if nargin < 2,
         error('Not enough arguments')
+    elseif isempty(target) || ~ischar(target),
+        error('target must be a non-empty string')
+    else
+%         if exist([locpath,target],'dir'),% target directory already exist
+%             if strcmp(target(end),filesep),
+%                 target = [target,'*'];
+%             else
+%                 target = [target,filesep,'*'];
+%             end
+%         else% target directory does not exist
+            if strcmp(target(end),filesep),
+                target = target(1:end-1);
+            end
+%         end
     end
     %
     if ~isempty(remote.host),
@@ -38,17 +52,17 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
                 return
             end
             %
-            [res,txt] = download2client(remote,target,locpath);        
+            [res,txt] = download2client(remote,target,locpath,fileparts(target));        
             %
         else
             %
-            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,target]);
+            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,fileparts(target)]);
             %
         end
         %
     elseif ~strcmp(locpath,rempath),
         %
-        [res,txt] = unix(['cp -r ',rempath,target,' ',locpath,target]);        
+        [res,txt] = unix(['cp -r ',rempath,target,' ',locpath]);        
         %
     else% nothing to do
         %
