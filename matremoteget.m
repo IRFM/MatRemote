@@ -15,19 +15,11 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
         error('Not enough arguments')
     elseif isempty(target) || ~ischar(target),
         error('target must be a non-empty string')
-    else
-%         if exist([locpath,target],'dir'),% target directory already exist
-%             if strcmp(target(end),filesep),
-%                 target = [target,'*'];
-%             else
-%                 target = [target,filesep,'*'];
-%             end
-%         else% target directory does not exist
-            if strcmp(target(end),filesep),
-                target = target(1:end-1);
-            end
-%         end
+    elseif strcmp(target(end),filesep),% target is a directory : ensure it is not copied into itself!
+        target = target(1:end-1);
     end
+    %    
+    targetpath = fileparts(target);
     %
     if ~isempty(remote.host),
         %
@@ -39,30 +31,30 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
                 return
             end
             %
-            [res,txt] = download2client(remote,target,locpath);
+            [res,txt] = download2client(remote,target,[locpath,targetpath]);
             %
         elseif remote.link_mode == 1,
             %
             [remote] = bridge_params(remote);
             %
-            remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',remote.bridge.ssh.temppath,'/',target];%download from remote to bridge
+            remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',remote.bridge.ssh.temppath,'/',targetpath];%download from remote to bridge
             [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
             %
             if res ~= 0,
                 return
             end
             %
-            [res,txt] = download2client(remote,target,locpath,fileparts(target));        
+            [res,txt] = download2client(remote,target,[locpath,targetpath]);        
             %
         else
             %
-            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,fileparts(target)]);
+            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,targetpath]);
             %
         end
         %
     elseif ~strcmp(locpath,rempath),
         %
-        [res,txt] = unix(['cp -r ',rempath,target,' ',locpath]);        
+        [res,txt] = unix(['cp -r ',rempath,target,' ',locpath,targetpath]);        
         %
     else% nothing to do
         %

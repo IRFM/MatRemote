@@ -85,5 +85,5 @@ if remote.link_mode == 2,
     cd(initdir);
     %
 elseif remote.link_mode == 1,
-    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath,target]); 
+    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
 end
