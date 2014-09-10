@@ -44,6 +44,7 @@ remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 % direct
 %
 remote.direct.kamleitn = remote.direct.decker;
+remote.direct.kamleitn.remotedatapath = '/tmp';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 %
 % -------------------------------------------------

@@ -49,11 +49,13 @@ remote.slurm.decker.bridge.ssh.host = 'lac911.epfl.ch';
 % direct
 %
 remote.direct.kamleitn = remote.direct.decker;
+remote.direct.kamleitn.remotedatapath = '/scratch/kamleitn';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 %
 % slurm
 %
 remote.slurm.kamleitn = remote.slurm.decker;
+remote.slurm.kamleitn.remotedatapath = '/scratch/kamleitn';
 remote.slurm.kamleitn.remoteuser = 'kamleitn';
 %
 %
