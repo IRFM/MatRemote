@@ -21,8 +21,10 @@ default.profile = 'decker';% default user profile if 'remoteuser' is not an exis
 remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'lac5.epfl.ch';
 remote.direct.decker.hostname = 'crpppc401.epfl.ch';
-remote.direct.decker.nproc = 24;
+remote.direct.decker.nproc = 18;%total 24 cpus, 2 nodes, 6 cores/node, 2 threads/core
+remote.direct.decker.memtot = 72000;%total 96000 (4 gb/cpu)
 remote.direct.decker.cmd = {'bash','',' &'};% direct calculation (csh, bash)
+remote.direct.decker.remotedatapath = '/tmp/decker/';
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.matver.mat710 = '/usr/local/matlab710/bin/matlab';
@@ -44,7 +46,7 @@ remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 % direct
 %
 remote.direct.kamleitn = remote.direct.decker;
-remote.direct.kamleitn.remotedatapath = '/tmp';
+remote.direct.kamleitn.remotedatapath = '/tmp/kamleitn/';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 %
 % -------------------------------------------------

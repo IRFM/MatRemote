@@ -23,6 +23,7 @@ remote.direct.decker.host = 'ppb110.epfl.ch';
 remote.direct.decker.hostname = 'ws0.epfl.ch';
 remote.direct.decker.nproc = 4;
 remote.direct.decker.cmd ={'bash','',' &'};% direct calculation (csh, bash)
+remote.direct.decker.remotedatapath = '/scratch/decker/';
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.matver.mat801 = '/usr/local/matlab-8.1/bin/matlab';
@@ -37,6 +38,7 @@ remote.slurm.decker.host = 'ppb110.epfl.ch';
 remote.slurm.decker.hostname = 'ws0.epfl.ch';
 remote.slurm.decker.nproc = 36;
 remote.slurm.decker.cmd = 'sbatch';% direct calculation (csh, bash)
+remote.slurm.decker.remotedatapath = '/scratch/decker/';
 remote.slurm.decker.get_jobid = {'Submitted batch job ',''};%str_before,str_after
 remote.slurm.decker.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
 remote.slurm.decker.matver.mat801 = '/usr/local/matlab-8.1/bin/matlab';
@@ -49,13 +51,13 @@ remote.slurm.decker.bridge.ssh.host = 'lac911.epfl.ch';
 % direct
 %
 remote.direct.kamleitn = remote.direct.decker;
-remote.direct.kamleitn.remotedatapath = '/scratch/kamleitn';
+remote.direct.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 %
 % slurm
 %
 remote.slurm.kamleitn = remote.slurm.decker;
-remote.slurm.kamleitn.remotedatapath = '/scratch/kamleitn';
+remote.slurm.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.slurm.kamleitn.remoteuser = 'kamleitn';
 %
 %

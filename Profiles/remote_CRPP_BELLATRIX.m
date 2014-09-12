@@ -23,6 +23,7 @@ remote.direct.kamleitn.host = 'bellatrix.epfl.ch';
 remote.direct.kamleitn.hostname = 'bellatrix.cluster';
 remote.direct.kamleitn.nproc = 8;
 remote.direct.kamleitn.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.direct.kamleitn.get_jobid = {};%str_before,str_after
 remote.direct.kamleitn.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.kamleitn.matver.mat800 = '/opt/software/MATLAB/R2012b/bin/matlab';
