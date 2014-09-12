@@ -122,7 +122,7 @@ if ~isempty(dkecluster.scheduler.remote),
         dkecluster.scheduler.localdatadir = '';
     end
     %
-    if isempty(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3,% local remcomputing after next and last mdce_remote
+    if isempty(dkecluster.scheduler.remote) && dkecluster.scheduler.mode == 3,% local remcomputing after next and last mdce_remote
         dkecluster.scheduler.mode = remote;%to ensure proper environment
         dkecluster.scheduler.mode.host = '';
     end
