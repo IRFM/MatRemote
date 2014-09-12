@@ -47,6 +47,8 @@ try
         %
         remotebatchdir = [pwd,filesep];
         %
+        addpath(remotebatchdir);
+        %
         [~,localdir] = fileparts(pwd);
         %
         if length(localdir) <= 7 || ~strcmp(localdir(1:6),'batch_'),
