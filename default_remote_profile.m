@@ -4,6 +4,7 @@ remote.host = [];% adress of host. Ex : cephee15.intra.cea.fr
 remote.hostname = [];% local name of host (from hostname -f command)
 remote.sshopts = '';% ssh options
 remote.nproc = [];% maximum number of processors. Ex : 48    
+remote.memtot = [];% total available memory, in mb. Ex : 16000    
 remote.cmd = [];% job submit command. Ex : qsub
 remote.get_jobid = [];% syntax to read job number {str_before,str_after}. Ex : {'','.cephee'}
 remote.set_jobid = [];% syntax to test job status {command,str_after,completed job tag}. Ex : {'qstat ','.cephee','Unknown Job Id'}

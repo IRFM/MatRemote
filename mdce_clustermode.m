@@ -122,6 +122,11 @@ if ~isempty(dkecluster.scheduler.remote),
         dkecluster.scheduler.localdatadir = '';
     end
     %
+    if isempty(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3,% local remcomputing after next and last mdce_remote
+        dkecluster.scheduler.mode = remote;%to ensure proper environment
+        dkecluster.scheduler.mode.host = '';
+    end
+    %
     disp(' ');
     if ~isempty(remote),
         %
@@ -199,6 +204,14 @@ else% remote computing mode
         %    
         if dkecluster.scheduler.clustersize > dkecluster.scheduler.remote.nproc,
             dkecluster.scheduler.clustersize = dkecluster.scheduler.remote.nproc;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
+        end
+        %    
+        if ~isempty(dkecluster.scheduler.remote.memtot) && dkecluster.scheduler.clustersize*dkecluster.scheduler.memory > dkecluster.scheduler.remote.memtot,
+            dkecluster.scheduler.clustersize = fix(dkecluster.scheduler.remote.memtot/dkecluster.scheduler.memory);%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
+            if dkecluster.scheduler.clustersize == 0,%not enough memory on remote host
+                disp('WARNING: not enough memory on remote host. Sequential mode enforced');
+                dkecluster.scheduler.mode = 0;
+            end
         end
         %
         if ~isfield(dkecluster.scheduler.remote,'localdatapath') || isempty(dkecluster.scheduler.remote.localdatapath),
