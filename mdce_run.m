@@ -93,7 +93,7 @@ function [flag,varargout] = mdce_run(fun,args_in,arg_index,arg_range,dkecluster)
         %
         flag = zeros(size(flag_remote));
         %
-        if any(mask_loc) && (~isfield(dkecluster,'scheduler') || ~isfield(dkecluster.scheduler,'enforce') || dkecluster.scheduler.enforce == 1),%back to local computing 
+        if any(mask_loc) && (~isfield(dkecluster,'scheduler') || ~isfield(dkecluster.scheduler,'enforce') || real(dkecluster.scheduler.enforce) == 1),%back to local computing 
             %
             disp(['WARNING: Remote distributed computing failed for ',num2str(sum(mask_loc)),'/',num2str(length(mask_loc)),' cases. Switching to local computing for these cases.']);
             %
@@ -225,8 +225,33 @@ function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_ran
     %
     varargout = cell(1,nargout-1);
     %
-    [flag,varargout{:}] = method(fun,args_in,arg_index,arg_range,scheduler);
+    if ~isfield(scheduler,'enforce'),
+         scheduler.enforce = 1;% one attempt then sequential
+    end
     %
+    nattempts = 1 + imag(scheduler.enforce);
+    %
+    flag = -Inf*ones(1,length(arg_range));
+    mask_calc = true(1,length(arg_range));
+    varargout_calc = cell(1,nargout-1);
+    %
+    for iattempts = 1:nattempts,
+        %
+        [flag(mask_calc),varargout_calc{:}] = method(fun,args_in,arg_index,arg_range(mask_calc),scheduler);
+        %
+        flag(mask_calc) = real(flag(mask_calc)) + (iattempts - 1)*1i;
+        %
+        for j_nargout = 1:nargout-1,
+            varargout{j_nargout}(mask_calc) = varargout_calc{j_nargout};
+        end	
+        %
+        mask_calc = (flag < 0);%flagged for new attempt
+        %
+        if ~any(mask_calc),
+            break
+        end
+    end
+    %    
     if scheduler.mode < 3 || scheduler.remtimout > 0,%jobs completed
         try
             rmdir(scheduler.temppath,'s');
@@ -235,11 +260,9 @@ function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_ran
         end
     end
     %
-    mask_seq = (flag < 0);%flagged for sequential computing
-    %
-    if any(mask_seq) && (~isfield(scheduler,'enforce') || scheduler.enforce == 1),%back to sequential computing (for robustness of the function in case of problems on the cluster)
+    if any(mask_calc) && real(scheduler.enforce) == 1,%back to sequential computing (for robustness of the function in case of problems on the cluster)
         %
-        disp(['WARNING: Distributed computing failed for ',num2str(sum(mask_seq)),'/',num2str(length(mask_seq)),' cases. Switching to sequential computing for these cases.']);
+        disp(['WARNING: Distributed computing failed for ',num2str(sum(mask_calc)),'/',num2str(length(mask_calc)),' cases. Switching to sequential computing for these cases.']);
         %
         varargout_seq = cell(1,nargout-1);
         %
@@ -248,14 +271,14 @@ function [flag,varargout] = process_loop_jd(method,fun,args_in,arg_index,arg_ran
             scheduler.gpu = 0;%no GPU when distributed computing failed
         end
         %
-        [flag(mask_seq),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_seq),scheduler);
+        [flag(mask_calc),varargout_seq{:}] = seqcomputing(fun,args_in,arg_index,arg_range(mask_calc),scheduler);
         %
         if isfield(scheduler,'gpu'),
             scheduler.gpu = gpu_status;%back to the initial GPU status
         end
         %
         for j_nargout = 1:nargout-1,
-            varargout{j_nargout}(mask_seq) = varargout_seq{j_nargout};
+            varargout{j_nargout}(mask_calc) = varargout_seq{j_nargout};
         end	
         %
     end
