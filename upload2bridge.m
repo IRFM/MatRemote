@@ -19,6 +19,11 @@ if remote.link_mode == 2,
             end
         end
     end
+    %
+    if res~= 0, 
+       disp(['WARNING: ',txt,' -> transfer is down by Matlab FTP'])
+    end
+    %
     if ~flag_curl_ftp || res~= 0,%ftp embedded in matlab (not necessarily operational)
         %
         res = 0;
