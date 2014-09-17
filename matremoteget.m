@@ -31,7 +31,7 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
                 return
             end
             %
-            [res,txt] = download2client(remote,target,[locpath,targetpath]);
+            [res,txt] = download2client(remote,target,locpath);
             %
         elseif remote.link_mode == 1,
             %
