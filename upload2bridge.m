@@ -14,7 +14,12 @@ if remote.link_mode == 2,
         filelist = dir(job.batch_dir(1:end-1));
         for ii = 1:length(filelist),
             if ~strcmp(filelist(ii).name,'.') && ~strcmp(filelist(ii).name,'..')
-                cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,' --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist(ii).name];
+                if ~isdir([job.batch_dir,filelist(ii).name])
+                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,' --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist(ii).name];%for transfering files
+                else
+                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,'/. --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,'/. -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist(ii).name,'/'];%for creating an empty directory
+                end
+                %
                 [res,txt] = unix(cmd);
             end
         end
