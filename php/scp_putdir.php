@@ -62,7 +62,7 @@ function ssh2_transfer_dir($connection,$post,$safemode,$ftp_rootdir, $remotedata
       //echo $error0;
      
       
-      //$safemode = 0;
+      //$safemode = 0;//safety disabled
 
       if ($safemode >= 1) {
 
@@ -101,7 +101,7 @@ function ssh2_transfer_dir($connection,$post,$safemode,$ftp_rootdir, $remotedata
          //echo $files[$i]." - ".$ext."\n";
 
 
-         if ((strcmp($files[$i],"datadir_".$timeid) == 0) OR (strcmp($files[$i],"MAT_RUN_".$timeid.".mat") == 0) OR (similar_text($ext, "m") == 1) OR (strcmp($files[$i],$script) == 0)) {
+         if ((strcmp($files[$i],"matlabbatch.sh") == 0) OR (strcmp($files[$i],"datadir_".$timeid) == 0) OR (strcmp($files[$i],"MAT_RUN_".$timeid.".mat") == 0) OR (similar_text($ext, "m") == 1) OR (strcmp($files[$i],$script) == 0)) {
             //echo "non unlink : ".$files[$i]." - ".$ext."\n";
             if (($safemode >= 2) AND (strcmp($files[$i],$script) == 0)){
                   //echo "unlink : ".$files[$i]." - ".$ext."\n";
