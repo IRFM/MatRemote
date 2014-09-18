@@ -44,14 +44,8 @@ if remote.link_mode == 2,
         %
         try
             f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
-            listfiles = dir(f,job.batch_dir(1:end-1));%list all files in batch dir of the bridge
-            for ilf = 1:length(listfiles),
-                delete(f,[job.batch_dir,listfiles(ilf).name]);%delete all files in batch dir of the bridge
-            end
             %
-            if isempty(listfiles),
-                rmdir(f,job.batch_dir(1:end-1));%delete batch dir of the bridge
-            end
+            ftp_rmdir(f,job.batch_dir(1:end-1))
             %
             close(f);
             %
@@ -67,4 +61,20 @@ elseif remote.link_mode == 1,
     remotecmd = ['rm -fr ',remote.bridge.ssh.temppath,'/',job.save_id];
     [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
     %
+end
+end
+
+function ftp_rmdir(f,rmpath)
+    %
+    listfiles = dir(f,rmpath);%list all files in batch dir of the bridge
+    %
+    for ilf = 1:length(listfiles),
+        if listfiles(ilf).isdir,
+            ftp_rmdir(f,[rmpath,'/',listfiles(ilf).name]);
+        else
+            delete(f,[rmpath,'/',listfiles(ilf).name]);%delete all files in batch dir of the bridge
+        end
+    end
+    %
+    rmdir(f,rmpath);%delete batch dir of the bridge
 end
