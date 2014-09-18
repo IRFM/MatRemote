@@ -25,6 +25,7 @@ remote.pbs.JD211098.hostname = 'andromede1';
 remote.pbs.JD211098.shell = 'csh';
 remote.pbs.JD211098.nproc = 12;
 remote.pbs.JD211098.cmd = 'qsub';
+remote.pbs.JD211098.remotedatapath = '/home/JD211098/tmp/';
 remote.pbs.JD211098.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.JD211098.set_jobid = {'qstat ','.andromede1','finished'};%str_before,str_after,str_check
 remote.pbs.JD211098.shclean = 1;
@@ -52,6 +53,7 @@ remote.direct.JD211098.nproc = 12;
 %
 % remote.direct.JD211098.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
 remote.direct.JD211098.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.JD211098.remotedatapath = '/home/JD211098/tmp/';
 remote.direct.JD211098.get_jobid = {};%str_before,str_after
 remote.direct.JD211098.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.JD211098.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
