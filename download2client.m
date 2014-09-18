@@ -21,6 +21,7 @@ if remote.link_mode == 2,
         parentdir = [parentdir,filesep];
         %   
         filelist_local = dir(parentdir);
+        filelist_local = filelist_local(arrayfun(@(x) x.name(1), filelist_local) ~= '.');
         %
         cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
@@ -40,31 +41,62 @@ if remote.link_mode == 2,
                     for jj = 1:length(filelist_local),
                         %
                         if strcmp(filelist_remote_parsed{end},filelist_local(jj).name),
-                            if jj > 1 && jj < length(filelist_local),
-                                filelist_local = [filelist_local(1:jj-1);filelist_local(jj+1:end)];
-                            elseif jj == 1,
-                                filelist_local = filelist_local(2:end);
-                            elseif jj == length(filelist_local),
-                                filelist_local = filelist_local(1:end-1);
+                            if  ~isdir([parentdir,filelist_local(jj).name]),
+                                if jj > 1 && jj < length(filelist_local),
+                                    filelist_local = [filelist_local(1:jj-1);filelist_local(jj+1:end)];
+                                elseif jj == 1,
+                                    filelist_local = filelist_local(2:end);
+                                elseif jj == length(filelist_local),
+                                    filelist_local = filelist_local(1:end-1);
+                                end
+                                %  
+                                flag = 1;
+                                %
+                                break;
+                            else
+                                %
+                                flag = 2;
+                                %
+                                break;
                             end
-                            %  
-                            flag = 1;
-                            %
-                            break;
                         end
                     end
                     %
-                    if ~flag,
+                    if flag == 0,
                         %
                         cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
                         %
                         [res,txt] = unix(cmd);
                         %
+                    elseif flag == 2,%transfer of all files in datadir
+                        %
+                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_local(jj).name,'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+                        %
+                        [res_datadir,txt_datadir] = unix(cmd_datadir);          
+                        %
+                        if ~res_datadir,
+                            if ~isempty(txt_datadir),
+                                filelist_datadir_remote = regexp(txt_datadir, '[\f\n\r]', 'split');
+                                %
+                                for ii = 1:length(filelist_datadir_remote),
+                                    %
+                                    filelist_datadir_remote_parsed = regexp(filelist_datadir_remote{ii},' ', 'split');
+                                    %
+                                    cmd_datadir_file = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end}];
+                                    %
+                                    [res_datadir_file,txt_datadir_file] = unix(cmd_datadir_file);
+                                end
+                            end
+                        end
                     end
                 end
             end
         end
     end
+    %
+	if res~= 0, 
+        disp(['WARNING: ',txt,' -> download2client is done by Matlab FTP, and not FTP over curl'])
+	end
     %
     if ~flag_curl_ftp || res ~= 0,%ftp embedded in matlab
         %
