@@ -21,7 +21,7 @@ default.profile = 'JD211098';% default user profile if 'remoteuser' is not an ex
 %
 remote.pbs.JD211098 = default_remote_profile;
 remote.pbs.JD211098.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.JD211098.hostname = 'andromede1';
+remote.pbs.JD211098.hostname = 'andromede';
 remote.pbs.JD211098.shell = 'csh';
 remote.pbs.JD211098.nproc = 12;
 remote.pbs.JD211098.cmd = 'qsub';
@@ -43,7 +43,7 @@ remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 remote.direct.JD211098 = default_remote_profile;
 remote.direct.JD211098.host = 'andromede1.partenaires.cea.fr';
-remote.direct.JD211098.hostname = 'andromede1';
+remote.direct.JD211098.hostname = 'andromede';
 remote.direct.JD211098.shell = 'csh';
 remote.direct.JD211098.nproc = 12;
 %
@@ -68,7 +68,7 @@ remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 remote.pbs.YP105119 = default_remote_profile;
 remote.pbs.YP105119.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.YP105119.hostname = 'andromede1';
+remote.pbs.YP105119.hostname = 'andromede';
 remote.pbs.YP105119.shell = 'csh';
 remote.pbs.YP105119.nproc = 12;
 remote.pbs.YP105119.cmd = 'qsub';
@@ -90,7 +90,7 @@ remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
 remote.direct.YP105119 = default_remote_profile;
 remote.direct.YP105119.host = 'andromede1.partenaires.cea.fr';
-remote.direct.YP105119.hostname = 'andromede1';
+remote.direct.YP105119.hostname = 'andromede';
 remote.direct.YP105119.shell = 'csh';
 remote.direct.YP105119.nproc = 12;
 % remote.direct.YP105119.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
