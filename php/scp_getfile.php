@@ -27,7 +27,7 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    //echo "$remotedatapath = ".$remotedatapath.$filename."\n";
   
 
-   if (strpos($filename,"/")) {
+   if (strpos($filename,"datadir")) {
 
 
 		$localDir  = $ftp_rootdir.$filename."/";
@@ -65,7 +65,7 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    if ($error > 0) {
       echo "scp2php_error:".$error."\n";
    } else {
-      echo "scp2php_error:".$error."\n";
+      echo "scp2php_error:\n";
   }
     
 } else {
