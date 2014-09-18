@@ -26,7 +26,7 @@ if remote.link_mode == 2,
     end
     %
     if res~= 0, 
-       disp(['WARNING: ',txt,' -> transfer is done by Matlab FTP'])
+       disp(['WARNING: ',txt,' -> upload2bridge is done by Matlab FTP, and not FTP over curl'])
     end
     %
     if ~flag_curl_ftp || res~= 0,%ftp embedded in matlab (not necessarily operational)
