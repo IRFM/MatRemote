@@ -152,6 +152,28 @@ elseif ~strcmp(job.remotedatapath(end),filesep),
     job.remotedatapath = [job.remotedatapath,filesep];
 end
 %
+% full remotedatapath requested with link_mode = 2 
+%
+if ~isempty(remote.host) && remote.link_mode == 2 && ~strcmp(job.remotedatapath(1),filesep),
+    %
+    remotecmd = 'pwd';% test if remote directory exists
+    %
+    [res,txt] = matremotecmd(remote,job,remotecmd);
+    %
+    if res ~= 0,% cannot retrieve remote pwd
+        %
+        locdisp(displaymode,['Cannot retrieve remote pwd : ',txt]);
+        job.err = txt;
+        %
+        return
+        %
+    else
+        remotepwd = txt;
+        %
+        job.remotedatapath = [remotepwd,filesep,job.remotedatapath];
+    end
+end
+%
 % test remote connection - select ssh mode over bridge mode if possible
 %
 remote = testremoteprofile_jd(remote,NaN,true,displaymode);% test connection to remote host
