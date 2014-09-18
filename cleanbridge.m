@@ -23,10 +23,39 @@ if remote.link_mode == 2,
                 filelist_remote_parsed = regexp(filelist_remote{ii},' ', 'split');
                 %
                 if ~isempty(filelist_remote_parsed{end}),
-                    %           
-                    cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE ',job.batch_dir,filelist_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
-                    %
-                    [res,txt] = unix(cmd);
+                    %    
+                    if strfind(filelist_remote_parsed{end},'datadir'),
+                        %
+                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist_remote_parsed{end},'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+                        %
+                        [res_datadir,txt_datadir] = unix(cmd_datadir);
+                        %
+                        if ~res_datadir,
+                            %
+                            filelist_datadir_remote = regexp(txt_datadir, '[\f\n\r]', 'split');
+                            %
+                            for ii_datadir = 1:length(filelist_datadir_remote),
+                                %
+                                filelist_datadir_remote_parsed = regexp(filelist_datadir_remote{ii_datadir},' ', 'split');
+                                %
+                                if ~isempty(filelist_datadir_remote_parsed{end}),
+                                    %
+                                    cmd_datadir_file = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE ',job.batch_dir,filelist_remote_parsed{end},'/',filelist_datadir_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
+                                    %
+                                    [res_datadir_file,txt_datadir_file] = unix(cmd_datadir_file);                        
+                                end
+                            end
+                            %
+                            cmd_datadir_dir = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD ',job.batch_dir,filelist_remote_parsed{end},'/" ftp://',remote.bridge.ftp.host];
+                            %
+                            [res_datadir_dir,txt_datadir_dir] = unix(cmd_datadir_dir);
+                            %
+                        end
+                    else
+                        cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE ',job.batch_dir,filelist_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
+                        %
+                        [res,txt] = unix(cmd);
+                    end
                     %
                 end
             end
@@ -36,6 +65,10 @@ if remote.link_mode == 2,
             %
         end
     end
+    %
+    if res~= 0, 
+       disp(['WARNING: ',txt,' -> cleanbridge is done by Matlab FTP, and not FTP over curl'])
+    end    
     %
     if ~flag_curl_ftp || res ~= 0,%ftp embedded in matlab
         %
