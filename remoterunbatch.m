@@ -154,7 +154,7 @@ end
 %
 % full remotedatapath requested with link_mode = 2 
 %
-if ~isempty(remote.host) && remote.link_mode == 2 && ~strcmp(job.remotedatapath(1),filesep),
+if ~isempty(remote.host) & remote.link_mode == 2 & ~strcmp(job.remotedatapath(1),filesep),
     %
     remotecmd = 'pwd';% test if remote directory exists
     %
