@@ -38,7 +38,7 @@ remote.sge.yvesp.get_jobid = {'Your job ',' '};%str_before,str_after
 remote.sge.yvesp.set_jobid = {'qstat -j ','','jobs do not exist'};%str_before,str_after,str_check
 remote.sge.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab';
 remote.sge.yvesp.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
-remote.sge.yvesp.matver.matdef = remote.sge.yvesp.matver.mat800;%default matlab on remote machine
+remote.sge.yvesp.matver.matdef = remote.sge.yvesp.matver.mat802;%default matlab on remote machine
 remote.sge.yvesp.remoteuser = 'yvesp';
 remote.sge.yvesp.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.sge.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr';
@@ -56,7 +56,7 @@ remote.direct.yvesp.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_
 remote.direct.yvesp.remotedatapath = '/pfs/home/yvesp/';
 remote.direct.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab';
 remote.direct.yvesp.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
-remote.direct.yvesp.matver.matdef = remote.direct.yvesp.matver.mat800;%default matlab on remote machine
+remote.direct.yvesp.matver.matdef = remote.direct.yvesp.matver.mat802;%default matlab on remote machine
 remote.direct.yvesp.remoteuser = 'yvesp';
 remote.direct.yvesp.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr';
