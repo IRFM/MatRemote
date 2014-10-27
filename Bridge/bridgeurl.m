@@ -19,4 +19,6 @@ url_message = 'Successful ssh identification !';
 %
 if ~isempty(strfind(txt_url,url_message)),
     txt_url = strtrim(txt_url(length(url_message)+1:end));
+else
+    disp(['WARNING: -> the php command ''',phpcmd,''' failed in bridgurl.']);
 end
