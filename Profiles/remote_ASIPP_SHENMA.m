@@ -55,11 +55,6 @@ remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
 %
-% JOAN DECKER (SHENMA)
-%
-remote.torque.joan = remote.torque.PEYSSON;
-remote.direct.joan = remote.direct.PEYSSON;
-%
 % BOJIANG DING (SHENMA)
 %
 remote.torque.bjding= remote.torque.PEYSSON;
