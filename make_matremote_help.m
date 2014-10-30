@@ -30,7 +30,8 @@ helptools = '';
 texfilelist = '';
 %
 ref_folder = what('MatRemote');
-redminepath = 'http://tolbachik.hd.free.fr:8080/redmine/';
+redminepath = getenv('redmine_path');
+if isempty(redminepath),disp('WARNING: the path of redmine has not been found. Set the environment variable ''redmine_path''');end
 %
 make_help(verbose,ref_folder.path,redminepath,texfilelist,excludedfoldernames,helptools);
 %
