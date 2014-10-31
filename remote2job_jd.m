@@ -47,14 +47,6 @@ if isfield(remote,'env') && ~isempty(remote.env),
     job.env = conc_struct_jd(job.env,remote.env);
 end
 %
-% XGRID only
-%
-if isfield(remote,'hostname') && ~isempty(remote.hostname),
-    job.hostname = remote.hostname;
-elseif ~isfield(job,'hostname'),
-    job.hostname = '';
-end
-%
 % PBS and TORQUE only
 %
 if isfield(remote,'wait') && ~isempty(remote.wait),

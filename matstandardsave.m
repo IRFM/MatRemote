@@ -13,19 +13,13 @@ loadfile = ['MAT_OUT_',job.timeid,'.mat'];%output data filename
 datadir = ['datadir_',job.timeid,filesep];%output data directory
 mkdir([job.localdatapath,job.batch_dir,datadir])
 %
-% create specific scripts for condor and xgrid jobs
+% create specific scripts for condor jobs
 %
 if job.condorsearch,
     %
     % save condor batch file into job directory 
     %
     job.condor_script = condor_batchscript_yp(job);
-    %
-elseif job.xgridsearch,
-    %
-    % save xgrid batch file into job directory 
-    %
-    job.xgrid_script = xgrid_batch2xml_yp(job);
     %
 elseif job.sgesearch,
     %

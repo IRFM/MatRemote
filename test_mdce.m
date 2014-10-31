@@ -60,7 +60,7 @@ function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertyp
 %           (default = 1)
 %       - mdce_enforce: (1) enforce sequential run if distributed computing failed, (0) otherwise [1,1]
 %           (default = 1)
-%       - schedulertype: type of scheduler, '' or 'local' for any machine or cluster,'pbspro' for CEPHEE or SATURNE cluster,'xgrid' on mac computers,... [1,1]
+%       - schedulertype: type of scheduler, '' or 'local' for any machine or cluster,'pbspro' for CEPHEE or SATURNE cluster,'condor' on mac computers,... [1,1]
 %           (default = 'local')
 %       - mdce_size: cluster size. Use the maximum of processor available for calculations (not valid for GPU) [1,1]
 %           (default = 8)
@@ -95,7 +95,7 @@ if nargin < 4,
 end
 %
 if nargin < 5,
-    schedulertype = 'local';%'' or 'local','pbspro','xgrid','condor',...
+    schedulertype = 'local';%'' or 'local','pbspro','condor',...
 end
 %
 if nargin < 6,

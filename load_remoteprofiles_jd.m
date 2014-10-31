@@ -36,8 +36,8 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %       - profilestr : (cell or char array) corresponding user-friendly title
     %
     %   - Ex : 
-    %       - to load profile from remote_macpro_YVES_PEYSSON.m with scheduler 'xgrid', profile 'yves' and with connection test :
-    %           >> remote = load_remoteprofiles_jd('macpro_YVES_PEYSSON','xgrid','yves',true);
+    %       - to load profile from remote_macpro_YVES_PEYSSON.m with scheduler 'condor', profile 'yves' and with connection test :
+    %           >> remote = load_remoteprofiles_jd('macpro_YVES_PEYSSON','condor','yves',true);
     %
     %       - to find all profiles and schedulers with valid connection test, duplicate local profile, and choose among them, for profile 'joan' :
     %           >> remote = load_remoteprofiles_jd('','','joan',true,true,true);

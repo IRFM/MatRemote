@@ -36,15 +36,7 @@ if remote.link_mode == 2,
         txt2 = strtrim(txt_url(1:ie-1));
     else
         %
-        if strfind(remotecmd,'xgrid')
-            if strfind(error_txt,'ulimit:'),%wrong error
-                res2 = 0;%force standard unix error.
-            else
-                res2 = 1;%force standard unix error.
-            end          
-        else
-            res2 = 1;%force standard unix error.
-        end
+        res2 = 1;%force standard unix error.
         %
         txt2 = error_txt;     
     end

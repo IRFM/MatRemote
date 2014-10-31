@@ -99,15 +99,12 @@ job.pbssearch = 0;
 job.sgesearch = 0;
 job.slurmsearch = 0;
 job.condorsearch = 0;
-job.xgridsearch = 0;
 job.directsearch = 0;
 %
 if strcmp(remote.scheduler ,'torque') || strcmp(remote.scheduler ,'pbs') || strcmp(remote.scheduler ,'sun')
     job.pbssearch = 1;
 elseif strcmp(remote.scheduler ,'slurm'),
     job.slurmsearch = 1;
-elseif strcmp(remote.scheduler ,'xgrid'),
-    job.xgridsearch = 1;
 elseif strcmp(remote.scheduler ,'condor'),
     job.condorsearch = 1;
 elseif strcmp(remote.scheduler ,'sge'),
@@ -238,7 +235,7 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.xgridsearch || job.condorsearch || job.directsearch,
+if job.condorsearch || job.directsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end  
 %
@@ -261,11 +258,11 @@ if ~isempty(job.save_id),
         return
         %
     else
-        if job.xgridsearch || job.condorsearch || job.directsearch,
+        if job.condorsearch || job.directsearch,
             [res_chmod,txt_chmod] = matremotecmd(remote,job,remotecmd_chmod);
             %
             if res_chmod ~= 0,
-                locdisp(displaymode,['Warning: for xgrid and condor schedulers and direct mode only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
+                locdisp(displaymode,['Warning: for condor scheduler and direct mode only, chmod for directory',job.remotedatapath,job.save_id,' failed : ',txt_chmod]);
             end
         end
         %
@@ -430,22 +427,9 @@ elseif job.condorsearch,
     %
     remotecmd = ['export CONDOR_CONFIG=',remote.condor.CONDOR_CONFIG,'; export PATH=',remote.condor.PATH,'; export jobtimeid=',job.timeid,'; export debugmode=',num2str(job.debugmode),'; ',remote.cmd,' ',job.remotedatapath,job.save_id,job.condor_script,' -v'];
     %
-elseif job.xgridsearch,
-    %
-    if ~isfield(remote,'password') || isempty(remote.password),
-        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
-        locdisp(displaymode,['    --> Starting run with command ',remotecmd]) 
-    else
-        remotecmd = [remote.cmd{1},job.hostname,remote.cmd{2},remote.password,remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
-        remotecmd_hiddenpwd = [remote.cmd{1},job.hostname,remote.cmd{2},'*********',remote.cmd{3},job.remotedatapath,job.save_id,job.xgrid_script];
-        locdisp(displaymode,['    --> Starting run with command ',remotecmd_hiddenpwd]) 
-    end
-    %
 end
 %
-if ~job.xgridsearch,
-	locdisp(displaymode,['    --> Starting run with command ',remotecmd])
-end
+locdisp(displaymode,['    --> Starting run with command ',remotecmd])
 %
 if iscell(remote.cmd) && (length(remote.cmd) == 4) && ~isempty(remote.cmd(4)),
     [res,txt] = matremotecmd(remote,job,remotecmd,remote.cmd{4});

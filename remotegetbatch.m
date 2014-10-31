@@ -162,14 +162,6 @@ elseif job.condorsearch,
     %
     remotecmd = ['export CONDOR_CONFIG=',remote.condor.CONDOR_CONFIG,'; export PATH=',remote.condor.PATH,'; ',remoteset_jobid{1},job.id,remoteset_jobid{2}];
     %
-elseif job.xgridsearch,  
-    %
-    if ~isfield(remote,'password') || isempty(remote.password),
-        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{2},job.id];
-    else
-        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{2},job.id];
-    end
-    %
 end
 %
 locdisp(displaymode,['    --> Checking status of job # ',job.id]);
@@ -256,64 +248,6 @@ elseif job.condorsearch,
         %
     end
     %
-elseif job.xgridsearch,  
-    %
-    if ~isempty(strfind(txt,remoteset_jobid{3})), % job still running
-        return
-    elseif ~isempty(strfind(txt,remoteset_jobid{4})), % job pending
-        return
-    else
-        if isempty(strfind(txt,remoteset_jobid{5})), % job has a problem (check if xgrid is in operation on the remote machine)
-            disp(['Remote run check failed : ',txt]);
-            return
-        end
-    end
-    %
-    % extract output and error files
-    %
-    if ~isfield(remote,'password') || isempty(remote.password),
-        remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
-    else
-        remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -se ',job.remotedatapath,job.batch_dir,'error_file',' -so ',job.remotedatapath,job.batch_dir,'output_file -out'];  
-    end
-    %
-    [res,err] = matremotecmd(remote,job,remotecmd);
-    %
-    pause(0.1);
-    %
-    if res == 0,% error file successfuly transfered
-        locdisp(displaymode,['    --> Remote transfer of xgrid error and output files for Job # ',job.id,' on the remote computer completed.']);
-    else
-        locdisp(displaymode,['Remote transfer of xgrid error and output files for Job # ',job.id,' failed : ',err]);
-    end        
-    %
-    % extract result files
-    %
-    res = matremotecheck(remote,job,['MAT_OUT_',job.timeid,'.mat']);%check if the results are already back to the temp batch dir
-    %
-    if res,
-        %
-        if ~isfield(remote,'password') || isempty(remote.password),
-            remotecmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
-        else
-            remotecmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{6},job.id,' -out ',job.remotedatapath,job.batch_dir];  
-        end
-        %
-        [res,err] = matremotecmd(remote,job,remotecmd);
-        %
-        pause(0.1);
-        %
-        if res == 0,% result file successfuly transfered
-            locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
-        else
-            locdisp(displaymode,['File transfer from xgrid temp dir failed : ',err]);
-            soutput.err = err;
-            %
-            return
-        end 
-    else
-        locdisp(displaymode,['    --> File transfer from xgrid temp dir for Job # ',job.id,' on the remote computer completed.']);
-    end
 end
 %
 % data transfer (results are transfered back from the remote to the local computer) 
@@ -374,11 +308,6 @@ if ~isempty(job.load_id),
             datamvcmd = ['mv ',job.localdatapath,job.datadir,'* ',job.localdatadir];%transfer content of datadir to localdatadir
             [res(3),err{3}] = unix(datamvcmd);
         end
-    end
-    %    
-    if job.xgridsearch,%Files must be first transfered from xgrid temp directory to the job folder on the remote computer before being transfered back to the local computer
-        [res(4),err{4}] = matremoteget(remote,[job.batch_dir,'output_file'],job.remotedatapath,job.localdatapath);
-        [res(5),err{5}] = matremoteget(remote,[job.batch_dir,'error_file'],job.remotedatapath,job.localdatapath);
     end
     %
     if any(res ~= 0),
@@ -526,31 +455,11 @@ if job.clean >= 1,%clean remote and batch files
         %
         res = 0;
         %
-    elseif job.xgridsearch,
-        %
-        if ~isfield(remote,'password') || isempty(remote.password),
-            rmbatchcmd = [remoteset_jobid{1},job.hostname,remoteset_jobid{10},job.id];
-        else
-            rmbatchcmd = [remoteset_jobid{1},job.hostname,remote.cmd{2},remote.password,remoteset_jobid{10},job.id];
-        end
-        %
-        if ~isempty(remotehost),
-            %
-            locdisp(displaymode,['    --> Removing batch output files from remote host ',remotehost,' as user ',remote.remoteuser,' ...'])
-            [res,err] = matremotecmd(remote,job,rmbatchcmd);
-            pause(0.1)
-            %
-        else
-            %
-            locdisp(displaymode,'    --> Removing batch output files ...')
-            [res,err] = matremotecmd(remote,job,rmbatchcmd);
-            %
-        end       
     end
     %
     if res ~= 0,
         locdisp(displaymode,['Warning, batch files delete failed : ',err])
-    elseif job.pbssearch || job.slurmsearch || job.xgridsearch,
+    elseif job.pbssearch || job.slurmsearch,
         locdisp(displaymode,' ... done');          
     end
     %

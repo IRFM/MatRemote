@@ -31,19 +31,6 @@ if isempty(link_mode) || ~isnan(link_mode),% remote.link_mode enforced by input
     remote.link_mode = link_mode;
 end
 %
-xgridsearch = iscell(remote.cmd) && any(~cellfun('isempty',strfind(remote.cmd,'xgrid')));
-%
-if xgridsearch, 
-    if ~isempty(getenv('XGRID_PWD')),
-        remote.password = getenv('XGRID_PWD');
-    else
-        locdisp(display_mode,'Remote connection test failed : XGRID password not set up. Create an environment variable ''XGRID_PWD''.')
-        %
-        remote = [];
-        return
-    end
-end
-%
 if isempty(remote.host), %local calculation
     if ~isempty(remote.link_mode),% local host not compatible with enforced link mode
         locdisp(display_mode,'Remote connection test failed : local host not compatible with enforced link mode.')

@@ -24,15 +24,7 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
                 txt = strtrim(txt_url(1:ie-1));
             else
                 %
-                if strfind(remotecmd,'xgrid')
-                    if strfind(error_txt,'ulimit:'),%wrong error
-                        res = 0;%force standard unix error.
-                        txt = strtrim(txt_url(1:ie-1));
-                    else
-                        res = 1;%force standard unix error.
-                        txt = error_txt; 
-                    end
-                elseif strfind(remotecmd,'condor')
+				if strfind(remotecmd,'condor')
                     if strfind(error_txt,'was unused by condor_submit. Is it a typo'),%wrong warning
                         res = 0;%force standard unix error.
                         txt = strtrim(txt_url(1:ie-1));
