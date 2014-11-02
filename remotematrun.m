@@ -106,7 +106,9 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
-        disp('------------------------------');
+        disp('----------- Matlab Path -----------');
+        path;
+        disp('-----------------------------------');
     end
     %
     dataout = feval(remotematfnc,datain);
