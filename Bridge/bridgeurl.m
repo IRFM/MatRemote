@@ -15,10 +15,14 @@ if it == itmax,disp('WARNING: bridgeurl failed -> Possible network connection is
 %
 txt_url = strtrim(txt_url);
 %
-url_message = 'Successful ssh identification !';
+url_message1 = 'Successful ssh identification !';
+url_message2 = 'scp2php_error:';
 %
-if ~isempty(strfind(txt_url,url_message)),
-    txt_url = strtrim(txt_url(length(url_message)+1:end));
+if ~isempty(strfind(txt_url,url_message1)),
+    txt_url = strtrim(txt_url(length(url_message1)+1:end));
+elseif ~isempty(strfind(txt_url,url_message2)),
+    
+    
 else
     disp(['WARNING: -> the php command ''',phpcmd,''' failed in bridgurl.']);
 end
