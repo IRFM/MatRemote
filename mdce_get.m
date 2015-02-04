@@ -65,6 +65,7 @@ if strcmp(joblist{1}.job.env.remotematfnc,'runmdce'),
         varargout{1}{1}.job = job;% update job time stamps
     elseif isfield(output,'err'),% job failed
         disp('Remote MDCE run failed.')
+        varargout{1}{1}.err = output.err;
     else% job completed
         flag = 10 + output.flag;% add 10 for each remote step
         varargout = output.varargout;

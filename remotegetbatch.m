@@ -252,6 +252,8 @@ end
 %
 % data transfer (results are transfered back from the remote to the local computer) 
 %
+pause(1)
+%
 if ~isempty(job.load_id),
     %
     if ~isempty(remotehost),
@@ -279,22 +281,32 @@ if ~isempty(job.load_id),
         end
     end
     %
+    if timeres == 0,
+        job.time.finished = get_datetime_yp(timestr);%considered to be the time at which the simulation stops
+    else
+        job.time.finished = utctime_jd;
+    end
+    %
     if timeres,
         soutput.err = ['Error: the output file MAT_OUT_',job.timeid,'.mat has not been saved in the directory ',job.remotedatapath,job.batch_dir,' whereas the job is done.'];
         locdisp(displaymode,soutput.err);
-        %
-        return
-    elseif ~strcmp(remotefilemtime,timestr)
-        locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been written completely before being copied.']);
+        res(1) = 0;
+        err{1} = {};
+    else
+        if ~strcmp(remotefilemtime,timestr),
+            locdisp(displaymode,['WARNING : the output file MAT_OUT_',job.timeid,'.mat may not have been written completely before being copied.']);
+        end
+        [res(1),err{1}] = matremoteget(remote,job.load_id,job.remotedatapath,job.localdatapath);        
     end
     %
-    job.time.finished = get_datetime_yp(timestr);%considered to be the time at which the simulation stops
+    transferstr = '';
     %
-    [res(1),err{1}] = matremoteget(remote,job.load_id,job.remotedatapath,job.localdatapath);
     if isfield(job,'datadir'),
         [res(2),err{2}] = matremoteget(remote,job.datadir,job.remotedatapath,job.localdatapath);
         %
-        if length(dir([job.localdatapath,job.datadir])) > 2,
+        datadirfilenum = length(dir([job.localdatapath,job.datadir])) - 2;
+        %
+        if datadirfilenum > 0,
             if ~isfield(job,'localdatadir') || isempty(job.localdatadir),
                 job.localdatadir = job.localdatapath;
             elseif ~strcmp(job.localdatadir(end),filesep),
@@ -307,6 +319,10 @@ if ~isempty(job.load_id),
             %
             datamvcmd = ['mv ',job.localdatapath,job.datadir,'* ',job.localdatadir];%transfer content of datadir to localdatadir
             [res(3),err{3}] = unix(datamvcmd);
+            %
+            if res(3) == 0,
+                transferstr = ['However, ',num2str(datadirfilenum),' files were transfered to ',job.localdatadir];
+            end
         end
     end
     %
@@ -345,6 +361,9 @@ if isfield(soutput,'err'),
     locdisp(displaymode,'The remote script failed for the following reason : ');
     if ~iscell(soutput.err),
         soutput.err = {soutput.err};
+    end
+    if ~isempty(transferstr),
+        soutput.err = [soutput.err,transferstr];
     end
     for istr = 1:length(soutput.err),
         locdisp(displaymode,soutput.err{istr});
