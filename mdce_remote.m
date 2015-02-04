@@ -57,6 +57,12 @@ remote = dkecluster.remote;
 %
 mdce_job = matstandardjob_jd('runmdce');
 %
+if isfield(dkecluster,'walltime'),
+    mdce_job.walltime = dkecluster.walltime;
+elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'walltime'),% inherit MDCE walltime
+    mdce_job.walltime = dkecluster.scheduler.walltime;
+end
+%
 if isfield(dkecluster,'funcopy'),
     mdce_job.funcopy = dkecluster.funcopy;
 elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'funcopy'),% inherit MDCE funcopy
@@ -75,7 +81,7 @@ mdce_input.fun = fun;
 mdce_input.args_in = args_in;
 mdce_input.arg_index = arg_index;
 mdce_input.arg_range = arg_range;
-mdce_input.dkecluster = rmfield(dkecluster,'remote');
+mdce_input.dkecluster.scheduler = dkecluster.scheduler;
 mdce_input.nargout = nargout;
 %
 mdce_job = remoterunbatch(remote,mdce_job,mdce_input,debugmode);
