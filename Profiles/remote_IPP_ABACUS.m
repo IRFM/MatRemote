@@ -54,7 +54,6 @@ remote.direct.peysson.nproc = 12;
 remote.direct.peysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.peysson.remotedatapath = '/compass/home/peysson/';
 remote.direct.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
@@ -69,7 +68,6 @@ remote.pbs.peysson.host = 'abacus.tok.ipp.cas.cz';
 remote.pbs.peysson.hostname = 'abacus';
 remote.pbs.peysson.nproc = 36;
 remote.pbs.peysson.cmd = 'qsub ';% direct calculation (csh, bash)
-remote.pbs.peysson.remotedatapath = '/compass/home/peysson/tmp/';
 remote.pbs.peysson.shclean = 1;
 remote.pbs.peysson.get_jobid = {'','.abacus'};%str_before,str_after
 remote.pbs.peysson.set_jobid = {'qstat ','.abacus','Unknown Job Id',' C '};%str_before,str_after,str_check
@@ -79,6 +77,21 @@ remote.pbs.peysson.remoteuser = 'peysson';
 remote.pbs.peysson.bridge.url.host = 'tolbachik.hd.free.fr';
 remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr';
 remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%
+% JAKUB URBAN
+%
+% pbs
+%
+remote.pbs.urban = remote.pbs.peysson;
+remote.pbs.urban.remoteuser = 'urban';
+%
+% RICHARD PAPROK
+%
+% pbs
+%
+remote.pbs.paprok = remote.pbs.peysson;
+remote.pbs.paprok.remoteuser = 'paprok';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
