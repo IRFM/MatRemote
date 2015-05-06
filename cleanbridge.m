@@ -11,7 +11,7 @@ if remote.link_mode == 2,
     %
     if flag_curl_ftp,%ftp over curl method
         %
-        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+        cmd = ['curl ftp://',remote.bridge.ftp.host,'/transfer/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
         [res,txt] = unix(cmd);
         %
@@ -40,19 +40,19 @@ if remote.link_mode == 2,
                                 %
                                 if ~isempty(filelist_datadir_remote_parsed{end}),
                                     %
-                                    cmd_datadir_file = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE ',job.batch_dir,filelist_remote_parsed{end},'/',filelist_datadir_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
+                                    cmd_datadir_file = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE transfer/',job.batch_dir,filelist_remote_parsed{end},'/',filelist_datadir_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
                                     %
                                     [res_datadir_file,txt_datadir_file] = unix(cmd_datadir_file);                        
                                 end
                             end
                             %
-                            cmd_datadir_dir = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD ',job.batch_dir,filelist_remote_parsed{end},'/" ftp://',remote.bridge.ftp.host];
+                            cmd_datadir_dir = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD transfer/',job.batch_dir,filelist_remote_parsed{end},'/" ftp://',remote.bridge.ftp.host];
                             %
                             [res_datadir_dir,txt_datadir_dir] = unix(cmd_datadir_dir);
                             %
                         end
                     else
-                        cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE ',job.batch_dir,filelist_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
+                        cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "DELE transfer/',job.batch_dir,filelist_remote_parsed{end},'" ftp://',remote.bridge.ftp.host];
                         %
                         [res,txt] = unix(cmd);
                     end
@@ -60,7 +60,7 @@ if remote.link_mode == 2,
                 end
             end
             %
-            cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD ',job.batch_dir,'" ftp://',remote.bridge.ftp.host];
+            cmd = ['curl -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' --quote "RMD transfer/',job.batch_dir,'" ftp://',remote.bridge.ftp.host];
             [res,txt] = unix(cmd);
             %
         end

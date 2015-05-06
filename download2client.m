@@ -23,7 +23,7 @@ if remote.link_mode == 2,
         filelist_local = dir(parentdir);
         filelist_local = filelist_local(arrayfun(@(x) x.name(1), filelist_local) ~= '.');
         %
-        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+        cmd = ['curl ftp://',remote.bridge.ftp.host,'/transfer/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
         [res,txt] = unix(cmd);
         %
@@ -117,5 +117,12 @@ if remote.link_mode == 2,
     cd(initdir);
     %
 elseif remote.link_mode == 1,
-    [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
+    if strfind(remote.bridge.ssh.host,'-p')
+        remotehost1 = deblank(remote.bridge.ssh.host(1:strfind(remote.bridge.ssh.host,'-p')-1));
+        remotehost2 = remote.bridge.ssh.host(strfind(remote.bridge.ssh.host,'-p'):end);%for non-standard port
+        [res,txt] = unix(['scp ',upper(remotehost2),' -r ',remote.bridge.ssh.username,'@',remotehost1,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
+    else
+        [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
+    end
+
 end
