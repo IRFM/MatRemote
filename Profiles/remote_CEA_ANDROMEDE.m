@@ -33,9 +33,12 @@ remote.pbs.JD211098.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.pbs.JD211098.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.pbs.JD211098.matver.matdef = remote.pbs.JD211098.matver.mat800;%default matlab on remote machine
 remote.pbs.JD211098.remoteuser = 'JD211098';
-remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % direct
 %
@@ -60,9 +63,12 @@ remote.direct.JD211098.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.direct.JD211098.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.direct.JD211098.matver.matdef = remote.direct.JD211098.matver.mat800;%default matlab on remote machine
 remote.direct.JD211098.remoteuser = 'JD211098';
-remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % YVES PEYSSON
 %
@@ -80,9 +86,12 @@ remote.pbs.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.pbs.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat800;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % direct
 %
@@ -102,9 +111,12 @@ remote.direct.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.direct.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat800;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
-remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % YVES BURAVAND
 %

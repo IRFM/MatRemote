@@ -34,9 +34,12 @@ remote.torque.PEYSSON.matver.mat801 = '/pkg/matlab/R2013a/bin/matlab';
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat801;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.torque.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.torque.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.torque.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % direct
 %
@@ -52,9 +55,13 @@ remote.direct.PEYSSON.matver.mat801 = '/pkg/matlab/R2013a/bin/matlab';
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat801;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.direct.PEYSSON.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+
 %
 % BOJIANG DING (SHENMA)
 %

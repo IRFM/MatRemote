@@ -40,9 +40,12 @@ remote.torque.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.torque.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
 remote.torque.Yves.matver.matdef = remote.torque.Yves.matver.mat801;%default matlab on remote machine
 remote.torque.Yves.remoteuser = 'Yves';
-remote.torque.Yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.torque.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.torque.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.torque.Yves.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.torque.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.torque.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.torque.Yves.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.torque.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.torque.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % direct
 %
@@ -58,9 +61,12 @@ remote.direct.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.direct.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
 remote.direct.Yves.matver.matdef = remote.direct.Yves.matver.mat801;%default matlab on remote machine
 remote.direct.Yves.remoteuser = 'Yves';
-remote.direct.Yves.bridge.url.host = 'tolbachik.hd.free.fr';
-remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr';
-remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr';
+%remote.direct.Yves.bridge.url.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr';%macpro aix
+%remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr';%macpro aix
+remote.direct.Yves.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % JOAN DECKER
 %
