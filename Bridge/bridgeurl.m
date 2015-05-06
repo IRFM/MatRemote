@@ -17,11 +17,14 @@ txt_url = strtrim(txt_url);
 %
 url_message1 = 'Successful ssh identification !';
 url_message2 = 'scp2php_error:';
+url_message3 = 'ssh2php_error:';
 %
 if ~isempty(strfind(txt_url,url_message1)),
     txt_url = strtrim(txt_url(length(url_message1)+1:end));
 elseif ~isempty(strfind(txt_url,url_message2)),
-    
+
+elseif ~isempty(strfind(txt_url,url_message3)),
+
     
 else
     disp(['WARNING: -> the php command ''',phpcmd,''' failed in bridgurl.']);
