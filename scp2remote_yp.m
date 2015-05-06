@@ -25,7 +25,13 @@ if ~strcmp(remote_path(end),filesep),
     remote_path = [remote_path,filesep];
 end
 %
-[res,err] = unix(['scp -r ',local_path,filename,' ',remotelogname,'@',remotehost,':',remote_path]);
+if strfind(remotehost,'-p')
+    remotehost1 = deblank(remotehost(1:strfind(remotehost,'-p')-1));
+    remotehost2 = remotehost(strfind(remotehost,'-p'):end);%for non-standard port
+    [res,err] = unix(['scp ',upper(remotehost2),' -r ',local_path,filename,' ',remotelogname,'@',remotehost1,':',remote_path]);
+else
+    [res,err] = unix(['scp -r ',local_path,filename,' ',remotelogname,'@',remotehost,':',remote_path]);
+end
 %
 % Check that the file transfer is fully achieved even when network is slow 
 %
