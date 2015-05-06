@@ -15,9 +15,9 @@ if remote.link_mode == 2,
         for ii = 1:length(filelist),
             if ~strcmp(filelist(ii).name,'.') && ~strcmp(filelist(ii).name,'..')
                 if ~isdir([job.batch_dir,filelist(ii).name])
-                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,' --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist(ii).name];%for transfering files
+                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,' --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/transfer/',job.batch_dir,filelist(ii).name];%for transfering files
                 else
-                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,'/. --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,'/. -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist(ii).name,'/'];%for creating an empty directory
+                    cmd = ['curl --cacert ',job.batch_dir,filelist(ii).name,'/. --ftp-create-dirs -T ',job.batch_dir,filelist(ii).name,'/. -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' ftp://',remote.bridge.ftp.host,'/transfer/',job.batch_dir,filelist(ii).name,'/'];%for creating an empty directory
                 end
                 %
                 [res,txt] = unix(cmd);
@@ -26,7 +26,7 @@ if remote.link_mode == 2,
     end
     %
     if res~= 0, 
-       disp(['WARNING: ',txt,' -> upload2bridge is done by Matlab FTP, and not FTP over curl'])
+       disp(['WARNING: ',txt,' -> upload2bridge is done by Matlab FTP, and not FTP over curl. Check the curl version called by Matlab: curl --version and compare it to the same command in a terminal. The library may have to be changed in Matlab.'])
     end
     %
     if ~flag_curl_ftp || res~= 0,%ftp embedded in matlab (not necessarily operational)
