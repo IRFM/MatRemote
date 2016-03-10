@@ -11,7 +11,7 @@ function remote_profile = remote_CEA_ANDROMEDE(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'JD211098';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'YP105119';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
@@ -122,14 +122,14 @@ remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspber
 %
 % pbs pro
 %
-remote.pbs.YB109156 = remote.pbs.JD211098;
+remote.pbs.YB109156 = remote.pbs.YP105119;
 remote.pbs.YB109156.remoteuser = 'YB109156';
 %
 % EMELIE NILSSON
 %
 % pbs pro
 %
-remote.pbs.EN290612 = remote.pbs.JD211098;
+remote.pbs.EN290612 = remote.pbs.YP105119;
 remote.pbs.EN290612.remoteuser = 'EN290612';
 remote.pbs.EN290612.remotedatapath = '/home/EN290612/tmp/';
 %
@@ -137,7 +137,7 @@ remote.pbs.EN290612.remotedatapath = '/home/EN290612/tmp/';
 %
 % pbs pro
 %
-remote.pbs.kamleitn = remote.pbs.JD211098;
+remote.pbs.kamleitn = remote.pbs.YP105119;
 remote.pbs.kamleitn.remoteuser = 'jkamleitner';
 %
 % -------------------------------------------------
