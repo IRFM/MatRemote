@@ -11,7 +11,7 @@ if remote.link_mode == 2,
     %
     if flag_curl_ftp,%ftp over curl method
         %
-        cmd = ['curl ftp://',remote.bridge.ftp.host,'/transfer/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+        cmd = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',job.batch_dir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
         [res,txt] = unix(cmd);
         %
@@ -26,7 +26,7 @@ if remote.link_mode == 2,
                     %    
                     if strfind(filelist_remote_parsed{end},'datadir'),
                         %
-                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'/',job.batch_dir,filelist_remote_parsed{end},'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',job.batch_dir,filelist_remote_parsed{end},'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
                         %
                         [res_datadir,txt_datadir] = unix(cmd_datadir);
                         %
