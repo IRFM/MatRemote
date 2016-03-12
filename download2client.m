@@ -64,13 +64,13 @@ if remote.link_mode == 2,
                     %
                     if flag == 0,
                         %
-                        cmd = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
+                        cmd = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
                         %
                         [res,txt] = unix(cmd);
                         %
                     elseif flag == 2,%transfer of all files in datadir
                         %
-                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_local(jj).name,'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_local(jj).name,'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
                         %
                         [res_datadir,txt_datadir] = unix(cmd_datadir);          
                         %
@@ -82,7 +82,7 @@ if remote.link_mode == 2,
                                     %
                                     filelist_datadir_remote_parsed = regexp(filelist_datadir_remote{ii},' ', 'split');
                                     %
-                                    cmd_datadir_file = ['curl ftp://',remote.bridge.ftp.host,'/',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end}];
+                                    cmd_datadir_file = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end}];
                                     %
                                     [res_datadir_file,txt_datadir_file] = unix(cmd_datadir_file);
                                 end
@@ -104,7 +104,7 @@ if remote.link_mode == 2,
         txt = '';
         %
         try
-            f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge
+            f = ftp(remote.bridge.ftp.host,remote.bridge.ftp.username,remote.bridge.ftp.password);%ftp access to the bridge           
             mget(f,target);%Transfer ouput data from the bridge batch dir to the local batch dir
             close(f);
         catch err
