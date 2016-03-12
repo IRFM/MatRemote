@@ -4,8 +4,6 @@ if ~isempty(remote.bridge),
     if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host'),
         if strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr:8081'),%raspberry1 aix
             remote.bridge.url.path = 'MatRemote';
-        elseif strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr'),%macpro aix
-            remote.bridge.url.path = 'MatRemote';
         end
         %
         if strcmp(remote.bridge.ftp.host,'tolbachik.hd.free.fr:2121'),%raspberry1 bridge aix
