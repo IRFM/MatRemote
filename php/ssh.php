@@ -15,8 +15,6 @@ list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuse
 
 $safemode = safemode($remotehost);
 
-$safemode = 0;
-
 if ($safemode >= 1) {
 
   list($flag_filter,$txt_filter) = filter_cmd($_POST);
@@ -37,10 +35,10 @@ if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
 }
 
 /*
-echo "cmd=".$remote_cmd."<br>";
-echo "host=".$remote_host."<br>";
-echo "passwd=".$remote_password."<br>";
-echo "login=".$remote_login."<br>";
+echo "cmd=".$remote_cmd."\n";
+echo "host=".$remote_host."\n";
+echo "passwd=".$remote_password."\n";
+echo "login=".$remote_login."\n";
 */
 
 $connection = ssh2_connect($remote_host);
