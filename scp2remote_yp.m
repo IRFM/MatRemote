@@ -75,6 +75,9 @@ if res == 0,
         err(err == 10) = [];%remote EoF
         %
         filesize = str2double(err);
+        if isnan(filesize),
+            filesize = length(err);
+        end
         %
         tstart = tic;
         %
@@ -93,6 +96,9 @@ if res == 0,
             err(err == 10) = [];%remote EoF
             %
             filesize = str2double(err);
+            if isnan(filesize),
+                filesize = length(err);
+            end
             %
             if filesize == filesize0,
                 break
