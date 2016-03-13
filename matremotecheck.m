@@ -28,5 +28,6 @@ if ~res,
         %
         remotecmd = ['python -c "import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
         [res,txt] = matremotecmd(remote,job,remotecmd);
+        %
     end
 end
