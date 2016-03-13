@@ -22,7 +22,7 @@ if ~isempty(remote.bridge),
         %
         if strcmp(remote.bridge.ssh.host,'cybele.gat.com -p 2039'),%cybele bridge General Atomics
             remote.bridge.ssh.username = 'peyssony';
-            remote.bridge.ssh.temppath = '.';
+            remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.ports = {'1080','9999'};
         end
         %
