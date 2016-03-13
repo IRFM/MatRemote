@@ -10,7 +10,7 @@ function remote_profile = remote_GA_LOHAN14(varargin)
 %   OUTPUTS : 
 %       - remote_profile : name of selected remote profile(s)
 %
-default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'peyssony';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
@@ -19,23 +19,23 @@ default.profile = 'peyssony';% default user profile if 'remoteuser' is not an ex
 %
 % pbs pro
 %
-remote.pbs.peyssony = default_remote_profile;
-remote.pbs.peyssony.host = 'lohan14.gat.com';%'localhost -p 4023';%set first a permanent ssh tunnel locally on your computer before connection
-remote.pbs.peyssony.hostname = 'lohan14.gat.com';
-remote.pbs.peyssony.shell = 'tcsh';
-remote.pbs.peyssony.nproc = 12;
-remote.pbs.peyssony.cmd = 'qsub';
-remote.pbs.peyssony.remotedatapath = '/u/peyssony/tmp/';
-remote.pbs.peyssony.get_jobid = {'','.loki'};%str_before,str_after
-remote.pbs.peyssony.set_jobid = {'qstat ','.loki','finished'};%str_before,str_after,str_check
-remote.pbs.peyssony.shclean = 1;
-remote.pbs.peyssony.matver.mat804 = '/usr/local/bin/matlab';
-remote.pbs.peyssony.matver.mat806 = '/usr/local/bin/matlab15b';
-remote.pbs.peyssony.matver.matdef = remote.pbs.peyssony.matver.mat804;%default matlab on remote machine
-remote.pbs.peyssony.remoteuser = 'peyssony';
-%remote.pbs.peyssony.bridge.url.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
-%remote.pbs.peyssony.bridge.ftp.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
-remote.pbs.peyssony.bridge.ssh.host = 'cybele.gat.com -p 2039';%cybele workstation GA/DIII-D
+%remote.pbs.peyssony = default_remote_profile;
+%remote.pbs.peyssony.host = 'lohan14.gat.com';%'localhost -p 4023';%set first a permanent ssh tunnel locally on your computer before connection
+%remote.pbs.peyssony.hostname = 'lohan14.gat.com';
+%remote.pbs.peyssony.shell = 'tcsh';
+%remote.pbs.peyssony.nproc = 12;
+%remote.pbs.peyssony.cmd = 'qsub';
+%remote.pbs.peyssony.remotedatapath = '/u/peyssony/tmp/';
+%remote.pbs.peyssony.get_jobid = {'','.loki'};%str_before,str_after
+%remote.pbs.peyssony.set_jobid = {'qstat ','.loki','finished'};%str_before,str_after,str_check
+%remote.pbs.peyssony.shclean = 1;
+%remote.pbs.peyssony.matver.mat804 = '/usr/local/bin/matlab';
+%remote.pbs.peyssony.matver.mat806 = '/usr/local/bin/matlab15b';
+%remote.pbs.peyssony.matver.matdef = remote.pbs.peyssony.matver.mat804;%default matlab on remote machine
+%remote.pbs.peyssony.remoteuser = 'peyssony';
+%%remote.pbs.peyssony.bridge.url.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
+%%remote.pbs.peyssony.bridge.ftp.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
+%remote.pbs.peyssony.bridge.ssh.host = 'cybele.gat.com -p 2039';%cybele workstation GA/DIII-D
 %
 % direct
 %
