@@ -5,7 +5,7 @@ function make_matremote_help(verbose)
 %
 % INPUT:
 %
-%	- verbose: display the output of the documentation build-up is not empty
+%	- verbose: display the output of the documentation build-up (on/off). Empty is off.
 %
 % OUTPUT: none
 %
@@ -15,7 +15,7 @@ if nargin == 0,
     verbose = 'off';
 end
 %
-excludedfoldernames = {};%update if necessary
+excludedfoldernames = {};%list of excluded folders. Update if necessary 
 %
 disp('************************* EXCLUDED FOLDER NAMES **************************')
 for ie = 1:length(excludedfoldernames),
@@ -25,14 +25,22 @@ disp('**************************************************************************
 %
 dirinit = pwd;
 %
-helptools = '';
+helptools = '';%specific display tools (like TeX, GraphViz or ImageMagick which are considered by default)
+%
+% List of pdf text files that can be viewed from the web browser. 
+%
+% Format: 
+%       texfilelist(i).file = path to the file without extension;
+%       texfilelist(i).title = name of the link in the webpage;
 %
 texfilelist = '';
 %
 ref_folder = what('MatRemote');
-redminepath = getenv('redmine_path');
-if isempty(redminepath),disp('WARNING: the path of redmine has not been found. Set the environment variable ''redmine_path''');end
+outputpath = getenv('output_path');%where the help website is created
+if isempty(outputpath),disp('WARNING: the output path has not been found. Set the environment variable ''output_path'' for a specific path. Otherwise, the help website is created locally.');
+    outputpath = [pwd,'/Help'];
+end
 %
-make_help(verbose,ref_folder.path,redminepath,texfilelist,excludedfoldernames,helptools);
+make_help(verbose,ref_folder(1).path,outputpath,texfilelist,excludedfoldernames,helptools);
 %
 cd(dirinit);
