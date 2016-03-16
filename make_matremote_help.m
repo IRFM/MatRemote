@@ -36,11 +36,10 @@ helptools = '';%specific display tools (like TeX, GraphViz or ImageMagick which 
 texfilelist = '';
 %
 ref_folder = what('MatRemote');
-outputpath = getenv('output_path');%where the help website is created
-if isempty(outputpath),disp('WARNING: the output path has not been found. Set the environment variable ''output_path'' for a specific path. Otherwise, the help website is created locally.');
-    outputpath = [pwd,'/Help'];
-end
+redminepath = 'http://tolbachik.hd.free.fr:8080';%path to the redmine website 
 %
-make_help(verbose,ref_folder(1).path,outputpath,texfilelist,excludedfoldernames,helptools);
+if isempty(redminepath),disp('WARNING: the ''redminepath'' path is empty.');end
+%
+make_help(verbose,ref_folder(1).path,redminepath,texfilelist,excludedfoldernames,helptools);
 %
 cd(dirinit);
