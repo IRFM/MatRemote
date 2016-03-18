@@ -4,7 +4,7 @@ function remote_profile = remote_laptop_YVES_PEYSSON(varargin)
 %
 %   INPUTS : 
 %       - schedulername (optinal) : name of selected scheduler
-%       - profilename (optinal) : name of selected profile
+%       - profilename (optinal) : name of selected profile 
 %
 %   OUTPUTS : 
 %       - remote_profile : name of selected remote profile(s)
