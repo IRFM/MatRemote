@@ -1,3 +1,4 @@
+
 function remote = default_remote_profile
 %
 remote.host = [];% adress of host. Ex : cephee15.intra.cea.fr
@@ -20,6 +21,8 @@ remote.bridge = [];% bridge address (url or ssh)
 remote.link_mode = [];% connection mode prescription : ([]) give priority according to 0,1,2; (0) ssh key pair enforced, (1) ssh bridge enforced, (2) url/ftp bridge enforced
 remote.cvsupdate = [];% boolean for cvs update
 remote.cvsrights = [];% if not empty, execute command to set up rights after cvs update
+remote.gitupdate = [];% boolean for git update
+remote.gitmode = [];% git update mode (pull or fetch)
 remote.funcopy = [];% (-1) do not copy any executable, (0) copy all functions except the matlab function to be run remotely (1) also copy function to be run remotely
 remote.condor = [];% condor specific parameters
 remote.sge = [];% sun grid engine specific parameters
