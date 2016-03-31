@@ -106,6 +106,7 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
+        disp(['hostname (from hostname_jd) = ',hostname_jd]);
         disp('----------- Matlab Path -----------');
         path;
         disp('-----------------------------------');
