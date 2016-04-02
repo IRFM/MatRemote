@@ -10,6 +10,12 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
         disp('------------------------------------------------------------------------------------')
     end
     %
+    if isempty(remote),
+        res = 1;
+        txt = 'Error: Remote structure is empty.';
+        return
+    end
+    %
     if ~isempty(remote.host),
         %
         if remote.link_mode == 2,
