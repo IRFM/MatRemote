@@ -19,10 +19,10 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude)
 %           o 0 : no dispplay
 %           o 1 : display result only
 %           o 2 : display updated, removed, added, and conflicts
-%           o 3 : also list files & folders outside CVS control.
+%           o 3 : also list files & folders outside Git control.
 %
 %       - exclude : 
-%           Ignore extensions from list of files outside CVS control (only used if display_mode >= 3)
+%           Ignore extensions from list of files outside Git control (only used if display_mode >= 3)
 %
 %   - OUTPUTS : 
 %       - flag : matrix of size (nrem x nfncs) with values :
