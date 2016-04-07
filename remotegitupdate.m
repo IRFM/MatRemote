@@ -74,70 +74,6 @@ for irem = 1:nrem,
             %
             if res(1) ~= 0,
                 flag(irem,ifnc) = -1;% failed git update
-            else
-                %
-                isep = [0,find(txt{1} == 10)];
-                %
-                nseps = length(isep) - 1;
-                %
-                txts = cell(1,nseps);
-                flag_C = false(1,nseps);
-                flag_M = false(1,nseps);
-                flag_A = false(1,nseps);
-                flag_R = false(1,nseps);
-                flag_U = false(1,nseps);
-                flag_O = false(1,nseps);
-                %
-                for iisep = 1:nseps,
-                    txts{iisep} = txt{1}(isep(iisep)+1:isep(iisep+1)-1);
-                    %
-                    % Git outputs
-                    %
-                    if txts{iisep}(1) == 'C',
-                        flag_C(iisep) = true;
-                    elseif txts{iisep}(1) == 'M',
-                        flag_M(iisep) = true;
-                    elseif txts{iisep}(1) == 'A',
-                        flag_A(iisep) = true;
-                    elseif txts{iisep}(1) == 'R',
-                        flag_R(iisep) = true;
-                    elseif txts{iisep}(1) == 'U' || txts{iisep}(1) == 'P',
-                        flag_U(iisep) = true;
-                    end
-                    %
-                    % elements outside Git control
-                    %
-                    if txts{iisep}(1) == '?' && display_mode >= 3,
-                        %
-                        flag_excl = false;
-                        for iext = 1:nexts,
-                            if (length(txts{iisep})-length(exclude{iext})+1 > 0) && strcmp(exclude{iext},txts{iisep}(end-length(exclude{iext})+1:end)),
-                                flag_excl = true;
-                                break
-                            end
-                        end
-                        %
-                        if ~flag_excl,
-                            flag_O(iisep) = true;
-                        end
-                        %
-                    end
-                end
-                %
-                nC = sum(flag_C);
-                nM = sum(flag_M);
-                nA = sum(flag_A);
-                nR = sum(flag_R);
-                nU = sum(flag_U);
-                nO = sum(flag_O);
-                %
-                if nC > 0,
-                    flag(irem,ifnc) = 2;% files in conflict on remote folder
-                elseif nM > 0,
-                    flag(irem,ifnc) = 1;% files modified and not commited on remote folder
-                else
-                    flag(irem,ifnc) = 0;% git udpate OK
-                end                    
             end
             %
             if display_mode >= 1,
@@ -145,83 +81,14 @@ for irem = 1:nrem,
                 disp('------------------------------------------------------------------');
                 disp(' ');
                 if res(1) == 0,
-                    disp(['Git update successful for folder ',workpath]);
-                    %
-                    if ~isnan(res(2)),
-                        %
-                        if res(2) == 0,
-                            disp(['Git rights successfully set up for folder ',workpath]);
-                        else
-                            disp(['Git rights setup failed : ',txt{2}]);
-                        end
-                    end
+                    disp(['Successful ',txt{1}(1:end-1), ' from Git repository']);
                     %
                 else
-                    disp(['Git update failed : ',txt{1}]);
+                    disp(['Git update failed : ',txt{1}(1:end-1)]);
                 end
             end
             %
-            if display_mode >= 2 && res(1) == 0,
-                %
-                % display results
-                %
-                disp(' ');
-                disp('    -----------------------');
-                disp(['    - Files in conflict : ',num2str(nC)]);
-                disp(' ');
-                %
-                for iisep = find(flag_C),
-                    disp(['        o ',txts{iisep}]);
-                end
-                %
-                disp(' ');
-                disp('    ------------------------------');
-                disp(['    - Files with modifications : ',num2str(nM)]);
-                disp(' ');
-                %
-                for iisep = find(flag_M),
-                    disp(['        o ',txts{iisep}]);
-                end
-                %
-                disp(' ');
-                disp('    -----------------');
-                disp(['    - Files added : ',num2str(nA)]);
-                disp(' ');
-                %
-                for iisep = find(flag_A),
-                    disp(['        o ',txts{iisep}]);
-                end
-                %
-                disp(' ');
-                disp('    -------------------');
-                disp(['    - Files removed : ',num2str(nR)]);
-                disp(' ');
-                %
-                for iisep = find(flag_R),
-                    disp(['        o ',txts{iisep}]);
-                end
-                %
-                disp(' ');
-                disp('    -------------------');
-                disp(['    - Files updated : ',num2str(nU)]);
-                disp(' ');
-                %
-                for iisep = find(flag_U),
-                    disp(['        o ',txts{iisep}]);
-                end
-                %
-                if display_mode >= 3,
-                    disp(' ');
-                    disp('    ----------------------------------------');
-                    disp(['    - Selected files & folders outside Git control : ',num2str(nO)]);
-                    disp(' ');
-                    %
-                    for iisep = find(flag_O),
-                        disp(['        o ',txts{iisep}]);
-                    end
-                end
-                %
-            end
+
             %
         else
             %
