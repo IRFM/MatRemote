@@ -75,11 +75,15 @@ for irem = 1:nrem,
                 disp('------------------------------------------------------------------');
                 disp(' ');
                 if res(1) == 0,
-                    disp(['Successful ',txt{1}(1:end-1), ' from Git repository']);
+                    for itxt = 1:length(txt),
+                        disp(['Successful ',txt{itxt}(1:end-1), ' from primary Git repository']);
+                    end
                     flag(irem,ifnc) = 0;
                     %
                 else
-                    disp(['Git update failed : ',txt{1}(1:end-1)]);
+                    for itxt = 1:length(txt),
+                        disp(['Git update failed : ',txt{itxt}(1:end-1)]);
+                    end
                     flag(irem,ifnc) = -1;% failed git update
                 end
             end
