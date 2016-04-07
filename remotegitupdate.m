@@ -29,8 +29,6 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude)
 %           o -2 if the remote process failed
 %           o -1 if the git update process failed
 %           o  0 if the git update succeeded without remote conflicts or remote modified files
-%           o  1 if the git update succeeded without remote conflicts and with remote modified files
-%           o  2 if the git update succeeded with remote conflicts
 %
 if nargin < 4,
     exclude = {};
