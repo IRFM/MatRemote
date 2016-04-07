@@ -72,23 +72,19 @@ for irem = 1:nrem,
         %
         if isempty(err),            
             %
-            if res(1) ~= 0,
-                flag(irem,ifnc) = -1;% failed git update
-            end
-            %
             if display_mode >= 1,
                 disp(' ');
                 disp('------------------------------------------------------------------');
                 disp(' ');
                 if res(1) == 0,
                     disp(['Successful ',txt{1}(1:end-1), ' from Git repository']);
+                    flag(irem,ifnc) = 0;
                     %
                 else
                     disp(['Git update failed : ',txt{1}(1:end-1)]);
+                    flag(irem,ifnc) = -1;% failed git update
                 end
             end
-            %
-
             %
         else
             %
