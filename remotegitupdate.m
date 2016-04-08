@@ -1,4 +1,4 @@
-function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude)
+function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude,debugmode)
 %
 % This function git updates the folders containing the functions listed in remotefunctions 
 % over the profiles defined by remote
@@ -23,6 +23,8 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude)
 %
 %       - exclude : 
 %           Ignore extensions from list of files outside Git control (only used if display_mode >= 3)
+%       
+%       - debugmode: (0) debug mode not activated, (1) debug mode activated
 %
 %   - OUTPUTS : 
 %       - flag : matrix of size (nrem x nfncs) with values :
@@ -30,6 +32,9 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude)
 %           o -1 if the git update process failed
 %           o  0 if the git update succeeded without remote conflicts or remote modified files
 %
+if nargin < 5,
+    debugmode = 0;
+end
 if nargin < 4,
     exclude = {};
 end
@@ -64,9 +69,9 @@ for irem = 1:nrem,
     for ifnc = 1:nfncs,
         %
         job = matstandardjob_jd('runmat');
-        job.remtimout = 5;% timeout in minutes
+        job.remtimout = 30;% timeout in minutes
         %
-        [err,jobparams,res,txt,workpath] = matremote_jd('gitupdate_yp',{remotefunctions{ifnc},remoteprofiles(irem).gitmode},remoteprofiles(irem),job);
+        [err,jobparams,res,txt,workpath] = matremote_jd('gitupdate_yp',{remotefunctions{ifnc},remoteprofiles(irem).gitmode,debugmode},remoteprofiles(irem),job);
         %
         if isempty(err),            
             %
