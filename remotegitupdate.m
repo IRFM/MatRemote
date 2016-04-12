@@ -71,6 +71,8 @@ for irem = 1:nrem,
         job = matstandardjob_jd('runmat');
         job.remtimout = 30;% timeout in minutes
         %
+        remoteprofiles(irem).sshopts = ['-o ConnectTimeout=',int2str(job.remtimout),' -o BatchMode=yes'];
+        %
         [err,jobparams,res,txt,workpath] = matremote_jd('gitupdate_yp',{remotefunctions{ifnc},remoteprofiles(irem).gitmode,debugmode},remoteprofiles(irem),job);
         %
         if isempty(err),            
