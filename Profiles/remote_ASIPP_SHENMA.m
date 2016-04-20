@@ -22,7 +22,7 @@ default.profile = 'PEYSSON';% default user profile if 'remoteuser' is not an exi
 %
 remote.torque.PEYSSON = default_remote_profile;
 remote.torque.PEYSSON.host = 'shenma.ipp.ac.cn';%empty for local host (202.127.204.22)
-remote.torque.PEYSSON.hostname = 'login113';%login110(10.10.10.110) to login113(10.10.10.113)
+remote.torque.PEYSSON.hostname = 'shenma107';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
 remote.torque.PEYSSON.nproc = 20;% default number of nodes for job on shenma
 remote.torque.PEYSSON.wait = 0;
 remote.torque.PEYSSON.shclean = 1;
@@ -44,7 +44,7 @@ remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberr
 %
 remote.direct.PEYSSON = default_remote_profile;
 remote.direct.PEYSSON.host = 'shenma.ipp.ac.cn';
-remote.direct.PEYSSON.hostname = 'login113';%login110(10.10.10.110) to login113(10.10.10.113)
+remote.direct.PEYSSON.hostname = 'shenma107';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
 remote.direct.PEYSSON.nproc = 20;
 remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.PEYSSON.get_jobid = {};%str_before,str_after
