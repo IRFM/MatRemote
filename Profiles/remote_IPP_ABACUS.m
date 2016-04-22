@@ -10,7 +10,7 @@ function remote_profile = remote_IPP_ABACUS(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'decker';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'peysson';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %

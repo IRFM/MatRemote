@@ -67,7 +67,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         if inter,
             remote = '';% load all profiles
         else
-            remote = 'local';% load all profiles
+            remote = 'local';% load all local profiles
         end
     end
     if nargin < 4 || ~ischar(scheduler),
@@ -287,9 +287,9 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         end
         %
         for ifile = 1:nremotefiles,
-            testedprofile = testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),link_mode,test,display_mode);
+            testedprofile = testremoteprofile_jd(feval(RemoteFileNames{ifile},scheduler,profilename),link_mode,test,display_mode);
             RemoteFileTest(ifile) = ~isempty(testedprofile);
-            if RemoteFileTest(ifile),
+            if RemoteFileTest(ifile) && ~isempty(testedprofile.link_mode),
                 TestedLinkModes(ifile) = testedprofile.link_mode;
             else
                 TestedLinkModes(ifile) = link_mode;
@@ -318,7 +318,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         remoteprofiletest = [];
         %
         for irem = 1:length(RemoteFileNames),
-            newremoteprofiles = feval(RemoteFileNames{irem},NaN,profilename);
+            newremoteprofiles = feval(RemoteFileNames{irem},scheduler,profilename);
             %
             for iirem = 1:length(newremoteprofiles),
                 newremoteprofiles(iirem).link_mode = TestedLinkModes(irem);

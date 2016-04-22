@@ -14,59 +14,59 @@ default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not 
 default.profile = 'YP105119';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
-%
-% JOAN DECKER
-%
-% pbs pro
-%
-remote.pbs.JD211098 = default_remote_profile;
-remote.pbs.JD211098.host = 'andromede1.partenaires.cea.fr';
-remote.pbs.JD211098.hostname = 'andromede';
-remote.pbs.JD211098.shell = 'csh';
-remote.pbs.JD211098.nproc = 12;
-remote.pbs.JD211098.cmd = 'qsub';
-remote.pbs.JD211098.remotedatapath = '/home/JD211098/tmp/';
-remote.pbs.JD211098.get_jobid = {'','.andromede1'};%str_before,str_after
-remote.pbs.JD211098.set_jobid = {'qstat ','.andromede1','finished'};%str_before,str_after,str_check
-remote.pbs.JD211098.shclean = 1;
-remote.pbs.JD211098.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
-remote.pbs.JD211098.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
-remote.pbs.JD211098.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
-remote.pbs.JD211098.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
-remote.pbs.JD211098.matver.matdef = remote.pbs.JD211098.matver.mat806;%default matlab on remote machine
-remote.pbs.JD211098.remoteuser = 'JD211098';
-remote.pbs.JD211098.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.pbs.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.pbs.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
-%
-% direct
-%
-% note : mode direct bridge disabled because nohup does not work
-%
-remote.direct.JD211098 = default_remote_profile;
-remote.direct.JD211098.host = 'andromede1.partenaires.cea.fr';
-remote.direct.JD211098.hostname = 'andromede';
-remote.direct.JD211098.shell = 'csh';
-remote.direct.JD211098.nproc = 12;
-%
-% remote.direct.JD211098.cmd = {'csh','',' &;'};% direct calculation (csh, bash)
-% remote.direct.JD211098.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
-% remote.direct.JD211098.set_jobid = {'ps -p ',' -o comm=','csh'};%str_before,str_after,str_check
-%
-% remote.direct.JD211098.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
-remote.direct.JD211098.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-remote.direct.JD211098.remotedatapath = '/home/JD211098/tmp/';
-remote.direct.JD211098.get_jobid = {};%str_before,str_after
-remote.direct.JD211098.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.JD211098.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
-remote.direct.JD211098.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
-remote.direct.JD211098.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
-remote.direct.JD211098.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
-remote.direct.JD211098.matver.matdef = remote.direct.JD211098.matver.mat806;%default matlab on remote machine
-remote.direct.JD211098.remoteuser = 'JD211098';
-remote.direct.JD211098.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.JD211098.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.JD211098.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+% %
+% % JOAN DECKER
+% %
+% % pbs pro
+% %
+% remote.pbs.decker = default_remote_profile;
+% remote.pbs.decker.host = 'andromede1.partenaires.cea.fr';
+% remote.pbs.decker.hostname = 'andromede';
+% remote.pbs.decker.shell = 'csh';
+% remote.pbs.decker.nproc = 12;
+% remote.pbs.decker.cmd = 'qsub';
+% remote.pbs.decker.remotedatapath = '/home/JD211098/tmp/';
+% remote.pbs.decker.get_jobid = {'','.andromede1'};%str_before,str_after
+% remote.pbs.decker.set_jobid = {'qstat ','.andromede1','finished'};%str_before,str_after,str_check
+% remote.pbs.decker.shclean = 1;
+% remote.pbs.decker.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+% remote.pbs.decker.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
+% remote.pbs.decker.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
+% remote.pbs.decker.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
+% remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat806;%default matlab on remote machine
+% remote.pbs.decker.remoteuser = 'JD211098';
+% remote.pbs.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+% remote.pbs.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+% remote.pbs.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+% %
+% % direct
+% %
+% % note : mode direct bridge disabled because nohup does not work
+% %
+% remote.direct.decker = default_remote_profile;
+% remote.direct.decker.host = 'andromede1.partenaires.cea.fr';
+% remote.direct.decker.hostname = 'andromede';
+% remote.direct.decker.shell = 'csh';
+% remote.direct.decker.nproc = 12;
+% %
+% % remote.direct.decker.cmd = {'csh','',' &;'};% direct calculation (csh, bash)
+% % remote.direct.decker.get_jobid = {'[1] ',{' ',''}};%str_before,str_after
+% % remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','csh'};%str_before,str_after,str_check
+% %
+% % remote.direct.decker.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
+% remote.direct.decker.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+% remote.direct.decker.remotedatapath = '/home/JD211098/tmp/';
+% remote.direct.decker.get_jobid = {};%str_before,str_after
+% remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+% remote.direct.decker.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
+% remote.direct.decker.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
+% remote.direct.decker.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
+% remote.direct.decker.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
+% remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat806;%default matlab on remote machine
+% remote.direct.decker.remoteuser = 'JD211098';
+% remote.direct.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+% remote.direct.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+% remote.direct.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
 %
 % YVES PEYSSON
 %

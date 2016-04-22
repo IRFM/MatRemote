@@ -18,7 +18,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     // generic commands
 
-    $localcmd[0] = "ls";
+    $localcmd[0] = "whoami";
     $localcmd[1] = "test -d ".$remotedatapath;
     $localcmd[2] = "chmod -R 777 ".$remotedatapath.$batch_dir;
     $localcmd[3] = "ls ".$remotedatapath.$batch_dir;

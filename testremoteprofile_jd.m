@@ -44,7 +44,7 @@ if isempty(remote.host), %local calculation
     return
 end
 %
-remotecmd = 'echo test ok';
+remotecmd = 'whoami';
 %
 % test ssh key-pair connection
 %
@@ -52,9 +52,7 @@ if isempty(remote.link_mode) || remote.link_mode == 0,
     if test,% test ssh key-pair connection
         locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
         %
-        remote.sshopts = '-o ConnectTimeout=10 -o BatchMode=yes';
-        %
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
+        [res,txt] = unix(['ssh -o ConnectTimeout=10 -o BatchMode=yes ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh   
         %
         if res ~= 0,
             if any(strfind(txt,'Connection timed out')),
@@ -67,7 +65,7 @@ if isempty(remote.link_mode) || remote.link_mode == 0,
             %
             locdisp(display_mode,['   ... ',msg])
         else
-            locdisp(display_mode,['   ... completed with following result : ',txt])
+            locdisp(display_mode,['   ... completed with following request of remote end user: ',txt])
             locdisp(display_mode,' ---> ssh key-pair mode selected')
             %
             remote.link_mode = 0;% ssh key-pair mode selected
@@ -85,12 +83,12 @@ if (isempty(remote.link_mode) || remote.link_mode == 1),
         if test,% test ssh bridge connection
             locdisp(display_mode,['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... '])
             %
-            [txt,res] = matremotessh(remote,'ls');
+            [txt,res] = matremotessh(remote,remotecmd);
             %
             if res ~= 0,
-                locdisp(display_mode,['   ... failed with following message : ',txt])
+                locdisp(display_mode,['   ... failed with following : ',txt])
             else
-                locdisp(display_mode,'   ... completed with following result : test ok')
+                locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
                 locdisp(display_mode,' ---> ssh bridge mode selected')
                 %
                 remote.link_mode = 1;% ssh bridge mode selected
@@ -114,12 +112,12 @@ if (isempty(remote.link_mode) || remote.link_mode == 2),
         if test,
             locdisp(display_mode,['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... '])
             %
-            [txt,res] = matremoteurl(remote,'','ls','');
+            [txt,res] = matremoteurl(remote,'',remotecmd,'');
             %
             if res == 0,
                 locdisp(display_mode,['   ... failed with following message : ',txt])
             else
-                locdisp(display_mode,'   ... completed with following result : test ok')
+                locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
                 locdisp(display_mode,' ---> url/ftp bridge mode selected')
                 %
                 remote.link_mode = 2;% ssh bridge mode selected

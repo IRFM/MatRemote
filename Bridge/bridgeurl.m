@@ -21,10 +21,13 @@ url_message3 = 'ssh2php_error:';
 %
 if ~isempty(strfind(txt_url,url_message1)),
     txt_url = strtrim(txt_url(length(url_message1)+1:end));
-elseif ~isempty(strfind(txt_url,url_message2)),
+elseif ~isempty(strfind(txt_url,url_message2))...% remove empty scp2php_error message
+        && isempty(txt_url(strfind(txt_url,url_message2)+length(url_message2):end)),
+    txt_url = strtrim(txt_url(1:strfind(txt_url,url_message2)-1));
 
-elseif ~isempty(strfind(txt_url,url_message3)),
-
+elseif ~isempty(strfind(txt_url,url_message3))...% remove empty ssh2php_error message
+        && isempty(txt_url(strfind(txt_url,url_message3)+length(url_message3):end)),
+    txt_url = strtrim(txt_url(1:strfind(txt_url,url_message3)-1));
     
 else
     disp(['WARNING: -> the php command ''',phpcmd,''' failed in bridgurl.']);
