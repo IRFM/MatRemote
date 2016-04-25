@@ -287,7 +287,7 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         end
         %
         for ifile = 1:nremotefiles,
-            testedprofile = testremoteprofile_jd(feval(RemoteFileNames{ifile},scheduler,profilename),link_mode,test,display_mode);
+            testedprofile = testremoteprofile_jd(feval(RemoteFileNames{ifile},'',profilename),link_mode,test,display_mode);
             RemoteFileTest(ifile) = ~isempty(testedprofile);
             if RemoteFileTest(ifile) && ~isempty(testedprofile.link_mode),
                 TestedLinkModes(ifile) = testedprofile.link_mode;
