@@ -22,7 +22,7 @@ remote.direct.decker = default_remote_profile;
 remote.direct.decker.host = 'abacus.tok.ipp.cas.cz';
 remote.direct.decker.hostname = 'abacus';
 remote.direct.decker.nproc = 12;
-remote.direct.decker.cmd ={'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.decker.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.remotedatapath = '/compass/home/decker/';
@@ -53,7 +53,7 @@ remote.direct.peysson = default_remote_profile;
 remote.direct.peysson.host = 'abacus.tok.ipp.cas.cz';
 remote.direct.peysson.hostname = 'abacus';
 remote.direct.peysson.nproc = 12;
-remote.direct.peysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.peysson.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.peysson.remotedatapath = '/compass/home/peysson/';
@@ -62,7 +62,7 @@ remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%defau
 remote.direct.peysson.remoteuser = 'peysson';
 remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
 remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % pbs
 %
@@ -80,7 +80,7 @@ remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat801;%default mat
 remote.pbs.peysson.remoteuser = 'peysson';
 remote.pbs.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
 remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % JAKUB URBAN
 %

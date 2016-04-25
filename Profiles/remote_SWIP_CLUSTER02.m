@@ -43,7 +43,7 @@ remote.torque.Yves.matver.matdef = remote.torque.Yves.matver.mat802;%default mat
 remote.torque.Yves.remoteuser = 'Yves';
 remote.torque.Yves.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
 remote.torque.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.torque.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+remote.torque.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % direct
 %
@@ -62,7 +62,7 @@ remote.direct.Yves.matver.matdef = remote.direct.Yves.matver.mat802;%default mat
 remote.direct.Yves.remoteuser = 'Yves';
 remote.direct.Yves.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
 remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % SHAODONG SONG
 %

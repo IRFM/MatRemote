@@ -56,7 +56,7 @@ remote.direct.peyssony.matver.matdef = remote.direct.peyssony.matver.mat804;%def
 remote.direct.peyssony.remoteuser = 'peyssony';
 %remote.direct.peyssony.bridge.url.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
 %remote.direct.peyssony.bridge.ftp.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
-remote.direct.peyssony.bridge.ssh.host = 'cybele.gat.com -p 2039';%cybele workstation GA/DIII-D
+remote.direct.peyssony.bridge.ssh.host = 'cybele.gat.com:2039';%cybele workstation GA/DIII-D
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
