@@ -37,8 +37,8 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
             %
             [remote] = bridge_params(remote);
             %
-            remotecmd = ['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',remote.bridge.ssh.temppath,'/',targetpath];%download from remote to bridge
-            [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
+            remotecmd = [remote.ssh.scpcmd{1},' ',remote.ssh.scpcmd{2},':',rempath,target,' ',remote.bridge.ssh.temppath,'/',targetpath];%download from remote to bridge
+            [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);
             %
             if res ~= 0,
                 return

@@ -1,12 +1,12 @@
-function [res,err] = scp2remote_yp(remotelogname,remotehost,filename,local_path,remote_path)
+function [res,err] = scp2remote_yp(sshcmd,scpcmd,filename,local_path,remote_path)
 % LUKE - scp UNIX command with checking of the file or directory transfer for slow network
 %
 %   scp UNIX command with checking of the file or directory transfer for slow network
 %
 %   INPUT:
 %
-%       - remotelogname on the remote computer
-%       - remotehost IP adress
+%       - sshcmd : ssh command to remote computer
+%       - scpcmd : scpcmd command to remote computer
 %       - filename or dirname
 %       - local_path
 %       - remote_path
@@ -18,20 +18,14 @@ function [res,err] = scp2remote_yp(remotelogname,remotehost,filename,local_path,
 %
 %   by Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) and J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr)
 %
-if nargin < 3,
+if nargin < 5,
     error('Not enough input arguments in scp2remote_yp.m.');
 end
 if ~strcmp(remote_path(end),filesep),
     remote_path = [remote_path,filesep];
 end
 %
-if strfind(remotehost,'-p')
-    remotehost1 = deblank(remotehost(1:strfind(remotehost,'-p')-1));
-    remotehost2 = remotehost(strfind(remotehost,'-p'):end);%for non-standard port
-    [res,err] = unix(['scp ',upper(remotehost2),' -r ',local_path,filename,' ',remotelogname,'@',remotehost1,':',remote_path]);
-else
-    [res,err] = unix(['scp -r ',local_path,filename,' ',remotelogname,'@',remotehost,':',remote_path]);
-end
+[res,err] = unix([scpcmd{1},' ',local_path,filename,' ',scpcmd{2},':',remote_path]);
 %
 % Check that the file transfer is fully achieved even when network is slow 
 %
@@ -61,7 +55,7 @@ if res == 0,
             %
             remotecmd = remotecmds{icmd};
             %
-            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            [res,err] = unix([sshcmd,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
             %
             if res == 0,
                 break
@@ -87,7 +81,7 @@ if res == 0,
             %
             pause(dt);
             %
-            [res,err] = unix(['ssh ',remotelogname,'@',remotehost,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
+            [res,err] = unix([sshcmd,' ''',remotecmd,' ',remote_path,filelist{ifile},'''']);
             %
             if res ~= 0,
                 return

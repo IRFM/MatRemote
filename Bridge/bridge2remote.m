@@ -49,8 +49,8 @@ elseif remote.link_mode == 1,
     %
     [remote] = bridge_params(remote);
     %
-    remotecmd = ['scp -r ',remote.bridge.ssh.temppath,'/',job.save_id,' ',remote.remoteuser,'@',remote.host,':',job.remotedatapath];
-    [res1,txt1] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' "',remotecmd,'"']);
+    remotecmd = [remote.ssh.scpcmd{1},' ',remote.bridge.ssh.temppath,'/',job.save_id,' ',remote.ssh.scpcmd{2},':',job.remotedatapath];
+    [res1,txt1] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);
     %
     remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];%because all files in the bridge have low level rights
     [txt2,res2] = matremotessh(remote,remotecmd);  

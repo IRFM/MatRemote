@@ -52,7 +52,7 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
             %
         else
             %
-            [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' "',fixquotes(remotecmd,'"'),'"',ssh_opts]);%execute the remote command by ssh 
+            [res,txt] = unix([remote.ssh.sshcmd,' "',fixquotes(remotecmd,'"'),'"',ssh_opts]);%execute the remote command by ssh 
             %
         end
     else

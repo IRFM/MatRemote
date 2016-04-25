@@ -117,12 +117,5 @@ if remote.link_mode == 2,
     cd(initdir);
     %
 elseif remote.link_mode == 1,
-    if strfind(remote.bridge.ssh.host,'-p')
-        remotehost1 = deblank(remote.bridge.ssh.host(1:strfind(remote.bridge.ssh.host,'-p')-1));
-        remotehost2 = remote.bridge.ssh.host(strfind(remote.bridge.ssh.host,'-p'):end);%for non-standard port
-        [res,txt] = unix(['scp ',upper(remotehost2),' -r ',remote.bridge.ssh.username,'@',remotehost1,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
-    else
-        [res,txt] = unix(['scp -r ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,':',remote.bridge.ssh.temppath,'/',target,' ',locpath]); 
-    end
-
+    [res,txt] = unix([remote.bridge.ssh.scpcmd{1},' ',remote.bridge.ssh.scpcmd{2},':',remote.bridge.ssh.temppath,'/',target,' ',locpath]);
 end

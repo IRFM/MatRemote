@@ -14,33 +14,31 @@ if ~isempty(remote.bridge),
     %
     if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host'),
         %
-        if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr -p 2222'),%raspberry1 bridge aix
+        if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr:2222'),%raspberry1 bridge aix
             remote.bridge.ssh.username = 'matremote';
             remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.keyfile = 'id_dsa_matremote';
-%             remote.bridge.ssh.ports = {'1080','9999'};
-        end
-        %
-        if strcmp(remote.bridge.ssh.host,'cybele.gat.com -p 2039'),%cybele bridge General Atomics
+        elseif strcmp(remote.bridge.ssh.host,'cybele.gat.com:2039'),%cybele bridge General Atomics
             remote.bridge.ssh.username = 'peyssony';
             remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.keyfile = 'id_rsa_cybele';
-%             remote.bridge.ssh.ports = {'1080','9999'};
-        end
-        %
-        if strcmp(remote.bridge.ssh.host,'cmodws85.psfc.mit.edu'),%cmodws85 bridge PSFC/MIT
+        elseif strcmp(remote.bridge.ssh.host,'cmodws85.psfc.mit.edu'),%cmodws85 bridge PSFC/MIT
             remote.bridge.ssh.username = 'ypeysson';
             remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.keyfile = 'id_rsa_cmodws85';
-%             remote.bridge.ssh.ports = {'1080','9999'};
-        end
-        %
-        if strcmp(remote.bridge.ssh.host,'lac911.epfl.ch'),%lac bridge crpp/epfl
+        elseif strcmp(remote.bridge.ssh.host,'lac911.epfl.ch'),%lac bridge crpp/epfl
             remote.bridge.ssh.username = 'decker';
             remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.keyfile = 'id_rsa_lac911';
-%             remote.bridge.ssh.ports = {'1080','9999'};
-       end
+        else
+            remote.bridge.ssh.username = remote.remoteuser;
+            remote.bridge.ssh.temppath = '/tmp';
+            remote.bridge.ssh.keyfile = '';           
+        end
+        %
+        % setup bridge specific ssh and scp commands
+        %
+        remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts));
         %
     end
     %

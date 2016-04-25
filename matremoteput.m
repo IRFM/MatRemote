@@ -14,7 +14,7 @@ if ~isempty(remote.host),
         %
         res = res1*res2;
     else
-        [res,txt] = scp2remote_yp(remote.remoteuser,remote.host,job.save_id,job.localdatapath,job.remotedatapath);%transfer data from the local batch dir to the remote batch dir
+        [res,txt] = scp2remote_yp(remote.ssh.sshcmd,remote.ssh.scpcmd,job.save_id,job.localdatapath,job.remotedatapath);%transfer data from the local batch dir to the remote batch dir
         %
     end
     %

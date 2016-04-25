@@ -92,7 +92,7 @@ if remote.link_mode == 2,
 elseif remote.link_mode == 1,
     %
     remotecmd = ['rm -fr ',remote.bridge.ssh.temppath,'/',job.save_id];
-    [res,txt] = unix(['ssh ',remote.bridge.ssh.username,'@',remote.bridge.ssh.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
+    [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);%execute the remote command by ssh 
     %
 end
 end

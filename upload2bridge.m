@@ -49,6 +49,6 @@ if remote.link_mode == 2,
     %
 elseif remote.link_mode == 1,
     %
-    [res,txt] = scp2remote_yp(remote.bridge.ssh.username,remote.bridge.ssh.host,job.save_id,job.localdatapath,remote.bridge.ssh.temppath);%transfer data from the local batch dir to the remote batch dir
+    [res,txt] = scp2remote_yp(remote.bridge.ssh.sshcmd,remote.bridge.ssh.scpcmd,job.save_id,job.localdatapath,remote.bridge.ssh.temppath);%transfer data from the local batch dir to the remote batch dir
     %
 end
