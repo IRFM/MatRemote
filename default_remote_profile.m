@@ -29,6 +29,7 @@ remote.sge = [];% sun grid engine specific parameters
 remote.scheduler = [];%scheduler type (because two identical cmd may correspond to different schedulers)
 remote.shell = [];%shell type 
 remote.rempause = [];% pause between job checks (in minutes)
+remote.keyfile = [];% use of a specific private key in folder Matremote/Keys
 %
 % The following parameters are for qsub or torque only. Use NaN if option is forbidden 
 %
