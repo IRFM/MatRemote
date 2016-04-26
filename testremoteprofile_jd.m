@@ -44,7 +44,7 @@ if isempty(remote.host), %local calculation
     return
 end
 %
-remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts);
+remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout);
 %
 remotecmd = 'whoami';
 %

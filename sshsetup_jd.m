@@ -1,7 +1,10 @@
-function ssh = sshsetup_jd(host,username,keyfile,sshopts)
+function ssh = sshsetup_jd(host,username,keyfile,sshopts,timeout)
 %
 % builds the ssh and scp commands specifically for the provided host
 %
+if nargin < 5,
+    timeout = 10;% in s
+end
 if nargin < 4,
     sshopts = '';
 end
@@ -33,7 +36,7 @@ else
     keyfilestr = '';
 end
 %
-batchmodestr = ' -o ConnectTimeout=10 -o BatchMode=yes';
+batchmodestr = [' -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
 %
 ssh.sshcmd = ['ssh',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
 ssh.scpcmd = {['scp -r',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};

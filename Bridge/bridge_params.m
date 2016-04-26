@@ -38,7 +38,7 @@ if ~isempty(remote.bridge),
         %
         % setup bridge specific ssh and scp commands
         %
-        remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts));
+        remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts,remote.timeout));
         %
     end
     %

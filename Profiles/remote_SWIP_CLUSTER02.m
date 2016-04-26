@@ -37,6 +37,7 @@ remote.torque.Yves.remotedatapath = '/home/Yves/tmp/';
 remote.torque.Yves.get_jobid = {'','.mgmt.chess'};%str_before,str_after
 remote.torque.Yves.set_jobid = {'qstat ','',' C '};%str_before,str_after,str_check
 remote.torque.Yves.quotes = false;
+remote.torque.Yves.timeout = 60;
 remote.torque.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.torque.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
 remote.torque.Yves.matver.mat802 = '/opt/MATLAB/R2013b/bin/matlab';
@@ -56,6 +57,7 @@ remote.direct.Yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};
 remote.direct.Yves.get_jobid = {};%str_before,str_after
 remote.direct.Yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.Yves.quotes = false;
+remote.direct.Yves.timeout = 60;
 remote.direct.Yves.remotedatapath = '/home/Yves/';
 remote.direct.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.direct.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';

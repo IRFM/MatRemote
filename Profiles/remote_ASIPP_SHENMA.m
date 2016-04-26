@@ -31,6 +31,7 @@ remote.torque.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
 remote.torque.PEYSSON.get_jobid = {'','.service103'};%str_before,str_after
 remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
 remote.torque.PEYSSON.quotes = false;
+remote.torque.PEYSSON.timeout = 60;
 remote.torque.PEYSSON.matver.mat714 = '/pkg/MATLAB/MATLAB/R2012a/bin/matlab';
 remote.torque.PEYSSON.matver.mat801 = '/pkg/MATLAB/MATLAB/R2013a/bin/matlab';
 remote.torque.PEYSSON.matver.mat804 = '/pkg/MATLAB/MATLAB/R2014b/bin/matlab';
@@ -51,6 +52,7 @@ remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &','
 remote.direct.PEYSSON.get_jobid = {};%str_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.quotes = false;
+remote.direct.PEYSSON.timeout = 60;
 remote.direct.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
 remote.direct.PEYSSON.matver.mat714 = '/pkg/MATLAB/MATLAB/R2012a/bin/matlab';
 remote.direct.PEYSSON.matver.mat801 = '/pkg/MATLAB/MATLAB/R2013a/bin/matlab';
