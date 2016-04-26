@@ -298,6 +298,14 @@ if debugmode,
     end
 end
 %
+resstr = cell(1,nrem);
+profilestr1 = cell(1,nrem);
+profilestr2 = cell(1,nrem);
+profilestr3 = cell(1,nrem);
+nstr1 = 0;
+nstr2 = 0;
+nstr3 = 0;
+%
 for irem = 1:nrem,
     %
     disp(' ');
@@ -308,12 +316,23 @@ for irem = 1:nrem,
     %
     soutputs{irem}.profilestr = profilestr{irem};
     %
+    isep1 = strfind(profilestr{irem},' :');
+    isep2 = strfind(profilestr{irem},')');
+    profilestr1{irem} = profilestr{irem}(1:isep1-1);
+    profilestr2{irem} = profilestr{irem}(isep1+3:isep2);
+    profilestr3{irem} = profilestr{irem}(isep2+2:end);
+    nstr1 = max([nstr1,length(profilestr1{irem})]);
+    nstr2 = max([nstr2,length(profilestr2{irem})]);
+    nstr3 = max([nstr3,length(profilestr3{irem})]);
+    %
     if isfield(soutputs{irem},'err'),
         %
         % failed test
         %
         disp('The remote job failed : ');
         disperr_jd(soutputs{irem}.err)
+        %
+        resstr{irem} = 'X';
         %
     elseif isfield(soutputs{irem},'job'),
         %
@@ -329,19 +348,42 @@ for irem = 1:nrem,
             %
         end
         %
+        resstr{irem} = 'R';
+        %
     elseif isfield(soutputs{irem},'strout'),
         %
         % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
         %
         disp(soutputs{irem}.strout)
         %
+        if any(strfind(soutputs{irem}.strout,'luke')),% test OK
+            resstr{irem} = 'O';
+        else
+            resstr{irem} = 'X';
+        end
     else
         %
         % failed test
         %
         disp('The remote job failed for unknown reasons');
         %
+        resstr{irem} = 'X';
+        %
     end
+end
+%
+disp(' ');
+disp('-------------------------------------------------------------------')
+disp('                     SUMMARY');
+disp('-------------------------------------------------------------------')
+disp(' ');
+%
+for irem = 1:nrem,
+    %
+    disp([resstr{irem},'    ',profilestr1{irem},repmat(' ',[1,4+nstr1-length(profilestr1{irem})]),...
+                            profilestr2{irem},repmat(' ',[1,4+nstr2-length(profilestr2{irem})]),...
+                            profilestr3{irem}])
+    %
 end
 %
 if ~isempty(diaryname),
