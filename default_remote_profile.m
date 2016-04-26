@@ -30,6 +30,7 @@ remote.scheduler = [];%scheduler type (because two identical cmd may correspond 
 remote.shell = [];%shell type 
 remote.rempause = [];% pause between job checks (in minutes)
 remote.keyfile = [];% use of a specific private key in folder Matremote/Keys
+remote.quotes = true;
 %
 % The following parameters are for qsub or torque only. Use NaN if option is forbidden 
 %

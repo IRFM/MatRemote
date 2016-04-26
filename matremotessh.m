@@ -6,8 +6,11 @@ end
 %
 [remote] = bridge_params(remote);
 %
-% [res,txt] = unix([remote.bridge.ssh.sshcmd,' "ssh -o ConnectTimeout=10 -o BatchMode=yes ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''"',ssh_opts]);%execute the remote command by ssh
-[res,txt] = unix([remote.bridge.ssh.sshcmd,' "ssh -o ConnectTimeout=10 -o BatchMode=yes ',remote.remoteuser,'@',remote.host,' ',remotecmd,'"',ssh_opts]);%execute the remote command by ssh
+if remote.quotes,
+    [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remote.ssh.sshcmd,' ''',remotecmd,'''"',ssh_opts]);%execute the remote command by ssh
+else
+    [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remote.ssh.sshcmd,' ',remotecmd,'"',ssh_opts]);%execute the remote command by ssh
+end
 %
 if res == 0 && any(strfind(txt,'Rejected')),
     res = 1;
