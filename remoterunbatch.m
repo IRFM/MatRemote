@@ -309,7 +309,14 @@ if job.directsearch,
         end
     end
     %
-    remotecmd = [remenvstr,remote.cmd{2},job.remotedatapath,job.batch_dir,job.script,remote.cmd{3}];
+    if any(strfind(remote.cmd{3},' >')),
+        logfile = '';
+    else
+        logfile = [' >',job.remotedatapath,job.batch_dir,job.script,'.log'];
+%         logfile = [' &>',job.remotedatapath,job.batch_dir,job.script,'.log'];
+    end
+    %
+    remotecmd = [remenvstr,remote.cmd{2},job.remotedatapath,job.batch_dir,job.script,logfile,remote.cmd{3}];
     %
 elseif job.pbssearch,
     %
