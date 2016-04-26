@@ -8,7 +8,7 @@ if ~isempty(remote.bridge),
         %
         if strcmp(remote.bridge.ftp.host,'tolbachik.hd.free.fr:2121'),%raspberry1 bridge aix
             remote.bridge.ftp.username = 'matremote';
-            remote.bridge.ftp.password = 'bridge22';
+            remote.bridge.ftp.password = 'M@trem0tePass';
         end
     end
     %
