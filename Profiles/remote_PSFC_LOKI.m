@@ -28,6 +28,7 @@ remote.pbs.ypeysson.cmd = 'qsub';
 remote.pbs.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.pbs.ypeysson.get_jobid = {'','.head'};%str_before,str_after
 remote.pbs.ypeysson.set_jobid = {'qstat ','.head','Unknown Job Id'};%str_before,str_after,str_check
+remote.pbs.ypeysson.quotes = false;
 remote.pbs.ypeysson.shclean = 1;
 remote.pbs.ypeysson.matver.mat712 = '/usr/local/bin/matlab';
 remote.pbs.ypeysson.matver.matdef = remote.pbs.ypeysson.matver.mat712;%default matlab on remote machine
