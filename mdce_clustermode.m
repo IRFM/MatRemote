@@ -121,6 +121,13 @@ if ~isempty(dkecluster.scheduler.remote),
         localdatadir = dkecluster.scheduler.localdatadir;% non-recursive case
         dkecluster.scheduler.localdatadir = '';
     end
+    if ischar(dkecluster.scheduler.mode),
+        if strcmp(dkecluster.scheduler.mode,'local'),
+            dkecluster.scheduler.mode = 3;
+        else
+            error('param.mode is not recognized.')
+        end
+    end
     %
     if isempty(dkecluster.scheduler.remote) && dkecluster.scheduler.mode == 3,% local remcomputing after next and last mdce_remote
         dkecluster.scheduler.mode = remote;%to ensure proper environment
