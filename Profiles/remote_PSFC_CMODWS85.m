@@ -30,6 +30,7 @@ remote.direct.ypeysson.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.direct.ypeysson.get_jobid = {};%str_before,str_after
 remote.direct.ypeysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.ypeysson.quotes = false;
 remote.direct.ypeysson.matver.mat806 = '/usr/local/bin/matlab';
 remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat806;%default matlab on remote machine
 remote.direct.ypeysson.remoteuser = 'ypeysson';
