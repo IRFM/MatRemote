@@ -35,7 +35,7 @@ remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat806;%def
 remote.direct.ypeysson.remoteuser = 'ypeysson';
 %remote.direct.ypeysson.bridge.url.host = 'cmodws85.psfc.mit.edu';%cmodws85 workstation PSFC/MIT
 %remote.direct.ypeysson.bridge.ftp.host = 'cmodws85.psfc.mit.edu';%cmodws85 workstation PSFC/MIT
-%remote.direct.ypeysson.bridge.ssh.host = 'cmodws85.psfc.mit.edu';%cmodws85 workstation PSFC/MIT
+remote.direct.ypeysson.bridge.ssh.host = 'cmodws85.psfc.mit.edu';%cmodws85 workstation PSFC/MIT
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
