@@ -79,7 +79,6 @@ remote.pbs.YP105119.cmd = 'qsub';
 remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp/';
 remote.pbs.YP105119.get_jobid = {'','.andromede1'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.andromede1','finished'};%str_before,str_after,str_check
-remote.pbs.YP105119.quotes = false;
 remote.pbs.YP105119.shclean = 1;
 remote.pbs.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.pbs.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
@@ -104,7 +103,6 @@ remote.direct.YP105119.nproc = 12;
 remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.YP105119.quotes = false;
 remote.direct.YP105119.remotedatapath = '/home/YP105119/';
 remote.direct.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.direct.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';

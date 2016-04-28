@@ -41,13 +41,13 @@ case "$SSH_ORIGINAL_COMMAND" in
 		env
 		;;
        	"ssh"*)
-                $SSH_ORIGINAL_COMMAND
+                eval $SSH_ORIGINAL_COMMAND
                 ;;
 	"scp"*)
-		$SSH_ORIGINAL_COMMAND
+		eval $SSH_ORIGINAL_COMMAND
 		;;
         "stat"*)
-                $SSH_ORIGINAL_COMMAND
+                eval $SSH_ORIGINAL_COMMAND
                 ;;
   	*)
    		echo "Unauthorized Command : $SSH_ORIGINAL_COMMAND"

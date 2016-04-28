@@ -50,7 +50,6 @@ remote.direct.peyssony.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 remote.direct.peyssony.remotedatapath = '/u/peyssony/tmp/';
 remote.direct.peyssony.get_jobid = {};%str_before,str_after
 remote.direct.peyssony.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.peyssony.quotes = false;
 remote.direct.peyssony.matver.mat804 = '/usr/local/bin/matlab';
 remote.direct.peyssony.matver.mat806 = '/usr/local/bin/matlab15b';
 remote.direct.peyssony.matver.matdef = remote.direct.peyssony.matver.mat804;%default matlab on remote machine

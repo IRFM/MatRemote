@@ -25,7 +25,6 @@ remote.direct.decker.nproc = 12;
 remote.direct.decker.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.decker.quotes = false;
 remote.direct.decker.remotedatapath = '/compass/home/decker/';
 remote.direct.decker.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat801;%default matlab on remote machine
@@ -41,7 +40,6 @@ remote.pbs.decker.cmd = 'qsub ';%remote calculation with the pbs scheduler
 remote.pbs.decker.shclean = 1;
 remote.pbs.decker.get_jobid = {'','.abacus'};%str_before,str_after
 remote.pbs.decker.set_jobid = {'qstat ','.abacus','Unknown Job Id',' C '};%str_before,str_after,str_check
-remote.pbs.decker.quotes = false;
 remote.pbs.decker.remotedatapath = '/compass/home/decker/';
 remote.pbs.decker.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat801;%default matlab on remote machine
