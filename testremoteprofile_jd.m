@@ -41,6 +41,7 @@ if isempty(remote.host), %local calculation
         locdisp(display_mode,'Remote connection test skipped : local calculation.')
     end
     %
+    remote.ssh = [];
     return
 end
 %
