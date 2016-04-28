@@ -114,6 +114,10 @@ if nargin < 9,
     displaymode = 1;
 end
 %
+if nargin >= 2, 
+    disp('WARNING :The MatRemote toolbox must be up to date on the remote computer !')
+end
+%
 if isnumeric(mdce_mode) && any(real(mdce_mode) == 0:2),
     param.mode = real(mdce_mode);
     param.gpu = imag(mdce_mode);
