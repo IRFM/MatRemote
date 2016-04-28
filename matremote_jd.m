@@ -3,6 +3,15 @@ function [err,job,varargout] = matremote_jd(arg1,args_in,remote,job)
 % This is a generic matlab function exectuting the function fun with
 % arguments args_in remotely according to profile remote
 %
+% remote can be a remote structure or a string of the form : 
+%
+%   - remoteprofile : remote profile 'remoteprofile' with default remote user and default remote scheduler
+%       ex : 'CRPP_PPB110'
+%   - remoteuser:remoteprofile : remote profile 'remoteprofile' with remote user 'remoteuser' and default remote scheduler
+%       ex : 'decker:CRPP_PPB110'
+%   - remoteuser:remoteprofile:scheduler : remote profile 'remoteprofile' with remote user 'remoteuser' and remote scheduler 'scheduler'
+%       ex : 'decker:CRPP_PPB110:slurm'
+%
 % Note : this function can be used with a wait loop (job.remtimeout or remote.remtimeout > 0)
 %                 or return the job for later check (job.remtimeout or remote.remtimeout == 0)
 %
@@ -36,6 +45,36 @@ elseif nargin > 2 && ~isempty(remote),% new batch job
     mat_input.fun = arg1;% arg1=fun;
     mat_input.args_in = args_in;
     mat_input.nargout = nargout-1;
+    %
+    if ischar(remote),
+        %
+        isep = strfind(remote,':');
+        %
+        if isempty(isep),
+            remoteuser = NaN;
+            remoteprofile = remote;
+            scheduler = NaN;
+        elseif length(isep) == 1,
+            remoteuser = remote(1:isep-1);
+            remoteprofile = remote(isep+1:end);
+            scheduler = NaN;
+        elseif length(isep) == 2,
+            remoteuser = remote(1:isep(1)-1);
+            remoteprofile = remote(isep(1)+1:isep(2)-1);
+            scheduler = remote(isep(2)+1:end);            
+        else
+            error('Could not determine remote profile')
+        end
+        %
+        [remoteprofiles,profilestr] = load_remoteprofiles_jd(remoteprofile,true,false,scheduler,remoteuser,false,false);
+        %
+        if length(profilestr) ~= 1,
+            error('Could not determine remote profile')
+        else
+            disp(profilestr{1})
+        end
+        remote = remoteprofiles;
+    end
     %
     job = remoterunbatch(remote,job,mat_input);
     %
