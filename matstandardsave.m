@@ -67,7 +67,7 @@ function safecopyfile(filename,savedir)
     if ~isempty(filepath),
         copyfile(filepath,savedir);
     else
-        error(['The file = ',filename,' cannot be found on the local matlab path']);
+        error(['The file : ',filename,' cannot be found on the local matlab path']);
     end
 end
     
