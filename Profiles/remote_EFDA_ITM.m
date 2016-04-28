@@ -63,8 +63,43 @@ remote.direct.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 ai
 %
 % JOAN DECKER
 %
-remote.sge.joan = remote.sge.yvesp;
-remote.direct.joan = remote.direct.yvesp;
+remote.sge.joan = default_remote_profile;
+remote.sge.joan.host = 'g01.efda-itm.eu';
+remote.sge.joan.hostname = 'itm.rzg.mpg.de';
+remote.sge.joan.usermail = 'joan.decker@free.fr';
+remote.sge.joan.shell = 'bash';
+remote.sge.joan.nproc = 16;% limited to two jobs per PBS node to avoid cluster saturation
+remote.sge.joan.wait = 0;% invalid option
+remote.sge.joan.nodes = [];% invalid option
+remote.sge.joan.ncpus = [];% invalid option
+remote.sge.joan.memory = [12000,15000];% default/max values
+remote.sge.joan.walltime = [];% invalid option
+remote.sge.joan.cmd = 'qsub';%
+remote.sge.joan.sge.batchscript_params1 = {'module load itmenv'};
+remote.sge.joan.sge.batchscript_params2 = {'source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.09a'};%Call to UAL release 4.09a
+%remote.sge.joan.sge.batchscript_params2 = {'source $ITMSCRIPTDIR/ITMv1.sh kepler test 4.10a'};%Call to UAL release 4.10a
+remote.sge.joan.remotedatapath = '/pfs/home/jodec/tmp/';
+remote.sge.joan.get_jobid = {'Your job ',' '};%str_before,str_after
+remote.sge.joan.set_jobid = {'qstat -j ','','jobs do not exist'};%str_before,str_after,str_check
+remote.sge.joan.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab';
+remote.sge.joan.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
+remote.sge.joan.matver.mat803 = '/afs/ipp/common/soft/matlab_2014a/bin/matlab';
+remote.sge.joan.matver.matdef = remote.sge.joan.matver.mat803;%default matlab on remote machine
+remote.sge.joan.remoteuser = 'jodec';
+%
+% direct
+%
+remote.direct.joan = default_remote_profile;
+remote.direct.joan.host = 'g01.efda-itm.eu';
+remote.direct.joan.hostname = 'itm.rzg.mpg.de';
+remote.direct.joan.nproc = 16;
+%remote.direct.joan.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
+remote.direct.joan.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash). Note the Call to UAL release is done in the .bashrc file
+remote.direct.joan.get_jobid = {};%str_before,str_after
+remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.joan.remotedatapath = '/pfs/home/jodec/tmp/';
+remote.direct.joan.matver = remote.sge.joan.matver;
+remote.direct.joan.remoteuser = 'jodec';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
