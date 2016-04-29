@@ -312,8 +312,12 @@ if job.directsearch,
     if any(strfind(remote.cmd{3},' >')),
         logfile = '';
     else
-        logfile = [' >',job.remotedatapath,job.batch_dir,job.script,'.log'];
+        if job.link_mode < 2,%disabled for curl
+            logfile = [' >',job.remotedatapath,job.batch_dir,job.script,'.log'];
 %         logfile = [' &>',job.remotedatapath,job.batch_dir,job.script,'.log'];
+        else
+            logfile = '';
+        end
     end
     %
     remotecmd = [remenvstr,remote.cmd{2},job.remotedatapath,job.batch_dir,job.script,logfile,remote.cmd{3}];
