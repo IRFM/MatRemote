@@ -31,4 +31,5 @@ elseif ~isempty(strfind(txt_url,url_message3))...% remove empty ssh2php_error me
     
 else
     disp(['WARNING: -> the php command ''',phpcmd,''' failed in bridgurl.']);
+    disp(txt_url);
 end
