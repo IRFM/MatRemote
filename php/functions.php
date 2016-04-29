@@ -76,7 +76,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
             if (strlen($matlabfun) > 0) $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun;
             
-            $localcmd[5] = $localcmd[5]."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+            $localcmd[5] = $localcmd[5]."; nohup ".$remotedatapath.$batch_dir.$script." &";
 
             $localcmd[6] = "ps -p ".$id;
         	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
@@ -98,7 +98,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
-            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
+            
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+              
 
             $localcmd[6] = "ps -p ".$id." -o comm=";
             $localcmd[7] = "rm -f nohup.out";
@@ -175,7 +177,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
             //$localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
-            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+            
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";  
 
             $localcmd[6] = "ps -p ".$id." -o comm=";
         	$localcmd[7] = "rm -f nohup.out";
@@ -210,18 +213,17 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabroot ".$matlabroot;
             $localcmd[5] = $localcmd[5]."; setenv remotematfnc ".$remotematfnc;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; setenv TESTVAR ".$testvar;
-            $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script;
 
-        	$localcmd[6] = $localcmd[5]." &";
+            $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";  
 
-        	$localcmd[7] = "ps -p ".$id." -o comm=";
-        	$localcmd[8] = "rm -f nohup.out";
+        	$localcmd[6] = "ps -p ".$id." -o comm=";
+        	$localcmd[7] = "rm -f nohup.out";
 
-            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[12] = "date +%Y%m%d%H%M%S";
-            $localcmd[13] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
+			$localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
 
 
    		}  elseif (strcmp($pbssearch,"1") == 0) {
@@ -288,7 +290,7 @@ function sendmail($remotehost,$remotecmd,$remoteuser){
     //echo "to:".$to."\n";
     $subject = "MatRemote filtering error";
     //echo "subject:".$subject."\n";
-    $message = "This is an automatic warning message generated by the MatRemote library.\n"."A forbidden filtered remote command has been send :\n".$remotecmd."\n"."The forbidden command has been send by the user:\n".$remoteuser."\n";
+    $message = "This is an automatic warning message generated by the MatRemote library.\n\n-------------------------------------\n\n"."A forbidden filtered remote command has been send :\n\n".$remotecmd."\n\n-------------------------------------\n\n"."The forbidden command has been send by the user:\n".$remoteuser."\n";
     //echo "message:".$message."\n";
     $headers = 'From: '.$mailadress[0]."\r\n".'X-Mailer: PHP/';
     //echo "headers:".$headers."\n";
