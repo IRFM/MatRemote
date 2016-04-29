@@ -38,5 +38,5 @@ end
 %
 batchmodestr = [' -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
 %
-ssh.sshcmd = ['ssh',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
-ssh.scpcmd = {['scp -r',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
+ssh.sshcmd = ['ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+ssh.scpcmd = {['scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
