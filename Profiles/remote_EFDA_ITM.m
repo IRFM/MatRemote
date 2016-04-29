@@ -84,7 +84,7 @@ remote.sge.joan.set_jobid = {'qstat -j ','','jobs do not exist'};%str_before,str
 remote.sge.joan.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab';
 remote.sge.joan.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
 remote.sge.joan.matver.mat803 = '/afs/ipp/common/soft/matlab_2014a/bin/matlab';
-remote.sge.joan.matver.matdef = remote.sge.joan.matver.mat803;%default matlab on remote machine
+remote.sge.joan.matver.matdef = remote.sge.joan.matver.mat802;%default matlab on remote machine
 remote.sge.joan.remoteuser = 'jodec';
 %
 % direct

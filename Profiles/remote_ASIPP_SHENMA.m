@@ -47,7 +47,8 @@ remote.direct.PEYSSON = default_remote_profile;
 remote.direct.PEYSSON.host = 'shenma.ipp.ac.cn';
 remote.direct.PEYSSON.hostname = 'shenma107';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
 remote.direct.PEYSSON.nproc = 20;
-remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+%remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.PEYSSON.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.PEYSSON.get_jobid = {};%str_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.timeout = 60;

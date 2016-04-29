@@ -52,7 +52,7 @@ remote.direct.Yves = default_remote_profile;
 remote.direct.Yves.host = 'cluster02.swip.ac.cn';
 remote.direct.Yves.hostname = 'mgmt.chess';
 remote.direct.Yves.nproc = 20;
-remote.direct.Yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.Yves.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.Yves.get_jobid = {};%str_before,str_after
 remote.direct.Yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.Yves.timeout = 60;
