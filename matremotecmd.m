@@ -23,11 +23,19 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
             [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
             %
             ie = strfind(txt_url,'ssh2php_error:');%the 'ssh2php_error:' separates the ssh output from the error in ssh.php
-            error_txt = strtrim(txt_url(ie+15:end));
+            if isempty(ie),
+                error_txt = '';
+            else
+                error_txt = strtrim(txt_url(ie+15:end));
+            end
             %
             if isempty(error_txt),
                 res = 0;%force standard unix error.
-                txt = strtrim(txt_url(1:ie-1));
+                if isempty(ie),
+                    txt = strtrim(txt_url);
+                else
+                    txt = strtrim(txt_url(1:ie-1));
+                end
             else
                 %
 				if strfind(remotecmd,'condor')
