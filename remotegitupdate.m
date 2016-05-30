@@ -47,7 +47,6 @@ end
 %
 if nargin < 2,
     remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m','make_help.m','lukegitupdate.m'};
-
 end
 %
 if nargin < 1,
@@ -84,7 +83,7 @@ for irem = 1:nrem,
                 disp(' ');
                 disp('------------------------------------------------------------------');
                 disp(' ');
-                if res(1) == 0,
+                if res(1) == 0 & strfind(txt{:},'error') == 0,
                     for itxt = 1:length(txt),
                         disp(['---> ',txt{itxt}(1:end-1), ' from Git repository']);
                     end
