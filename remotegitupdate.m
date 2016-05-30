@@ -13,10 +13,12 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude,debu
 %
 %       - remotefunctions : list of functions (if ends by '.m') or name of environment variable for path to update. default values include
 %           o select_LUKE -> MatTools
-%           o load_remoteprofiles_jd -> MatTools
+%           o load_remoteprofiles_jd -> MatRemote
+%           o make_help -> MatHelp
+%           o lukegitupdate -> LUKE
 %
 %       - display_mode : 
-%           o 0 : no dispplay
+%           o 0 : no display
 %           o 1 : display result only
 %           o 2 : display updated, removed, added, and conflicts
 %           o 3 : also list files & folders outside Git control.
@@ -44,14 +46,15 @@ if nargin < 3,
 end
 %
 if nargin < 2,
-    remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m'};
+    remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m','make_help.m','lukegitupdate.m'};
+
 end
 %
 if nargin < 1,
     remote = '';
 end
 %
-[remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,false,NaN,NaN,false,false);
+[remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,false,'direct','',true,false);
 %
 nrem = length(remoteprofiles);
 nfncs = length(remotefunctions);
