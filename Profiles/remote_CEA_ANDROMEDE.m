@@ -86,9 +86,6 @@ remote.pbs.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.pbs.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat806;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % direct
 %
@@ -110,9 +107,6 @@ remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat806;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
-remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % YVES BURAVAND
 %
