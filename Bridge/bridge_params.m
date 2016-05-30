@@ -3,6 +3,7 @@ function [remote] = bridge_params(remote)
 if ~isempty(remote.bridge),
     if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host'),
         if strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr:8081'),%raspberry1 aix
+%TODO: change into https port 443. Change also remote profiles
             remote.bridge.url.path = 'MatRemote';
         end
         %
