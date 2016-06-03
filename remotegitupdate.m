@@ -83,7 +83,7 @@ for irem = 1:nrem,
                 disp(' ');
                 disp('------------------------------------------------------------------');
                 disp(' ');
-                if res(1) == 0 & strfind(txt{:},'error') == 0,
+                if res(1) == 0 & (length(strfind(txt{:},'error')) == 0 | length(strfind(txt{:},'fatal')) == 0  | length(strfind(txt{:},'unable')) == 0),
                     for itxt = 1:length(txt),
                         disp(['---> ',txt{itxt}(1:end-1), ' from Git repository']);
                     end
