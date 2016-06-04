@@ -182,7 +182,7 @@ function keyslist() {
     'funcopy','remtimout','rempause','wait','script','savefcn','loadfcn','testvar','matlabfun',
     'matlabpath','remotematfnc','condorscript','condorconfig','condorpath','xgridscript',
     'sgescript','hostname','usermail','nbatchscriptparams','shell','password',
-    'lukeroot','whoami');
+    'lukeroot','whoami','git','cd');
   
   return $keys;
 

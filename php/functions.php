@@ -87,6 +87,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
             $localcmd[12] = "date +%Y%m%d%H%M%S";
             $localcmd[13] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[14] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
         }
 
@@ -110,6 +111,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
             $localcmd[11] = "date +%Y%m%d%H%M%S";
             $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
         } elseif (strcmp($pbssearch,"1") == 0) {
 
@@ -188,7 +190,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
 			$localcmd[11] = "date +%Y%m%d%H%M%S";
             $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
-
+            $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
         } elseif (strcmp($sgesearch,"1") == 0) {
 
@@ -224,6 +226,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
 			$localcmd[11] = "date +%Y%m%d%H%M%S";
             $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
 
    		}  elseif (strcmp($pbssearch,"1") == 0) {
