@@ -70,41 +70,27 @@ for irem = 1:nrem,
     %
     for ifnc = 1:nfncs,
         %
-        job = matstandardjob_jd('runmat');
-        job.remtimout = 30;% timeout in minutes
+        [res,txt,project] = gitupdate_yp(remotefunctions{ifnc},remoteprofiles(irem).gitmode,remoteprofiles(irem),debugmode);
         %
-        remoteprofiles(irem).sshopts = ['-o ConnectTimeout=',int2str(job.remtimout),' -o BatchMode=yes'];
-        %
-        [err,jobparams,res,txt,workpath] = matremote_jd('gitupdate_yp',{remotefunctions{ifnc},remoteprofiles(irem).gitmode,debugmode},remoteprofiles(irem),job);
-        %
-        if isempty(err),            
+        if ~res,            
             %
             if display_mode >= 1,
                 disp(' ');
                 disp('------------------------------------------------------------------');
                 disp(' ');
-                if res(1) == 0,
-                    if length(strfind(txt{:},'error')) == 0 | length(strfind(txt{:},'fatal')) == 0  | length(strfind(txt{:},'unable')) == 0,
-                        flag(irem,ifnc) = -1;
-                    else
-                        flag(irem,ifnc) = 0;
-                    end
-                    %
-                    if  flag(irem,ifnc) == -1,
-                        for itxt = 1:length(txt),
-                            disp(['Git update failed ---> ',txt{itxt}(1:end-1)]);
-                        end
-                    else
-                        for itxt = 1:length(txt),
-                            disp(['---> ',txt{itxt}(1:end-1), ' from Git repository']);
-                        end                        
-                    end
-                    %
+                %
+                txt = txt{:};
+                %
+                if length(strfind(txt,'error')) ~= 0 | length(strfind(txt,'fatal')) ~= 0  | length(strfind(txt,'unable')) ~= 0  | length(strfind(txt,'No path')) ~= 0,
+                    flag(irem,ifnc) = -1;
                 else
-                    for itxt = 1:length(txt),
-                        disp(['Git update failed ---> ',txt{itxt}(1:end-1)]);
-                    end
-                    flag(irem,ifnc) = -1;% failed git update
+                    flag(irem,ifnc) = 0;
+                end
+                %
+                if  flag(irem,ifnc) == -1,
+                    disp(['WARNING: Git update for ',project,' failed ---> ',txt]);
+                else
+                    disp(['Successful Git update for ',project,' ---> ',txt]);                       
                 end
             end
             %
@@ -114,7 +100,7 @@ for irem = 1:nrem,
             %
             disp(' ');
             disp('Remote call failed : ');
-            disperr_jd(err);
+            disperr_jd(txt);
             %
         end
     end
