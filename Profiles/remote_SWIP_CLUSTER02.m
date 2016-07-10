@@ -23,7 +23,7 @@ default.profile = 'Yves';% default user profile if 'remoteuser' is not an existi
 % torque
 %
 remote.torque.Yves = default_remote_profile;
-remote.torque.Yves.host = 'cluster02.swip.ac.cn';% empty for local host
+remote.torque.Yves.host = 'cluster02.swip.ac.cn';% empty for local host (192.168.5.2)
 remote.torque.Yves.hostname = 'mgmt.chess';
 remote.torque.Yves.nproc = 20;% default number of nodes for job on shenma
 remote.torque.Yves.wait = 0;
@@ -32,7 +32,7 @@ remote.torque.Yves.cmd = 'qsub';%
 remote.torque.Yves.queue.name = {'debug','express','small','medium','long','verylong'};%Queue mode
 remote.torque.Yves.queue.maxtask = {8,64,32,16,8,8};%maximum number of tasks per user
 remote.torque.Yves.queue.maxtime = {'00:15','05:00','10:00','24:00','168:00','360:00'};%Maximum calculation time per task (hh:mm) (seconds are set to 00)
-remote.torque.Yves.queue.qdef = 2;%default queue mode number (see queue.name)
+remote.torque.Yves.queue.qdef = 4;%default queue mode number (see queue.name)
 remote.torque.Yves.remotedatapath = '/home/Yves/tmp/';
 remote.torque.Yves.get_jobid = {'','.mgmt.chess'};%str_before,str_after
 remote.torque.Yves.set_jobid = {'qstat ','',' ',' C '};%str_before,str_after,str_check
