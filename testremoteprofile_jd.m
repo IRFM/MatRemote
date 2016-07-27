@@ -31,6 +31,14 @@ if isempty(link_mode) || ~isnan(link_mode),% remote.link_mode enforced by input
     remote.link_mode = link_mode;
 end
 %
+if test > 1,
+    nn = 350;
+    mat_test = rand(nn,nn);
+    save file4testingremoteconnection.mat mat_test;%file for testing upload and download speeds.
+    clear mat_test;
+    file4testingremoteconnection_param = dir('file4testingremoteconnection.mat');
+end
+%
 if isempty(remote.host), %local calculation
     if ~isempty(remote.link_mode),% local host not compatible with enforced link mode
         locdisp(display_mode,'Remote connection test failed : local host not compatible with enforced link mode.')
@@ -68,6 +76,29 @@ if isempty(remote.link_mode) || remote.link_mode == 0,
             %
             locdisp(display_mode,['   ... ',msg])
         else
+            if test > 1 && strcmp(remote.scheduler,'direct'),%test upload and download speeds
+                disp(['---> Test connection speed by uploading and downloading a ',num2str(file4testingremoteconnection_param.bytes/1e6),' MB file on host ',remote.host])
+                tstart_upload = tic;
+                [res_upload,txt_upload] = unix(['scp file4testingremoteconnection.mat ',remote.remoteuser,'@',remote.host,':']);%execute the remote command by ssh
+                telapsed_upload = toc(tstart_upload);
+                tstart_download = tic;
+                [res_download,txt_download] = unix(['scp ',remote.remoteuser,'@',remote.host,':file4testingremoteconnection.mat .']);%execute the remote command by ssh
+                telapsed_download = toc(tstart_download);
+                %
+                if ~res_upload,
+                    disp(['---> Upload speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_upload/1e6),' MB/s']);
+                else
+                    disp(['---> Error upload speed test']);
+                end
+                %
+                if ~res_download,
+                    disp(['---> Download speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_download/1e6),' MB/s']);
+                else
+                    disp(['---> Error download speed test']);
+                end
+                %
+            end
+            %
             locdisp(display_mode,['   ... completed with following request of remote end user: ',txt])
             locdisp(display_mode,' ---> ssh key-pair mode selected')
             %
@@ -149,6 +180,11 @@ end
 locdisp(display_mode,['Remote connection test failed : ',msg])
 %
 remote = [];
+%
+if test > 1,
+    delete file4testingremoteconnection.mat;
+end
+%
 return
 %
 %
