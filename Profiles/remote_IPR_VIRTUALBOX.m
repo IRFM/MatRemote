@@ -35,8 +35,8 @@ remote.condor.peysson.remotedatapath = '/home/peysson/tmp/';
 remote.condor.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.condor.peysson.matver.matdef = remote.condor.peysson.matver.mat805;%default matlab on remote machine1
 remote.condor.peysson.remoteuser = 'peysson';
-remote.condor.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.condor.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+%remote.condor.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+%remote.condor.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
 remote.condor.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % direct
@@ -53,8 +53,8 @@ remote.direct.peysson.remotedatapath = '/home/Yves/';
 remote.direct.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat805;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
-remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+%remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+%remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
 remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % HARSHITA RAJ
