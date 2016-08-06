@@ -49,7 +49,7 @@ remote.direct.peysson.cmd = {'bash','',' &',' &'};% direct calculation (csh, bas
 remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.peysson.timeout = 60;
-remote.direct.peysson.remotedatapath = '/home/Yves/';
+remote.direct.peysson.remotedatapath = '/home/peysson/tmp/';
 remote.direct.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat805;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
