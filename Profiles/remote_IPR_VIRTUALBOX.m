@@ -11,7 +11,7 @@ function remote_profile = remote_IPR_VIRTUALBOX(varargin)
 %
 %       - remote_profile : name of selected remote profile(s)
 %
-default.scheduler = 'condor';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.scheduler = 'torque';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'peysson';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
@@ -22,22 +22,24 @@ default.profile = 'peysson';% default user profile if 'remoteuser' is not an exi
 %
 % torque
 %
-remote.condor.peysson = default_remote_profile;
-remote.condor.peysson.host = '103.49.147.27';% empty for local host (192.168.5.2)
-remote.condor.peysson.hostname = 'ipr-virtualbox';
-remote.condor.peysson.nproc = 12;% default number of nodes for job on shenma
-remote.condor.peysson.cmd = 'condor_submit';
-remote.condor.peysson.get_jobid = {'** Proc ',':'};
-remote.condor.peysson.set_jobid = {'condor_q ',''};
-remote.condor.peysson.condor.CONDOR_CONFIG = 'HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/etc/condor_config';
-remote.condor.peysson.condor.PATH = 'HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/sbin:/Users/yvespeysson/Shared/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/bin:${PATH}';
-remote.condor.peysson.remotedatapath = '/home/peysson/tmp/';
-remote.condor.peysson.matver.mat805 = '/usr/local/bin/matlab';
-remote.condor.peysson.matver.matdef = remote.condor.peysson.matver.mat805;%default matlab on remote machine1
-remote.condor.peysson.remoteuser = 'peysson';
-%remote.condor.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-%remote.condor.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.condor.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+remote.torque.peysson = default_remote_profile;
+remote.torque.peysson.host = '103.49.147.27';%empty for local host (202.127.204.22)
+remote.torque.peysson.hostname = 'ipr-virtualbox';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
+remote.torque.peysson.nproc = 12;% default number of nodes for job on shenma
+remote.torque.peysson.wait = 0;
+remote.torque.peysson.shclean = 1;
+remote.torque.peysson.cmd = 'qsub -q batch';%'qsub -q batch -o /scratch/PEYSSON';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
+remote.torque.peysson.remotedatapath = '/home/peysson/tmp/';
+remote.torque.peysson.get_jobid = {'','.adi-server'};%str_before,str_after
+remote.torque.peysson.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
+remote.torque.peysson.timeout = 60;
+remote.torque.peysson.matver.mat805 = '/usr/local/bin/matlab';
+remote.torque.peysson.matver.matdef = remote.torque.peysson.matver.mat805;%default matlab on remote machine
+remote.torque.peysson.remoteuser = 'peysson';
+remote.torque.peysson.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
+%remote.torque.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
+%remote.torque.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.torque.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
 %
 % direct
 %
@@ -59,9 +61,9 @@ remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 
 %
 % HARSHITA RAJ
 %
-remote.condor.ipr= remote.condor.peysson;
-remote.condor.ipr.remoteuser = 'ipr';
-remote.condor.ipr.remotedatapath = '/home/ipr/tmp/';
+remote.torque.ipr= remote.torque.peysson;
+remote.torque.ipr.remoteuser = 'ipr';
+remote.torque.ipr.remotedatapath = '/home/ipr/tmp/';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
