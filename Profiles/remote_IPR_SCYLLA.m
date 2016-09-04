@@ -61,9 +61,9 @@ remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 
 %
 % HARSHITA RAJ
 %
-remote.torque.ipr= remote.torque.peysson;
-remote.torque.ipr.remoteuser = 'codex';
-remote.torque.ipr.remotedatapath = '/home/ipr/tmp/';
+remote.torque.harshita= remote.torque.peysson;
+remote.torque.harshita.remoteuser = 'harshita';
+remote.torque.harshita.remotedatapath = '/home/harshita/tmp/';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
