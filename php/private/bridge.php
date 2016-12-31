@@ -24,7 +24,7 @@ function login($remotehost,$remoteuser) {
   if ($remotehost == 'shenma.ipp.ac.cn') {
      $remote_host = $remotehost;
      $remote_login = 'PEYSSON';
-     $remote_password = 'ij4ca4+EM';
+     $remote_password = 'ij4ca4+EM';%
      $pbssearch = 1;
      $condorsearch = 0;
      $xgridsearch = 0;
