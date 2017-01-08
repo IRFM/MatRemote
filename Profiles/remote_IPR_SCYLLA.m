@@ -16,6 +16,49 @@ default.profile = 'peysson';% default user profile if 'remoteuser' is not an exi
 %
 % --------------------------------------------------
 %
+% CODE (username)
+%
+% Note : direct mode disabled because login for pid check could occur on a different machine
+%
+% torque
+%
+remote.torque.code = default_remote_profile;
+remote.torque.code.host = '103.49.147.27';%empty for local host (202.127.204.22)
+remote.torque.code.hostname = 'scylla';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
+remote.torque.code.nproc = 12;% default number of nodes for job on shenma
+remote.torque.code.wait = 0;
+remote.torque.code.shclean = 1;
+remote.torque.code.cmd = 'qsub -q batch';%'qsub -q batch -o /home/peysson';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
+remote.torque.code.remotedatapath = '/home/peysson/tmp/';
+remote.torque.code.get_jobid = {'','.scylla'};%str_before,str_after
+remote.torque.code.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
+remote.torque.code.timeout = 60;
+remote.torque.code.matver.mat805 = '/usr/local/bin/matlab';
+remote.torque.code.matver.matdef = remote.torque.code.matver.mat805;%default matlab on remote machine
+remote.torque.code.remoteuser = 'code';
+remote.torque.code.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
+%remote.torque.code.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.torque.code.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.torque.code.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%
+% direct
+%
+remote.direct.peysson = default_remote_profile;
+remote.direct.code.host = '103.49.147.27';
+remote.direct.code.hostname = 'scylla';
+remote.direct.code.nproc = 20;
+remote.direct.code.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.code.get_jobid = {};%str_before,str_after
+remote.direct.code.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.code.timeout = 60;
+remote.direct.code.remotedatapath = '/home/peysson/tmp/';
+remote.direct.code.matver.mat805 = '/usr/local/bin/matlab';
+remote.direct.code.matver.matdef = remote.direct.code.matver.mat805;%default matlab on remote machine
+remote.direct.code.remoteuser = 'code';
+%remote.direct.code.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.direct.code.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.code.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%
 % YVES PEYSSON
 %
 % Note : direct mode disabled because login for pid check could occur on a different machine
@@ -61,7 +104,7 @@ remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % HARSHITA RAJ
 %
-remote.torque.harshita= remote.torque.peysson;
+remote.torque.harshita= remote.torque.code;
 remote.torque.harshita.remoteuser = 'harshita';
 remote.torque.harshita.remotedatapath = '/home/harshita/tmp/';
 %
