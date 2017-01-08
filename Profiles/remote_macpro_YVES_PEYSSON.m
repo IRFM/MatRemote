@@ -19,7 +19,7 @@ default.profile = 'yvespeysson';% default user profile if 'remoteuser' is not an
 % direct
 %
 remote.direct.yvespeysson = default_remote_profile;
-remote.direct.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.direct.yvespeysson.host = '192.168.0.118';
 remote.direct.yvespeysson.hostname = 'macproyves';
 remote.direct.yvespeysson.nproc = 6;
 % remote.direct.yvespeysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
@@ -37,14 +37,11 @@ remote.direct.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/m
 remote.direct.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
 remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.direct.yvespeysson.remoteuser = 'yvespeysson';
-remote.direct.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
-remote.direct.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.direct.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % condor
 %
 remote.condor.yvespeysson = default_remote_profile;
-remote.condor.yvespeysson.host = 'tolbachik.hd.free.fr';
+remote.condor.yvespeysson.host = '192.168.0.118';
 remote.condor.yvespeysson.hostname = 'macproyves';
 remote.condor.yvespeysson.nproc = 6;
 remote.condor.yvespeysson.cmd = 'condor_submit';
@@ -63,10 +60,6 @@ remote.condor.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/m
 remote.condor.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
 remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.condor.yvespeysson.remoteuser = 'yvespeysson';
-remote.condor.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
-remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
-%
 % JOAN DECKER
 %
 % direct
