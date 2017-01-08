@@ -2,12 +2,12 @@ function [remote] = bridge_params(remote)
 %
 if ~isempty(remote.bridge),
     if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host'),
-        if strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr:8081'),%raspberry1 aix
+        if strcmp(remote.bridge.url.host,'tolbachik.hd.free.fr:8081'),%nuc aix
 %TODO: change into https port 443. Change also remote profiles
             remote.bridge.url.path = 'MatRemote';
         end
         %
-        if strcmp(remote.bridge.ftp.host,'tolbachik.hd.free.fr:2121'),%raspberry1 bridge aix
+        if strcmp(remote.bridge.ftp.host,'tolbachik.hd.free.fr:2121'),%nuc bridge aix
             remote.bridge.ftp.username = 'matremote';
             remote.bridge.ftp.password = 'M@trem0tePass';
         end
@@ -15,7 +15,7 @@ if ~isempty(remote.bridge),
     %
     if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host'),
         %
-        if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr:2222'),%raspberry1 bridge aix
+        if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr:2222'),%nuc bridge aix
             remote.bridge.ssh.username = 'matremote';
             remote.bridge.ssh.temppath = 'tmp';
             remote.bridge.ssh.keyfile = 'id_dsa_matremote';
