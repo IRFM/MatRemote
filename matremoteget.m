@@ -48,7 +48,7 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
             %
         else
             %
-            [res,txt] = unix(['scp -r ',remote.remoteuser,'@',remote. host,':',rempath,target,' ',locpath,targetpath]);
+            [res,txt] = unix([remote.ssh.scpcmd{1},' ',remote.ssh.scpcmd{2},':',rempath,target,' ',locpath,targetpath]);%execute the remote command by ssh
             %
         end
         %
