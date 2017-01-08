@@ -40,8 +40,8 @@ remote.sge.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matlab';
 remote.sge.yvesp.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
 remote.sge.yvesp.matver.matdef = remote.sge.yvesp.matver.mat802;%default matlab on remote machine
 remote.sge.yvesp.remoteuser = 'yvesp';
-remote.sge.yvesp.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.sge.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.sge.yvesp.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.sge.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 %
 % direct
 %
@@ -58,8 +58,8 @@ remote.direct.yvesp.matver.mat800 = '/afs/ipp/common/soft/matlab_2012b/bin/matla
 remote.direct.yvesp.matver.mat802 = '/afs/ipp/common/soft/matlab_2013b/bin/matlab';
 remote.direct.yvesp.matver.matdef = remote.direct.yvesp.matver.mat802;%default matlab on remote machine
 remote.direct.yvesp.remoteuser = 'yvesp';
-remote.direct.yvesp.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
+remote.direct.yvesp.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 %
 % JOAN DECKER
 %

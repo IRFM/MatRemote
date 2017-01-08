@@ -60,9 +60,9 @@ remote.direct.peysson.remotedatapath = '/compass/home/peysson/';
 remote.direct.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat801;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
-remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % pbs
 %
@@ -78,9 +78,9 @@ remote.pbs.peysson.remotedatapath = '/compass/home/peysson/';
 remote.pbs.peysson.matver.mat801 = '/sw/matlab/r2013a/bin/matlab';
 remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat801;%default matlab on remote machine
 remote.pbs.peysson.remoteuser = 'peysson';
-remote.pbs.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+remote.pbs.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % JAKUB URBAN
 %

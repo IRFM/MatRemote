@@ -37,9 +37,9 @@ remote.torque.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.torque.peysson.matver.matdef = remote.torque.peysson.matver.mat805;%default matlab on remote machine
 remote.torque.peysson.remoteuser = 'peysson';
 remote.torque.peysson.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
-%remote.torque.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-%remote.torque.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.torque.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+%remote.torque.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.torque.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.torque.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % direct
 %
@@ -55,9 +55,9 @@ remote.direct.peysson.remotedatapath = '/home/peysson/tmp/';
 remote.direct.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat805;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
-%remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-%remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+%remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % HARSHITA RAJ
 %

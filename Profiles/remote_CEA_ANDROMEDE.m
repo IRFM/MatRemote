@@ -35,9 +35,9 @@ default.profile = 'YP105119';% default user profile if 'remoteuser' is not an ex
 % remote.pbs.decker.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 % remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat806;%default matlab on remote machine
 % remote.pbs.decker.remoteuser = 'JD211098';
-% remote.pbs.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-% remote.pbs.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-% remote.pbs.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+% remote.pbs.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+% remote.pbs.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+% remote.pbs.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%nuc aix
 % %
 % % direct
 % %
@@ -64,9 +64,9 @@ default.profile = 'YP105119';% default user profile if 'remoteuser' is not an ex
 % remote.direct.decker.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 % remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat806;%default matlab on remote machine
 % remote.direct.decker.remoteuser = 'JD211098';
-% remote.direct.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-% remote.direct.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-% remote.direct.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%raspberry1 aix
+% remote.direct.decker.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+% remote.direct.decker.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+% remote.direct.decker.bridge.ssh.host = 'tolbachik.hd.free.fr -p 2222';%nuc aix
 %
 % YVES PEYSSON
 %
@@ -86,9 +86,9 @@ remote.pbs.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.pbs.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat806;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-%remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+%remote.pbs.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % direct
 %
@@ -110,9 +110,9 @@ remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat806;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
-%remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+%remote.direct.YP105119.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % YVES BURAVAND
 %

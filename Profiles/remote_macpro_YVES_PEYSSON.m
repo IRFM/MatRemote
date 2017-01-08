@@ -34,11 +34,12 @@ remote.direct.yvespeysson.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/m
 remote.direct.yvespeysson.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
-remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat900;%default matlab on remote machine
+remote.direct.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
+remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.direct.yvespeysson.remoteuser = 'yvespeysson';
-remote.direct.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.direct.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.direct.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+remote.direct.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % condor
 %
@@ -59,11 +60,12 @@ remote.condor.yvespeysson.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/m
 remote.condor.yvespeysson.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
 remote.condor.yvespeysson.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.condor.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
-remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat900;%default matlab on remote machine
+remote.condor.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
+remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.condor.yvespeysson.remoteuser = 'yvespeysson';
-remote.condor.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%raspberry1 aix
-remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%raspberry1 aix
-remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%raspberry1 aix
+remote.condor.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % JOAN DECKER
 %

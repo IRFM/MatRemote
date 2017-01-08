@@ -32,7 +32,8 @@ remote.direct.yves.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
 remote.direct.yves.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
 remote.direct.yves.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.direct.yves.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat900;%default matlab on remote machine
+remote.direct.yves.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
+remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat901;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yves';
 %
 % condor
@@ -53,7 +54,8 @@ remote.condor.yves.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
 remote.condor.yves.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
 remote.condor.yves.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.condor.yves.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
-remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat900;%default matlab on remote machine
+remote.condor.yves.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
+remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat901;%default matlab on remote machine
 remote.condor.yves.remoteuser = 'yves';
 %
 % -------------------------------------------------
