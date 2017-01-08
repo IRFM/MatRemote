@@ -380,9 +380,7 @@ disp(' ');
 %
 for irem = 1:nrem,
     %
-    disp([resstr{irem},'    ',profilestr1{irem},repmat(' ',[1,4+nstr1-length(profilestr1{irem})]),...
-                            profilestr2{irem},repmat(' ',[1,4+nstr2-length(profilestr2{irem})]),...
-                            profilestr3{irem}])
+    disp([resstr{irem},'    ',profilestr1{irem},repmat(' ',[1,4+nstr1-length(profilestr1{irem})]),profilestr2{irem},repmat(' ',[1,4+nstr2-length(profilestr2{irem})]),profilestr3{irem}])
     %
 end
 %
@@ -390,4 +388,5 @@ if ~isempty(diaryname),
     diary off
 end
 %
+
 
