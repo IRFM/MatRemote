@@ -12,7 +12,7 @@ function remote_profile = remote_IPR_SCYLLA(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'torque';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'peysson';% default user profile if 'remoteuser' is not an existing user profile
+default.profile = 'code';% default user profile if 'remoteuser' is not an existing user profile
 %
 % --------------------------------------------------
 %
