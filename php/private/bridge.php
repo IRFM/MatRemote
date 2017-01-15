@@ -11,7 +11,7 @@ function login($remotehost,$remoteuser) {
     $directsearch = 1;
     $sgesearch = 0;
 
-    //if ($remoteuser == 'JD211098') {
+    //if ($remoteuser == 'JD211098') { 
     //   $remote_login = 'JD211098';
     //   $remote_password = '!!Platypus76';
     //} else {
