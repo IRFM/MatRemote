@@ -1,5 +1,5 @@
 <?php 
-//test
+//test https pull
 function login($remotehost,$remoteuser) {
 
   if ($remotehost == 'andromede1.partenaires.cea.fr') {
