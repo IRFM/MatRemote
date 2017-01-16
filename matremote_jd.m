@@ -23,7 +23,7 @@ function [err,job,varargout] = matremote_jd(arg1,args_in,remote,job)
 %   - [err,job,varargout] = matremote_jd(job)
 %       -> check the status of the job 'job' and return the result if completed
 %
-varargout = cell(1,nargout-2);
+varargout = cell(1,nargout-2);%test
 %
 err = '';
 %
