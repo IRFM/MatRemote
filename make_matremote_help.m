@@ -36,7 +36,7 @@ helptools = '';%specific display tools (like TeX, GraphViz or ImageMagick which 
 texfilelist = '';
 %
 ref_folder = what('MatRemote');
-redminepath = 'http://tolbachik.hd.free.fr:8080';%path to the redmine website 
+redminepath = 'http://tolbachik.hd.free.fr:8080/redmine';%path to the redmine website 
 %
 if isempty(redminepath),disp('WARNING: the ''redminepath'' path is empty.');end
 %
