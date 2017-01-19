@@ -12,7 +12,7 @@ for it = 1:itmax,
         webaccess_options = weboptions('RequestMethod','post','Timeout',timeout,'CertificateFilename',certificate_filename);
         %
         if ~isempty(strfind(remote.bridge.url.host,'https://'))
-            if isempty(certificate_filename),disp('WARNING: https access to the bridge may be unsecure since certificate validation is disabled.');end
+            %if isempty(certificate_filename),disp('WARNING: https access to the bridge may be unsecure since certificate validation is disabled.');end
         end
         %
         webcmd = 'webwrite([remote.bridge.url.host,''/'',remote.bridge.url.path,''/'',phpcmd],';
