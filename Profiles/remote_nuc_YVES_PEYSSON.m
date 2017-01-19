@@ -30,7 +30,7 @@ remote.direct.yvespeysson.remotedatapath = '/home/yvespeysson/';
 remote.direct.yvespeysson.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
 remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.direct.yvespeysson.remoteuser = 'yvespeysson';
-remote.direct.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.yvespeysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
@@ -49,7 +49,7 @@ remote.condor.yvespeysson.remotedatapath = '/home/yvespeysson/condor/';
 remote.condor.yvespeysson.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
 remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.condor.yvespeysson.remoteuser = 'yvespeysson';
-remote.condor.yvespeysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.condor.yvespeysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %

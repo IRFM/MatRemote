@@ -35,7 +35,7 @@ remote.torque.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.torque.peysson.matver.matdef = remote.torque.peysson.matver.mat805;%default matlab on remote machine
 remote.torque.peysson.remoteuser = 'peysson';
 remote.torque.peysson.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.torque.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.torque.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.torque.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.torque.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
@@ -53,7 +53,7 @@ remote.direct.peysson.remotedatapath = '/home/peysson/tmp/';
 remote.direct.peysson.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat805;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
-remote.direct.peysson.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
@@ -76,7 +76,7 @@ remote.torque.code.matver.mat805 = '/usr/local/bin/matlab';
 remote.torque.code.matver.matdef = remote.torque.code.matver.mat805;%default matlab on remote machine
 remote.torque.code.remoteuser = 'code';
 remote.torque.code.rempause = 0.5;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.torque.code.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.torque.code.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.torque.code.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.torque.code.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
@@ -94,7 +94,7 @@ remote.direct.code.remotedatapath = '/home/peysson/tmp/';
 remote.direct.code.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.code.matver.matdef = remote.direct.code.matver.mat805;%default matlab on remote machine
 remote.direct.code.remoteuser = 'code';
-remote.direct.code.bridge.url.host = 'tolbachik.hd.free.fr:8081';%nuc aix
+remote.direct.code.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.code.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.code.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
