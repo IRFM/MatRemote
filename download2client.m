@@ -23,7 +23,7 @@ if remote.link_mode == 2,
         filelist_local = dir(parentdir);
         filelist_local = filelist_local(arrayfun(@(x) x.name(1), filelist_local) ~= '.');
         %
-        cmd = ['curl ftp://',remote.bridge.ftp.host,'/transfer/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+        cmd = ['curl ftp://',remote.bridge.ftp.host,'/ftp/transfer/',parentdir,' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
         %
         [res,txt] = unix(cmd);
         %
@@ -64,13 +64,13 @@ if remote.link_mode == 2,
                     %
                     if flag == 0,
                         %
-                        cmd = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
+                        cmd = ['curl ftp://',remote.bridge.ftp.host,'/ftp/transfer/',parentdir,filelist_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_remote_parsed{end}];
                         %
                         [res,txt] = unix(cmd);
                         %
                     elseif flag == 2,%transfer of all files in datadir
                         %
-                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_local(jj).name,'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
+                        cmd_datadir = ['curl ftp://',remote.bridge.ftp.host,'/ftp/transfer/',parentdir,filelist_local(jj).name,'/ -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password];
                         %
                         [res_datadir,txt_datadir] = unix(cmd_datadir);          
                         %
@@ -82,7 +82,7 @@ if remote.link_mode == 2,
                                     %
                                     filelist_datadir_remote_parsed = regexp(filelist_datadir_remote{ii},' ', 'split');
                                     %
-                                    cmd_datadir_file = ['curl ftp://',remote.bridge.ftp.host,'//transfer/',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end}];
+                                    cmd_datadir_file = ['curl ftp://',remote.bridge.ftp.host,'/ftp/transfer/',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end},' -u ',remote.bridge.ftp.username,':',remote.bridge.ftp.password,' -o ',parentdir,filelist_local(jj).name,'/',filelist_datadir_remote_parsed{end}];
                                     %
                                     [res_datadir_file,txt_datadir_file] = unix(cmd_datadir_file);
                                 end
