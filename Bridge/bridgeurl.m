@@ -1,6 +1,6 @@
 function [txt_url,res_url] = bridgeurl(remote,php_post,phpcmd)
 %
-[remote] = bridge_params(remote);%
+[remote] = bridge_params(remote);
 %
 itmax = 10;
 %
