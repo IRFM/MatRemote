@@ -27,15 +27,9 @@ remote.direct.yvespeysson.cmd = {'bash','nohup ',' &'};% direct calculation (csh
 remote.direct.yvespeysson.get_jobid = {};%str_before,str_after
 remote.direct.yvespeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
 remote.direct.yvespeysson.remotedatapath = '/Users/yvespeysson/';
-% remote.direct.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/matlab';
-% remote.direct.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
-% remote.direct.yvespeysson.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
-remote.direct.yvespeysson.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
-remote.direct.yvespeysson.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
-remote.direct.yvespeysson.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
-remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat901;%default matlab on remote machine
+remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat900;%default matlab on remote machine
 remote.direct.yvespeysson.remoteuser = 'yvespeysson';
 %
 % condor
@@ -50,15 +44,9 @@ remote.condor.yvespeysson.set_jobid = {'condor_q ',''};
 remote.condor.yvespeysson.condor.CONDOR_CONFIG = '/Users/yvespeysson/Shared/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/etc/condor_config';
 remote.condor.yvespeysson.condor.PATH = '/Users/yvespeysson/Shared/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/sbin:/Users/yvespeysson/Shared/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/bin:${PATH}';
 remote.condor.yvespeysson.remotedatapath = '/Users/yvespeysson/condor/';
-remote.condor.yvespeysson.matver.mat800 = '/Applications/MATLAB_R2012b.app/bin/matlab';
-remote.condor.yvespeysson.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
-remote.condor.yvespeysson.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
-remote.condor.yvespeysson.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
-remote.condor.yvespeysson.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
-remote.condor.yvespeysson.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
 remote.condor.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.condor.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
-remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat901;%default matlab on remote machine
+remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat900;%default matlab on remote machine
 remote.condor.yvespeysson.remoteuser = 'yvespeysson';
 % JOAN DECKER
 %
