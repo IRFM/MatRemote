@@ -515,7 +515,9 @@ if ~isempty(remote.get_jobid)
             %
         end
         if isempty(istr1),
-            error('Job ID could not be retrieved')
+            disp('WARNING: Job ID could not be retrieved.');
+            disp(' ');
+            return;
         end
     else
         istr1 = length(txt);
