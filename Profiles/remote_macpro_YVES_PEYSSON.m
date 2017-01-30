@@ -29,7 +29,7 @@ remote.direct.yvespeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_aft
 remote.direct.yvespeysson.remotedatapath = '/Users/yvespeysson/';
 remote.direct.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.direct.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
-remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat900;%default matlab on remote machine
+remote.direct.yvespeysson.matver.matdef = remote.direct.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.direct.yvespeysson.remoteuser = 'yvespeysson';
 %
 % condor
@@ -46,7 +46,7 @@ remote.condor.yvespeysson.condor.PATH = '/Users/yvespeysson/Shared/Packages/Bin/
 remote.condor.yvespeysson.remotedatapath = '/Users/yvespeysson/condor/';
 remote.condor.yvespeysson.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.condor.yvespeysson.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
-remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat900;%default matlab on remote machine
+remote.condor.yvespeysson.matver.matdef = remote.condor.yvespeysson.matver.mat901;%default matlab on remote machine
 remote.condor.yvespeysson.remoteuser = 'yvespeysson';
 % JOAN DECKER
 %
