@@ -22,7 +22,15 @@ for it = 1:itmax,
         end
         webcmd = [webcmd,'webaccess_options)'];
         %
-        txt_url = eval(webcmd);%transfer data from the bridge batch dir to the remote batch dir
+        try
+            txt_url = eval(webcmd);%transfer data from the bridge batch dir to the remote batch dir
+        catch
+            txt_url = '';
+            res_url = 0;
+            it = itmax;
+            break
+        end
+        %
         res_url = 1;
         %
     else
