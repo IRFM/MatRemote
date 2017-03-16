@@ -39,6 +39,14 @@ remote.direct.kamleitn = remote.direct.decker;
 remote.direct.kamleitn.remotedatapath = '/tmp';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
 %
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.peysson = remote.direct.decker;
+remote.direct.peysson.remotedatapath = '/tmp';
+remote.direct.peysson.remoteuser = 'peysson';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------

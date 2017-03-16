@@ -60,6 +60,20 @@ remote.slurm.kamleitn = remote.slurm.decker;
 remote.slurm.kamleitn.remotedatapath = '/scratch/kamleitn/';
 remote.slurm.kamleitn.remoteuser = 'kamleitn';
 %
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.peysson = remote.direct.decker;
+remote.direct.peysson.remotedatapath = '/scratch/peysson/';
+remote.direct.peysson.remoteuser = 'peysson';
+%
+% slurm
+%
+remote.slurm.peysson = remote.slurm.decker;
+remote.slurm.peysson.remotedatapath = '/scratch/peysson/';
+remote.slurm.peysson.remoteuser = 'peysson';
+%
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles

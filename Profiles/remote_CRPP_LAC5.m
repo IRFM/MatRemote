@@ -38,7 +38,6 @@ remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat803;%default
 remote.direct.decker.remoteuser = 'decker';
 remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 %
-%
 % --------------------------------------------------
 %
 % JOSEF KAMLEITNER
@@ -48,6 +47,16 @@ remote.direct.decker.bridge.ssh.host = 'lac911.epfl.ch';
 remote.direct.kamleitn = remote.direct.decker;
 remote.direct.kamleitn.remotedatapath = '/tmp/kamleitn/';
 remote.direct.kamleitn.remoteuser = 'kamleitn';
+%
+% --------------------------------------------------
+%
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.peysson = remote.direct.decker;
+remote.direct.peysson.remotedatapath = '/tmp/peysson/';
+remote.direct.peysson.remoteuser = 'peysson';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
