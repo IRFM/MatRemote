@@ -33,6 +33,25 @@ remote.direct.joan.matver.mat901 = 'matlab-9.1.0';
 remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat901;%default matlab on remote machine
 remote.direct.joan.remoteuser = 'decker';
 %
+% --------------------------------------------------
+%
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.yves = default_remote_profile;
+remote.direct.yves.host = 'spcpc483.epfl.ch';% IP address on EPFL network
+remote.direct.yves.hostname = 'spcpc483';
+remote.direct.yves.nproc = 4;
+remote.direct.yves.cmd = {'bash','',' &'};% direct calculation (csh, bash)
+remote.direct.yves.get_jobid = {};%str_before,str_after
+remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.yves.remotedatapath = '/tmp/';
+remote.direct.yves.matver.mat804 = 'matlab-8.4.0';
+remote.direct.yves.matver.mat901 = 'matlab-9.1.0';
+remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat901;%default matlab on remote machine
+remote.direct.yves.remoteuser = 'peysson';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
