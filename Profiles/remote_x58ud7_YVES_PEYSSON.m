@@ -34,7 +34,7 @@ remote.direct.ypeysson.remoteuser = 'ypeysson';
 % condor
 %
 remote.condor.ypeysson = default_remote_profile;
-remote.condor.ypeysson.host = '86.193.138.241:2222';
+remote.condor.ypeysson.host = '86.193.138.241:22';
 remote.condor.ypeysson.hostname = 'ypeysson-X58A-UD7';
 remote.condor.ypeysson.nproc = 6;
 remote.condor.ypeysson.cmd = 'condor_submit';
