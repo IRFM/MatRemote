@@ -68,7 +68,7 @@ remote.torque.code.nproc = 12;% default number of nodes for job on shenma
 remote.torque.code.wait = 0;
 remote.torque.code.shclean = 1;
 remote.torque.code.cmd = 'qsub -q batch';%'qsub -q batch -o /home/peysson';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
-remote.torque.code.remotedatapath = '/home/peysson/tmp/';
+remote.torque.code.remotedatapath = '/home/code/tmp/';
 remote.torque.code.get_jobid = {'','.scylla'};%str_before,str_after
 remote.torque.code.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
 remote.torque.code.timeout = 60;
@@ -90,7 +90,7 @@ remote.direct.code.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.code.get_jobid = {};%str_before,str_after
 remote.direct.code.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.code.timeout = 60;
-remote.direct.code.remotedatapath = '/home/peysson/tmp/';
+remote.direct.code.remotedatapath = '/home/code/tmp/';
 remote.direct.code.matver.mat805 = '/usr/local/bin/matlab';
 remote.direct.code.matver.matdef = remote.direct.code.matver.mat805;%default matlab on remote machine
 remote.direct.code.remoteuser = 'code';
