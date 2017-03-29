@@ -30,7 +30,7 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude,debu
 %
 %   - OUTPUTS : 
 %       - flag : matrix of size (nrem x nfncs) with values :
-%           o -2 if the remote process failed
+%           o -2 if the remote process or git update process failed
 %           o -1 if the git update process failed
 %           o  0 if the git update succeeded without remote conflicts or remote modified files
 %
@@ -42,7 +42,7 @@ if nargin < 4,
 end
 %
 if nargin < 3,
-    display_mode = 0;
+    display_mode = 1;
 end
 %
 if nargin < 2,
@@ -53,7 +53,17 @@ if nargin < 1,
     remote = '';
 end
 %
+if exist('remotefunctions','var'),
+    if isempty(remotefunctions),
+        remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m','make_help.m','lukegitupdate.m'};
+    end
+else
+    remotefunctions = {'select_LUKE.m','load_remoteprofiles_jd.m','make_help.m','lukegitupdate.m'};
+end
+%
 [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,true,false,'direct','',true,false);
+%
+dkepath = setpath_luke_jd('','','',0,0);
 %
 nrem = length(remoteprofiles);
 nfncs = length(remotefunctions);
@@ -68,11 +78,30 @@ for irem = 1:nrem,
     disp(['updating remote profile : ',profilestr{irem}]);
     disp('------------------------------------------------------------------');
     %
+    for jrem = 1:length(dkepath.remote)
+        if strcmp(remoteprofiles(irem).hostname,dkepath.remote(jrem).hostname) && strcmp(dkepath.remote(jrem).scheduler,'direct'),
+            if isfield(dkepath.remote(jrem),'gitupdate') && isfield(dkepath.remote(jrem),'gitmode')
+                remoteprofile = dkepath.remote(jrem);
+            end
+        end
+    end
+    %
+    if ~isfield(remoteprofile,'gitupdate') && isfield(remoteprofile,'gitmode'),
+        disp('WARNING: gitupdate and gitmode are not set-up in dkepath. Please check ')
+        break;
+    end    
+    %
     for ifnc = 1:nfncs,
         %
-        [res,txt,project] = gitupdate_yp(remotefunctions{ifnc},remoteprofiles(irem).gitmode,remoteprofiles(irem),debugmode);
+        [res,txt,project] = gitupdate_yp(remotefunctions{ifnc},remoteprofile.gitmode,remoteprofile,debugmode);
         %
         if ~res,            
+            %
+            if length(strfind(txt{1},'error')) ~= 0 | length(strfind(txt{1},'fatal')) ~= 0  | length(strfind(txt{1},'unable')) ~= 0  | length(strfind(txt{1},'No path')) ~= 0,
+                flag(irem,ifnc) = -1;
+            else
+                flag(irem,ifnc) = 0;
+            end
             %
             if display_mode >= 1,
                 disp(' ');
@@ -80,12 +109,6 @@ for irem = 1:nrem,
                 disp(' ');
                 %
                 txt = txt{:};
-                %
-                if length(strfind(txt,'error')) ~= 0 | length(strfind(txt,'fatal')) ~= 0  | length(strfind(txt,'unable')) ~= 0  | length(strfind(txt,'No path')) ~= 0,
-                    flag(irem,ifnc) = -1;
-                else
-                    flag(irem,ifnc) = 0;
-                end
                 %
                 if  flag(irem,ifnc) == -1,
                     disp(['WARNING: Git update for ',project,' failed ---> ',txt]);
@@ -98,9 +121,13 @@ for irem = 1:nrem,
             %
             flag(irem,ifnc) = -2;
             %
-            disp(' ');
-            disp('Remote call failed : ');
-            disperr_jd(txt);
+            if display_mode >= 1,
+                disp(' ');
+                disp('------------------------------------------------------------------');
+                disp(' ');
+                disp('Remote call failed : ');
+                disperr_jd(txt);
+            end
             %
         end
     end
