@@ -1,4 +1,4 @@
-function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude,debugmode)
+function [profilestr,flag] = remotegitupdate(remote,remotefunctions,display_mode,exclude,debugmode)
 %
 % This function git updates the folders containing the functions listed in remotefunctions 
 % over the profiles defined by remote
@@ -29,6 +29,7 @@ function flag = remotegitupdate(remote,remotefunctions,display_mode,exclude,debu
 %       - debugmode: (0) debug mode not activated, (1) debug mode activated
 %
 %   - OUTPUTS : 
+%       - profilestr : connection characteristics
 %       - flag : matrix of size (nrem x nfncs) with values :
 %           o -2 if the remote process or git update process failed
 %           o -1 if the git update process failed
@@ -132,6 +133,31 @@ for irem = 1:nrem,
         end
     end
 end
+%
+time0 = time;
+time1 = strrep(time0,'   ','.');
+diary(['gitpdate_summary_',time1,'.txt']);
+disp('------------------------------------------------------------------');
+disp('------------------------------------------------------------------');
+disp(['Git update summary: ',time0]);
+disp('------------------------------------------------------------------');
+for irem = 1:nrem,
+    comment = [profilestr{irem},': '];
+    %
+    for jflag = 1:size(flag,2),
+        if jflag < size(flag,2),
+            comment = [comment,int2str(flag(irem,jflag)),', '];
+        else
+            comment = [comment,int2str(flag(irem,jflag))];
+        end
+    end
+    %
+    disp(comment);
+end
+disp('------------------------------------------------------------------');
+disp('------------------------------------------------------------------');
+diary('off');
+%
 
 
 
