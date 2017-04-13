@@ -21,7 +21,7 @@ remote.pbs.YP105119.hostname = 'sirrah';
 remote.pbs.YP105119.shell = 'csh';
 remote.pbs.YP105119.nproc = 12;
 remote.pbs.YP105119.cmd = 'qsub';
-remote.pbs.YP105119.remotedatapath = '/tmp/';
+remote.pbs.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.pleione'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.pleione','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
@@ -40,7 +40,7 @@ remote.direct.YP105119.nproc = 12;
 remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.YP105119.remotedatapath = '/Home/YP105119/';
+remote.direct.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat805;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
