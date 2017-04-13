@@ -86,7 +86,8 @@ function cmd2 = fixquotes(cmd,quote)
         cmd2 = '';
         iquote = [0,iquote];
         for ifix = 2:length(iquote),
-            cmd2 = [cmd2,cmd(iquote(ifix-1)+1:iquote(ifix)-1),'\',quote];
+            %cmd2 = [cmd2,cmd(iquote(ifix-1)+1:iquote(ifix)-1),'\',quote];
+            cmd2 = [cmd2,cmd(iquote(ifix-1)+1:iquote(ifix)-1),''''];
         end
         cmd2 = [cmd2,cmd(iquote(end)+1:end)];
     end
