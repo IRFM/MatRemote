@@ -94,7 +94,7 @@ end
 %
 %[varargout{:}] = deal(cell(N_range,1)); keep this line as an example of use of the function deal
 %
-parfor j_argout = 1:nargout_in,
+for j_argout = 1:nargout_in,
     %
     varargout{j_argout} = cell(nrange,1);
     %
