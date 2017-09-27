@@ -62,7 +62,6 @@ remote.direct.PEYSSON.rempause = 0.5;% pause between job checks (in minutes) (be
 remote.direct.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
-
 %
 % BOJIANG DING (SHENMA)
 %
