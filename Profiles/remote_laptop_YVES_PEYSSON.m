@@ -26,13 +26,8 @@ remote.direct.yves.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% d
 remote.direct.yves.get_jobid = {};%str_before,str_after
 remote.direct.yves.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
 remote.direct.yves.remotedatapath = '/Users/yves/';
-remote.direct.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
-remote.direct.yves.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
-remote.direct.yves.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
-remote.direct.yves.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
-remote.direct.yves.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
-remote.direct.yves.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.direct.yves.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
+remote.direct.yves.matver.mat902 = '/Applications/MATLAB_R2017a.app/bin/matlab';
 remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat901;%default matlab on remote machine
 remote.direct.yves.remoteuser = 'yves';
 %
@@ -45,17 +40,12 @@ remote.condor.yves.nproc = 4;
 remote.condor.yves.cmd = 'condor_submit';
 remote.condor.yves.get_jobid = {'** Proc ',':'};
 remote.condor.yves.set_jobid = {'condor_q ',''};
-remote.condor.yves.condor.CONDOR_CONFIG = '/Users/yves/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/etc/condor_config';
-remote.condor.yves.condor.PATH = '/Users/yves/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/sbin:/Users/yves/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/bin:${PATH}';
+remote.condor.yves.condor.CONDOR_CONFIG = '/Users/yves/Travail/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/etc/condor_config';
+remote.condor.yves.condor.PATH = '/Users/yves/Travail/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/sbin:/Users/yves/Projets/Packages/Bin/HTCONDOR/condor-8.2.3-x86_64_MacOSX7-unstripped/bin:${PATH}';
 remote.condor.yves.remotedatapath = '/Users/yves/condor/';
-remote.condor.yves.matver.mat801 = '/Applications/MATLAB_R2013a.app/bin/matlab';
-remote.condor.yves.matver.mat803 = '/Applications/MATLAB_R2014a.app/bin/matlab';
-remote.condor.yves.matver.mat804 = '/Applications/MATLAB_R2014b.app/bin/matlab';
-remote.condor.yves.matver.mat805 = '/Applications/MATLAB_R2015a.app/bin/matlab';
-remote.condor.yves.matver.mat806 = '/Applications/MATLAB_R2015b.app/bin/matlab';
-remote.condor.yves.matver.mat900 = '/Applications/MATLAB_R2016a.app/bin/matlab';
 remote.condor.yves.matver.mat901 = '/Applications/MATLAB_R2016b.app/bin/matlab';
-remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat901;%default matlab on remote machine
+remote.condor.yves.matver.mat902 = '/Applications/MATLAB_R2017a.app/bin/matlab';
+remote.condor.yves.matver.matdef = remote.condor.yves.matver.mat902;%default matlab on remote machine
 remote.condor.yves.remoteuser = 'yves';
 %
 % -------------------------------------------------
