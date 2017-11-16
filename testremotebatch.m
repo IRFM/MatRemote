@@ -72,44 +72,56 @@ testvar = 'luke'; % test variable
 %
 % Displaymode
 %
-if nargin < 5,
+if nargin < 5
     displaymode = 1;% display job status evolution 
 end
 %
 % link_mode
 %
-if nargin < 4,
+if nargin < 4
     link_mode = NaN;% use value from remote.link_mode
 end
 %
 % Debugmode
 %
-if nargin < 3,
+if nargin < 3
     debugmode = 0;% default mode is direct use of remoterunbatch and remotegetbatch
 end
 %
 % Test direct calculation with matremote_jd
 %
-if debugmode,
+if debugmode
     setenv('TESTVAR',testvar);
     [err,~,soutput_init] = matremote_jd('remotetest',{sinput});
     %
-    if ~isempty(err),
+    if ~isempty(err)
         soutput_init.err = err;
     end
 end
 %
 % Test remote calculation
 %
-if nargin < 1,
+if nargin < 1
     sinputs = 0;% default mode is direct use of remoterunbatch and remotegetbatch
 end
 %
-if nargin < 2,
+if nargin < 2
     remote = '';% test all profiles
 end
 %
-if isnumeric(sinputs),% start new test
+if isempty(remote)
+    remotestr = 'all';
+elseif ischar(remote)
+    remotestr = remote;
+elseif isnan(remote)
+    remotestr = 'NaN';
+elseif isstruct(remote)
+    remotestr = remote.hostname;
+else
+    error('Input argument remote not understood.')
+end    
+%
+if isnumeric(sinputs)% start new test
     %
     % Select local and remote profiles to be tested
     %
@@ -121,7 +133,7 @@ if isnumeric(sinputs),% start new test
     %
     % loop on tested profiles
     %
-    for irem = 1:nrem,
+    for irem = 1:nrem
         %
         disp(' ');
         disp('-------------------------------------------------------------------')
@@ -141,7 +153,7 @@ if isnumeric(sinputs),% start new test
         test_job.walltime = 1;%[];% time required (integers - in hours) - leave empty if no requirement
         test_job.rempause = 1/60;% in minutes
         %
-        if sinputs <= 1,% wait for result
+        if sinputs <= 1 % wait for result
             test_job.remtimout = 5;% in minutes
         else% return hand for later check
             test_job.remtimout = 0;% in minutes
@@ -157,13 +169,13 @@ if isnumeric(sinputs),% start new test
 %         test_job.remotedatapath = '/tmp/';
         %
         try
-            if sinputs == 0,% use remoterunbatch and wait for result with remotegetbatch
+            if sinputs == 0 % use remoterunbatch and wait for result with remotegetbatch
                 %
                 test_job.env.remotematfnc = 'remotetest'; % matlab function to be called remotely by remotematrun (case of direct call)
                 %
                 test_job = remoterunbatch(remote,test_job,sinput,displaymode);
                 %
-                if isfield(test_job,'err'),
+                if isfield(test_job,'err')
                     soutputs{irem}.err = test_job.err;
                 else
                     [~,soutputs{irem}] = remotegetbatch(test_job,displaymode,0);
@@ -177,9 +189,9 @@ if isnumeric(sinputs),% start new test
                 %
                 [err,test_job,soutput] = matremote_jd('remotetest',{sinput},remote,test_job);
                 %
-                if ~isempty(err),
+                if ~isempty(err)
                     soutputs{irem}.err = err;
-                elseif ~isempty(soutput),% job completed
+                elseif ~isempty(soutput) % job completed
                     soutputs{irem} = soutput;
                 else
                     soutputs{irem}.job = test_job;
@@ -202,17 +214,17 @@ else% check previously started job
     %
     profilestr = cell(1,nrem);
     %
-    for irem = 1:nrem,
+    for irem = 1:nrem
         %
         profilestr{irem} = sinputs{irem}.profilestr;
         %
-        if isfield(sinputs{irem},'job'),% previously running job
+        if isfield(sinputs{irem},'job') % previously running job
             %
             [err,test_job,soutput] = matremote_jd(sinputs{irem}.job);
             %
-            if ~isempty(err),
+            if ~isempty(err) 
                 soutputs{irem}.err = err;
-            elseif ~isempty(soutput),% job completed
+            elseif ~isempty(soutput) % job completed
                 soutputs{irem} = soutput;
             else
                 soutputs{irem}.job = test_job;
@@ -231,7 +243,7 @@ end
 if isempty(link_mode)
     link_modestr = '_empty_link_mode';
     link_modestr2 = 'empty link mode';
-elseif isnan(link_mode),
+elseif isnan(link_mode) 
     link_modestr = '_link_mode_NaN';
     link_modestr2 = 'link mode = NaN';
 else
@@ -239,7 +251,7 @@ else
     link_modestr2 = ['link mode = ',num2str(link_mode)];
 end
 %
-if isnumeric(sinputs),
+if isnumeric(sinputs) 
     calcmodestr = num2str(sinputs);
 else
     calcmodestr = '2';
@@ -247,11 +259,11 @@ end
 %
 testdate = datestr(now,29);
 %
-diaryname = ['res_testremotebatch_',matversion_yp,'_',testdate,link_modestr,'_calc_mode_',calcmodestr,'.log'];
+diaryname = ['res_testremotebatch_',matversion_yp,'_',remotestr,'_',testdate,link_modestr,'.log'];
 %
-if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y',
+if input_dke_yp(['Do you want to save the results in the log file ',diaryname,' ? (y/n)'],'y',{'y','n'}) == 'y'
     %
-    if exist(diaryname,'file'),
+    if exist(diaryname,'file')
         delete(diaryname);
     end
     %
@@ -272,18 +284,18 @@ disp(' ');
 disp('-------------------------------------------------------------------')
 disp(' ');
 %
-if debugmode,
+if debugmode
     disp(' ---> Direct local calculation');
     disp(' ');
     %
-    if isfield(soutput_init,'err'),
+    if isfield(soutput_init,'err')
         %
         % failed test
         %
         disp('The remote job failed : ');
         disperr_jd(soutput_init.err)
         %
-    elseif isfield(soutput_init,'strout'),
+    elseif isfield(soutput_init,'strout')
         %
         % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
         %
@@ -306,7 +318,7 @@ nstr1 = 0;
 nstr2 = 0;
 nstr3 = 0;
 %
-for irem = 1:nrem,
+for irem = 1:nrem
     %
     disp(' ');
     disp('-------------------------------------------------------------------')
@@ -325,7 +337,7 @@ for irem = 1:nrem,
     nstr2 = max([nstr2,length(profilestr2{irem})]);
     nstr3 = max([nstr3,length(profilestr3{irem})]);
     %
-    if isfield(soutputs{irem},'err'),
+    if isfield(soutputs{irem},'err')
         %
         % failed test
         %
@@ -334,11 +346,11 @@ for irem = 1:nrem,
         %
         resstr{irem} = 'X';
         %
-    elseif isfield(soutputs{irem},'job'),
+    elseif isfield(soutputs{irem},'job')
         %
         % job started and returned for later check
         %
-        if ~isempty(soutputs{irem}.job.id),
+        if ~isempty(soutputs{irem}.job.id)
             %
             disp(['The remote job is running under id ',soutputs{irem}.job.id]);
             %
@@ -350,13 +362,13 @@ for irem = 1:nrem,
         %
         resstr{irem} = 'R';
         %
-    elseif isfield(soutputs{irem},'strout'),
+    elseif isfield(soutputs{irem},'strout')
         %
         % result - should read 'The best code is : luke - running under matlab version : ', followed by the requested remote matlab version
         %
         disp(soutputs{irem}.strout)
         %
-        if any(strfind(soutputs{irem}.strout,'luke')),% test OK
+        if any(strfind(soutputs{irem}.strout,'luke')) % test OK
             resstr{irem} = 'O';
         else
             resstr{irem} = 'X';
@@ -378,13 +390,13 @@ disp('                     SUMMARY');
 disp('-------------------------------------------------------------------')
 disp(' ');
 %
-for irem = 1:nrem,
+for irem = 1:nrem
     %
     disp([resstr{irem},'    ',profilestr1{irem},repmat(' ',[1,4+nstr1-length(profilestr1{irem})]),profilestr2{irem},repmat(' ',[1,4+nstr2-length(profilestr2{irem})]),profilestr3{irem}])
     %
 end
 %
-if ~isempty(diaryname),
+if ~isempty(diaryname)
     diary off
 end
 %
