@@ -45,26 +45,30 @@ waitime = '';
 runtime = '';
 jobtime = '';
 %
-if isfield(job,'time'),
+if isfield(job,'time')
     %
-    if ~isempty(job.time.cleaned),
+    if ~isempty(job.time.cleaned)
         %
         % job completed
         %
         flag = 2;
-        jobtime = datestr(etime(datevec(job.time.cleaned),datevec(job.time.created))/86400,'HH:MM:SS');
-        message = [jobstr,' is completed in ',jobtime,' (HH:MM:SS).'];
+        if ~strcmp(job.time.created(1:5),'Error')
+            jobtime = datestr(etime(datevec(job.time.cleaned),datevec(job.time.created))/86400,'HH:MM:SS');
+            message = [jobstr,' is completed in ',jobtime,' (HH:MM:SS).'];
+        else 
+            message = '';
+        end
         %
-        if ~isempty(job.time.started),% remote wait time accessible
+        if ~isempty(job.time.started) && ~strcmp(job.time.launched(1:5),'Error') && ~strcmp(job.time.started(1:5),'Error') % remote wait time accessible
             waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
             message = [message,' Remote wait time was ',waitime,' (HH:MM:SS).'];
-            if ~isempty(job.time.finished)% remote run time accessible
+            if ~isempty(job.time.finished) && ~strcmp(job.time.finished(1:5),'Error') % remote run time accessible
                 runtime = datestr(etime(datevec(job.time.finished),datevec(job.time.started))/86400,'HH:MM:SS');
                 message = [message,' Remote run time was ',runtime,' (HH:MM:SS).'];
             end
         end
         %
-    elseif ~isempty(job.time.started),
+    elseif ~isempty(job.time.started) && ~strcmp(job.time.started(1:5),'Error')
         %
         % job started but not completed
         % 
@@ -73,7 +77,7 @@ if isfield(job,'time'),
         waitime = datestr(etime(datevec(job.time.started),datevec(job.time.launched))/86400,'HH:MM:SS');
         message = [jobstr,' has been running for ',runtime,' (HH:MM:SS). Remote wait time was ',waitime,' (HH:MM:SS).'];
         %
-    else% job launched but not started
+    elseif ~strcmp(job.time.launched(1:5),'Error')% job launched but not started
         %
         flag = 0;
         waitime = datestr(etime(datevec(utctime_jd),datevec(job.time.launched))/86400,'HH:MM:SS');
