@@ -342,7 +342,7 @@ for irem = 1:nrem
         % failed test
         %
         disp('The remote job failed : ');
-        disperr_jd(soutputs{irem}.err)
+        disperr_jd(soutputs{irem}.err);
         %
         resstr{irem} = 'X';
         %
