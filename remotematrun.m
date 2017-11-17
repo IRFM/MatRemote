@@ -20,6 +20,8 @@ function remotematrun(debugmode,remotematfnc)
 %
 % by J. Decker and Y. Peysson.
 %
+initdir = pwd;
+%
 try
     %
     remotebatchdir = getenv('remotebatchdir');
@@ -32,6 +34,12 @@ try
     end
     %
     if ~isempty(remotebatchdir),% function called by matlabbatch.sh
+        %
+        if ~exist(remotebatchdir,'dir'),
+            error(['remotebatchdir : ',remotebatchdir,' does not exist from current location :',pwd]);
+        elseif ~strcmp(remotebatchdir(1),filesep) % relative path
+            addpath([pwd,filesep,remotebatchdir]);
+        end
         %
         timeid = getenv('jobtimeid');
         if isempty(timeid),
@@ -92,8 +100,6 @@ try
         datadir = remotebatchdir;
     end
     %
-    initdir = pwd;
-    %
     cd(datadir);
     %
     if debugmode,
@@ -106,7 +112,9 @@ try
         disp(['timeid = ',timeid]);
         disp(['filein = ',filein]);
         disp(['fileout = ',fileout]);
-        disp(['hostname (from hostname_jd) = ',hostname_jd]);
+        if exist('hostname_jd','file')
+            disp(['hostname (from hostname_jd) = ',hostname_jd]);
+        end
         disp('----------- Matlab Path -----------');
         path;
         disp('-----------------------------------');
@@ -124,6 +132,8 @@ catch lsterr
     for il = 1:length(lsterr.stack),
         err = [err,['In ',lsterr.stack(il).file,' at line ',num2str(lsterr.stack(il).line)]];
     end
+    %
+    cd(initdir);
     %
     if exist('fileout','var'),
         save(fileout,'err')

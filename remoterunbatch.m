@@ -66,14 +66,20 @@ end
 %
 % path to matlab if applicable
 %
-if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot'),%matlab called remotely and not prescribed by job
+if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot')%matlab called remotely and not prescribed by job
     matver = matversion_yp;
-    if isempty(remote.host),% same version for local calculations
+    if isempty(remote.host) &&...
+            (~isfield(remote,'matver') || ~isfield(remote.matver,['mat',matver]) ||...
+             ~isfield(remote.matver.(['mat',matver]),'enforce') || ~remote.matver.(['mat',matver]).enforce)% same version for local calculations, except if enforce = true 
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/matlab'];
-    elseif isfield(remote,'matver') && isfield(remote.matver,['mat',matver]) && ~isempty(remote.matver.(['mat',matver])),
+    elseif isfield(remote,'matver') && isfield(remote.matver,['mat',matver]) && ~isempty(remote.matver.(['mat',matver]))
         % same version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]);
-    elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef),
+        if isfield(remote.matver.(['mat',matver]),'cmd')
+            job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]).cmd;
+        else
+            job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]);
+        end
+    elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef)
         % default version on remote cluster, if available
         job.env.remotebatch_matlabroot = remote.matver.matdef;
     else% default version on remote cluster
@@ -299,22 +305,25 @@ if job.directsearch,
     envnames = fieldnames(remenv);
     remenvstr = '';
     %
-    for ienv = 1:length(envnames),
-        if strcmp(remote.cmd{1},'csh'),
+    for ienv = 1:length(envnames)
+        if strcmp(remote.cmd{1},'csh')
             remenvstr = ['setenv ',envnames{ienv},' ',remenv.(envnames{ienv}),'; ',remenvstr];
-        elseif strcmp(remote.cmd{1},'bash'),
+        elseif strcmp(remote.cmd{1},'bash')
             remenvstr = ['export ',envnames{ienv},'=',remenv.(envnames{ienv}),'; ',remenvstr];
         else
             error(['case with cmd = ',remote.cmd{1},' not yet implemented']);
         end
     end
     %
-    if any(strfind(remote.cmd{3},' >')),
+    if any(strfind(remote.cmd{3},' >'))
         logfile = '';
     else
-        if job.link_mode < 2,%disabled for curl
-            logfile = [' >',job.remotedatapath,job.batch_dir,job.script,'.log'];
-%         logfile = [' &>',job.remotedatapath,job.batch_dir,job.script,'.log'];
+        if job.link_mode < 2 %disabled for curl
+            if strcmp(remote.cmd{1},'csh')
+                logfile = [' >& ',job.remotedatapath,job.batch_dir,job.script,'.log'];
+            elseif  strcmp(remote.cmd{1},'bash')
+                logfile = [' &> ',job.remotedatapath,job.batch_dir,job.script,'.log'];
+            end
         else
             logfile = '';
         end
