@@ -170,7 +170,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         }
 
 
-    } elseif (strcmp($remote_host,"g01.efda-itm.eu") == 0) {
+    } elseif (strcmp($remote_host,"login.eufus.eu") == 0) {
 
     	if (strcmp($directsearch,"1") == 0) {
 
