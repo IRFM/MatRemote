@@ -192,18 +192,32 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
-        } elseif (strcmp($sgesearch,"1") == 0) {
+        } elseif (strcmp($pbssearch,"1") == 0) {
 
-        	$localcmd[5] = "qsub ".$remotedatapath.$batch_dir.$sgescript;
-        	$localcmd[6] = "qstat -j ".$id;
-        	$localcmd[7] = "rm -f ".strstr($script,'.',true).".e".$id." ".strstr($script,'.',true).".o".$id;
+            if (strcmp($wait,"1") == 0) {
+                $cmdextras = " -W block=true";
+            } else {
+                $cmdextras = "";
+            }           
+
+            $localcmd[5] = "qsub ".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
+            if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
+            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
+            $localcmd[5] = $localcmd[5].",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot;
+            if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
+            $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
+
+            $localcmd[6] = "qstat ".$id.'.andromede1';
+            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[11] = "date +%Y%m%d%H%M%S";
-
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
     	}
+
+
 
     } elseif (strcmp($remote_host,"andromede1.partenaires.cea.fr") == 0) {
 
