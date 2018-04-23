@@ -29,7 +29,8 @@ remote.direct.ypeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,
 remote.direct.ypeysson.remotedatapath = '/home/ypeysson/';
 remote.direct.ypeysson.matver.mat902 = '/usr/local/MATLAB/R2017a/bin/matlab';
 remote.direct.ypeysson.matver.mat903 = '/usr/local/MATLAB/R2017b/bin/matlab';
-remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat903;%default matlab on remote machine
+remote.direct.ypeysson.matver.mat904 = '/usr/local/MATLAB/R2018a/bin/matlab';
+remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat904;%default matlab on remote machine
 remote.direct.ypeysson.remoteuser = 'ypeysson';
 %
 % condor
@@ -46,7 +47,8 @@ remote.condor.ypeysson.condor.PATH = '$PATH';
 remote.condor.ypeysson.remotedatapath = '/home/ypeysson/condor/';
 remote.condor.ypeysson.matver.mat902 = '/usr/local/MATLAB/R2017a/bin/matlab';
 remote.condor.ypeysson.matver.mat903 = '/usr/local/MATLAB/R2017b/bin/matlab';
-remote.condor.ypeysson.matver.matdef = remote.condor.ypeysson.matver.mat903;%default matlab on remote machine
+remote.condor.ypeysson.matver.mat904 = '/usr/local/MATLAB/R2018a/bin/matlab';
+remote.condor.ypeysson.matver.matdef = remote.condor.ypeysson.matver.mat904;%default matlab on remote machine
 remote.condor.ypeysson.remoteuser = 'ypeysson';
 %
 % -------------------------------------------------
