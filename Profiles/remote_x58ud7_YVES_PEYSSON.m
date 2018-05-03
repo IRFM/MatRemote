@@ -19,7 +19,7 @@ default.profile = 'ypeysson';% default user profile if 'remoteuser' is not an ex
 % direct
 %
 remote.direct.ypeysson = default_remote_profile;
-remote.direct.ypeysson.host = 'home-aix.yvespeysson.fr:22';
+remote.direct.ypeysson.host = 'home-aix.yvespeysson.fr';
 remote.direct.ypeysson.hostname = 'ypeysson-X58A-UD7';
 remote.direct.ypeysson.nproc = 6;
 % remote.direct.ypeysson.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &'};% direct calculation (csh, bash)
@@ -36,7 +36,7 @@ remote.direct.ypeysson.remoteuser = 'ypeysson';
 % condor
 %
 remote.condor.ypeysson = default_remote_profile;
-remote.condor.ypeysson.host = 'home-aix.yvespeysson.fr:22';
+remote.condor.ypeysson.host = 'home-aix.yvespeysson.fr';
 remote.condor.ypeysson.hostname = 'ypeysson-X58A-UD7';
 remote.condor.ypeysson.nproc = 6;
 remote.condor.ypeysson.cmd = 'condor_submit';
