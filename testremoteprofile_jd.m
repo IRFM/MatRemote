@@ -50,6 +50,7 @@ if isempty(remote.host), %local calculation
     end
     %
     remote.ssh = [];
+    remote.hosts = {};
     return
 end
 %
