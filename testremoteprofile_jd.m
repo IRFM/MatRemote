@@ -53,116 +53,127 @@ if isempty(remote.host), %local calculation
     return
 end
 %
-remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout);
-%
-remotecmd = 'whoami';
-%
-% test ssh key-pair connection
-%
-if isempty(remote.link_mode) || remote.link_mode == 0,
-    if test,% test ssh key-pair connection
-        locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
-        %
-        [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh   
-        %
-        if res ~= 0,
-            if any(strfind(txt,'Connection timed out')),
-                msg = 'failed : connection timed out (10s)';
-            elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
-                msg = 'failed : ssh key pairing not set up or not working';
-            else
-                msg = ['failed with following message : ',txt];            
-            end
-            %
-            locdisp(display_mode,['   ... ',msg])
-        else
-            if test > 1 && strcmp(remote.scheduler,'direct'),%test upload and download speeds
-                disp(['---> Test connection speed by uploading and downloading a ',num2str(file4testingremoteconnection_param.bytes/1e6),' MB file on host ',remote.host])
-                tstart_upload = tic;
-                [res_upload,txt_upload] = unix(['scp file4testingremoteconnection.mat ',remote.remoteuser,'@',remote.host,':']);%execute the remote command by ssh
-                telapsed_upload = toc(tstart_upload);
-                tstart_download = tic;
-                [res_download,txt_download] = unix(['scp ',remote.remoteuser,'@',remote.host,':file4testingremoteconnection.mat .']);%execute the remote command by ssh
-                telapsed_download = toc(tstart_download);
-                %
-                if ~res_upload,
-                    disp(['---> Upload speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_upload/1e6),' MB/s']);
-                else
-                    disp(['---> Error upload speed test']);
-                end
-                %
-                if ~res_download,
-                    disp(['---> Download speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_download/1e6),' MB/s']);
-                else
-                    disp(['---> Error download speed test']);
-                end
-                %
-            end
-            %
-            locdisp(display_mode,['   ... completed with following request of remote end user: ',txt])
-            locdisp(display_mode,' ---> ssh key-pair mode selected')
-            %
-            remote.link_mode = 0;% ssh key-pair mode selected
-            return
-        end
-    else
-        return
-    end        
+if iscell(remote.host),%hosts list 
+    remote.hosts = remote.host;
+else 
+    remote.hosts = {remote.host};
 end
 %
-% test ssh bridge connection
-%
-if (isempty(remote.link_mode) || remote.link_mode == 1),
-    if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
-        if test,% test ssh bridge connection
-            locdisp(display_mode,['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... '])
+for ihosts = 1:length(remote.hosts),
+    %
+    remote.host = remote.hosts{ihosts};
+    %
+    remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout);
+    %
+    remotecmd = 'whoami';
+    %
+    % test ssh key-pair connection
+    %
+    if isempty(remote.link_mode) || remote.link_mode == 0,
+        if test,% test ssh key-pair connection
+            locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
             %
-            [txt,res] = matremotessh(remote,remotecmd);
+            [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh   
             %
             if res ~= 0,
-                locdisp(display_mode,['   ... failed with following : ',txt])
-            else
-                locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
-                locdisp(display_mode,' ---> ssh bridge mode selected')
+                if any(strfind(txt,'Connection timed out')),
+                    msg = 'failed : connection timed out (10s)';
+                elseif any(strfind(txt,'Permission denied')) || any(strfind(txt,'Host key verification failed')),
+                    msg = 'failed : ssh key pairing not set up or not working';
+                else
+                    msg = ['failed with following message : ',txt];            
+                end
                 %
+                locdisp(display_mode,['   ... ',msg])
+            else
+                if test > 1 && strcmp(remote.scheduler,'direct'),%test upload and download speeds
+                    disp(['---> Test connection speed by uploading and downloading a ',num2str(file4testingremoteconnection_param.bytes/1e6),' MB file on host ',remote.host])
+                    tstart_upload = tic;
+                    [res_upload,txt_upload] = unix(['scp file4testingremoteconnection.mat ',remote.remoteuser,'@',remote.host,':']);%execute the remote command by ssh
+                    telapsed_upload = toc(tstart_upload);
+                    tstart_download = tic;
+                    [res_download,txt_download] = unix(['scp ',remote.remoteuser,'@',remote.host,':file4testingremoteconnection.mat .']);%execute the remote command by ssh
+                    telapsed_download = toc(tstart_download);
+                    %
+                    if ~res_upload,
+                        disp(['---> Upload speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_upload/1e6),' MB/s']);
+                    else
+                        disp(['---> Error upload speed test']);
+                    end
+                    %
+                    if ~res_download,
+                        disp(['---> Download speed test : ',num2str(file4testingremoteconnection_param.bytes/telapsed_download/1e6),' MB/s']);
+                    else
+                        disp(['---> Error download speed test']);
+                    end
+                    %
+                end
+                %
+                locdisp(display_mode,['   ... completed with following request of remote end user: ',txt])
+                locdisp(display_mode,' ---> ssh key-pair mode selected')
+                %
+                remote.link_mode = 0;% ssh key-pair mode selected
+                return
+            end
+        else
+            return
+        end        
+    end
+    %
+    % test ssh bridge connection
+    %
+    if (isempty(remote.link_mode) || remote.link_mode == 1),
+        if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && ~isempty(remote.bridge.ssh.host),
+            if test,% test ssh bridge connection
+                locdisp(display_mode,['Testing bridge connection (ssh) to ',remote.host,' via ',remote.bridge.ssh.host,' ... '])
+                %
+                [txt,res] = matremotessh(remote,remotecmd);
+                %
+                if res ~= 0,
+                    locdisp(display_mode,['   ... failed with following : ',txt])
+                else
+                    locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
+                    locdisp(display_mode,' ---> ssh bridge mode selected')
+                    %
+                    remote.link_mode = 1;% ssh bridge mode selected
+                    return
+                end    
+            else
                 remote.link_mode = 1;% ssh bridge mode selected
                 return
-            end    
+            end            
         else
-            remote.link_mode = 1;% ssh bridge mode selected
-            return
-        end            
-    else
-        locdisp(display_mode,'ssh bridge mode connection not set up.')
+            locdisp(display_mode,'ssh bridge mode connection not set up.')
+        end
     end
-end
-%
-% test url/ftp bridge connection
-%
-if (isempty(remote.link_mode) || remote.link_mode == 2),
-    if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host) &&...
-       isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url/ftp
-        %
-        if test,
-            locdisp(display_mode,['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... '])
+    %
+    % test url/ftp bridge connection
+    %
+    if (isempty(remote.link_mode) || remote.link_mode == 2),
+        if isfield(remote.bridge,'url') && isfield(remote.bridge.url,'host') && ~isempty(remote.bridge.url.host) &&...
+           isfield(remote.bridge,'ftp') && isfield(remote.bridge.ftp,'host') && ~isempty(remote.bridge.ftp.host),% test bridge connection via url/ftp
             %
-            [txt,res] = matremoteurl(remote,'',remotecmd,'');
-            %
-            if res == 0,
-                locdisp(display_mode,['   ... failed with following message : ',txt])
-            else
-                locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
-                locdisp(display_mode,' ---> url/ftp bridge mode selected')
+            if test,
+                locdisp(display_mode,['Testing bridge connection (url/ftp) to ',remote.host,' via ',remote.bridge.url.host,' ... '])
                 %
+                [txt,res] = matremoteurl(remote,'',remotecmd,'');
+                %
+                if res == 0,
+                    locdisp(display_mode,['   ... failed with following message : ',txt])
+                else
+                    locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
+                    locdisp(display_mode,' ---> url/ftp bridge mode selected')
+                    %
+                    remote.link_mode = 2;% ssh bridge mode selected
+                    return
+                end    
+            else
                 remote.link_mode = 2;% ssh bridge mode selected
                 return
-            end    
+            end
         else
-            remote.link_mode = 2;% ssh bridge mode selected
-            return
+            locdisp(display_mode,'url/ftp bridge mode connection not set up.')
         end
-    else
-        locdisp(display_mode,'url/ftp bridge mode connection not set up.')
     end
 end
 % 
