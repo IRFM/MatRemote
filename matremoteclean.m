@@ -23,7 +23,18 @@ if ~isempty(remote.host),
             %
         elseif remote.link_mode == 1,
             %
-            [txt2,res2] = matremotessh(remote,remotecmd);
+            flag = 1;
+            for ii = 1:20;%the folder may be locked by the scheduler with some delay (use lsof +D batch_xxxxxxxx to check)
+                [txt2,res2] = matremotessh(remote,remotecmd);
+                if res2 == 0, 
+                    flag = 0;
+                    break;
+                end
+            end
+            %
+            if flag 
+                disp(['WARNING: the directory ',remotecmd(strfind(remotecmd,'batch_'):end-1),' has not been removed on the remote server for an unkown reason. Delete it manually.']);
+            end
             %
         end
         %
@@ -31,7 +42,7 @@ if ~isempty(remote.host),
         %
         res = res1*res2;
     else
-        [res,txt] = unix(['ssh ',remote.sshopts,' ',remote.remoteuser,'@',remote.host,' ''',remotecmd,'''']);%execute the remote command by ssh 
+        [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh
     end
     %
 elseif ~strcmp(job.localdatapath,job.remotedatapath),
