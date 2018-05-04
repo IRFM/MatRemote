@@ -20,9 +20,9 @@ default.profile = 'PEYSSON';% default user profile if 'remoteuser' is not an exi
 %
 % torque
 %
-remote.torque.PEYSSON = default_remote_profile;
-remote.torque.PEYSSON.host = 'shenma.ipp.ac.cn';%empty for local host (from outside : 202.127.204.22 or shenma.ipp.ac.cn)
-remote.torque.PEYSSON.hostname = 'login110';%login110(10.10.10.110) to login113(10.10.10.113). 
+remote.torque.PEYSSON = default_remote_profile;%202.127.204.22
+remote.torque.PEYSSON.host = {'10.10.10.110','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.torque.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3} 
 remote.torque.PEYSSON.nproc = 20;% default number of nodes for job on shenma
 remote.torque.PEYSSON.wait = 0;
 remote.torque.PEYSSON.shclean = 1;
@@ -31,21 +31,20 @@ remote.torque.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
 remote.torque.PEYSSON.get_jobid = {'','.service103'};%str_before,str_after
 remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
 remote.torque.PEYSSON.timeout = 60;
-remote.torque.PEYSSON.matver.mat714 = '/pkg/MATLAB/MATLAB/R2012a/bin/matlab';
-remote.torque.PEYSSON.matver.mat801 = '/pkg/MATLAB/MATLAB/R2013a/bin/matlab';
 remote.torque.PEYSSON.matver.mat901 = '/pkg/MATLAB/MATLAB/R2016a/bin/matlab';
-remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat901;%default matlab on remote machine
+remote.torque.PEYSSON.matver.mat902 = '/pkg/MATLAB/MATLAB/R2017a/bin/matlab';
+remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat902;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
 %remote.torque.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 %remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % direct
 %
 remote.direct.PEYSSON = default_remote_profile;
-remote.direct.PEYSSON.host = 'shenma.ipp.ac.cn';
-remote.direct.PEYSSON.hostname = 'login110';%'login113';%login110(10.10.10.110) to login113(10.10.10.113)
+remote.direct.PEYSSON.host = {'10.10.10.110','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.direct.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3}
 remote.direct.PEYSSON.nproc = 20;
 %remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.PEYSSON.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
@@ -53,15 +52,14 @@ remote.direct.PEYSSON.get_jobid = {};%sr_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.timeout = 60;
 remote.direct.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
-remote.direct.PEYSSON.matver.mat714 = '/pkg/MATLAB/MATLAB/R2012a/bin/matlab';
-remote.direct.PEYSSON.matver.mat801 = '/pkg/MATLAB/MATLAB/R2013a/bin/matlab';
-remote.direct.PEYSSON.matver.mat901 = '/pkg/MATLAB/MATLAB/R2016a/bin/matlab';
-remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat901;%default matlab on remote machine
+remote.direct.PEYSSON.matver.mat900 = '/pkg/MATLAB/MATLAB/R2016a/bin/matlab';
+remote.direct.PEYSSON.matver.mat902 = '/pkg/MATLAB/MATLAB/R2017a/bin/matlab';
+remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat902;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
 %remote.direct.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 %remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % BOJIANG DING (SHENMA)
 %
