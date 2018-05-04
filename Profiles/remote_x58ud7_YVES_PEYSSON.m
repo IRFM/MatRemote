@@ -12,6 +12,8 @@ function remote_profile = remote_x58ud7_YVES_PEYSSON(varargin)
 default.scheduler = 'condor';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'ypeysson';% default user profile if 'remoteuser' is not an existing user profile
 %
+default.filename = mfilename;%remote_xxx_yyy.m file name
+%
 % --------------------------------------------------
 %
 % YVES PEYSSON

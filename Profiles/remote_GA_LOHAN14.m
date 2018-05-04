@@ -13,6 +13,8 @@ function remote_profile = remote_GA_LOHAN14(varargin)
 default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'peyssony';% default user profile if 'remoteuser' is not an existing user profile
 %
+default.filename = mfilename;%remote_xxx_yyy.m file name
+%
 % --------------------------------------------------
 %
 % YVES PEYSSON

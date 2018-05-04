@@ -12,6 +12,8 @@ function remote_profile = remote_EUROFUSION_ITM(varargin)
 default.scheduler = 'pbs';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'g2yvesp';% default user profile if 'remoteuser' is not an existing user profile
 %
+default.filename = mfilename;%remote_xxx_yyy.m file name
+%
 % YVES PEYSSON
 %
 % direct

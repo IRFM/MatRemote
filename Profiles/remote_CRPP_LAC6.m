@@ -12,6 +12,8 @@ function remote_profile = remote_CRPP_LAC6(varargin)
 default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
 default.profile = 'decker';% default user profile if 'remoteuser' is not an existing user profile
 %
+default.filename = mfilename;%remote_xxx_yyy.m file name
+%
 % --------------------------------------------------
 %
 % JOAN DECKER
