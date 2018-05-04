@@ -439,6 +439,6 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     end
     %
     %profilestr = [remote_env,hoststr,' : ',schedulerstr,' (',cmdstr,')',bridgestr,' as user ',userstr]
-    profilestr = [remote_env,schedulerstr,' (',cmdstr,')',bridgestr,' as user ',userstr]
+    profilestr = [remote_env,schedulerstr,' (',cmdstr,')',bridgestr,' as user ',userstr];
 end
 %
