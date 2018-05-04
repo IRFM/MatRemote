@@ -91,7 +91,7 @@ if remote.link_mode == 2,
     %
 elseif remote.link_mode == 1,
     %
-    remotecmd = ['rm -fr ',remote.bridge.ssh.temppath,'/',job.save_id];
+    remotecmd = ['python -c \"import shutil; shutil.rmtree(''',remote.bridge.ssh.temppath,'/',job.save_id,''')\"'];%remove without rm command to preserve safety with ssh_filter
     [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);%execute the remote command by ssh 
     %
 end
