@@ -59,5 +59,11 @@ for ischeduler = 1:nschedulers,
     end
 end
 %
+if isfield(default,'filename'),
+    remote_profile.filename = default.filename;
+else
+    remote_profile.filename = '';
+end
+
 
 
