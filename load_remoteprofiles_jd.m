@@ -236,6 +236,8 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
         nrem = length(newremoteprofiles);
         %
         for irem = 1:nrem,
+            newremoteprofiles(irem).host = testedprofile.host;% host from test output
+            newremoteprofiles(irem).hosts = testedprofile.hosts;% hosts list from test output
             newremoteprofiles(irem).link_mode = testedprofile.link_mode;% link_mode from test output
         end    
         %
