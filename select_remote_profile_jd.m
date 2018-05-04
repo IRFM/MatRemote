@@ -45,6 +45,7 @@ for ischeduler = 1:nschedulers,
     else
         profilenames{ischeduler}{1} = default.profile;% default profile name
     end
+    %
 end
 %
 % make remote profiles list
@@ -59,11 +60,10 @@ for ischeduler = 1:nschedulers,
     end
 end
 %
-if isfield(default,'filename'),
-    remote_profile.filename = default.filename;
-else
-    remote_profile.filename = '';
+for irem = 1:nschedulers, 
+    if isfield(default,'filename'),
+        remote_profile(irem).filename = default.filename;
+    else
+        remote_profile(irem).filename = '';
+    end
 end
-
-
-
