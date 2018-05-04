@@ -432,8 +432,12 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     %
     userstr = remote.remoteuser;
     %
-    if length(remote.filename) > 8,
-        remote_env = [remote.filename(8:end),' : '];
+    if isfield(remote,'filename'),
+        if length(remote.filename) > 8,
+            remote_env = [remote.filename(8:end),' : '];
+        else
+            remote_env = '';
+        end
     else
         remote_env = '';
     end
