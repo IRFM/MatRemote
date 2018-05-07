@@ -1,0 +1,55 @@
+function remote_profile = remote_PSFC_EOFE7(varargin)
+%
+% This function regroups the remote profiles run on the MIT/EOFE7 engaging cluster
+%
+%   INPUTS : 
+%       - schedulername (optinal) : name of selected scheduler
+%       - profilename (optinal) : name of selected profile
+%
+%   OUTPUTS : 
+%       - remote_profile : name of selected remote profile(s)
+%
+default.scheduler = 'slurm';% default scheduler profile if 'schedulername' is not an existing scheduler profile
+default.profile = 'ypeysson';% default user profile if 'remoteuser' is not an existing user profile
+%
+default.filename = mfilename;%remote_xxx_yyy.m file name
+%
+% --------------------------------------------------
+%
+% YVES PEYSSON
+%
+% slurm
+%
+remote.slurm.ypeysson = default_remote_profile;
+remote.slurm.ypeysson.host = 'eofe7.mit.edu';
+remote.slurm.ypeysson.hostname = 'eofe7';
+remote.slurm.ypeysson.nproc = 20;
+%remote.slurm.ypeysson.walltime = '00:10';
+remote.slurm.ypeysson.cmd = 'sbatch --partition=sched_mit_psfc ';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
+remote.slurm.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
+remote.slurm.ypeysson.get_jobid = {'Submitted batch job ',''};%str_before,str_after
+remote.slurm.ypeysson.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
+remote.slurm.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/matlab';
+remote.slurm.ypeysson.matver.matdef = remote.slurm.ypeysson.matver.mat903;%default matlab on remote machine
+remote.slurm.ypeysson.remoteuser = 'ypeysson';
+%
+% direct
+%
+remote.direct.ypeysson = default_remote_profile;
+remote.direct.ypeysson.host = 'eofe7.mit.edu';
+remote.direct.ypeysson.hostname = 'eofe7';
+remote.direct.ypeysson.shell = 'bash';
+remote.direct.ypeysson.nproc = 20;
+remote.direct.ypeysson.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
+remote.direct.ypeysson.get_jobid = {};%str_before,str_after
+remote.direct.ypeysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/matlab';
+remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat903;%default matlab on remote machine
+remote.direct.ypeysson.remoteuser = 'ypeysson';
+% -------------------------------------------------
+% this part should be common to all remote profiles
+% -------------------------------------------------
+%
+remote_profile = select_remote_profile_jd(remote,default,varargin{:});
+%
