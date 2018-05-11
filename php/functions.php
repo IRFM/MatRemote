@@ -62,7 +62,7 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         }
 
 
-    } elseif ((strcmp($remote_host,"iris.gat.com") == 0) || (strcmp($remote_host,"login.eufus.eu") == 0)) {
+    } elseif (strcmp($remote_host,"login.eufus.eu") == 0) {
 
         if (strcmp($directsearch,"1") == 0) {
 
@@ -87,10 +87,6 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
         } elseif (strcmp($slurmsearch,"1") == 0) {
 
             $cmdextras = "";
-
-            if ((strcmp($remote_host,"iris.gat.com") == 0)) {
-                $cmdextras = "--partition=sched_mit_psfc";
-            }
 
 
 //sbatch --partition=sched_mit_psfc  --nodes=1 --mincpus=1 --cpus-per-task=1 --mem=2000 --time=1:00:00 --output=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.out --error=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.err --export=jobtimeid=180511174310812,debugmode=1,remotebatchdir=/home/ypeysson/tmp/batch_180511174310812/,remotebatch_matlabfun=remotematrun,TESTVAR=luke,remotematfnc=remotetest,remotebatch_matlabroot=/cm/shared/mit/matlab/matlab-2017b/bin/matlab /home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh
