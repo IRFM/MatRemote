@@ -61,7 +61,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         }
 
-    } elseif (strcmp($remote_host,"iris.gat.com") == 0) {
+
+    } elseif ((strcmp($remote_host,"iris.gat.com") == 0) || (strcmp($remote_host,"login.eufus.eu") == 0)) {
 
         if (strcmp($directsearch,"1") == 0) {
 
@@ -85,8 +86,34 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         } elseif (strcmp($slurmsearch,"1") == 0) {
 
+            $cmdextras = "";
+
+            if ((strcmp($remote_host,"iris.gat.com") == 0)) {
+                $cmdextras = "--partition=sched_mit_psfc";
+            }
 
 
+//sbatch --partition=sched_mit_psfc  --nodes=1 --mincpus=1 --cpus-per-task=1 --mem=2000 --time=1:00:00 --output=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.out --error=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.err --export=jobtimeid=180511174310812,debugmode=1,remotebatchdir=/home/ypeysson/tmp/batch_180511174310812/,remotebatch_matlabfun=remotematrun,TESTVAR=luke,remotematfnc=remotetest,remotebatch_matlabroot=/cm/shared/mit/matlab/matlab-2017b/bin/matlab /home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh
+
+
+//remotecmd = [remote.cmd,comopts,' --output=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.out --error=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.err --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
+
+
+            $localcmd[5] = "sbatch ".$cmdextras." --mincpus=1 --nodes=".$nodes." --cpus-per-task=".$ncpus;
+            if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." --mem=".$memory;
+            $localcmd[5] = $localcmd[5]." --time=".$walltime.":00 --output=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".out --error=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".err --export=jobtimeid=".$timeid.",debugmode=".$debugmode.",remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
+            $localcmd[5] = $localcmd[5].",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot;
+            if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
+            $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
+
+            $localcmd[6] = "squeue -j ".$id;
+            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
 
         }
 
@@ -167,56 +194,6 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 			$localcmd[11] = "date +%Y%m%d%H%M%S";
 
         }
-
-
-    } elseif (strcmp($remote_host,"login.eufus.eu") == 0) {
-
-    	if (strcmp($directsearch,"1") == 0) {
-
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
-            if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
-            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
-            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
-            //$localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; nohup ".$remotedatapath.$batch_dir.$script." `</dev/null` >nohup.out 2>&1 &";
-            
-            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";  
-
-            $localcmd[6] = "ps -p ".$id." -o comm=";
-        	$localcmd[7] = "rm -f nohup.out";
-
-        	$localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[11] = "date +%Y%m%d%H%M%S";
-            $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
-
-        } elseif (strcmp($pbssearch,"1") == 0) {
-
-            if (strcmp($wait,"1") == 0) {
-                $cmdextras = " -W block=true";
-            } else {
-                $cmdextras = "";
-            }           
-
-            $localcmd[5] = "qsub ".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
-            if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
-            $localcmd[5] = $localcmd[5]." -l walltime=".$walltime.":00 -v jobtimeid=".$timeid.",debugmode=".$debugmode.","."remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
-            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
-            $localcmd[5] = $localcmd[5].",remotematfnc=".$remotematfnc.",remotebatch_matlabroot=".$matlabroot;
-            if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
-            $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
-
-            $localcmd[6] = "qstat ".$id.'.andromede1';
-            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
-
-            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-            $localcmd[11] = "date +%Y%m%d%H%M%S";
-    	}
-
-
 
     } elseif (strcmp($remote_host,"andromede1.partenaires.cea.fr") == 0) {
 
