@@ -13,4 +13,4 @@ LUKE/Tools/remotegetbatch.m
 LUKE/Tools/remoterunbatch.m
 LUKE/Tools/remotematrun.m
 LUKE/Tools/timeid_jd.m
-LUKE/Tools/xgrid_batch2xml_yp.m
+LUKE/Tools/slurm_batch2xml_yp.m
