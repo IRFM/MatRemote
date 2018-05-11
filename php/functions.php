@@ -36,36 +36,6 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
             $localcmd[10] = "date +%Y%m%d%H%M%S";
 
-    	} elseif (strcmp($xgridsearch,"1") == 0) {
-
-        	if (strlen($password) > 0) {
-  
-            	$localcmd[5] = "xgrid -h ".$hostname." -p ".$remote_password." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
-            	$localcmd[6] = "xgrid -h ".$hostname." -p ".$remote_password." -job attributes -id ".$id;
-           	    $localcmd[7] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
-				$localcmd[8] = "xgrid -h ".$hostname." -p ".$remote_password." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
-				$localcmd[9] = "xgrid -h ".$hostname." -p ".$remote_password." -job delete -id ".$id;
-
-                $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-                $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-                $localcmd[12] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-                $localcmd[13] = "date +%Y%m%d%H%M%S";
-
-        	} else {
-
-            	$localcmd[5] = "xgrid -h ".$hostname." -job batch ".$remotedatapath.$batch_dir.$xgridscript;
-            	$localcmd[6] = "xgrid -h ".$hostname." -job attributes -id ".$id;
-            	$localcmd[7] = "xgrid -h ".$hostname." -job results -id ".$id." -se ".$remotedatapath.$batch_dir."error_file -so ".$remotedatapath.$batch_dir."output_file -out";
-            	$localcmd[8] = "xgrid -h ".$hostname." -job results -id ".$id." -out ".$remotedatapath.$batch_dir;
-            	$localcmd[9] = "xgrid -h ".$hostname." -job delete -id ".$id;
-
-                $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
-                $localcmd[11] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
-                $localcmd[12] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-                $localcmd[13] = "date +%Y%m%d%H%M%S";
-
-        	}
-
 		} elseif (strcmp($directsearch,"1") == 0) {
 
         	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
@@ -88,6 +58,35 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[12] = "date +%Y%m%d%H%M%S";
             $localcmd[13] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[14] = "cd ".$remotedatapath.$batch_dir.";git pull;";
+
+        }
+
+    } elseif (strcmp($remote_host,"iris.gat.com") == 0) {
+
+        if (strcmp($directsearch,"1") == 0) {
+
+            $localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
+            if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot."; export remotematfnc=".$remotematfnc;
+            if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5]."; export TESTVAR=".$testvar;
+            
+            $localcmd[5] = $localcmd[5]."; export remotebatch_matlabfun=".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";
+              
+
+            $localcmd[6] = "ps -p ".$id." -o comm=";
+            $localcmd[7] = "rm -f nohup.out";
+
+            $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
+            $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
+            $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
+
+        } elseif (strcmp($slurmsearch,"1") == 0) {
+
+
+
 
         }
 
@@ -356,6 +355,10 @@ function make_batch_script($post,$bridgetype){
         $envcmdbase2 = '=';
     }
 
+    if ((strcmp($slurmsearch,'1') == 0) AND ($safemode >= 1)) {
+
+    }
+
     if ((strcmp($sgesearch,'1') == 0) AND ($safemode >= 1)) {
 
 
@@ -488,67 +491,8 @@ function make_batch_script($post,$bridgetype){
         $script_name = $condorscript;
 
     }
-
-    if ((strcmp($xgridsearch,'1') == 0) AND ($safemode >= 1)) {
-     
-        $batchscript = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        $batchscript = $batchscript.'<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'."\n";
-        $batchscript = $batchscript.'<plist version="1.0">'."\n";
-        $batchscript = $batchscript.'<array>'."\n";
-        $batchscript = $batchscript.'<dict>'."\n";
-        $batchscript = $batchscript.'<key>name</key>'."\n";
-        $batchscript = $batchscript.'<string>matlab_job_'.$timeid.'</string>'."\n";
-        $batchscript = $batchscript.'<key>taskSpecifications</key>'."\n";
-        $batchscript = $batchscript.'<dict>'."\n";
-        $batchscript = $batchscript.'<key>0</key>'."\n";//first job
-        $batchscript = $batchscript.'<dict>'."\n";
-        $batchscript = $batchscript.'<key>arguments</key>'."\n";
-        $batchscript = $batchscript.'<array>'."\n";
-        $batchscript = $batchscript.'<string>'.$remotedatapath.$batch_dir.$script.'</string>'."\n";
-        $batchscript = $batchscript.'</array>'."\n";
-        $batchscript = $batchscript.'<key>command</key>'."\n";
-        $batchscript = $batchscript.'<string>/bin/sh</string>'."\n";
-        $batchscript = $batchscript.'<key>environment</key>'."\n";
-        $batchscript = $batchscript.'<dict>'."\n";
-        $batchscript = $batchscript.'<key>remotebatch_matlabfun</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$matlabfun.'</string>'."\n";
-
-        if (strlen($testvar) > 0) {
-            $batchscript = $batchscript.'<key>TESTVAR</key>'."\n";
-            $batchscript = $batchscript.'<string>'.$testvar.'</string>'."\n";
-        }
-        $batchscript = $batchscript.'<key>remotematfnc</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$remotematfnc.'</string>'."\n";
-        
-        $batchscript = $batchscript.'<key>remotebatch_matlabroot</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$matlabroot.'</string>'."\n";
-        $batchscript = $batchscript.'<key>MATLABPATH</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$matlabpath.'</string>'."\n";
-        if (strlen($lukeroot) > 0) {
-            $batchscript = $batchscript.'<key>luke_root</key>'."\n";
-            $batchscript = $batchscript.'<string>'.$lukeroot.'</string>'."\n";
-        }
-        $batchscript = $batchscript.'<key>jobtimeid</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$timeid.'</string>'."\n";
-        $batchscript = $batchscript.'<key>debugmode</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$debugmode.'</string>'."\n";
-        $batchscript = $batchscript.'<key>hostname</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$hostname.'</string>'."\n";
-        $batchscript = $batchscript.'<key>remotebatchdir</key>'."\n";
-        $batchscript = $batchscript.'<string>'.$remotedatapath.$batch_dir.'</string>'."\n";
-        $batchscript = $batchscript.'</dict>'."\n";
-        $batchscript = $batchscript.'</dict>'."\n";
-        $batchscript = $batchscript.'</dict>'."\n";
-        $batchscript = $batchscript.'</dict>'."\n";
-        $batchscript = $batchscript.'</array>'."\n";
-        $batchscript = $batchscript.'</plist>'."\n";
-
-        $flag_script = fopen($bridgetype.$xgridscript, 'w');
-        $script_name = $xgridscript;
-        
-    }
    
-    if (((strcmp($xgridsearch,'1') == 0) OR (strcmp($sgesearch,'1') == 0) OR (strcmp($condorsearch,'1') == 0)) AND ($safemode >= 1)) {
+    if (((strcmp($slurmsearch,'1') == 0) OR (strcmp($sgesearch,'1') == 0) OR (strcmp($condorsearch,'1') == 0)) AND ($safemode >= 1)) {
         fwrite($flag_script, $batchscript);
         fclose($flag_script);
     }
