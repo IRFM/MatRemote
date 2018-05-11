@@ -29,11 +29,7 @@ if ($safemode >= 1) {
   }
 }
 
-if (strcmp(substr($remotecmd,0,5),'xgrid') == 0) {
-  $remote_cmd = $remotecmd." -p ".$remote_password;//put hidden password
-} else {
-  $remote_cmd = $remotecmd;
-}
+$remote_cmd = $remotecmd;
 
 /*
 echo "cmd=".$remote_cmd."\n";
