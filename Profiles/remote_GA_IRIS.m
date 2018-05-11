@@ -33,8 +33,6 @@ remote.slurm.peyssony.matver.mat901 = '/fusion/usc/opt/MATLAB/R2016b/bin/matlab'
 remote.slurm.peyssony.matver.mat903 = '/fusion/usc/opt/MATLAB/R2017b/bin/matlab';
 remote.slurm.peyssony.matver.matdef = remote.slurm.peyssony.matver.mat903;%default matlab on remote machine
 remote.slurm.peyssony.remoteuser = 'peyssony';
-remote.slurm.peyssony.bridge.url.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
-remote.slurm.peyssony.bridge.ftp.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
 remote.slurm.peyssony.bridge.ssh.host = 'cybele.gat.com:2039';%cybele workstation GA/DIII-D
 %
 % direct
@@ -52,8 +50,6 @@ remote.direct.peyssony.matver.mat901 = '/fusion/usc/opt/MATLAB/R2016b/bin/matlab
 remote.direct.peyssony.matver.mat903 = '/fusion/usc/opt/MATLAB/R2017b/bin/matlab';
 remote.direct.peyssony.matver.matdef = remote.direct.peyssony.matver.mat903;%default matlab on remote machine
 remote.direct.peyssony.remoteuser = 'peyssony';
-remote.direct.peyssony.bridge.url.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
-remote.direct.peyssony.bridge.ftp.host = 'cybele.gat.com';%cybele workstation GA/DIII-D
 remote.direct.peyssony.bridge.ssh.host = 'cybele.gat.com:2039';%cybele workstation GA/DIII-D
 % -------------------------------------------------
 % this part should be common to all remote profiles
