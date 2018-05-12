@@ -19,18 +19,25 @@ $timeid = $_POST["timeid"];
 $script = $_POST["script"];
 $remoteuser = $_POST['remoteuser'];
 
+//echo "remote host: ".$remotehost."<br>";
+//echo "remote user: ".$remoteuser."<br>";
+
 list($remote_host,$remote_login,$remote_password) = login($remotehost,$remoteuser);
 
 $safemode = safemode($remotehost);
 
 $connection = ssh2_connect($remote_host);
 
+//echo "connection: ".$connection."<br>";
+//echo "remote login: ".$remote_login."<br>";
+//echo "remote password: ".$remote_password."<br>";
+
 if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
-   //echo "Successful ssh identification !"."\n";
+   echo "Successful ssh identification !"."\n";
 
    $ftp_rootdir = ftprootdir();
-      //echo $ftp_rootdir.$batch_dir."\n";
-      //echo "Bridge folder: ".getcwd()."\n";
+      echo $ftp_rootdir.$batch_dir."\n";
+      echo "Bridge folder: ".getcwd()."\n";
 
    echo "scp2php_error:".ssh2_transfer_dir($connection,$post,$safemode,$ftp_rootdir,$remotedatapath,$batch_dir)."\n";
 
@@ -39,8 +46,6 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
    die('Identification failed...');
 
 }
-
-
 
 function ssh2_transfer_dir($connection,$post,$safemode,$ftp_rootdir, $remotedatapath,$batch_dir) {
 
