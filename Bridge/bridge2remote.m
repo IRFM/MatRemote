@@ -5,6 +5,10 @@ txt = '';
 %
 if remote.link_mode == 2,
     %
+    if strfind(remote.host,':')
+        remote.host = remote.host(1:strfind(remote.host,':')-1);%no specific port for url 
+    end
+    %
     php_post = phppostremotejob(remote,job);%add extra data for php filtering
     %
     [txt_url,res_url] = bridgeurl(remote,php_post,'scp_putdir.php');
