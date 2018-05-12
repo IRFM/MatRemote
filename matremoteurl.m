@@ -1,5 +1,9 @@
 function [txt_url,res_url] = matremoteurl(remote,job,remotecmd,filename)
 %
+if strfind(remote.host,':')
+	remote.host = remote.host(1:strfind(remote.host,':')-1);%no specific port for url 
+end
+%
 if isempty(remotecmd) && ~isempty(filename)
     php_post{1} = 'filename';%php variable
     php_post{2} = filename;
