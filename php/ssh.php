@@ -25,7 +25,7 @@ if ($safemode >= 1) {
     //***************** UNCOMMENT the following lines to disable the filtering and check the strings (see also functions.php *************************
     //echo "flag_filter,txt_filter = ".$flag_filter.",".$txt_filter."\n";
     //************************************************************************************************************************************************
-    die("*************************************************\nNon standard unix command in MatRemote:\n".$remotecmd."\nAn automatic message has been sent to the administrator.\nJob aborted...\n*************************************************");
+    die("*************************************************\nNon standard unix command in MatRemote:\n".$remotecmd."\nAn automatic message has been  send to the administrator.\nJob aborted...\n*************************************************");
   }
 }
 
@@ -59,10 +59,3 @@ if (ssh2_auth_password($connection, $remote_login, $remote_password)) {
 }
 
 ?>
-
-
-
-
-
-
-
