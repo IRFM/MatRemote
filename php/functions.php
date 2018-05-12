@@ -26,9 +26,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
     if (strcmp($remote_host,"tolbachik.hd.free.fr") == 0) {
 
-		if (strcmp($condorsearch,"1") == 0) {
+        if (strcmp($condorsearch,"1") == 0) {
 
-        	$localcmd[5] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
+            $localcmd[5] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; export jobtimeid=".$timeid."; export debugmode=".$debugmode."; condor_submit ".$remotedatapath.$batch_dir.$condorscript." -v";
             $localcmd[6] = "export CONDOR_CONFIG=".$condorconfig."; export PATH=".$condorpath."; condor_q ".$id;
 
             $localcmd[7] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
@@ -36,9 +36,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
             $localcmd[10] = "date +%Y%m%d%H%M%S";
 
-		} elseif (strcmp($directsearch,"1") == 0) {
+        } elseif (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
+            $localcmd[5] = "export remotebatchdir=".$remotedatapath.$batch_dir."; export debugmode=".$debugmode."; export jobtimeid=".$timeid;
 
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5]."; export luke_root=".$lukeroot;
             if (strlen($matlabroot) > 0) $localcmd[5] = $localcmd[5]."; export remotebatch_matlabroot=".$matlabroot;
@@ -49,8 +49,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[5] = $localcmd[5]."; nohup ".$remotedatapath.$batch_dir.$script." &";
 
             $localcmd[6] = "ps -p ".$id;
-        	$localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
-        	$localcmd[8] = "rm -f nohup.out";
+            $localcmd[7] = "cd ".$remotedatapath.$batch_dir.";rm pid_".$id.".mat";
+            $localcmd[8] = "rm -f nohup.out";
 
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
@@ -86,16 +86,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         } elseif (strcmp($slurmsearch,"1") == 0) {
 
-            $cmdextras = "";
+            $cmdextras = "--partition=bdw_all_serial";
 
-
-//sbatch --partition=sched_mit_psfc  --nodes=1 --mincpus=1 --cpus-per-task=1 --mem=2000 --time=1:00:00 --output=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.out --error=/home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh_180511174310812.err --export=jobtimeid=180511174310812,debugmode=1,remotebatchdir=/home/ypeysson/tmp/batch_180511174310812/,remotebatch_matlabfun=remotematrun,TESTVAR=luke,remotematfnc=remotetest,remotebatch_matlabroot=/cm/shared/mit/matlab/matlab-2017b/bin/matlab /home/ypeysson/tmp/batch_180511174310812/matlabbatch.sh
-
-
-//remotecmd = [remote.cmd,comopts,' --output=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.out --error=',job.remotedatapath,job.batch_dir,job.script,'_',job.timeid,'.err --export=jobtimeid=',job.timeid,',debugmode=',num2str(job.debugmode),',remotebatchdir=',job.remotedatapath,job.save_id,jobenvstr,' ',job.remotedatapath,job.batch_dir,job.script];% batch command
-
-
-            $localcmd[5] = "sbatch ".$cmdextras." --mincpus=1 --nodes=".$nodes." --cpus-per-task=".$ncpus;
+            $localcmd[5] = "sbatch ".$cmdextras." --nodes=".$nodes." --mincpus=1 --cpus-per-task=".$ncpus;
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." --mem=".$memory;
             $localcmd[5] = $localcmd[5]." --time=".$walltime.":00 --output=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".out --error=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".err --export=jobtimeid=".$timeid.",debugmode=".$debugmode.",remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
@@ -103,8 +96,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
+
             $localcmd[6] = "squeue -j ".$id;
-            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+            $localcmd[7] = "rm -f slurm-".$id.".out";
 
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
@@ -160,9 +154,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             }
 
 
-        	if (strcmp($wait,"1") == 0) {
-            	$cmdextras = $cmdextras." -W block=true";
-        	}
+            if (strcmp($wait,"1") == 0) {
+                $cmdextras = $cmdextras." -W block=true";
+            }
 
             if (strcmp($remote_host,"shenma.ipp.ac.cn") == 0) {
                 $localcmd[5] = "qsub -q batch".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
@@ -182,20 +176,20 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             if (strlen($lukeroot) > 0) $localcmd[5] = $localcmd[5].",luke_root=".$lukeroot;
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
-			$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
 
         }
 
     } elseif (strcmp($remote_host,"andromede1.partenaires.cea.fr") == 0) {
 
-		if (strcmp($directsearch,"1") == 0) {
+        if (strcmp($directsearch,"1") == 0) {
 
-        	$localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode;
+            $localcmd[5] = "setenv remotebatchdir ".$remotedatapath.$batch_dir."; setenv debugmode ".$debugmode;
             $localcmd[5] = $localcmd[5]."; setenv jobtimeid ".$timeid;
             if (strlen($lukeroot) > 0)  $localcmd[5] = $localcmd[5]."; setenv luke_root ".$lukeroot;
             $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabroot ".$matlabroot;
@@ -204,24 +198,24 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
             $localcmd[5] = $localcmd[5]."; setenv remotebatch_matlabfun ".$matlabfun."; ".$remotedatapath.$batch_dir.$script." &";  
 
-        	$localcmd[6] = "ps -p ".$id." -o comm=";
-        	$localcmd[7] = "rm -f nohup.out";
+            $localcmd[6] = "ps -p ".$id." -o comm=";
+            $localcmd[7] = "rm -f nohup.out";
 
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
             $localcmd[12] = "cat ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[13] = "cd ".$remotedatapath.$batch_dir.";git pull;";
 
 
-   		}  elseif (strcmp($pbssearch,"1") == 0) {
+        }  elseif (strcmp($pbssearch,"1") == 0) {
 
-       		if (strcmp($wait,"1") == 0) {
-            	$cmdextras = " -W block=true";
-        	} else {
-            	$cmdextras = "";
-        	}			
+            if (strcmp($wait,"1") == 0) {
+                $cmdextras = " -W block=true";
+            } else {
+                $cmdextras = "";
+            }           
 
             $localcmd[5] = "qsub".$cmdextras." -l nodes=".$nodes.":ppn=".$ppn." -l ncpus=".$ncpus;
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." -l mem=".$memory."mb";
@@ -232,12 +226,12 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
             $localcmd[5] = $localcmd[5]." ".$remotedatapath.$batch_dir.$script;
 
             $localcmd[6] = "qstat ".$id.'.andromede1';
-        	$localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
+            $localcmd[7] = "rm -f ".$script.".e".$id." ".$script.".o".$id;
 
             $localcmd[8] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."pid_".$timeid;
             $localcmd[9] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_OUT_".$timeid.".mat";
             $localcmd[10] = "python -c \"import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))\" %Y%m%d%H%M%S ".$remotedatapath.$batch_dir."MAT_RUN_".$timeid.".mat";
-			$localcmd[11] = "date +%Y%m%d%H%M%S";
+            $localcmd[11] = "date +%Y%m%d%H%M%S";
        }
 
     }
@@ -247,8 +241,8 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
     for ($i = 0; $i < count($localcmd); $i++) {
         if (strcmp($localcmd[$i],$remotecmd) == 0) {
             $flag = 0; 
-            break;  	
-        }
+            break;      
+        } 
     }
 
     if (((strcmp($remotedatapath,"*") == 0) || (strcmp($remotedatapath,"*.") == 0) || (strcmp($remotedatapath,"*.*") == 0)) AND ($safemode == 1)) $flag = 1;
@@ -328,10 +322,6 @@ function make_batch_script($post,$bridgetype){
         $envcmdbase2 = '=';
     }
 
-    if ((strcmp($slurmsearch,'1') == 0) AND ($safemode >= 1)) {
-
-    }
-
     if ((strcmp($sgesearch,'1') == 0) AND ($safemode >= 1)) {
 
 
@@ -358,7 +348,7 @@ function make_batch_script($post,$bridgetype){
 
         $batchscript = $batchscript.$envcmdbase1.'jobtimeid'.$envcmdbase2.$timeid."\n";
 
-		if (strlen($debugmode) > 0) $batchscript = $batchscript.$envcmdbase1.'debugmode'.$envcmdbase2.$debugmode."\n";
+        if (strlen($debugmode) > 0) $batchscript = $batchscript.$envcmdbase1.'debugmode'.$envcmdbase2.$debugmode."\n";
 
         $batchscript = $batchscript.$envcmdbase1.'remotebatch_matlabfun'.$envcmdbase2.$matlabfun."\n";
         
@@ -465,7 +455,7 @@ function make_batch_script($post,$bridgetype){
 
     }
    
-    if (((strcmp($slurmsearch,'1') == 0) OR (strcmp($sgesearch,'1') == 0) OR (strcmp($condorsearch,'1') == 0)) AND ($safemode >= 1)) {
+    if (((strcmp($sgesearch,'1') == 0) OR (strcmp($condorsearch,'1') == 0)) AND ($safemode >= 1)) {
         fwrite($flag_script, $batchscript);
         fclose($flag_script);
     }
