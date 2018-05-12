@@ -159,15 +159,19 @@ for ihosts = 1:length(remote.hosts),
                 %
                 [txt,res] = matremoteurl(remote,'',remotecmd,'');
                 %
-                if res == 0,
-                    locdisp(display_mode,['   ... failed with following message : ',txt])
+                if res ~= 0,
+                    if any(strfind(txt,'Identification failed')),
+                        msg = 'failed : Identification failed';
+                    else
+                        locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
+                        locdisp(display_mode,' ---> url/ftp bridge mode selected')
+                        %
+                        remote.link_mode = 2;% ssh bridge mode selected
+                        return          
+                    end
                 else
-                    locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
-                    locdisp(display_mode,' ---> url/ftp bridge mode selected')
-                    %
-                    remote.link_mode = 2;% ssh bridge mode selected
-                    return
-                end    
+                    locdisp(display_mode,['   ... failed with following message : ',txt])
+                end
             else
                 remote.link_mode = 2;% ssh bridge mode selected
                 return
