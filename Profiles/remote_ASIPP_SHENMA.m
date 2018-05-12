@@ -38,8 +38,8 @@ remote.torque.PEYSSON.matver.mat902 = '/pkg/MATLAB/MATLAB/R2017a/bin/matlab';
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat902;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
-%remote.torque.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.torque.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+remote.torque.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.torque.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % direct
@@ -59,8 +59,8 @@ remote.direct.PEYSSON.matver.mat902 = '/pkg/MATLAB/MATLAB/R2017a/bin/matlab';
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat902;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
-%remote.direct.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+remote.direct.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % BOJIANG DING (SHENMA)
