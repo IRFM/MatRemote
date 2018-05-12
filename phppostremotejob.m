@@ -13,6 +13,7 @@ post_job{ij} = {'timeid'};ij = ij + 1;
 post_job{ij} = {'id'};ij = ij + 1;
 post_job{ij} = {'pbssearch'};ij = ij + 1;
 post_job{ij} = {'condorsearch'};ij = ij + 1;
+post_job{ij} = {'slurmsearch'};ij = ij + 1;
 post_job{ij} = {'directsearch'};ij = ij + 1;
 post_job{ij} = {'sgesearch'};ij = ij + 1;
 post_job{ij} = {'nodes'};ij = ij + 1;
