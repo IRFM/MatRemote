@@ -134,7 +134,7 @@ for irem = 1:nrem,
     end
 end
 %
-time0 = time;
+time0 = datestr(now,'yymmddHHMMSS');
 time1 = strrep(time0,'   ','.');
 diary(['gitpdate_summary_',time1,'.txt']);
 disp('------------------------------------------------------------------');
