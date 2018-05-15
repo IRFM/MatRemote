@@ -86,9 +86,9 @@ function filter_cmd($post){ //filter allowed commands transfered by the bridge (
 
         } elseif (strcmp($slurmsearch,"1") == 0) {
 
-            $cmdextras = "--partition=bdw_all_serial";
+            $cmdextras = "--partition=bdw_fua_gw";
 
-            $localcmd[5] = "sbatch ".$cmdextras." --nodes=".$nodes." --mincpus=1 --cpus-per-task=".$ncpus;
+            $localcmd[5] = "sbatch ".$cmdextras." --nodes=".$nodes." --mincpus=".$ppn." --cpus-per-task=".$ncpus;
             if (strlen($memory) > 0) $localcmd[5] = $localcmd[5]." --mem=".$memory;
             $localcmd[5] = $localcmd[5]." --time=".$walltime.":00 --output=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".out --error=".$remotedatapath.$batch_dir."matlabbatch.sh_".$timeid.".err --export=jobtimeid=".$timeid.",debugmode=".$debugmode.",remotebatchdir=".$remotedatapath.$batch_dir.",remotebatch_matlabfun=".$matlabfun;
             if (strlen($testvar) > 0) $localcmd[5] = $localcmd[5].",TESTVAR=".$testvar;
