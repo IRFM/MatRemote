@@ -204,8 +204,7 @@ elseif job.pbssearch  || job.sgesearch,
 elseif job.slurmsearch,
     %
     if res == 0,% if remoteset_jobid{3} == '', search for job.id in txt, otherwise search for remoteset_jobid{3}
-        if (~isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,remoteset_jobid{3})))...
-        || (isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,job.id))),
+        if (~isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,remoteset_jobid{3}))) || (isempty(remoteset_jobid{3}) && ~isempty(strfind(txt,job.id))),
             return% run still running
         end
         %
