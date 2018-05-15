@@ -33,7 +33,7 @@ remote.keyfile = [];% use of a specific private key in folder Matremote/Keys
 remote.timeout = 10;% ssh connection timeout (in seconds)
 remote.hosts = {};% multiple host adresses for local or remote access of a cluster. Ex :  {'10.10.10.110','shenma.ipp.ac.cn'}
 %
-% The following parameters are for qsub or torque only. Use NaN if option is forbidden 
+% The following parameters are for qsub or torque or slurm only. Use NaN if option is forbidden 
 %
 remote.nodes = [];% use if ressources are specified by nodes=?:ppn=? 
 remote.select = [];% use if ressources are specified by select=?:ncpus=?
