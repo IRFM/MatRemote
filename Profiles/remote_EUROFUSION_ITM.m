@@ -40,12 +40,11 @@ remote.slurm.g2yvesp = default_remote_profile;
 remote.slurm.g2yvesp.host = 'login.eufus.eu';
 remote.slurm.g2yvesp.hostname = '@s';
 remote.slurm.g2yvesp.nproc = 10;
-%remote.slurm.g2yvesp.walltime = '00:10';
 remote.slurm.g2yvesp.cmd = 'sbatch --partition=bdw_fua_gw';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
 %remote.slurm.g2yvesp.remotedatapath = '/afs/eufus.eu/user/g/g2yvesp/tmp/';
 remote.slurm.g2yvesp.remotedatapath = '/pfs/work/g2yvesp/tmp/';
 remote.slurm.g2yvesp.get_jobid = {'Submitted batch job ',''};%str_before,str_after
-remote.slurm.g2yvesp.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
+remote.slurm.g2yvesp.set_jobid = {'squeue -j ','',''};%str_before,str_after,str_check
 remote.slurm.g2yvesp.matver.mat902 = '/gw/swvend/matlab/r2017a/bin/matlab';
 remote.slurm.g2yvesp.matver.matdef = remote.slurm.g2yvesp.matver.mat902;%default matlab on remote machine
 remote.slurm.g2yvesp.remoteuser = 'g2yvesp';
