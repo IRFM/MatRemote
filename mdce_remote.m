@@ -29,6 +29,14 @@ else
     cleanmode = 2;
 end
 %
+if isfield(dkecluster,'enforce'),
+    enforcemode = dkecluster.enforce;
+elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'enforce'),% inherit MDCE enforce
+    enforcemode = dkecluster.scheduler.enforce;
+else
+    enforcemode = 1;
+end
+%
 if isfield(dkecluster,'remtimout'),% in minutes
     remtimout = dkecluster.remtimout;
 elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'remtimout'),% inherit MDCE remtimout
@@ -99,9 +107,17 @@ else
 end
 %
 if isempty(output),
-    disp('Timeout reached, MDCE calculation started locally')
+    if enforcemode,
+        disp('Timeout reached, MDCE calculation started locally')
+    else
+        disp('Timeout reached, MDCE calculation failed (enforce mode off)')
+    end
 elseif isfield(output,'err'),
-    disp('Remote MDCE run failed, calculation started locally')
+    if enforcemode,
+        disp('Remote MDCE run failed, calculation started locally')
+    else
+        disp('Remote MDCE run failed (enforce mode off)')
+    end
 else
     flag = 10 + output.flag;% add 10 for each remote step
     varargout = output.varargout;
