@@ -79,5 +79,11 @@ for j_argout = 1:nargout-1,
     %
     if ~flag_GPU,
     	varargout{j_argout} = varargout_array(:,j_argout);
+        if ~isreal(scheduler.enforce)
+            varargout{j_argout}{nrange}.warning = ['Remote calculation failed with remote number #',int2str(imag(scheduler.enforce)),', local calculation performed'];
+        end
     end
 end
+%
+
+
