@@ -94,7 +94,17 @@ if ~isempty(dkecluster.scheduler.remote),
         remote = dkecluster.scheduler.remote;% non-recursive case
         dkecluster.scheduler.remote = {};
     end
-    [remote,profilestr] = load_remoteprofiles_jd(remote,true);
+    %
+    if isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'remnum')
+        remnum = dkecluster.scheduler.remnum;
+    else
+        remnum = 0;
+    end
+    [remote,profilestr] = load_remoteprofiles_jd(remote,dkecluster.scheduler.enforce);
+    %
+    if dkecluster.scheduler.enforce == 1 && remnum > 0 && isempty(remote)
+        dkecluster.scheduler.enforce = dkecluster.scheduler.enforce + i*remnum;%
+    end
     %
     % parameters set recursively
     %
