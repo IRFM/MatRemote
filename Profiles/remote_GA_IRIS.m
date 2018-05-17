@@ -51,6 +51,17 @@ remote.direct.peyssony.matver.mat903 = '/fusion/usc/opt/MATLAB/R2017b/bin/matlab
 remote.direct.peyssony.matver.matdef = remote.direct.peyssony.matver.mat903;%default matlab on remote machine
 remote.direct.peyssony.remoteuser = 'peyssony';
 remote.direct.peyssony.bridge.ssh.host = 'cybele.gat.com:2039';%cybele workstation GA/DIII-D
+%
+% MICHAEL BROOKMAN (IRIS)
+%
+remote.slurm.brookmanmw = remote.slurm.peyssony;
+remote.slurm.brookmanmw.remoteuser = 'brookmanmw';
+remote.slurm.brookmanmw.remotedatapath = '/cscratch/brookmanmw/';
+%
+remote.direct.brookmanmw = remote.direct.peyssony;
+remote.direct.brookmanmw.remoteuser = 'brookmanmw';
+remote.direct.brookmanmw.remotedatapath = '/cscratch/brookmanmw/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
