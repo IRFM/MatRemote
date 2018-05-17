@@ -102,8 +102,8 @@ if ~isempty(dkecluster.scheduler.remote),
     end
     [remote,profilestr] = load_remoteprofiles_jd(remote,dkecluster.scheduler.enforce);
     %
-    if dkecluster.scheduler.enforce == 1 && remnum > 0 && isempty(remote)
-        dkecluster.scheduler.enforce = dkecluster.scheduler.enforce + i*remnum;%
+    if dkecluster.scheduler.enforce == 1 && remnum > 0 && isempty(remote),%remote link fails
+        dkecluster.scheduler.enforce = dkecluster.scheduler.enforce + i*remnum;%when local calculation enforced
     end
     %
     % parameters set recursively
@@ -214,8 +214,11 @@ else% remote computing mode
     if isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 3;% remcomputing on local cluster
         dkecluster.scheduler.mode = 'local';
     end
-    %
-    [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,true,dkecluster.scheduler.inter);% test validity and connection of remote profile
+    %    
+    [dkecluster.scheduler.remote,profilestr] = load_remoteprofiles_jd(dkecluster.scheduler.mode,dkecluster.scheduler.enforce,dkecluster.scheduler.inter);% test validity and connection of remote profile
+    if dkecluster.scheduler.enforce == 1 && isempty(dkecluster.scheduler.remote) && ~isreal(dkecluster.scheduler.remnum),%remote link fails
+        dkecluster.scheduler.enforce = dkecluster.scheduler.enforce + dkecluster.scheduler.remnum;%local calculation enforced
+    end
     %
     if ~isempty(dkecluster.scheduler.remote),
         %
@@ -252,4 +255,5 @@ end
 if dkecluster.scheduler.mode == 0,
     dkecluster.scheduler.clustersize = 1;% enforce one iteration by default if mode = 0,
 end
+%
     
