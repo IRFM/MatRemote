@@ -64,7 +64,7 @@ for ihosts = 1:length(remote.hosts),
     %
     remote.host = remote.hosts{ihosts};
     %
-    remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout);
+    remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout,remote.password);
     %
     remotecmd = 'whoami';
     %
@@ -74,7 +74,7 @@ for ihosts = 1:length(remote.hosts),
         if test,% test ssh key-pair connection
             locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
             %
-            [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh   
+            [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh 
             %
             if res ~= 0,
                 if any(strfind(txt,'Connection timed out')),

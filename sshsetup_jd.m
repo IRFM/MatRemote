@@ -1,7 +1,10 @@
-function ssh = sshsetup_jd(host,username,keyfile,sshopts,timeout)
+function ssh = sshsetup_jd(host,username,keyfile,sshopts,timeout,password)
 %
 % builds the ssh and scp commands specifically for the provided host
 %
+if nargin < 6,
+    password = '';
+end
 if nargin < 5,
     timeout = 10;% in s
 end
@@ -36,7 +39,20 @@ else
     keyfilestr = '';
 end
 %
-batchmodestr = [' -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
+[res,txt] = unix('which sshpass');
 %
-ssh.sshcmd = ['ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
-ssh.scpcmd = {['scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
+if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
+    batchmodestr = [' -o StrictHostKeyChecking=no -o ConnectTimeout=',num2str(timeout)];
+else
+    batchmodestr = [' -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
+end
+%
+if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
+    sshpassopts = [' -p "',password,'" '];
+    ssh.sshcmd = ['sshpass ',sshpassopts,'ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+    ssh.scpcmd = {['sshpass ',sshpassopts,'scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
+else
+    ssh.sshcmd = ['ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+    ssh.scpcmd = {['scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
+%
+end
