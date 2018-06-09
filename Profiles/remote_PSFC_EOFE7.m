@@ -25,7 +25,12 @@ remote.slurm.ypeysson.host = 'eofe7.mit.edu';
 remote.slurm.ypeysson.hostname = 'eofe7';
 remote.slurm.ypeysson.nproc = 20;
 %remote.slurm.ypeysson.walltime = '00:10';
-remote.slurm.ypeysson.cmd = 'sbatch --partition=sched_mit_psfc ';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
+%---------------------------------------------------
+% To run a long serial job (or any serial job) the sched_mit_psfc_serial partition must be used. Calculations are restricted to one core. 
+% For very long jobs which need parallel work in matlab the quality of service (qos) option : --qos=psfc_long must be used with the sched_mit_psfc partition (one week job, limited to three nodes, number of core must be specified)
+% The quality of service (qos) option : --qos=psfc_24h allows 24 hour jobs, limited to 50 nodes.
+%---------------------------------------------------
+remote.slurm.ypeysson.cmd = 'sbatch --partition=sched_mit_psfc --qos=psfc_24h';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
 remote.slurm.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.slurm.ypeysson.get_jobid = {'Submitted batch job ',''};%str_before,str_after
 remote.slurm.ypeysson.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
