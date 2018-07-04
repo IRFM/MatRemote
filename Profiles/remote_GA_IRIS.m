@@ -57,12 +57,12 @@ remote.direct.peyssony.bridge.ssh.host = 'cybele.gat.com:2039';%cybele workstati
 remote.slurm.brookmanmw = remote.slurm.peyssony;
 remote.slurm.brookmanmw.remoteuser = 'brookmanmw';
 remote.slurm.brookmanmw.remotedatapath = '/cscratch/brookmanmw/';
-remote.slurm.brookmanmw = rmfield(remote.slurm.brookmanmw,'bridge');%direct link only as Michael is always at GA
+remote.slurm.brookmanmw.bridge = [];%direct link only as Michael is always at GA
 %
 remote.direct.brookmanmw = remote.direct.peyssony;
 remote.direct.brookmanmw.remoteuser = 'brookmanmw';
 remote.direct.brookmanmw.remotedatapath = '/cscratch/brookmanmw/';
-remote.direct.brookmanmw = rmfield(remote.direct.brookmanmw,'bridge');%direct link only as Michael is always at GA
+remote.direct.brookmanmw.bridge = [];%direct link only as Michael is always at GA
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
