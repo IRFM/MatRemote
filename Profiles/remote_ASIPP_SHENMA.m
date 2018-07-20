@@ -80,6 +80,12 @@ remote.torque.bjdingLinux.remotedatapath = '/scratch/bjding/';
 remote.torque.limiaohui = remote.torque.PEYSSON;
 remote.torque.limiaohui.remoteuser = 'limiaohui';
 remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
+remote.torque.limiaohui.bridge = [];
+%
+remote.direct.limiaohui = remote.direct.PEYSSON;
+remote.direct.limiaohui.remoteuser = 'limiaohui';
+remote.direct.limiaohui.remotedatapath = '/scratch/limiaohui/';
+remote.direct.limiaohui.bridge = [];
 %
 % YONGCHUN LI (SHENMA)
 %
