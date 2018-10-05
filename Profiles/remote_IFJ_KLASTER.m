@@ -25,7 +25,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 % torque
 %
 remote.torque.yves = default_remote_profile;
-remote.torque.yves.host = 'klaster.ifj.edu.pl';% empty for local host (192.168.5.2)
+remote.torque.yves.host = {'10.10.101.13','klaster.ifj.edu.pl'};% empty for local host
 remote.torque.yves.hostname = 'node01';
 remote.torque.yves.nproc = 20;% default number of nodes for job on shenma
 remote.torque.yves.wait = 0;
@@ -49,7 +49,7 @@ remote.torque.yves.remoteuser = 'Yves';
 % direct
 %
 remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'klaster.ifj.edu.pl';
+remote.direct.yves.host = {'10.10.101.13','klaster.ifj.edu.pl'};
 remote.direct.yves.hostname = 'node01';
 remote.direct.yves.nproc = 20;
 remote.direct.yves.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
