@@ -69,12 +69,6 @@ remote.direct.Yves.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
-% SHAODONG SONG
-%
-remote.torque.songshd= remote.torque.Yves;
-remote.torque.songshd.remoteuser = 'songshd';
-remote.torque.songshd.remotedatapath = '/home/songshd/tmp/';
-%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
