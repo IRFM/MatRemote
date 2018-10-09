@@ -282,8 +282,17 @@ end
 [timeres,timestr] = matremotecheck(remote,job,['MAT_RUN_',job.timeid,'.mat']);
 %
 if ~timeres, 
-    job.time.transfered = get_datetime_yp(timestr);% time of job transfer on remote machine (creation of remote MAT_RUN file)
-end  
+   job.time.transfered = get_datetime_yp(timestr);% time of job transfer on remote machine (creation of remote MAT_RUN file)
+else
+     if strfind(timestr,'Error'),
+        locdisp(displaymode,['Setting MAT_RUN_',job.timeid,'.mat timeid failed (check python version used in matremotecheck.m) : ',timestr]);
+        job.err = ['Setting MAT_RUN_',job.timeid,'.mat timeid failed (check python version used in matremotecheck.m) : ',timestr];
+        %
+        return
+     end 
+end
+%
+
 %
 % start job
 %
