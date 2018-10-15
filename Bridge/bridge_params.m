@@ -17,7 +17,7 @@ if ~isempty(remote.bridge),
         if strcmp(remote.bridge.ssh.host,'tolbachik.hd.free.fr:2222'),%nuc bridge aix
             remote.bridge.ssh.username = 'matremote';
             remote.bridge.ssh.temppath = 'tmp';
-            remote.bridge.ssh.keyfile = 'id_dsa_matremote';
+            remote.bridge.ssh.keyfile = 'id_rsa_matremote';
         elseif strcmp(remote.bridge.ssh.host,'cybele.gat.com:2039'),%cybele bridge General Atomics
             remote.bridge.ssh.username = 'peyssony';
             remote.bridge.ssh.temppath = 'tmp';
