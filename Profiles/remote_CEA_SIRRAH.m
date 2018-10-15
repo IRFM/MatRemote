@@ -28,6 +28,7 @@ remote.pbs.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.pleione'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.pleione','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
+remote.pbs.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.pbs.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default matlab on remote machine
@@ -46,6 +47,7 @@ remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/Home/YP105119/tmp';
+remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%default matlab on remote machine
