@@ -84,20 +84,6 @@ remote.pbs.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
-% JAKUB URBAN
-%
-% pbs
-%
-remote.pbs.urban = remote.pbs.peysson;
-remote.pbs.urban.remoteuser = 'urban';
-%
-% RICHARD PAPROK
-%
-% pbs
-%
-remote.pbs.paprok = remote.pbs.peysson;
-remote.pbs.paprok.remoteuser = 'paprok';
-%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
