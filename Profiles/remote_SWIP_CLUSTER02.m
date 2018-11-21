@@ -69,6 +69,18 @@ remote.direct.Yves.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.Yves.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
+% PONY MA  
+%
+remote.torque.mazy = remote.torque.Yves;
+remote.torque.mazy.remoteuser = 'mazy';
+remote.torque.mazy.remotedatapath = '/home/mazy/tmp/';
+remote.torque.mazy.bridge = [];
+%
+remote.direct.mazy = remote.direct.Yves;
+remote.direct.mazy.remoteuser = 'mazy';
+remote.direct.mazy.remotedatapath = '/home/mazy/tmp/';
+remote.direct.mazy.bridge = [];
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
