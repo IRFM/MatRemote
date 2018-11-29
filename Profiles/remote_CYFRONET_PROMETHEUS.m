@@ -49,6 +49,13 @@ remote.slurm.plgzgoryk.remoteuser = 'plgzgoryk';
 remote.slurm.plgzgoryk.remotedatapath = '/net/scratch/people/plgzgoryk/';
 remote.slurm.plgzgoryk.bridge = [];
 %
+% DOMINIK DWORAK (PROMETHEUS)
+%
+remote.slurm.plgddworak = remote.slurm.plgypeysson;
+remote.slurm.plgddworak.remoteuser = 'plgzgoryk';
+remote.slurm.plgddworak.remotedatapath = '/net/scratch/people/plgddworak/';
+remote.slurm.plgddworak.bridge = [];
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
