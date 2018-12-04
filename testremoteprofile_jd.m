@@ -70,6 +70,8 @@ for ihosts = 1:length(remote.hosts),
     %
     % test ssh key-pair connection
     %
+    test = real(test);
+    %
     if isempty(remote.link_mode) || remote.link_mode == 0,
         if test,% test ssh key-pair connection
             locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
