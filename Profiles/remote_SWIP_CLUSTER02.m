@@ -81,6 +81,18 @@ remote.direct.mazy.remoteuser = 'mazy';
 remote.direct.mazy.remotedatapath = '/home/mazy/tmp/';
 remote.direct.mazy.bridge = [];
 %
+% XUE LEI 
+%
+remote.torque.xuelei = remote.torque.Yves;
+remote.torque.xuelei.remoteuser = 'xuelei';
+remote.torque.xuelei.remotedatapath = '/home/xuelei/tmp/';
+remote.torque.xuelei.bridge = [];
+%
+remote.direct.xuelei = remote.direct.Yves;
+remote.direct.xuelei.remoteuser = 'xuelei';
+remote.direct.xuelei.remotedatapath = '/home/xuelei/tmp/';
+remote.direct.xuelei.bridge = [];
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
