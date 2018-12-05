@@ -81,7 +81,7 @@ remote.direct.mazy.remoteuser = 'mazy';
 remote.direct.mazy.remotedatapath = '/home/mazy/tmp/';
 remote.direct.mazy.bridge = [];
 %
-% XUE LEI 
+% LEI XUE  
 %
 remote.torque.xuelei = remote.torque.Yves;
 remote.torque.xuelei.remoteuser = 'xuelei';
@@ -116,6 +116,19 @@ remote.direct.zhangjie = remote.direct.Yves;
 remote.direct.zhangjie.remoteuser = 'zhangjie';
 remote.direct.zhangjie.remotedatapath = '/home/zhangjie/tmp/';
 remote.direct.zhangjie.bridge = [];
+%
+%
+% XINGYU BAI
+%
+remote.torque.baixy = remote.torque.Yves;
+remote.torque.baixy.remoteuser = 'baixy';
+remote.torque.baixy.remotedatapath = '/home/baixy/tmp/';
+remote.torque.baixy.bridge = [];
+%
+remote.direct.baixy = remote.direct.Yves;
+remote.direct.baixy.remoteuser = 'baixy';
+remote.direct.baixy.remotedatapath = '/home/baixy/tmp/';
+remote.direct.baixy.bridge = [];
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
