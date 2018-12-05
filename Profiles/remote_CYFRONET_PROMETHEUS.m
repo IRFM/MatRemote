@@ -52,7 +52,7 @@ remote.slurm.plgzgoryk.bridge = [];
 % DOMINIK DWORAK (PROMETHEUS)
 %
 remote.slurm.plgddworak = remote.slurm.plgypeysson;
-remote.slurm.plgddworak.remoteuser = 'plgzgoryk';
+remote.slurm.plgddworak.remoteuser = 'plgddworak';
 remote.slurm.plgddworak.remotedatapath = '/net/scratch/people/plgddworak/';
 remote.slurm.plgddworak.bridge = [];
 %
