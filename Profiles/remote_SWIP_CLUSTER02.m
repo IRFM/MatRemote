@@ -35,13 +35,11 @@ remote.torque.Yves.queue.name = {'debug','express','small','medium','long','very
 remote.torque.Yves.queue.maxtask = {8,64,32,16,8,8};%maximum number of tasks per user
 remote.torque.Yves.queue.maxtime = {'00:15','05:00','10:00','24:00','168:00','360:00'};%Maximum calculation time per task (hh:mm) (seconds are set to 00)
 remote.torque.Yves.queue.qdef = 5;%default queue mode number (see queue.name)
-remote.torque.Yves.remotedatapath = '/home/Yves/tmp/';
+remote.torque.Yves.remotedatapath = '/home/Yves/';
 remote.torque.Yves.get_jobid = {'','.mgmt.chess'};%str_before,str_after
 remote.torque.Yves.set_jobid = {'qstat ','',' ',' C '};%str_before,str_after,str_check
 remote.torque.Yves.timeout = 240;%s
-remote.torque.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
 remote.torque.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
-remote.torque.Yves.matver.mat802 = '/opt/MATLAB/R2013b/bin/matlab';
 remote.torque.Yves.matver.matdef = remote.torque.Yves.matver.mat801;%default matlab on remote machinen
 
 remote.torque.Yves.remoteuser = 'Yves';
@@ -59,10 +57,8 @@ remote.direct.Yves.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.Yves.get_jobid = {};%str_before,str_after
 remote.direct.Yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.Yves.timeout = 240;%s
-remote.direct.Yves.remotedatapath = '/home/Yves/tmp/';
-remote.direct.Yves.matver.mat714 = '/opt/MATLAB/R2012a/bin/matlab';
+remote.direct.Yves.remotedatapath = '/home/Yves/';
 remote.direct.Yves.matver.mat801 = '/opt/MATLAB/R2013a/bin/matlab';
-remote.direct.Yves.matver.mat802 = '/opt/MATLAB/R2013b/bin/matlab';
 remote.direct.Yves.matver.matdef = remote.direct.Yves.matver.mat801;%default matlab on remote machine
 remote.direct.Yves.remoteuser = 'Yves';
 remote.direct.Yves.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
@@ -73,48 +69,48 @@ remote.direct.Yves.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 remote.torque.mazy = remote.torque.Yves;
 remote.torque.mazy.remoteuser = 'mazy';
-remote.torque.mazy.remotedatapath = '/home/mazy/tmp/';
+remote.torque.mazy.remotedatapath = '/home/mazy/';
 remote.torque.mazy.bridge = [];
 %
 remote.direct.mazy = remote.direct.Yves;
 remote.direct.mazy.remoteuser = 'mazy';
-remote.direct.mazy.remotedatapath = '/home/mazy/tmp/';
+remote.direct.mazy.remotedatapath = '/home/mazy/';
 remote.direct.mazy.bridge = [];
 %
 % LEI XUE  
 %
 remote.torque.xuelei = remote.torque.Yves;
 remote.torque.xuelei.remoteuser = 'xuelei';
-remote.torque.xuelei.remotedatapath = '/home/xuelei/tmp/';
+remote.torque.xuelei.remotedatapath = '/home/xuelei/';
 remote.torque.xuelei.bridge = [];
 %
 remote.direct.xuelei = remote.direct.Yves;
 remote.direct.xuelei.remoteuser = 'xuelei';
-remote.direct.xuelei.remotedatapath = '/home/xuelei/tmp/';
+remote.direct.xuelei.remotedatapath = '/home/xuelei/';
 remote.direct.xuelei.bridge = [];
 %
 % YIPO ZHANG 
 %
 remote.torque.zhangyp = remote.torque.Yves;
 remote.torque.zhangyp.remoteuser = 'zhangyp';
-remote.torque.zhangyp.remotedatapath = '/home/zhangyp/tmp/';
+remote.torque.zhangyp.remotedatapath = '/home/zhangyp/';
 remote.torque.zhangyp.bridge = [];
 %
 remote.direct.zhangyp = remote.direct.Yves;
 remote.direct.zhangyp.remoteuser = 'zhangyp';
-remote.direct.zhangyp.remotedatapath = '/home/zhangyp/tmp/';
+remote.direct.zhangyp.remotedatapath = '/home/zhangyp/';
 remote.direct.zhangyp.bridge = [];
 %
 % JIE ZHANG 
 %
 remote.torque.zhangjie = remote.torque.Yves;
 remote.torque.zhangjie.remoteuser = 'zhangjie';
-remote.torque.zhangjie.remotedatapath = '/home/zhangjie/tmp/';
+remote.torque.zhangjie.remotedatapath = '/home/zhangjie/';
 remote.torque.zhangjie.bridge = [];
 %
 remote.direct.zhangjie = remote.direct.Yves;
 remote.direct.zhangjie.remoteuser = 'zhangjie';
-remote.direct.zhangjie.remotedatapath = '/home/zhangjie/tmp/';
+remote.direct.zhangjie.remotedatapath = '/home/zhangjie/';
 remote.direct.zhangjie.bridge = [];
 %
 %
@@ -122,12 +118,12 @@ remote.direct.zhangjie.bridge = [];
 %
 remote.torque.baixy = remote.torque.Yves;
 remote.torque.baixy.remoteuser = 'baixy';
-remote.torque.baixy.remotedatapath = '/home/baixy/tmp/';
+remote.torque.baixy.remotedatapath = '/home/baixy/';
 remote.torque.baixy.bridge = [];
 %
 remote.direct.baixy = remote.direct.Yves;
 remote.direct.baixy.remoteuser = 'baixy';
-remote.direct.baixy.remotedatapath = '/home/baixy/tmp/';
+remote.direct.baixy.remotedatapath = '/home/baixy/';
 remote.direct.baixy.bridge = [];
 %
 % -------------------------------------------------
