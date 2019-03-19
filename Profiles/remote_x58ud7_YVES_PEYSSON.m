@@ -1,6 +1,6 @@
 function remote_profile = remote_x58ud7_YVES_PEYSSON(varargin)
 %
-% This function regroups the remote profiles run on the X58-UD7 Linux server (Aix) of Yves Peysson
+% This function regroups the remote profiles run on the X58-UD7 Linux server (Lyon) of Yves Peysson
 %
 %   INPUTS : 
 %       - schedulername (optinal) : name of selected scheduler
@@ -29,10 +29,9 @@ remote.direct.ypeysson.cmd = {'bash','nohup ',' &'};% direct calculation (csh, b
 remote.direct.ypeysson.get_jobid = {};%str_before,str_after
 remote.direct.ypeysson.set_jobid = {'ps -p ','','MATLAB'};%str_before,str_after,str_check
 remote.direct.ypeysson.remotedatapath = '/home/ypeysson/';
-remote.direct.ypeysson.matver.mat902 = '/usr/local/MATLAB/R2017a/bin/matlab';
-remote.direct.ypeysson.matver.mat903 = '/usr/local/MATLAB/R2017b/bin/matlab';
 remote.direct.ypeysson.matver.mat904 = '/usr/local/MATLAB/R2018a/bin/matlab';
-remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat904;%default matlab on remote machine
+remote.direct.ypeysson.matver.mat905 = '/usr/local/MATLAB/R2018a/bin/matlab';
+remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat905;%default matlab on remote machine
 remote.direct.ypeysson.remoteuser = 'ypeysson';
 %
 % condor
@@ -47,10 +46,9 @@ remote.condor.ypeysson.set_jobid = {'condor_q ',' -nobatch'};
 remote.condor.ypeysson.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
 remote.condor.ypeysson.condor.PATH = '$PATH';
 remote.condor.ypeysson.remotedatapath = '/home/ypeysson/condor/';
-remote.condor.ypeysson.matver.mat902 = '/usr/local/MATLAB/R2017a/bin/matlab';
-remote.condor.ypeysson.matver.mat903 = '/usr/local/MATLAB/R2017b/bin/matlab';
 remote.condor.ypeysson.matver.mat904 = '/usr/local/MATLAB/R2018a/bin/matlab';
-remote.condor.ypeysson.matver.matdef = remote.condor.ypeysson.matver.mat904;%default matlab on remote machine
+remote.condor.ypeysson.matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab';
+remote.condor.ypeysson.matver.matdef = remote.condor.ypeysson.matver.mat905;%default matlab on remote machine
 remote.condor.ypeysson.remoteuser = 'ypeysson';
 %
 % -------------------------------------------------
