@@ -1,0 +1,1 @@
+These files must be put in /var/www/html/MatRemote folder of the computer which is used as a url/ftp bridge.
