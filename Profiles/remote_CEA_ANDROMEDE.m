@@ -64,13 +64,46 @@ remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
 remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
-% EMELIE NILSSON
+% Jean-François Artaud
 %
 % pbs pro
 %
-%remote.pbs.EN290612 = remote.pbs.YP105119;
-%remote.pbs.EN290612.remoteuser = 'EN290612';
-%remote.pbs.EN290612.remotedatapath = '/home/EN290612/tmp/';
+%remote.pbs.JA132999 = remote.pbs.YP105119;
+%remote.pbs.JA132999.remoteuser = 'JA132999';
+%remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
+%
+% Annika Ekedahl
+%
+% pbs pro
+%
+%remote.pbs.AE165440 = remote.pbs.YP105119;
+%remote.pbs.AE165440.remoteuser = 'AE165440';
+%remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
+%
+% Clarisse Bourdelle
+%
+% pbs pro
+%
+%remote.pbs.DM088721 = remote.pbs.YP105119;
+%remote.pbs.DM088721.remoteuser = 'DM088721';
+%remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
+%
+% Lena Delpech
+%
+% pbs pro
+%
+%remote.pbs.LD142631 = remote.pbs.YP105119;
+%remote.pbs.LD142631.remoteuser = 'LD142631';
+%remote.pbs.LD142631.remotedatapath = '/home/LD142631/tmp/';
+%
+% Marc Goniche
+%
+% pbs pro
+%
+%remote.pbs.MG100063 = remote.pbs.YP105119;
+%remote.pbs.MG100063.remoteuser = 'MG100063';
+%remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
+%
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
