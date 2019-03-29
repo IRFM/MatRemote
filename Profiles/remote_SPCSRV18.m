@@ -1,6 +1,6 @@
-function remote_profile = remote_SPCPC483(varargin)
+function remote_profile = remote_SPCSRV18(varargin)
 %
-% This function regroups the remote profiles run on joan's laptop
+% SPCSRV18 LUKE server
 %
 %   INPUTS : 
 %       - schedulername (optinal) : name of selected scheduler
@@ -20,8 +20,8 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 % direct
 %
 remote.direct.joan = default_remote_profile;
-remote.direct.joan.host = 'spcpc483.epfl.ch';% IP address on EPFL network
-remote.direct.joan.hostname = 'spcpc483';
+remote.direct.joan.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
+remote.direct.joan.hostname = 'spcsrv18';
 remote.direct.joan.nproc = 4;
 remote.direct.joan.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.joan.get_jobid = {};%str_before,str_after
@@ -41,8 +41,8 @@ remote.direct.joan.remoteuser = 'decker';
 % direct
 %
 remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'spcpc483.epfl.ch';% IP address on EPFL network
-remote.direct.yves.hostname = 'spcpc483';
+remote.direct.yves.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
+remote.direct.yves.hostname = 'spcsrv18';
 remote.direct.yves.nproc = 4;
 remote.direct.yves.cmd = {'bash','',' &'};% direct calculation (csh, bash)
 remote.direct.yves.get_jobid = {};%str_before,str_after
