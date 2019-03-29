@@ -57,16 +57,6 @@ remote.condor.yvespeysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc 
 remote.condor.yvespeysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
 remote.condor.yvespeysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
-% JOAN DECKER
-%
-% direct
-%
-remote.direct.joan = remote.direct.yvespeysson;% same remote user, same options
-%
-% condor
-%
-remote.condor.joan = remote.condor.yvespeysson;% same remote user, same options
-%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
