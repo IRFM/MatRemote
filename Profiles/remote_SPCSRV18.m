@@ -19,20 +19,35 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 %
 % direct
 %
-remote.direct.joan = default_remote_profile;
-remote.direct.joan.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
-remote.direct.joan.hostname = 'spcsrv18';
-remote.direct.joan.nproc = 4;
-remote.direct.joan.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-remote.direct.joan.get_jobid = {};%str_before,str_after
-remote.direct.joan.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.joan.remotedatapath = '/tmp/';
-remote.direct.joan.matver.mat803 = 'matlab-8.3.0';
-remote.direct.joan.matver.mat804 = 'matlab-8.4.0';
-remote.direct.joan.matver.mat900 = 'matlab-9.0.0';
-remote.direct.joan.matver.mat901 = 'matlab-9.1.0';
-remote.direct.joan.matver.matdef = remote.direct.joan.matver.mat901;%default matlab on remote machine
-remote.direct.joan.remoteuser = 'decker';
+remote.direct.decker = default_remote_profile;
+remote.direct.decker.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
+remote.direct.decker.hostname = 'spcsrv18';
+remote.direct.decker.nproc = 4;
+remote.direct.decker.cmd = {'bash','',' &'};% direct calculation (csh, bash)
+remote.direct.decker.get_jobid = {};%str_before,str_after
+remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.decker.remotedatapath = '/tmp/';
+remote.direct.decker.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
+remote.direct.decker.matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab';
+remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat901;%default matlab on remote machine
+remote.direct.decker.remoteuser = 'decker';
+%
+% condor
+%
+remote.condor.decker = default_remote_profile;
+remote.condor.decker.host = 'spcsrv18.epfl.ch';
+remote.condor.decker.hostname = 'spcsrv18';
+remote.condor.decker.nproc = 12;
+remote.condor.decker.cmd = 'condor_submit';
+remote.condor.decker.get_jobid = {'** Proc ',':'};
+remote.condor.decker.set_jobid = {'condor_q ',' -nobatch'};
+remote.condor.decker.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
+remote.condor.decker.condor.PATH = '$PATH';
+remote.condor.decker.remotedatapath = '/home/decker/condor/';
+remote.condor.decker.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
+remote.condor.decker.matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab';
+remote.condor.decker.matver.matdef = remote.condor.decker.matver.mat901;%default matlab on remote machine
+remote.condor.decker.remoteuser = 'decker';
 %
 % --------------------------------------------------
 %
@@ -40,18 +55,35 @@ remote.direct.joan.remoteuser = 'decker';
 %
 % direct
 %
-remote.direct.yves = default_remote_profile;
-remote.direct.yves.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
-remote.direct.yves.hostname = 'spcsrv18';
-remote.direct.yves.nproc = 4;
-remote.direct.yves.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-remote.direct.yves.get_jobid = {};%str_before,str_after
-remote.direct.yves.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.yves.remotedatapath = '/tmp/';
-remote.direct.yves.matver.mat804 = 'matlab-8.4.0';
-remote.direct.yves.matver.mat901 = 'matlab-9.1.0';
-remote.direct.yves.matver.matdef = remote.direct.yves.matver.mat901;%default matlab on remote machine
-remote.direct.yves.remoteuser = 'peysson';
+remote.direct.peysson = default_remote_profile;
+remote.direct.peysson.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
+remote.direct.peysson.hostname = 'spcsrv18';
+remote.direct.peysson.nproc = 12;
+remote.direct.peysson.cmd = {'bash','',' &'};% direct calculation (csh, bash)
+remote.direct.peysson.get_jobid = {};%str_before,str_after
+remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.peysson.remotedatapath = '/tmp/';
+remote.direct.peysson.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
+remote.direct.peysson.matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab';
+remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat901;%default matlab on remote machine
+remote.direct.peysson.remoteuser = 'peysson';
+%
+% condor
+%
+remote.condor.peysson = default_remote_profile;
+remote.condor.peysson.host = 'spcsrv18.epfl.ch';
+remote.condor.peysson.hostname = 'spcsrv18';
+remote.condor.peysson.nproc = 12;
+remote.condor.peysson.cmd = 'condor_submit';
+remote.condor.peysson.get_jobid = {'** Proc ',':'};
+remote.condor.peysson.set_jobid = {'condor_q ',' -nobatch'};
+remote.condor.peysson.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
+remote.condor.peysson.condor.PATH = '$PATH';
+remote.condor.peysson.remotedatapath = '/home/peysson/condor/';
+remote.condor.peysson.matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
+remote.condor.peysson.matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab';
+remote.condor.peysson.matver.matdef = remote.condor.peysson.matver.mat901;%default matlab on remote machine
+remote.condor.peysson.remoteuser = 'peysson';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
