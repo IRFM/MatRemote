@@ -28,12 +28,13 @@ remote.direct.g2yvesp.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,st
 remote.direct.g2yvesp.remotedatapath = '/afs/eufus.eu/user/g/g2yvesp/tmp/';
 remote.direct.g2yvesp.remotedatapath = '/pfs/work/g2yvesp/tmp/';
 remote.direct.g2yvesp.matver.mat902 = '/gw/swvend/matlab/r2017a/bin/matlab';
-remote.direct.g2yvesp.matver.matdef = remote.direct.g2yvesp.matver.mat902;%default matlab on remote machine
+remote.direct.g2yvesp.matver.mat905 = '/gw/swvend/matlab/r2018b/bin/matlab';
+remote.direct.g2yvesp.matver.matdef = remote.direct.g2yvesp.matver.mat905;%default matlab on remote machine
 remote.direct.g2yvesp.remoteuser = 'g2yvesp';
 remote.direct.g2yvesp.password = getenv('EUROFUSION_ITM_PASSWD');%set password in startup.m or in session startup script
-remote.direct.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.direct.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.direct.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.direct.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.direct.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.direct.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % slurm
 %
@@ -47,12 +48,13 @@ remote.slurm.g2yvesp.remotedatapath = '/pfs/work/g2yvesp/tmp/';
 remote.slurm.g2yvesp.get_jobid = {'Submitted batch job ',''};%str_before,str_after
 remote.slurm.g2yvesp.set_jobid = {'squeue -j ','',''};%str_before,str_after,str_check
 remote.slurm.g2yvesp.matver.mat902 = '/gw/swvend/matlab/r2017a/bin/matlab';
-remote.slurm.g2yvesp.matver.matdef = remote.slurm.g2yvesp.matver.mat902;%default matlab on remote machine
+remote.slurm.g2yvesp.matver.mat905 = '/gw/swvend/matlab/r2018b/bin/matlab';
+remote.slurm.g2yvesp.matver.matdef = remote.slurm.g2yvesp.matver.mat905;%default matlab on remote machine
 remote.slurm.g2yvesp.remoteuser = 'g2yvesp';
 remote.slurm.g2yvesp.password = getenv('EUROFUSION_ITM_PASSWD');%set password in startup.m or in session startup script
-remote.slurm.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.slurm.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.slurm.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.slurm.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.slurm.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.slurm.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
