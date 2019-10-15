@@ -29,7 +29,8 @@ remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.peysson.remotedatapath = '/compass/home/peysson/tmp/';
 remote.direct.peysson.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat902;%default matlab on remote machine
+remote.direct.peysson.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat906;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
 %
 % pbs
@@ -41,10 +42,11 @@ remote.pbs.peysson.nproc = 36;
 remote.pbs.peysson.cmd = 'qsub ';% remote calculation with the pbs scheduler
 remote.pbs.peysson.shclean = 1;
 remote.pbs.peysson.get_jobid = {'','.soroban-sched'};%str_before,str_after
-remote.pbs.peysson.set_jobid = {'qstat ','.soroban-sched','Unknown Job Id',' C '};%str_before,str_after,str_check
+remote.pbs.peysson.set_jobid = {'qstat ','.soroban-sched','Job has finished',' C '};%str_before,str_after,str_check
 remote.pbs.peysson.remotedatapath = '/compass/home/peysson/tmp/';
 remote.pbs.peysson.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat902;%default matlab on remote machine
+remote.pbs.peysson.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat906;%default matlab on remote machine
 remote.pbs.peysson.remoteuser = 'peysson';
 %
 % -------------------------------------------------
