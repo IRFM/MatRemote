@@ -35,7 +35,8 @@ remote.slurm.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.slurm.ypeysson.get_jobid = {'Submitted batch job ',''};%str_before,str_after
 remote.slurm.ypeysson.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
 remote.slurm.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/matlab';
-remote.slurm.ypeysson.matver.matdef = remote.slurm.ypeysson.matver.mat903;%default matlab on remote machine
+remote.slurm.ypeysson.matver.mat905 = '/cm/shared/mit/matlab/matlab-2018b/bin/matlab';
+remote.slurm.ypeysson.matver.matdef = remote.slurm.ypeysson.matver.mat905;%default matlab on remote machine
 remote.slurm.ypeysson.remoteuser = 'ypeysson';
 %
 % direct
@@ -50,7 +51,8 @@ remote.direct.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.direct.ypeysson.get_jobid = {};%str_before,str_after
 remote.direct.ypeysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/matlab';
-remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat903;%default matlab on remote machine
+remote.direct.ypeysson.matver.mat905 = '/cm/shared/mit/matlab/matlab-2018b/bin/matlab';
+remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat905;%default matlab on remote machine
 remote.direct.ypeysson.remoteuser = 'ypeysson';
 % -------------------------------------------------
 % this part should be common to all remote profiles
