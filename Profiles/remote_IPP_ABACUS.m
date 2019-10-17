@@ -29,7 +29,8 @@ remote.direct.decker.get_jobid = {};%str_before,str_after
 remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.decker.remotedatapath = '/compass/home/decker/';
 remote.direct.decker.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat902;%default matlab on remote machine
+remote.direct.decker.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat906;%default matlab on remote machine
 remote.direct.decker.remoteuser = 'decker';
 %
 % pbs
@@ -44,7 +45,8 @@ remote.pbs.decker.get_jobid = {'','.abacus'};%str_before,str_after
 remote.pbs.decker.set_jobid = {'qstat ','.abacus','Unknown Job Id',' C '};%str_before,str_after,str_check
 remote.pbs.decker.remotedatapath = '/compass/home/decker/';
 remote.pbs.decker.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat902;%default matlab on remote machine
+remote.pbs.decker.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.pbs.decker.matver.matdef = remote.pbs.decker.matver.mat906;%default matlab on remote machine
 remote.pbs.decker.remoteuser = 'decker';
 %
 % YVES PEYSSON
@@ -60,11 +62,12 @@ remote.direct.peysson.get_jobid = {};%str_before,str_after
 remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.peysson.remotedatapath = '/compass/home/peysson/tmp/';
 remote.direct.peysson.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat902;%default matlab on remote machine
+remote.direct.peysson.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat906;%default matlab on remote machine
 remote.direct.peysson.remoteuser = 'peysson';
-remote.direct.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.direct.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.direct.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.direct.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % pbs
 %
@@ -78,11 +81,12 @@ remote.pbs.peysson.get_jobid = {'','.abacus'};%str_before,str_after
 remote.pbs.peysson.set_jobid = {'qstat ','.abacus','Unknown Job Id',' C '};%str_before,str_after,str_check
 remote.pbs.peysson.remotedatapath = '/compass/home/peysson/tmp/';
 remote.pbs.peysson.matver.mat902 = '/sw/matlab/r2017a/bin/matlab';
-remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat902;%default matlab on remote machine
+remote.pbs.peysson.matver.mat906 = '/sw/matlab/r2019a/bin/matlab';
+remote.pbs.peysson.matver.matdef = remote.pbs.peysson.matver.mat906;%default matlab on remote machine
 remote.pbs.peysson.remoteuser = 'peysson';
-remote.pbs.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.pbs.peysson.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.pbs.peysson.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.pbs.peysson.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
