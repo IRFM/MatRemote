@@ -23,7 +23,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 %
 remote.slurm.plgypeysson = default_remote_profile;
 remote.slurm.plgypeysson.host = 'pro.cyfronet.pl';
-remote.slurm.plgypeysson.hostname = 'cyfronet';
+remote.slurm.plgypeysson.hostname = 'prometheus';
 remote.slurm.plgypeysson.nproc = 24;
 %remote.slurm.plgypeysson.walltime = '00:10';
 %---------------------------------------------------
@@ -33,7 +33,7 @@ remote.slurm.plgypeysson.get_jobid = {'Submitted batch job ',''};%str_before,str
 remote.slurm.plgypeysson.set_jobid = {'squeue -j ','',''};%str_before,str_after,str_check
 remote.slurm.plgypeysson.matver.mat904 = '/net/software/local/matlab/R2018a/bin/matlab';
 remote.slurm.plgypeysson.matver.mat905 = '/net/software/local/matlab/R2018b/bin/matlab';
-remote.slurm.plgypeysson.matver.matdef = remote.slurm.plgypeysson.matver.mat904;%default matlab on remote machine1
+remote.slurm.plgypeysson.matver.matdef = remote.slurm.plgypeysson.matver.mat905;%default matlab on remote machine1
 remote.slurm.plgypeysson.remoteuser = 'plgypeysson';
 %
 % test script in interactive way withing slurm 
