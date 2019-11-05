@@ -42,7 +42,7 @@ remote.slurm.g2yvesp = default_remote_profile;
 remote.slurm.g2yvesp.host = 'login.eufus.eu';
 remote.slurm.g2yvesp.hostname = '@s';
 remote.slurm.g2yvesp.nproc = 10;
-remote.slurm.g2yvesp.cmd = 'sbatch --partition=bdw_fua_gw';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
+remote.slurm.g2yvesp.cmd = 'sbatch --partition=gw';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
 %remote.slurm.g2yvesp.remotedatapath = '/afs/eufus.eu/user/g/g2yvesp/tmp/';
 remote.slurm.g2yvesp.remotedatapath = '/pfs/work/g2yvesp/tmp/';
 remote.slurm.g2yvesp.get_jobid = {'Submitted batch job ',''};%str_before,str_after
