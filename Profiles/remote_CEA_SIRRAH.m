@@ -31,7 +31,10 @@ remote.pbs.YP105119.shclean = 1;
 remote.pbs.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.pbs.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
-remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default matlab on remote machine
+remote.pbs.YP105119.matver.mat903 = '/Applications/Matlab_2017B/bin/matlab';
+remote.pbs.YP105119.matver.mat905 = '/Applications/Matlab_2018B/bin/matlab';
+remote.pbs.YP105119.matver.mat906 = '/Applications/Matlab_2019A/bin/matlab';
+remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat906;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %
 % direct
@@ -50,7 +53,10 @@ remote.direct.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
-remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%default matlab on remote machine
+remote.direct.YP105119.matver.mat903 = '/Applications/Matlab_2017B/bin/matlab';
+remote.direct.YP105119.matver.mat905 = '/Applications/Matlab_2018B/bin/matlab';
+remote.direct.YP105119.matver.mat906 = '/Applications/Matlab_2019A/bin/matlab';
+remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat906;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
 %
 % -------------------------------------------------
