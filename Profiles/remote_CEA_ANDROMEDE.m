@@ -34,9 +34,9 @@ remote.pbs.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % direct
 %
@@ -56,13 +56,13 @@ remote.direct.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.direct.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
 remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
-remote.direct.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
+remote.direct.YP105133.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.direct.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
-remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
+%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
+%remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % Jean-François Artaud
 %
