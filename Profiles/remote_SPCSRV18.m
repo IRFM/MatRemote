@@ -15,38 +15,50 @@ default.profile = 'decker';% default user profile if 'remoteuser' is not an exis
 default.filename = mfilename;%remote_xxx_yyy.m file name
 % --------------------------------------------------
 %
+% general parameters
+%
+host = 'spcsrv18.epfl.ch';% IP address on EPFL network
+hostname = 'spcsrv18';
+matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
+matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab -c /etc/matlab.lic';
+matver.matdef = matver.mat901;%default matlab on remote machine
+%
+% direct profile
+%
+direct = default_remote_profile;
+direct.host = host;
+direct.hostname = hostname;
+direct.nproc = 4;
+direct.cmd = {'bash','',' &'};% direct calculation (csh, bash)
+direct.get_jobid = {};%str_before,str_after
+direct.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+direct.remotedatapath = '/tmp/';
+direct.matver = matver;
+%
+% condor
+%
+condor = default_remote_profile;
+condor.host = host;
+condor.hostname = hostname;
+condor.nproc = 12;
+condor.cmd = 'condor_submit';
+condor.get_jobid = {'** Proc ',':'};
+condor.set_jobid = {'condor_q ',' -nobatch'};
+condor.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
+condor.condor.PATH = '$PATH';
+condor.matver = matver;
+%
 % JOAN DECKER
 %
 % direct
 %
-remote.direct.decker = default_remote_profile;
-remote.direct.decker.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
-remote.direct.decker.hostname = 'spcsrv18';
-remote.direct.decker.nproc = 4;
-remote.direct.decker.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-remote.direct.decker.get_jobid = {};%str_before,str_after
-remote.direct.decker.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.decker.remotedatapath = '/tmp/';
-remote.direct.decker.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.direct.decker.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.direct.decker.matver.matdef = remote.direct.decker.matver.mat901;%default matlab on remote machine
+remote.direct.decker = direct;
 remote.direct.decker.remoteuser = 'decker';
 %
 % condor
 %
-remote.condor.decker = default_remote_profile;
-remote.condor.decker.host = 'spcsrv18.epfl.ch';
-remote.condor.decker.hostname = 'spcsrv18';
-remote.condor.decker.nproc = 12;
-remote.condor.decker.cmd = 'condor_submit';
-remote.condor.decker.get_jobid = {'** Proc ',':'};
-remote.condor.decker.set_jobid = {'condor_q ',' -nobatch'};
-remote.condor.decker.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
-remote.condor.decker.condor.PATH = '$PATH';
+remote.condor.decker = condor;
 remote.condor.decker.remotedatapath = '/home/decker/condor/';
-remote.condor.decker.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.condor.decker.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.condor.decker.matver.matdef = remote.condor.decker.matver.mat901;%default matlab on remote machine
 remote.condor.decker.remoteuser = 'decker';
 %
 % --------------------------------------------------
@@ -55,34 +67,13 @@ remote.condor.decker.remoteuser = 'decker';
 %
 % direct
 %
-remote.direct.peysson = default_remote_profile;
-remote.direct.peysson.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
-remote.direct.peysson.hostname = 'spcsrv18';
-remote.direct.peysson.nproc = 12;
-remote.direct.peysson.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-remote.direct.peysson.get_jobid = {};%str_before,str_after
-remote.direct.peysson.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.peysson.remotedatapath = '/tmp/';
-remote.direct.peysson.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.direct.peysson.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.direct.peysson.matver.matdef = remote.direct.peysson.matver.mat905;%default matlab on remote machine
+remote.direct.peysson = direct;
 remote.direct.peysson.remoteuser = 'peysson';
 %
 % condor
 %
-remote.condor.peysson = default_remote_profile;
-remote.condor.peysson.host = 'spcsrv18.epfl.ch';
-remote.condor.peysson.hostname = 'spcsrv18';
-remote.condor.peysson.nproc = 12;
-remote.condor.peysson.cmd = 'condor_submit';
-remote.condor.peysson.get_jobid = {'** Proc ',':'};
-remote.condor.peysson.set_jobid = {'condor_q ',' -nobatch'};
-remote.condor.peysson.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
-remote.condor.peysson.condor.PATH = '$PATH';
+remote.condor.peysson = condor;
 remote.condor.peysson.remotedatapath = '/home/peysson/condor/';
-remote.condor.peysson.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.condor.peysson.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.condor.peysson.matver.matdef = remote.condor.peysson.matver.mat905;%default matlab on remote machine
 remote.condor.peysson.remoteuser = 'peysson';
 %
 % --------------------------------------------------
@@ -91,34 +82,13 @@ remote.condor.peysson.remoteuser = 'peysson';
 %
 % direct
 %
-remote.direct.kkrol = default_remote_profile;
-remote.direct.kkrol.host = 'spcsrv18.epfl.ch';% IP address on EPFL network
-remote.direct.kkrol.hostname = 'spcsrv18';
-remote.direct.kkrol.nproc = 12;
-remote.direct.kkrol.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-remote.direct.kkrol.get_jobid = {};%str_before,str_after
-remote.direct.kkrol.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-remote.direct.kkrol.remotedatapath = '/tmp/';
-remote.direct.kkrol.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.direct.kkrol.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.direct.kkrol.matver.matdef = remote.direct.kkrol.matver.mat905;%default matlab on remote machine
+remote.direct.kkrol = direct;
 remote.direct.kkrol.remoteuser = 'kkrol';
 %
 % condor
 %
-remote.condor.kkrol = default_remote_profile;
-remote.condor.kkrol.host = 'spcsrv18.epfl.ch';
-remote.condor.kkrol.hostname = 'spcsrv18';
-remote.condor.kkrol.nproc = 12;
-remote.condor.kkrol.cmd = 'condor_submit';
-remote.condor.kkrol.get_jobid = {'** Proc ',':'};
-remote.condor.kkrol.set_jobid = {'condor_q ',' -nobatch'};
-remote.condor.kkrol.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
-remote.condor.kkrol.condor.PATH = '$PATH';
+remote.condor.kkrol = condor;
 remote.condor.kkrol.remotedatapath = '/home/kkrol/condor/';
-remote.condor.kkrol.matver.mat901 = '/usr/local/bin/matlab-9.1';
-remote.condor.kkrol.matver.mat905 = '/usr/local/bin/matlab-9.5';
-remote.condor.kkrol.matver.matdef = remote.condor.kkrol.matver.mat905;%default matlab on remote machine
 remote.condor.kkrol.remoteuser = 'kkrol';
 %
 % -------------------------------------------------

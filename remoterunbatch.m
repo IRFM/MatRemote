@@ -318,7 +318,7 @@ if job.directsearch,
         if strcmp(remote.cmd{1},'csh')
             remenvstr = ['setenv ',envnames{ienv},' ',remenv.(envnames{ienv}),'; ',remenvstr];
         elseif strcmp(remote.cmd{1},'bash')
-            remenvstr = ['export ',envnames{ienv},'=',remenv.(envnames{ienv}),'; ',remenvstr];
+            remenvstr = ['export ',envnames{ienv},'="',remenv.(envnames{ienv}),'"; ',remenvstr];
         else
             error(['case with cmd = ',remote.cmd{1},' not yet implemented']);
         end
