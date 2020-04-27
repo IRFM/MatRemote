@@ -89,6 +89,16 @@ remote.direct.xuelei.remoteuser = 'xuelei';
 remote.direct.xuelei.remotedatapath = '/home/xuelei/tmp/';
 remote.direct.xuelei.bridge = [];
 %
+remote.torque.xuelei_imas = remote.torque.Yves;
+remote.torque.xuelei_imas.remoteuser = 'xuelei_imas';
+remote.torque.xuelei_imas.remotedatapath = '/home/xuelei_imas/tmp/';
+remote.torque.xuelei_imas.bridge = [];
+%
+remote.direct.xuelei_imas = remote.direct.Yves;
+remote.direct.xuelei_imas.remoteuser = 'xuelei_imas';
+remote.direct.xuelei_imas.remotedatapath = '/home/xuelei_imas/tmp/';
+remote.direct.xuelei_imas.bridge = [];
+%
 % YIPO ZHANG 
 %
 remote.torque.zhangyp = remote.torque.Yves;
