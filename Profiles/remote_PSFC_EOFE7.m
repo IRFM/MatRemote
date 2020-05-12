@@ -33,7 +33,7 @@ remote.slurm.ypeysson.nproc = 20;
 remote.slurm.ypeysson.cmd = 'sbatch --partition=sched_mit_psfc --qos=psfc_24h';% direct calculation (csh, bash) (for debugging, move to the remote folder and launch the slum command replacing sbatch by srun, the interactive mode)
 remote.slurm.ypeysson.remotedatapath = '/home/ypeysson/tmp/';
 remote.slurm.ypeysson.get_jobid = {'Submitted batch job ',''};%str_before,str_after
-remote.slurm.ypeysson.set_jobid = {'squeue -j ','','prod'};%str_before,str_after,str_check
+remote.slurm.ypeysson.set_jobid = {'squeue -j ','',''};%str_before,str_after,str_check
 remote.slurm.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/matlab';
 remote.slurm.ypeysson.matver.mat905 = '/cm/shared/mit/matlab/matlab-2018b/bin/matlab';
 remote.slurm.ypeysson.matver.matdef = remote.slurm.ypeysson.matver.mat905;%default matlab on remote machine
