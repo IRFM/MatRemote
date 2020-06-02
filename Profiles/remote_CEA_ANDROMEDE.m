@@ -20,7 +20,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 remote.pbs.YP105119 = default_remote_profile;
 remote.pbs.YP105119.host = 'andromede1.partenaires.cea.fr';
 remote.pbs.YP105119.hostname = 'andromede';
-remote.pbs.YP105119.shell = 'csh';
+remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 12;
 remote.pbs.YP105119.cmd = 'qsub';
 remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
@@ -34,9 +34,9 @@ remote.pbs.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-%remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
+%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
+remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
 %
 % direct
 %
@@ -45,7 +45,7 @@ remote.pbs.YP105119.remoteuser = 'YP105119';
 remote.direct.YP105119 = default_remote_profile;
 remote.direct.YP105119.host = 'andromede1.partenaires.cea.fr';
 remote.direct.YP105119.hostname = 'andromede';
-remote.direct.YP105119.shell = 'csh';
+remote.direct.YP105119.shell = 'bash';
 remote.direct.YP105119.nproc = 12;
 % remote.direct.YP105119.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
 remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
@@ -60,9 +60,9 @@ remote.direct.YP105133.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.direct.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
-%remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+%remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
+%remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
+remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
 %
 % Jean-François Artaud
 %
@@ -70,6 +70,7 @@ remote.direct.YP105119.remoteuser = 'YP105119';
 %
 remote.pbs.JA132999 = remote.pbs.YP105119;
 remote.pbs.JA132999.remoteuser = 'JA132999';
+remote.pbs.JA132999.shell = 'csh';
 remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
 %
 % Annika Ekedahl
@@ -78,6 +79,7 @@ remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
 %
 remote.pbs.AE165440 = remote.pbs.YP105119;
 remote.pbs.AE165440.remoteuser = 'AE165440';
+remote.pbs.AE165440.shell = 'csh';
 remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
 %
 % Clarisse Bourdelle
@@ -86,6 +88,7 @@ remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
 %
 remote.pbs.DM088721 = remote.pbs.YP105119;
 remote.pbs.DM088721.remoteuser = 'DM088721';
+remote.pbs.DM088721.shell = 'csh';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 %
 % Lena Delpech
@@ -94,6 +97,7 @@ remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 %
 remote.pbs.LD142631 = remote.pbs.YP105119;
 remote.pbs.LD142631.remoteuser = 'LD142631';
+remote.pbs.LD142631.shell = 'csh';
 remote.pbs.LD142631.remotedatapath = '/home/LD142631/tmp/';
 %
 % Marc Goniche
@@ -102,6 +106,7 @@ remote.pbs.LD142631.remotedatapath = '/home/LD142631/tmp/';
 %
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
+remote.pbs.MG100063.shell = 'csh';
 remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
 %
 %
