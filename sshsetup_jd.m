@@ -42,9 +42,9 @@ end
 [res,txt] = unix('which sshpass');
 %
 if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
-    batchmodestr = [' -o StrictHostKeyChecking=no -o ConnectTimeout=',num2str(timeout)];
+    batchmodestr = [' -q -o StrictHostKeyChecking=no -o VisualHostKey=no -o ConnectTimeout=',num2str(timeout)];
 else
-    batchmodestr = [' -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
+    batchmodestr = [' -q -o VisualHostKey=no -o ConnectTimeout=',num2str(timeout),' -o BatchMode=yes'];
 end
 %
 if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
