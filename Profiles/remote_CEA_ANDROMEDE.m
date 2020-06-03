@@ -29,6 +29,8 @@ remote.pbs.YP105119.set_jobid = {'qstat ','.andromede1','finished'};%str_before,
 remote.pbs.YP105119.shclean = 1;
 remote.pbs.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.pbs.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
+remote.pbs.YP105119.matver.mat801 = '/Applications/Matlab_2013A/bin/matlab';
+remote.pbs.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.pbs.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.pbs.YP105119.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
 remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
@@ -48,12 +50,13 @@ remote.direct.YP105119.hostname = 'andromede';
 remote.direct.YP105119.shell = 'bash';
 remote.direct.YP105119.nproc = 12;
 % remote.direct.YP105119.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)
-remote.direct.YP105119.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/home/YP105119/tmp';
 remote.direct.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.direct.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
+remote.direct.YP105119.matver.mat801 = '/Applications/Matlab_2013A/bin/matlab';
 remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
 remote.direct.YP105119.matver.mat805 = '/Applications/Matlab_2015A/bin/matlab';
 remote.direct.YP105133.matver.mat806 = '/Applications/Matlab_2015B/bin/matlab';
@@ -73,6 +76,8 @@ remote.pbs.JA132999.remoteuser = 'JA132999';
 remote.pbs.JA132999.shell = 'csh';
 remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
 %
+remote.direct.JA132999.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+%
 % Annika Ekedahl
 %
 % pbs pro
@@ -81,6 +86,8 @@ remote.pbs.AE165440 = remote.pbs.YP105119;
 remote.pbs.AE165440.remoteuser = 'AE165440';
 remote.pbs.AE165440.shell = 'csh';
 remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
+%
+remote.direct.AE165440.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 % Clarisse Bourdelle
 %
@@ -91,6 +98,8 @@ remote.pbs.DM088721.remoteuser = 'DM088721';
 remote.pbs.DM088721.shell = 'csh';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 %
+remote.direct.DM088721.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+%
 % Lena Delpech
 %
 % pbs pro
@@ -100,6 +109,8 @@ remote.pbs.LD142631.remoteuser = 'LD142631';
 remote.pbs.LD142631.shell = 'csh';
 remote.pbs.LD142631.remotedatapath = '/home/LD142631/tmp/';
 %
+remote.direct.LD142631.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+%
 % Marc Goniche
 %
 % pbs pro
@@ -108,6 +119,8 @@ remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
 remote.pbs.MG100063.shell = 'csh';
 remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
+%
+remote.direct.MG100063.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 %
 % -------------------------------------------------
