@@ -74,7 +74,6 @@ remote.direct.peysson.remoteuser = 'peysson';
 %
 remote.condor.peysson = condor;
 remote.condor.peysson.remotedatapath = '/home/peysson/condor/';
-remote.condor.peysson.remoteuser = 'peysson';
 %
 % --------------------------------------------------
 %
