@@ -22,7 +22,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 %
 remote.slurm.peyssoy = default_remote_profile;
 remote.slurm.peyssoy.host = 'hpc-login.iter.org';
-remote.slurm.peyssoy.hostname = 'hpc-login02.iter.org';
+remote.slurm.peyssoy.hostname = 'hpc-login02.iter.org';%hpc-login01 -> hpc-login05, sdcc-login01 --> 03
 remote.slurm.peyssoy.nproc = 20;
 %remote.slurm.ypeysson.walltime = '00:10';
 %---------------------------------------------------
