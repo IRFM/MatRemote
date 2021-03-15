@@ -6,6 +6,12 @@ end
 %
 [remote] = bridge_params(remote);
 %
+if isfield(remote.bridge.ssh,'password') && ~isempty(remote.bridge.ssh.password)
+    %
+    remote.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.ssh.sshcmd];%remote sshpass (must be installed and accessible)
+    remote.ssh.sshcmd = strrep(remote.ssh.sshcmd,'yes','no');%BatchMode=no
+end
+%
 [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remote.ssh.sshcmd,' ''',remotecmd,'''"',ssh_opts]);%execute the remote command by ssh
 %
 if res == 0 && any(strfind(txt,'Rejected')),
