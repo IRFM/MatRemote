@@ -48,7 +48,7 @@ else
 end
 %
 if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
-    sshpassopts = [' -p "',password,'" '];
+    sshpassopts = [' -p ''',password,''' '];
     ssh.sshcmd = ['sshpass ',sshpassopts,'ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
     ssh.scpcmd = {['sshpass ',sshpassopts,'scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
 else
