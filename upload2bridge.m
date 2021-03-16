@@ -49,6 +49,14 @@ if remote.link_mode == 2,
     %
 elseif remote.link_mode == 1,
     %
+    if isfield(remote.bridge.ssh,'password') && ~isempty(remote.bridge.ssh.password)
+        remote.bridge.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.sshcmd];%remote sshpass (must be installed and accessible)
+        remote.bridge.ssh.sshcmd = strrep(remote.bridge.ssh.sshcmd,'yes','no');%BatchMode=no
+        %
+        remote.bridge.ssh.scpcmd{1} = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.scpcmd{1}];%remote sshpass (must be installed and accessible)
+        remote.bridge.ssh.scpcmd{1} = strrep(remote.bridge.ssh.scpcmd{1},'yes','no');%BatchMode=no
+    end
+    %
     [res,txt] = scp2remote_yp(remote.bridge.ssh.sshcmd,remote.bridge.ssh.scpcmd,job.save_id,job.localdatapath,remote.bridge.ssh.temppath);%transfer data from the local batch dir to the remote batch dir
     %
 end
