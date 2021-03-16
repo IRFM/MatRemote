@@ -38,7 +38,13 @@ remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default m
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
 %remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
-remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
+%remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
+%remote.pbs.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+%remote.pbs.YP105119.bridge.ssh.host = 'hpc-login.iter.org';%ITER
+remote.pbs.YP105119.bridge.ssh.host = 'login.eufus.eu';%EUROfusion (sshpass necessary)
+remote.pbs.YP105119.bridge.ssh.password = getenv('EUROFUSION_ITM_PASSWD');%set password for the remote machine in startup.m or in session startup script
+remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
+
 %
 % direct
 %
@@ -65,7 +71,13 @@ remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%def
 remote.direct.YP105119.remoteuser = 'YP105119';
 %remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
 %remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
-remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
+%remote.direct.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
+remote.direct.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+%remote.direct.YP105119.bridge.ssh.host = 'hpc-login.iter.org';%ITER
+%remote.direct.YP105119.bridge.ssh.host = 'login.eufus.eu';%EUROfusion (sshpass necessary)
+%remote.direct.YP105119.bridge.ssh.password = getenv('EUROFUSION_ITM_PASSWD');%set password for the remote machine in startup.m or in session startup script
+remote.direct.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
+
 %
 % Jean-François Artaud
 %
