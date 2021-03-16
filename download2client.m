@@ -116,6 +116,13 @@ if remote.link_mode == 2,
     %
     cd(initdir);
     %
-elseif remote.link_mode == 1,
+elseif remote.link_mode == 1
+    %
+    if isfield(remote.bridge.ssh,'password') && ~isempty(remote.bridge.ssh.password)
+        remote.bridge.ssh.scpcmd{1} = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.scpcmd{1}];%remote sshpass (must be installed and accessible)
+        remote.bridge.ssh.scpcmd{1} = strrep(remote.bridge.ssh.scpcmd{1},'yes','no');%BatchMode=no
+    end
+    %
     [res,txt] = unix([remote.bridge.ssh.scpcmd{1},' ',remote.bridge.ssh.scpcmd{2},':',remote.bridge.ssh.temppath,'/',target,' ',locpath]);
+    %
 end
