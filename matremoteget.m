@@ -37,7 +37,18 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
             %
             [remote] = bridge_params(remote);
             %
+            if isfield(remote.bridge.ssh,'remotepassword') && ~isempty(remote.bridge.ssh.remotepassword)
+                remote.ssh.scpcmd{1} = ['sshpass -p ''',remote.bridge.ssh.remotepassword,''' ',remote.ssh.scpcmd{1}];%remote sshpass (must be installed and accessible)
+                remote.ssh.scpcmd{1} = strrep(remote.ssh.scpcmd{1},'yes','no');%BatchMode=no
+            end
+            %
+            if isfield(remote.bridge.ssh,'password') && ~isempty(remote.bridge.ssh.password)
+                remote.bridge.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.sshcmd];%remote sshpass (must be installed and accessible)
+                remote.bridge.ssh.sshcmd = strrep(remote.bridge.ssh.sshcmd,'yes','no');%BatchMode=no
+            end
+            %
             remotecmd = [remote.ssh.scpcmd{1},' ',remote.ssh.scpcmd{2},':',rempath,target,' ',remote.bridge.ssh.temppath,'/',targetpath];%download from remote to bridge
+            %
             [res,txt] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);
             %
             if res ~= 0,
