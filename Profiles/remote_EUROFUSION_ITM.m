@@ -33,9 +33,6 @@ remote.direct.g2yvesp.matver.mat908 = '/gw/swvend/matlab/r2020a/bin/matlab';
 remote.direct.g2yvesp.matver.matdef = remote.direct.g2yvesp.matver.mat905;%default matlab on remote machine
 remote.direct.g2yvesp.remoteuser = 'g2yvesp';
 remote.direct.g2yvesp.password = getenv('EUROFUSION_ITM_PASSWD');%set password in startup.m or in session startup script
-%remote.direct.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.direct.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.direct.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % slurm
 %
@@ -54,9 +51,6 @@ remote.slurm.g2yvesp.matver.mat908 = '/gw/swvend/matlab/r2020a/bin/matlab';
 remote.slurm.g2yvesp.matver.matdef = remote.slurm.g2yvesp.matver.mat905;%default matlab on remote machine
 remote.slurm.g2yvesp.remoteuser = 'g2yvesp';
 remote.slurm.g2yvesp.password = getenv('EUROFUSION_ITM_PASSWD');%set password in startup.m or in session startup script
-%remote.slurm.g2yvesp.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.slurm.g2yvesp.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.slurm.g2yvesp.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
