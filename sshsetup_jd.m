@@ -39,7 +39,7 @@ else
     keyfilestr = '';
 end
 %
-[res,txt] = unix('which sshpass');
+[res,txt] = unix('which sshpass');%local sshpass
 %
 if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
     batchmodestr = [' -q -o StrictHostKeyChecking=no -o VisualHostKey=no -o ConnectTimeout=',num2str(timeout)];
@@ -54,5 +54,4 @@ if res == 0 && strfind(txt,'sshpass') && ~isempty(password),
 else
     ssh.sshcmd = ['ssh ',sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
     ssh.scpcmd = {['scp -r ',sshopts,scpportstr,keyfilestr,batchmodestr],[username,'@',host]};
-%
 end
