@@ -32,6 +32,7 @@ remote.rempause = [];% pause between job checks (in minutes)
 remote.keyfile = [];% use of a specific private key in folder Matremote/Keys
 remote.timeout = 10;% ssh connection timeout (in seconds)
 remote.hosts = {};% multiple host adresses for local or remote access of a cluster. Ex :  {'10.10.10.110','shenma.ipp.ac.cn'}
+remote.services = {};% check running services {'xxx','yyy'} prior to launch calculations
 %
 % The following parameters are for qsub or torque or slurm only. Use NaN if option is forbidden 
 %
