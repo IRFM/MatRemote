@@ -20,7 +20,8 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 host = 'spcsrv18.epfl.ch';% IP address on EPFL network
 hostname = 'spcsrv18';
 matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
-matver.mat905 = '/usr/local/MATLAB/R2018b/bin/matlab -c /etc/matlab.lic ';
+matver.mat905.enforce = true;
+matver.mat905.cmd = '/usr/local/MATLAB/R2018b/bin/matlab -c /etc/matlab.lic';
 matver.matdef = matver.mat905;%default matlab on remote machine
 %
 % direct profile
