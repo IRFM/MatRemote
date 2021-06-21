@@ -54,12 +54,10 @@ if isempty(remote.host), %local calculation
     return
 end
 %
-if ~isfield(remote,'hosts')
-    if iscell(remote.host),%hosts list 
-        remote.hosts = remote.host;
-    else 
-        remote.hosts = {remote.host};
-    end
+if iscell(remote.host),%hosts list 
+    remote.hosts = remote.host;
+else 
+    remote.hosts = {remote.host};
 end
 %
 for ihosts = 1:length(remote.hosts),

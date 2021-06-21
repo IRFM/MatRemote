@@ -57,8 +57,12 @@ end
 jobenvstr = '';
 if isfield(job,'env') && isstruct(job.env),
     envnames = fieldnames(job.env);
-    for ienv = 1:length(envnames),
-        jobenvstr = [jobenvstr,envnames{ienv},'=',job.env.(envnames{ienv}),';'];    
+    for ienv = 1:length(envnames)
+        if ~isstruct(job.env.(envnames{ienv}))
+            jobenvstr = [jobenvstr,envnames{ienv},'=',job.env.(envnames{ienv}),';'];
+        else
+            jobenvstr = [jobenvstr,envnames{ienv},'=',job.env.(envnames{ienv}).cmd,';'];
+        end
     end
 end
 %
