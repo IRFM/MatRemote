@@ -64,9 +64,7 @@ elseif remote.link_mode == 1,
         remote.bridge.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.sshcmd];%remote sshpass (must be installed and accessible)
         remote.bridge.ssh.sshcmd = strrep(remote.bridge.ssh.sshcmd,'yes','no');%BatchMode=no
     end
-    %
-    [remote.bridge.ssh.sshcmd,' "',remotecmd,'"']
-    
+    %    
     [res1,txt1] = unix([remote.bridge.ssh.sshcmd,' "',remotecmd,'"']);
     %
     remotecmd = ['chmod -R 777 ',job.remotedatapath,job.save_id];%because all files in the bridge have low level rights
