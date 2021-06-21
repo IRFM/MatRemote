@@ -24,8 +24,10 @@ remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 12;
 remote.pbs.YP105119.cmd = 'qsub';
 remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
-remote.pbs.YP105119.get_jobid = {'','.altair'};%str_before,str_after
-remote.pbs.YP105119.set_jobid = {'qstat ','.altair','finished'};%str_before,str_after,str_check
+%remote.pbs.YP105119.get_jobid = {'','.altair'};%str_before,str_after
+%remote.pbs.YP105119.set_jobid = {'qstat ','.altair','finished'};%str_before,str_after,str_check
+remote.pbs.YP105119.get_jobid = {'','.andromede'};%str_before,str_after
+remote.pbs.YP105119.set_jobid = {'qstat ','.andromede','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
 remote.pbs.YP105119.matver.mat710 = '/Applications/Matlab_2010A/bin/matlab';
 remote.pbs.YP105119.matver.mat800 = '/Applications/Matlab_2012B/bin/matlab';
@@ -39,10 +41,10 @@ remote.pbs.YP105119.remoteuser = 'YP105119';
 %remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
 %remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
 %remote.pbs.YP105119.bridge.ssh.host = 'tolbachik.hd.free.fr:2223';%Shuttle aix
-%remote.pbs.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+remote.pbs.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 %remote.pbs.YP105119.bridge.ssh.host = 'hpc-login.iter.org';%ITER
-remote.pbs.YP105119.bridge.ssh.host = 'login.eufus.eu';%EUROfusion (sshpass necessary)
-remote.pbs.YP105119.bridge.ssh.password = getenv('EUROFUSION_ITM_PASSWD');%set password for the remote machine in startup.m or in session startup script
+%remote.pbs.YP105119.bridge.ssh.host = 'login.eufus.eu';%EUROfusion (sshpass necessary)
+%remote.pbs.YP105119.bridge.ssh.password = getenv('EUROFUSION_ITM_PASSWD');%set password for the remote machine in startup.m or in session startup script
 remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
 
 %
