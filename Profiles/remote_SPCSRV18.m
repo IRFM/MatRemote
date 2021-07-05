@@ -92,6 +92,21 @@ remote.condor.kkrol = condor;
 remote.condor.kkrol.remotedatapath = '/home/kkrol/condor/';
 remote.condor.kkrol.remoteuser = 'kkrol';
 %
+% --------------------------------------------------
+%
+% Mario Gervais
+%
+% direct
+%
+remote.direct.gervais = direct;
+remote.direct.gervais.remoteuser = 'gervais';
+%
+% condor
+%
+remote.condor.gervais = condor;
+remote.condor.gervais.remotedatapath = '/home/gervais/condor/';
+remote.condor.gervais.remoteuser = 'gervais';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
