@@ -17,25 +17,31 @@ function [flag,waitime,runtime,jobtime,message] = displayrunningjob(job,isim,dis
 %
 %       - message : status message
 %
-if nargin < 3,
-    if ~isfield(job,'debugmode'),
+if ~ismember('mute_displayrunningjob', who('global'))
+    mute_displayrunningjob = 0;
+else
+    global mute_displayrunningjob
+end
+%
+if nargin < 3
+    if ~isfield(job,'debugmode')
         displaymode = 0;
     else
         displaymode = job.debugmode;
     end
 end
 %
-if nargin < 2,
+if nargin < 2
     isim = [];
 end
 %
-if isempty(job.id),
+if isempty(job.id)
     jobidstr = ['Job with timeid ',job.timeid];
 else
     jobidstr = ['Job with ID ',job.id];
 end
 %
-if isempty(isim),
+if isempty(isim)
     jobstr = [' - ',jobidstr];
 else
     jobstr = [' - Simulation #',int2str(isim),' -> ',jobidstr];
@@ -90,6 +96,8 @@ else%backward compatibility
 	message = '';
 end
 %
-if displaymode,
-    disp(message)
+if displaymode
+    if mute_displayrunningjob == 0
+        disp(message)
+    end
 end

@@ -42,6 +42,12 @@ function [dkecluster] = mdce_clustermode(param)
 % by J. Decker (CEA-IRFM) <joan.decker@cea.fr> and Y. Peysson (CEA-IRFM) <yves.peysson@cea.fr>
 %
 %
+if ~ismember('mute_mdce_clustermode', who('global'))
+    mute_mdce_clustermode = 0;
+else
+    global mute_mdce_clustermode
+end
+%
 if nargin < 1 || (~isstruct(param) && ~ischar(param) && ~isempty(mdce_mode) && (~isscalar(param) || (~any(param == 0:3) && ~isnan(param)))),% test param for valid formats
     param = 0;
 end
@@ -146,21 +152,28 @@ if ~isempty(dkecluster.scheduler.remote),
         dkecluster.scheduler.mode.remotedatapath = '';% to avoid unnecessary copies
     end
     %
-    disp(' ');
-    if ~isempty(remote),
+    if mute_mdce_clustermode == 0
+        disp(' ');
+    end
+    %
+    if ~isempty(remote)
         %
         dkecluster.remote = remote;
         dkecluster.remtimout = remtimout;
         dkecluster.rempause = rempause;
         dkecluster.localdatadir = localdatadir;
         %
-        disp(['==> Distributed calculation transfered to : ',profilestr{1}])
+        if mute_mdce_clustermode == 0
+            disp(['==> Distributed calculation transfered to : ',profilestr{1}])
+        end
         %
         return
         %
     else
         %
-        disp('==> WARNING : invalid remote profile. Local calculation enforced.')
+        if mute_mdce_clustermode == 0
+            disp('==> WARNING : invalid remote profile. Local calculation enforced.')
+        end
         %
     end
 end    
@@ -187,13 +200,17 @@ elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% 
             dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.NumWorkers]);
         end
         %
-        disp(['==> ',dkecluster.scheduler.info])
+        if mute_mdce_clustermode == 0
+            disp(['==> ',dkecluster.scheduler.info])
+        end
         %
     catch err
         %
         dkecluster.scheduler.info = ['Impossible to use JOBS MDCE with configuration ',dkecluster.scheduler.configuration,...
             ' because of the following error : ',err.message,'. Sequential mode enforced.'];
-        disp(['==> ',dkecluster.scheduler.info])
+        if mute_mdce_clustermode == 0
+            disp(['==> ',dkecluster.scheduler.info])
+        end
         dkecluster.scheduler.mode = 0;
         %
     end
@@ -204,8 +221,10 @@ elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 2,% 
     %
     [vmatlab,~,testtoolbox] = matversion_yp('Parallel Computing Toolbox');
     %
-    if str2double(vmatlab) < 77 || ~testtoolbox,
-        disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
+    if str2double(vmatlab) < 77 || ~testtoolbox
+        if mute_mdce_clustermode == 0
+            disp(['WARNING: ''matlabpool'' command may not be used with the present version ',version('-release'),' of Matlab or the ''Parallel Computing Toolbox'' may be missing. Use Matlab >= R2008b (7.7) for this functionality with the appropriate library. Sequential mode enforced']);
+        end
         dkecluster.scheduler.mode = 0;
     end
     %
@@ -231,7 +250,9 @@ else% remote computing mode
         if ~isempty(dkecluster.scheduler.remote.memtot) && dkecluster.scheduler.clustersize*dkecluster.scheduler.memory > dkecluster.scheduler.remote.memtot,
             dkecluster.scheduler.clustersize = fix(dkecluster.scheduler.remote.memtot/dkecluster.scheduler.memory);%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
             if dkecluster.scheduler.clustersize == 0,%not enough memory on remote host
-                disp('WARNING: not enough memory on remote host. Sequential mode enforced');
+                if mute_mdce_clustermode == 0
+                    disp('WARNING: not enough memory on remote host. Sequential mode enforced');
+                end
                 dkecluster.scheduler.mode = 0;
             end
         end
@@ -242,11 +263,15 @@ else% remote computing mode
         %
         dkecluster.scheduler.remote.debugmode = dkecluster.scheduler.debugmode;%maximum number of processors on cluster enforced by remote - generally to avoid cluster overuse
         %
-        dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',profilestr{1},' chosen.'];        
-        disp(['==> ',dkecluster.scheduler.info])
+        dkecluster.scheduler.info = ['Remote distributed computing mode with profile ',profilestr{1},' chosen.'];   
+        if mute_mdce_clustermode == 0
+            disp(['==> ',dkecluster.scheduler.info])
+        end
         %
     else
-        disp('WARNING: invalid remote profile. Sequential mode enforced');
+        if mute_mdce_clustermode == 0
+            disp('WARNING: invalid remote profile. Sequential mode enforced');
+        end
         dkecluster.scheduler.mode = 0;
     end
     %
