@@ -121,6 +121,27 @@ remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
 %
 remote.direct.MG100063.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
+% Valeria Ostuni
+%
+% pbs pro
+%
+remote.pbs.VO259454 = remote.pbs.YP105119;
+remote.pbs.VO259454.remoteuser = 'VO259454';
+remote.pbs.VO259454.shell = 'csh';
+remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
+%
+remote.direct.VO259454.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+%
+% Jorge Morales
+%
+% pbs pro
+%
+remote.pbs.JM240179 = remote.pbs.YP105119;
+remote.pbs.JM240179.remoteuser = 'JM240179';
+remote.pbs.JM240179.shell = 'csh';
+remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
+%
+remote.direct.JM240179.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)%
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
