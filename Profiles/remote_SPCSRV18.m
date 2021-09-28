@@ -22,7 +22,7 @@ hostname = 'spcsrv18';
 matver.mat901 = '/usr/local/MATLAB/R2016b/bin/matlab';
 matver.mat905.enforce = true;
 matver.mat905.cmd = '/usr/local/MATLAB/R2018b/bin/matlab -c /etc/matlab.lic';
-matver.matdef = matver.mat905;%default matlab on remote machine
+matver.matdef = matver.mat905.cmd;%default matlab on remote machine
 %
 % direct profile
 %
