@@ -2,9 +2,9 @@ function [res,txt] = matremoteput(remote,job)
 %
 % upload batch dir to the remote computer (through the bridge)
 %
-if ~isempty(remote.host),       
+if ~isempty(remote.host),      
     %
-    if remote.link_mode > 0,
+    if any(remote.link_mode == [1,2])
         %        
         [res1,txt1] = upload2bridge(remote,job);%file transfer from the client to the bridge
         %

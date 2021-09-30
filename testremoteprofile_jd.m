@@ -6,10 +6,11 @@ function remote = testremoteprofile_jd(remote,link_mode,test,display_mode)
 %       - remote : input remote structure
 %       - link_mode : connection mode prescription
 %           o NaN : (default) use value from remote.link_mode
-%           o []  : give priority to (0) ssh key pair, (1) ssh bridge, (2) url/ftp bridge
+%           o []  : give priority to (0) ssh key pair, (3) ssh proxy jump, (1) ssh bridge, (2) url/ftp bridge
 %           o 0   : ssh key pair enforced, or test fails
 %           o 1   : ssh bridge enforced, or test fails
 %           o 2   : url/ftp bridge enforced, or test fails
+%           o 3   : ssh proxy jump enforced
 %       - test : (false/true) flag for testing connection (default = true)
 %       - display_mode : (0) no display, (2) display test results
 %
@@ -121,6 +122,36 @@ for ihosts = 1:length(remote.hosts),
         else
             return
         end        
+    end
+    %
+    % test ssh proxy jump connection
+    %
+    if (isempty(remote.link_mode) || remote.link_mode == 3)
+        if isfield(remote.bridge,'proxy') && isfield(remote.bridge.proxy,'host') && ~isempty(remote.bridge.proxy.host)
+            %
+            remote.ssh = sshsetup_jd(remote.host,remote.remoteuser,remote.keyfile,remote.sshopts,remote.timeout,remote.password,remote.bridge.proxy);
+            %
+            if test % test ssh proxy connection
+                locdisp(display_mode,['Testing ssh proxy connection to ',remote.host,' via ',remote.bridge.proxy.host,' ... '])
+                %
+                [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh
+                %
+                if res ~= 0
+                    locdisp(display_mode,['   ... failed with following : ',txt])
+                else
+                    locdisp(display_mode,['   ... completed with following request of remote user: ',txt])
+                    locdisp(display_mode,' ---> ssh proxy mode selected')
+                    %
+                    remote.link_mode = 3;% ssh proxy mode selected
+                    return
+                end    
+            else
+                remote.link_mode = 3;% ssh proxy mode selected
+                return
+            end            
+        else
+            locdisp(display_mode,'ssh proxy mode connection not set up.')
+        end
     end
     %
     % test ssh bridge connection

@@ -36,10 +36,11 @@ function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode,displaymo
 %
 %   - link_mode : connection mode prescription
 %           o NaN : (default) use value from remote.link_mode
-%           o []  : give priority to (0) ssh key pair, (1) ssh bridge, (2) url/ftp bridge
+%           o []  : give priority to (0) ssh key pair, (3) ssh proxy jump, (1) ssh bridge, (2) url/ftp bridge
 %           o 0   : ssh key pair enforced
 %           o 1   : ssh bridge enforced
 %           o 2   : url/ftp bridge enforced
+%           o 3   : ssh proxy jump enforced
 %
 %   - displaymode : 
 %           o (0) display results only, 

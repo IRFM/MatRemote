@@ -19,7 +19,7 @@ function [res,txt] = matremoteget(remote,target,rempath,locpath)
         target = target(1:end-1);
     end
     %    
-    targetpath = fileparts(target);
+    targetpath = [fileparts(target),filesep];
     %
     if ~isempty(remote.host),
         %

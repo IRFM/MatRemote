@@ -26,10 +26,11 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %       - display_mode : (boolean) show information in command window 
     %       - link_mode : connection mode prescription
     %           o NaN : (default) use value from remote.link_mode
-    %           o []  : give priority to (0) ssh key pair, (1) ssh bridge, (2) url/ftp bridge
+    %           o []  : give priority to (0) ssh key pair, (3) ssh proxy jump, (1) ssh bridge, (2) url/ftp bridge
     %           o 0   : ssh key pair enforced
     %           o 1   : ssh bridge enforced
     %           o 2   : url/ftp bridge enforced
+    %           o 3   : ssh proxy jump enforced
     %
     %   - OUTPUTS :
     %       - newremoteprofiles : (struct array) list of remote profile, or selection if select == true
@@ -420,10 +421,12 @@ function [profilestr,hoststr,cmdstr,schedulerstr] = getremotestr_jd(remote)
     %
     % bridge (url or ssh)
     % 
-    if remote.link_mode == 1,
+    if remote.link_mode == 1
         bridgestr = [' via SSH: ',remote.bridge.ssh.host];
-    elseif remote.link_mode == 2,
+    elseif remote.link_mode == 2
         bridgestr = [' via URL: ',remote.bridge.url.host,' and FTP: ',remote.bridge.ftp.host];
+    elseif remote.link_mode == 3
+        bridgestr = [' via ssh proxy jump : ',remote.bridge.proxy.host];
     else
         bridgestr = '';
     end

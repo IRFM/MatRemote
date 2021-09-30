@@ -40,7 +40,7 @@ direct.matver = matver;
 %
 remote.direct.decker = direct;
 remote.direct.decker.remoteuser = 'decker';
-remote.direct.decker.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+remote.direct.decker.bridge.proxy.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
