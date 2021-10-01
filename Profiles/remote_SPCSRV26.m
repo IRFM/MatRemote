@@ -42,6 +42,16 @@ remote.direct.decker = direct;
 remote.direct.decker.remoteuser = 'decker';
 remote.direct.decker.bridge.proxy.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 %
+% --------------------------------------------------
+%
+% YVES PEYSSON
+%
+% direct
+%
+remote.direct.peysson = direct;
+remote.direct.peysson.remoteuser = 'peysson';
+remote.direct.peysson.bridge.proxy.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
