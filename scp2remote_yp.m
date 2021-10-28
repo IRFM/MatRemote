@@ -48,7 +48,7 @@ if res == 0,
     %
     for ifile = 1:length(filelist),
         %
-        remotecmds = {'stat -f "%z"','stat -c %s'};
+        remotecmds = {'stat -f','stat -f "%z"','stat -c %s'};
         res = 1;
         %
         for icmd = 1:length(remotecmds),
