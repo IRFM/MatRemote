@@ -72,6 +72,9 @@ if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot')%matlab call
             (~isfield(remote,'matver') || ~isfield(remote.matver,['mat',matver]) ||...
              ~isfield(remote.matver.(['mat',matver]),'enforce') || ~remote.matver.(['mat',matver]).enforce)% same version for local calculations, except if enforce = true 
         job.env.remotebatch_matlabroot = [matlabroot,'/bin/matlab'];
+    elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef)
+        % default version on remote cluster, is enforced if available
+        job.env.remotebatch_matlabroot = remote.matver.matdef;
     elseif isfield(remote,'matver') && isfield(remote.matver,['mat',matver]) && ~isempty(remote.matver.(['mat',matver]))
         % same version on remote cluster, if available
         if isfield(remote.matver.(['mat',matver]),'cmd')
@@ -79,9 +82,7 @@ if ~isfield(job,'env') || ~isfield(job.env,'remotebatch_matlabroot')%matlab call
         else
             job.env.remotebatch_matlabroot = remote.matver.(['mat',matver]);
         end
-    elseif isfield(remote,'matver') && isfield(remote.matver,'matdef') && ~isempty(remote.matver.matdef)
-        % default version on remote cluster, if available
-        job.env.remotebatch_matlabroot = remote.matver.matdef;
+   
     else% default version on remote cluster
         job.env.remotebatch_matlabroot = 'matlab';
     end
@@ -291,8 +292,6 @@ else
         return
      end 
 end
-%
-
 %
 % start job
 %
