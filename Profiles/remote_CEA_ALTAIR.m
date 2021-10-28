@@ -29,9 +29,11 @@ remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.altair'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.altair','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
-remote.pbs.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
-remote.pbs.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
-remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat902;%default matlab on remote machine
+remote.pbs.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
+remote.pbs.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin/matlab';
+remote.pbs.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
+remote.pbs.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
+remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat909;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
 %remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
@@ -57,9 +59,11 @@ remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/home/YP105119/tmp';
-remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
-remote.direct.YP105119.matver.mat902 = '/Applications/Matlab_2017A/bin/matlab';
-remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat902;%default matlab on remote machine
+remote.direct.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
+remote.direct.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin/matlab';
+remote.direct.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
+remote.direct.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
+remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat909;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
 %remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
 %remote.direct.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
@@ -69,29 +73,15 @@ remote.direct.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Swit
 %remote.direct.YP105119.bridge.ssh.host = 'login.eufus.eu';%EUROfusion (sshpass necessary)
 %remote.direct.YP105119.bridge.ssh.password = getenv('EUROFUSION_ITM_PASSWD');%set password for the remote machine in startup.m or in session startup script
 remote.direct.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
-
+%
 %
 % Jean-François Artaud
-%
+% 
 % pbs pro
 %
 remote.pbs.JA132999 = remote.pbs.YP105119;
 remote.pbs.JA132999.remoteuser = 'JA132999';
-remote.pbs.JA132999.shell = 'csh';
 remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
-%
-remote.direct.JA132999.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-%
-% Annika Ekedahl
-%
-% pbs pro
-%
-remote.pbs.AE165440 = remote.pbs.YP105119;
-remote.pbs.AE165440.remoteuser = 'AE165440';
-remote.pbs.AE165440.shell = 'csh';
-remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
-%
-remote.direct.AE165440.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 % Clarisse Bourdelle
 %
@@ -99,21 +89,7 @@ remote.direct.AE165440.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 %
 remote.pbs.DM088721 = remote.pbs.YP105119;
 remote.pbs.DM088721.remoteuser = 'DM088721';
-remote.pbs.DM088721.shell = 'csh';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
-%
-remote.direct.DM088721.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
-%
-% Lena Delpech
-%
-% pbs pro
-%
-remote.pbs.LD142631 = remote.pbs.YP105119;
-remote.pbs.LD142631.remoteuser = 'LD142631';
-remote.pbs.LD142631.shell = 'csh';
-remote.pbs.LD142631.remotedatapath = '/home/LD142631/tmp/';
-%
-remote.direct.LD142631.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 % Marc Goniche
 %
@@ -121,10 +97,7 @@ remote.direct.LD142631.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 %
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
-remote.pbs.MG100063.shell = 'csh';
 remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
-%
-remote.direct.MG100063.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 % Valeria Ostuni
 %
@@ -132,10 +105,7 @@ remote.direct.MG100063.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 %
 remote.pbs.VO259454 = remote.pbs.YP105119;
 remote.pbs.VO259454.remoteuser = 'VO259454';
-remote.pbs.VO259454.shell = 'csh';
 remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
-%
-remote.direct.VO259454.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
 %
 % Jorge Morales
 %
@@ -143,10 +113,7 @@ remote.direct.VO259454.cmd = {'csh','',' &',' &'};% direct calculation (csh, bas
 %
 remote.pbs.JM240179 = remote.pbs.YP105119;
 remote.pbs.JM240179.remoteuser = 'JM240179';
-remote.pbs.JM240179.shell = 'csh';
 remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
-%
-remote.direct.JM240179.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)%
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles

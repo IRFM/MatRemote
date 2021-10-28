@@ -28,11 +28,11 @@ remote.pbs.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.pleione'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.pleione','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
-remote.pbs.YP105119.matver.mat802 = '/usr/local/matlab/R2013b/bin/matlab';
-remote.pbs.YP105119.matver.mat903 = '/usr/local/matlab/R2017b/bin/matlab';
-remote.pbs.YP105119.matver.mat905 = '/usr/local/matlab/R2018b/bin/matlab';
-remote.pbs.YP105119.matver.mat907 = '/usr/local/matlab/R2019b/bin/matlab';
-remote.pbs.YP105119.matver.mat909 = '/usr/local/matlab/R2020b/bin/matlab';
+remote.pbs.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
+remote.pbs.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin/matlab';
+remote.pbs.YP105119.matver.mat905 = '/Applications/software/matlab/R2018b/bin/matlab';
+remote.pbs.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
+remote.pbs.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat909;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %
@@ -49,11 +49,11 @@ remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/Home/YP105119/tmp';
-remote.direct.YP105119.matver.mat802 = '/usr/local/matlab/R2013b/bin/matlab';
-remote.direct.YP105119.matver.mat903 = '/usr/local/matlab/R2017b/bin/matlab';
-remote.direct.YP105119.matver.mat905 = '/usr/local/matlab/R2018b/bin/matlab';
-remote.direct.YP105119.matver.mat907 = '/usr/local/matlab/R2019b/bin/matlab';
-remote.direct.YP105119.matver.mat909 = '/usr/local/matlab/R2020b/bin/matlab';
+remote.direct.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
+remote.direct.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin/matlab';
+remote.direct.YP105119.matver.mat905 = '/Applications/software/matlab/R2018b/bin/matlab';
+remote.direct.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
+remote.direct.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat909;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
 %
