@@ -41,6 +41,12 @@ remote.slurm.plgypeysson.remoteuser = 'plgypeysson';
 % srun -p plgrid -A poloniumwest -n 1 --pty /bin/bash -l'"
 % the execute the script
 %
+% JEDRZEJ WALKOWIAK (PROMETHEUS)
+%
+remote.slurm.plgjwalkowiak = remote.slurm.plgypeysson;
+remote.slurm.plgjwalkowiak.remoteuser = 'plgjwalkowiak';
+remote.slurm.plgjwalkowiak.remotedatapath = '/net/scratch/people/plgjwalkowiak/';
+remote.slurm.plgjwalkowiak.bridge = [];
 %
 % KRZYSZTOF KROL (PROMETHEUS)
 %
