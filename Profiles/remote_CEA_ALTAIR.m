@@ -115,6 +115,14 @@ remote.pbs.JM240179 = remote.pbs.YP105119;
 remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
 %
+% Tullio Barbui
+%
+% pbs pro
+%
+remote.pbs.TB263881 = remote.pbs.YP105119;
+remote.pbs.TB263881.remoteuser = 'TB263881';
+remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------

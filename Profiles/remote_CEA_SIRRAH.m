@@ -75,6 +75,15 @@ remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.shell = 'bash';
 remote.pbs.JM240179.remotedatapath = '/Home/JM240179/tmp/';
 %
+% Jorge Morales
+%
+% pbs pro
+%
+remote.pbs.TB263881 = remote.pbs.YP105119;
+remote.pbs.TB263881.remoteuser = 'TB263881';
+remote.pbs.TB263881.shell = 'bash';
+remote.pbs.TB263881.remotedatapath = '/Home/TB263881/tmp/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
