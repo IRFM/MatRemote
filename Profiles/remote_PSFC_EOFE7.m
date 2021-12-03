@@ -39,15 +39,6 @@ remote.slurm.ypeysson.matver.mat905 = '/cm/shared/mit/matlab/matlab-2018b/bin/ma
 remote.slurm.ypeysson.matver.matdef = remote.slurm.ypeysson.matver.mat905;%default matlab on remote machine
 remote.slurm.ypeysson.remoteuser = 'ypeysson';
 %
-%
-% Tullio Barbui
-%
-% pbs pro
-%
-remote.slurm.tbarbui = remote.slurm.ypeysson;
-remote.slurm.tbarbui.remoteuser = 'tbarbui';
-remote.slurms.tbarbui.remotedatapath = '/home/tbarbui/tmp/';
-%
 % direct
 %
 remote.direct.ypeysson = default_remote_profile;
@@ -63,6 +54,15 @@ remote.direct.ypeysson.matver.mat903 = '/cm/shared/mit/matlab/matlab-2017b/bin/m
 remote.direct.ypeysson.matver.mat905 = '/cm/shared/mit/matlab/matlab-2018b/bin/matlab';
 remote.direct.ypeysson.matver.matdef = remote.direct.ypeysson.matver.mat905;%default matlab on remote machine
 remote.direct.ypeysson.remoteuser = 'ypeysson';
+%
+% Tullio Barbui
+%
+% pbs pro
+%
+remote.slurm.tbarbui = remote.slurm.ypeysson;
+remote.slurm.tbarbui.remoteuser = 'tbarbui';
+remote.slurm.tbarbui.remotedatapath = '/home/tbarbui/tmp/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
