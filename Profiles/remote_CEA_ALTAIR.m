@@ -124,6 +124,8 @@ remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.pbs.TB263881.bridge.ssh.host = '';
 remote.pbs.TB263881.bridge.ssh.remotepassword = '';
+remote.pbs.TB263881.shell = 'csh';
+remote.pbs.TB263881.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)%
 
 %
 remote.direct.TB263881 = remote.direct.YP105119;
@@ -131,7 +133,8 @@ remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.direct.TB263881.bridge.ssh.host = '';
 remote.direct.TB263881.bridge.ssh.remotepassword = '';
-%
+remote.direct.TB263881.shell = 'csh';
+remote.direct.TB263881.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
