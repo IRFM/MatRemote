@@ -63,6 +63,12 @@ remote.slurm.tbarbui = remote.slurm.ypeysson;
 remote.slurm.tbarbui.remoteuser = 'tbarbui';
 remote.slurm.tbarbui.remotedatapath = '/home/tbarbui/tmp/';
 %
+% direct
+%
+remote.direct.tbarbui = remote.direct.ypeysson;
+remote.direct.tbarbui.remoteuser = 'tbarbui';
+remote.direct.tbarbui.remotedatapath = '/home/tbarbui/tmp/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
