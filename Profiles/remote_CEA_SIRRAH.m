@@ -33,7 +33,7 @@ remote.pbs.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin/ma
 remote.pbs.YP105119.matver.mat905 = '/Applications/software/matlab/R2018b/bin/matlab';
 remote.pbs.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
 remote.pbs.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
-remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat909;%default matlab on remote machine
+remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat802;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %
 % direct
@@ -54,7 +54,7 @@ remote.direct.YP105119.matver.mat903 = '/Applications/software/matlab/R2017b/bin
 remote.direct.YP105119.matver.mat905 = '/Applications/software/matlab/R2018b/bin/matlab';
 remote.direct.YP105119.matver.mat907 = '/Applications/software/matlab/R2019b/bin/matlab';
 remote.direct.YP105119.matver.mat909 = '/Applications/software/matlab/R2020b/bin/matlab';
-remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat909;%default matlab on remote machine
+remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat802;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
 %
 % Valeria Ostuni
@@ -75,7 +75,7 @@ remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.shell = 'bash';
 remote.pbs.JM240179.remotedatapath = '/Home/JM240179/tmp/';
 %
-% Jorge Morales
+% Tullio Barbui
 %
 % pbs pro
 %

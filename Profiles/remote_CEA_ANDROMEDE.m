@@ -77,6 +77,9 @@ remote.direct.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSW
 remote.pbs.JA132999 = remote.pbs.YP105119;
 remote.pbs.JA132999.remoteuser = 'JA132999';
 remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
+remote.pbs.JA132999.bridge.ssh.host = '';
+remote.pbs.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+
 %
 % Clarisse Bourdelle
 %
@@ -85,6 +88,8 @@ remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
 remote.pbs.DM088721 = remote.pbs.YP105119;
 remote.pbs.DM088721.remoteuser = 'DM088721';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
+remote.pbs.DM088721.bridge.ssh.host = '';
+remote.pbs.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Marc Goniche
 %
@@ -93,6 +98,8 @@ remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
 remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
+remote.pbs.MG100063.bridge.ssh.host = '';
+remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Valeria Ostuni
 %
@@ -101,6 +108,8 @@ remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
 remote.pbs.VO259454 = remote.pbs.YP105119;
 remote.pbs.VO259454.remoteuser = 'VO259454';
 remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
+remote.pbs.VO259454.bridge.ssh.host = '';
+remote.pbs.VO259454.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Jorge Morales
 %
@@ -109,6 +118,8 @@ remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
 remote.pbs.JM240179 = remote.pbs.YP105119;
 remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
+remote.pbs.JM240179.bridge.ssh.host = '';
+remote.pbs.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Tullio Barbui
 %
@@ -117,6 +128,8 @@ remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
 remote.pbs.TB263881 = remote.pbs.YP105119;
 remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
+remote.pbs.TB263881.bridge.ssh.host = '';
+remote.pbs.TB263881.bridge.ssh.remotepassword = '';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
