@@ -73,12 +73,22 @@ for ihosts = 1:length(remote.hosts),
     %
     test = real(test);
     %
-    if isempty(remote.link_mode) || remote.link_mode == 0,
+    if isfield(remote.bridge,'ssh') && isfield(remote.bridge.ssh,'host') && isfield(remote.bridge.ssh,'remotepassword')
+        %
+        if isempty(remote.link_mode) && ~isempty(remote.bridge.ssh.host) && ~isempty(remote.bridge.ssh.remotepassword)
+            %
+            remote.link_mode = 1;%bridge mode enforced
+            %
+        end
+        %
+    end
+    %
+    if isempty(remote.link_mode) || remote.link_mode == 0
         if test,% test ssh key-pair connection
             locdisp(display_mode,['Testing ssh key pair connection to ',remote.remoteuser,'@',remote.host,' ... '])
             %
             [res,txt] = unix([remote.ssh.sshcmd,' ''',remotecmd,'''']);%execute the remote command by ssh 
-            %
+            % 
             if res ~= 0,
                 if any(strfind(txt,'Connection timed out')),
                     msg = 'failed : connection timed out (10s)';
