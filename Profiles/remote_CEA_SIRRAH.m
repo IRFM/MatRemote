@@ -99,6 +99,8 @@ remote.direct.DM088721.bridge.ssh.remotepassword = '';%set password for the remo
 %
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
+remote.pbs.MG100063.host = 'sirrah';
+remote.pbs.MG100063.hostname = 'sirrah';
 remote.pbs.MG100063.remotedatapath = '/Home/MG100063/tmp/';
 remote.pbs.MG100063.bridge.ssh.host = '';
 remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
@@ -107,6 +109,8 @@ remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote 
 %
 remote.direct.MG100063 = remote.direct.YP105119;
 remote.direct.MG100063.remoteuser = 'MG100063';
+remote.direct.MG100063.host = 'sirrah';
+remote.direct.MG100063.hostname = 'sirrah';
 remote.direct.MG100063.remotedatapath = '/Home/MG100063/tmp/';
 remote.direct.MG100063.bridge.ssh.host = '';
 remote.direct.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
