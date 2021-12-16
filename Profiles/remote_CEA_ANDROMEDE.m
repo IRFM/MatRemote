@@ -131,6 +131,12 @@ remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.pbs.TB263881.bridge.ssh.host = '';
 remote.pbs.TB263881.bridge.ssh.remotepassword = '';
 %
+remote.direct.TB263881 = remote.direct.YP105119;
+remote.direct.TB263881.remoteuser = 'TB263881';
+remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
+remote.direct.TB263881.bridge.ssh.host = '';
+remote.direct.TB263881.bridge.ssh.remotepassword = '';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
