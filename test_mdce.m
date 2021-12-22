@@ -25,16 +25,16 @@ function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertyp
 %       >> test_mdce(3)
 %           or
 %       >> test_mdce('local')
-%   - to distribute to 'macpro_YVES_PEYSSON' using remcomputing :
-%       >> test_mdce('macpro_YVES_PEYSSON')
+%   - to distribute to 'MACHINE' using remcomputing :
+%       >> test_mdce('MACHINE')
 %   - to distribute to the profile stored in the structure 'remote' using remcomputing :
 %       >> test_mdce(remote)
 %   - to select manually which remote profile you want to distribute the calculation :
 %       >> test_mdce(NaN)
-%   - to transfer the calculation to 'macpro_YVES_PEYSSON' and distribute therein using parfor
-%       >> test_mdce(2,{'macpro_YVES_PEYSSON'})
-%   - to transfer the calculation to 'macpro_YVES_PEYSSON' and then to 'ANDROMEDE1' and distribute therein using remcomputing
-%       >> test_mdce('local',{'macpro_YVES_PEYSSON','ANDROMEDE1'})
+%   - to transfer the calculation to 'MACHINE' and distribute therein using parfor
+%       >> test_mdce(2,{'MACHINE'})
+%   - to transfer the calculation to 'MACHINE' and then to 'ANDROMEDE1' and distribute therein using remcomputing
+%       >> test_mdce('local',{'MACHINE','ANDROMEDE1'})
 %
 %   INPUT :
 %
