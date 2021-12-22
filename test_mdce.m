@@ -17,7 +17,7 @@ function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertyp
 %       >> test_mdce(0)
 %   - to run locally on GPU :
 %       >> test_mdce(1i)
-%   - to run locally using job sceduler :
+%   - to run locally using job scheduler :
 %       >> test_mdce(1)
 %   - to run locally using parfor :
 %       >> test_mdce(2)
@@ -33,8 +33,8 @@ function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertyp
 %       >> test_mdce(NaN)
 %   - to transfer the calculation to 'MACHINE' and distribute therein using parfor
 %       >> test_mdce(2,{'MACHINE'})
-%   - to transfer the calculation to 'MACHINE' and then to 'ANDROMEDE1' and distribute therein using remcomputing
-%       >> test_mdce('local',{'MACHINE','ANDROMEDE1'})
+%   - to transfer the calculation to 'MACHINE1' and then to 'MACHINE2' and distribute therein using remcomputing
+%       >> test_mdce('local',{'MACHINE1','MACHINE2'})
 %
 %   INPUT :
 %
@@ -60,7 +60,7 @@ function flag = test_mdce(mdce_mode,remote,force_error,mdce_enforce,schedulertyp
 %           (default = 1)
 %       - mdce_enforce: (1) enforce sequential run if distributed computing failed, (0) otherwise [1,1]
 %           (default = 1)
-%       - schedulertype: type of scheduler, '' or 'local' for any machine or cluster,'pbspro' for CEPHEE or SATURNE cluster,'condor' on mac computers,... [1,1]
+%       - schedulertype: type of scheduler, '' or 'local' for any machine or cluster,'pbs', 'slurm', 'condor',... [1,1]
 %           (default = 'local')
 %       - mdce_size: cluster size. Use the maximum of processor available for calculations (not valid for GPU) [1,1]
 %           (default = 8)
