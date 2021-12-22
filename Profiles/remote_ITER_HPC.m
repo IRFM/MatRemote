@@ -43,7 +43,7 @@ remote.slurm.peyssoy.remoteuser = 'peyssoy';
 %
 remote.direct.peyssoy = default_remote_profile;
 remote.direct.peyssoy.host = 'hpc-login.iter.org';
-remote.direct.peyssoy.hostname = 'hpc-login.iter.org';
+remote.direct.peyssoy.hostname = 'hpc-login02.iter.org';
 remote.direct.peyssoy.shell = 'bash';
 remote.direct.peyssoy.nproc = 20;
 remote.direct.peyssoy.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
