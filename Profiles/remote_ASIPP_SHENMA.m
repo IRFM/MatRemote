@@ -37,6 +37,8 @@ remote.torque.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_o
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
+remote.torque.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+remote.torque.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');%set password for the remote machine in startup.m or in session startup script
 %
 % direct
 %
@@ -54,39 +56,55 @@ remote.direct.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_o
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
-%remote.direct.PEYSSON.bridge.url.host = 'https://tolbachik.hd.free.fr';%nuc aix
-%remote.direct.PEYSSON.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%nuc aix
-%remote.direct.PEYSSON.bridge.ssh.host = 'tolbachik.hd.free.fr:2222';%nuc aix
+remote.direct.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+remote.direct.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');%set password for the remote machine in startup.m or in session startup script
+%
+
 %
 % BOJIANG DING (SHENMA)
 %
-remote.torque.bjding= remote.torque.PEYSSON;
+remote.torque.bjding = remote.torque.PEYSSON;
+remote.torque.bjding.host = '10.10.10.112';
 remote.torque.bjding.remoteuser = 'bjding';
 remote.torque.bjding.remotedatapath = '/scratch/bjding/';
+remote.torque.bjding.bridge.ssh.host = '';
+remote.torque.bjding.bridge.ssh.remotepassword = '';
 %
 % BOJIANG DING (LAPTOP)
 %
 remote.torque.bjdingLinux= remote.torque.PEYSSON;
+remote.torque.bjdingLinux.host = '10.10.10.112';
 remote.torque.bjdingLinux.remoteuser = 'bjding';
 remote.torque.bjdingLinux.remotedatapath = '/scratch/bjding/';
+remote.torque.bjdingLinux.bridge.ssh.host = '';
+remote.torque.bjdingLinux.bridge.ssh.remotepassword = '';
 %
 % MIAOHUI LI  (SHENMA)
 %
 remote.torque.limiaohui = remote.torque.PEYSSON;
+remote.torque.limiaohui.host = '10.10.10.112';
 remote.torque.limiaohui.remoteuser = 'limiaohui';
 remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
 remote.torque.limiaohui.bridge = [];
+remote.torque.limiaohui.bridge.ssh.host = '';
+remote.torque.limiaohui.bridge.ssh.remotepassword = '';
 %
 remote.direct.limiaohui = remote.direct.PEYSSON;
+remote.direct.limiaohui.host = '10.10.10.112';
 remote.direct.limiaohui.remoteuser = 'limiaohui';
 remote.direct.limiaohui.remotedatapath = '/scratch/limiaohui/';
 remote.direct.limiaohui.bridge = [];
+remote.torque.limiaohui.bridge.ssh.host = '';
+remote.torque.limiaohui.bridge.ssh.remotepassword = '';
 %
 % YONGCHUN LI (SHENMA)
 %
 remote.torque.ycunli = remote.torque.PEYSSON;
+remote.torque.ycunli.host = '10.10.10.112';
 remote.torque.ycunli.remoteuser = 'ycunli';
 remote.torque.ycunli.remotedatapath = '/scratch/ycunli/';
+remote.torque.ycunli.bridge.ssh.host = '';
+remote.torque.ycunli.bridge.ssh.remotepassword = '';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
