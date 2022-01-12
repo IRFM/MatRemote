@@ -316,8 +316,8 @@ if ~isempty(job.load_id),
                 mkdir(job.localdatadir);
             end
             %
-            datamvcmd = ['mv ',job.localdatapath,job.datadir,'* ',job.localdatadir];%transfer content of datadir to localdatadir
-            [res(3),err{3}] = unix(datamvcmd);
+            datacpcmd = ['cp -r ',job.localdatapath,job.datadir,'* ',job.localdatadir];%transfer content of datadir to localdatadir
+            [res(3),err{3}] = unix(datacpcmd);
             %
             if res(3) == 0,
                 transferstr = ['However, ',num2str(datadirfilenum),' files were transfered to ',job.localdatadir];
