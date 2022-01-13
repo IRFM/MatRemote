@@ -53,7 +53,7 @@ remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/home/YP105119/tmp';
-remote.direct.YP105119.matver.mat802 = '/usr/local/matlab/R2013b/bin/matlab';
+remote.direct.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
 remote.direct.YP105119.matver.mat909 = '/usr/local/matlab/R2020b/bin/matlab';
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat909;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
@@ -126,12 +126,14 @@ remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.pbs.TB263881.bridge.ssh.host = '';
 remote.pbs.TB263881.bridge.ssh.remotepassword = '';
+remote.pbs.TB263881.matver.matdef = remote.pbs.YP105119.matver.mat802;%default matlab on remote machine
 %
 remote.direct.TB263881 = remote.direct.YP105119;
 remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.direct.TB263881.bridge.ssh.host = '';
 remote.direct.TB263881.bridge.ssh.remotepassword = '';
+remote.direct.TB263881.matver.matdef = remote.direct.YP105119.matver.mat802;%default matlab on local machine
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
