@@ -25,14 +25,14 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 remote.torque.PEYSSON = default_remote_profile;%202.127.204.22
 remote.torque.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.torque.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3} 
-remote.torque.PEYSSON.nproc = 20;% default number of nodes for job on shenma
+remote.torque.PEYSSON.nproc = 10;% default number of nodes for job on shenma
 remote.torque.PEYSSON.wait = 0;
 remote.torque.PEYSSON.shclean = 1;
 remote.torque.PEYSSON.cmd = 'qsub -q batch';%'qsub -q batch -o /scratch/PEYSSON';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
-remote.torque.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
+remote.torque.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
 remote.torque.PEYSSON.get_jobid = {'','.service103'};%str_before,str_after
 remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
-remote.torque.PEYSSON.timeout = 60;
+remote.torque.PEYSSON.timeout = 100;
 remote.torque.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_origin';
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
@@ -45,13 +45,13 @@ remote.torque.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');
 remote.direct.PEYSSON = default_remote_profile;
 remote.direct.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.direct.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3}
-remote.direct.PEYSSON.nproc = 20;
+remote.direct.PEYSSON.nproc = 100;
 %remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.PEYSSON.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.PEYSSON.get_jobid = {};%sr_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.timeout = 60;
-remote.direct.PEYSSON.remotedatapath = '/scratch/PEYSSON/';
+remote.direct.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
 remote.direct.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_origin';
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
