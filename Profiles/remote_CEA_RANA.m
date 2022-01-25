@@ -29,8 +29,11 @@ remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.andromede'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.andromede','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
-remote.pbs.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
-remote.pbs.YP105119.matver.mat903 = '/Applications/Matlab_2017B/bin/matlab';
+remote.pbs.YP105119.matver.mat802 = '/home/YP105119/mat802.sh';%create executable bash script named mat802.sh with module purge;module load matlab/2013b;matlab "$@"
+remote.pbs.YP105119.matver.mat806 = '/home/YP105119/mat806.sh';%create executable bash script named mat806.sh with module purge;module load matlab/2015b;matlab "$@"
+remote.pbs.YP105119.matver.mat903 = '/home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
+remote.pbs.YP105119.matver.mat907 = '/home/YP105119/mat907.sh';%create executable bash script named mat907.sh with module purge;module load matlab/2019b;matlab "$@"
+remote.pbs.YP105119.matver.mat909 = '/home/YP105119/mat909.sh';%create executable bash script named mat909.sh with module purge;module load matlab/2020b;matlab "$@"
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat903;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
@@ -57,8 +60,11 @@ remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/home/YP105119/tmp';
-remote.direct.YP105119.matver.mat802 = '/Applications/Matlab_2013B/bin/matlab';
-remote.direct.YP105119.matver.mat903 = '/Applications/Matlab_2017B/bin/matlab';
+remote.direct.YP105119.matver.mat802 = '/home/YP105119/mat802.sh';%create executable bash script named mat802.sh with module purge;module load matlab/2013b;matlab "$@"
+remote.direct.YP105119.matver.mat806 = '/home/YP105119/mat806.sh';%create executable bash script named mat806.sh with module purge;module load matlab/2015b;matlab "$@"
+remote.direct.YP105119.matver.mat903 = '/home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
+remote.direct.YP105119.matver.mat907 = '/home/YP105119/mat907.sh';%create executable bash script named mat907.sh with module purge;module load matlab/2019b;matlab "$@"
+remote.direct.YP105119.matver.mat909 = '/home/YP105119/mat909.sh';%create executable bash script named mat909.sh with module purge;module load matlab/2020b;matlab "$@"
 remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat903;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
 %remote.direct.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
@@ -71,24 +77,15 @@ remote.direct.YP105119.remoteuser = 'YP105119';
 %remote.direct.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
 %
 % Jean-François Artaud
-%
+% 
 % pbs pro
 %
 remote.pbs.JA132999 = remote.pbs.YP105119;
 remote.pbs.JA132999.remoteuser = 'JA132999';
 remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
-%
-% Annika Ekedahl
-%
-% pbs pro
-%
-remote.pbs.AE165440 = remote.pbs.YP105119;
-remote.pbs.AE165440.remoteuser = 'AE165440';
-remote.pbs.AE165440.shell = 'bash';
-%remote.pbs.AE165440.shell = 'csh';
-remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
-%
-%remote.direct.AE165440.cmd = {'csh','',' &',' &'};% direct calculation (csh, bash)
+remote.pbs.JA132999.bridge.ssh.host = '';
+remote.pbs.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+
 %
 % Clarisse Bourdelle
 %
@@ -97,6 +94,8 @@ remote.pbs.AE165440.remotedatapath = '/home/AE165440/tmp/';
 remote.pbs.DM088721 = remote.pbs.YP105119;
 remote.pbs.DM088721.remoteuser = 'DM088721';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
+remote.pbs.DM088721.bridge.ssh.host = '';
+remote.pbs.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Marc Goniche
 %
@@ -105,6 +104,8 @@ remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
 remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
+remote.pbs.MG100063.bridge.ssh.host = '';
+remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Valeria Ostuni
 %
@@ -113,6 +114,8 @@ remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
 remote.pbs.VO259454 = remote.pbs.YP105119;
 remote.pbs.VO259454.remoteuser = 'VO259454';
 remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
+remote.pbs.VO259454.bridge.ssh.host = '';
+remote.pbs.VO259454.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Jorge Morales
 %
@@ -121,6 +124,8 @@ remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
 remote.pbs.JM240179 = remote.pbs.YP105119;
 remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
+remote.pbs.JM240179.bridge.ssh.host = '';
+remote.pbs.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Tullio Barbui
 %
@@ -129,6 +134,16 @@ remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
 remote.pbs.TB263881 = remote.pbs.YP105119;
 remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
+remote.pbs.TB263881.bridge.ssh.host = '';
+remote.pbs.TB263881.bridge.ssh.remotepassword = '';
+remote.pbs.TB263881.matver.matdef = remote.pbs.YP105119.matver.mat802;%default matlab on remote machine
+%
+remote.direct.TB263881 = remote.direct.YP105119;
+remote.direct.TB263881.remoteuser = 'TB263881';
+remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
+remote.direct.TB263881.bridge.ssh.host = '';
+remote.direct.TB263881.bridge.ssh.remotepassword = '';
+remote.direct.TB263881.matver.matdef = remote.direct.YP105119.matver.mat802;%default matlab on local machine
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
