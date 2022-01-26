@@ -58,7 +58,7 @@ if ~isempty(remote.bridge)
         end
     else
         %
-        error('File with private bridge parameters is not found.');
+        disp('File with private bridge parameters is not found.');
         %
     end     
 end
