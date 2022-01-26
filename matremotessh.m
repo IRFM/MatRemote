@@ -4,7 +4,7 @@ if nargin < 3,
     ssh_opts = '';
 end
 %
-if exist('bridge_params','file')
+if exist('private_bridge_parameters.m','file')
     %
     [remote] = bridge_params(remote);
     %
