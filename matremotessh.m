@@ -25,6 +25,7 @@ if exist('private_bridge_parameters.m','file')
     end
 else
     %
+    txt = '';
     res = 1;
     %
 end
