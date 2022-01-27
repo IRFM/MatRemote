@@ -85,6 +85,12 @@ remote.pbs.JA132999.remotedatapath = '/home/JA132999/tmp/';
 remote.pbs.JA132999.bridge.ssh.host = '';
 remote.pbs.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
+remote.direct.JA132999 = remote.direct.YP105119;
+remote.direct.JA132999.remoteuser = 'JA132999';
+remote.direct.JA132999.remotedatapath = '/home/JA132999/tmp/';
+remote.direct.JA132999.bridge.ssh.host = '';
+remote.direct.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+%
 % Clarisse Bourdelle
 %
 % pbs pro
@@ -94,6 +100,12 @@ remote.pbs.DM088721.remoteuser = 'DM088721';
 remote.pbs.DM088721.remotedatapath = '/home/DM088721/tmp/';
 remote.pbs.DM088721.bridge.ssh.host = '';
 remote.pbs.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+%
+remote.direct.DM088721 = remote.direct.YP105119;
+remote.direct.DM088721.remoteuser = 'DM088721';
+remote.direct.DM088721.remotedatapath = '/home/DM088721/tmp/';
+remote.direct.DM088721.bridge.ssh.host = '';
+remote.direct.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Marc Goniche
 %
@@ -105,6 +117,12 @@ remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
 remote.pbs.MG100063.bridge.ssh.host = '';
 remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
+remote.direct.MG100063 = remote.direct.YP105119;
+remote.direct.MG100063.remoteuser = 'MG100063';
+remote.direct.MG100063.remotedatapath = '/home/MG100063/tmp/';
+remote.direct.MG100063.bridge.ssh.host = '';
+remote.direct.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+%
 % Valeria Ostuni
 %
 % pbs pro
@@ -115,6 +133,12 @@ remote.pbs.VO259454.remotedatapath = '/home/VO259454/tmp/';
 remote.pbs.VO259454.bridge.ssh.host = '';
 remote.pbs.VO259454.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
+remote.direct.VO259454 = remote.direct.YP105119;
+remote.direct.VO259454.remoteuser = 'VO259454';
+remote.direct.VO259454.remotedatapath = '/home/VO259454/tmp/';
+remote.direct.VO259454.bridge.ssh.host = '';
+remote.direct.VO259454.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+%
 % Jorge Morales
 %
 % pbs pro
@@ -124,6 +148,12 @@ remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.remotedatapath = '/home/JM240179/tmp/';
 remote.pbs.JM240179.bridge.ssh.host = '';
 remote.pbs.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+%
+remote.direct.JM240179 = remote.direct.YP105119;
+remote.direct.JM240179.remoteuser = 'JM240179';
+remote.direct.JM240179.remotedatapath = '/home/JM240179/tmp/';
+remote.direct.JM240179.bridge.ssh.host = '';
+remote.direct.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Tullio Barbui
 %
