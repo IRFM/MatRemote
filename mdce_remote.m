@@ -71,6 +71,18 @@ elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'walltime
     mdce_job.walltime = dkecluster.scheduler.walltime;
 end
 %
+if isfield(dkecluster,'ncpus'),
+    mdce_job.ncpus = dkecluster.ncpus;
+elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'ncpus'),% inherit MDCE ncpus
+    mdce_job.ncpus = dkecluster.scheduler.ncpus;
+end
+%
+if isfield(dkecluster,'memory'),
+    mdce_job.memory = dkecluster.nmemory;
+elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'memory'),% inherit MDCE memory
+    mdce_job.memory = dkecluster.scheduler.memory;
+end
+%
 if isfield(dkecluster,'funcopy'),
     mdce_job.funcopy = dkecluster.funcopy;
 elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'funcopy'),% inherit MDCE funcopy
