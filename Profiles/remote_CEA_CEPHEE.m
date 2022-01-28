@@ -167,14 +167,12 @@ remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.pbs.TB263881.bridge.ssh.host = '';
 remote.pbs.TB263881.bridge.ssh.remotepassword = '';
-remote.pbs.TB263881.matver.matdef = remote.pbs.YP105119.matver.mat802;%default matlab on remote machine
 %
 remote.direct.TB263881 = remote.direct.YP105119;
 remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.direct.TB263881.bridge.ssh.host = '';
 remote.direct.TB263881.bridge.ssh.remotepassword = '';
-remote.direct.TB263881.matver.matdef = remote.direct.YP105119.matver.mat802;%default matlab on local machine
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
