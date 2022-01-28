@@ -156,8 +156,15 @@ if ~isempty(dkecluster.scheduler.remote),
         disp(' ');
     end
     %
+    if isfield(dkecluster.scheduler,'matdef') && ~isempty(dkecluster.scheduler.matdef)% prescription remote matlab version
+        if isfield(remote,'matver') && isfield(remote.matver,'matdef')
+            remote.matver.matdef = remote.matver.(dkecluster.scheduler.matdef);
+        end
+    end
+    %
     if ~isempty(remote)
         %
+        dkecluster.remote = remote;
         dkecluster.remote = remote;
         dkecluster.remtimout = remtimout;
         dkecluster.rempause = rempause;
