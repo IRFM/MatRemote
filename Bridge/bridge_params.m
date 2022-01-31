@@ -1,6 +1,6 @@
 function [remote] = bridge_params(remote)
 %
-if ~isempty(remote.bridge)
+if isfield(remote,'bridge') && ~isempty(remote.bridge)
     %
     if exist('private_bridge_parameters.m','file')
         %
@@ -35,7 +35,8 @@ if ~isempty(remote.bridge)
                     remote.bridge.ssh.temppath = bridge(ii).ssh.temppath;
                     remote.bridge.ssh.keyfile = bridge(ii).ssh.keyfile;
                     %
-                    remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts,remote.timeout,remote.password));% setup bridge specific ssh and scp commands
+                    remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts,remote.timeout,rem
+ote.password));% setup bridge specific ssh and scp commands
                     %
                     break
                     %
@@ -58,7 +59,8 @@ if ~isempty(remote.bridge)
         end
     else
         %
-        disp('File with private bridge parameters is not found.');
+        remote.bridge = [];
+        disp('WARNING : File with private bridge parameters is not found or bridge field is not existing. Bridge option is removed.');
         %
-    end     
+    end
 end
