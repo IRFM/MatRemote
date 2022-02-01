@@ -59,6 +59,24 @@ try
         job.walltime = scheduler.walltime;% requested memory specified by scheduler
     end
     %
+    if isfield(scheduler,'nodes'),
+        job.nodes = scheduler.nodes;% requested nodes specified by scheduler
+    end
+    %
+    if isfield(scheduler,'ppn'),
+        job.ppn = scheduler.ppn;% requested ppn value specified by scheduler
+    end
+
+    %
+    if isfield(scheduler,'select'),
+        job.select = scheduler.select;% requested select value specified by scheduler
+    end
+
+    %
+    if isfield(scheduler,'ncpus'),
+        job.ncpus = scheduler.ncpus;% requested ncpus value specified by scheduler
+    end
+    %
     if isfield(scheduler,'localdatapath'),
         job.localdatapath = scheduler.localdatapath;% path to store batch_timeid folders
     elseif isfield(scheduler,'temppath'),
