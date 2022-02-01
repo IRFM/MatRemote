@@ -22,7 +22,7 @@ function job = remoterunbatch(remote,job,sinput,displaymode)
 %               - remotebatch_path : matlab path (optional)
 %               - ...
 %           o wait (optional) : (0) return hand (1) wait for result
-%           o nodes (optional) : number of nodes required)
+%           o nodes (optional) : number of nodes required
 %           o nproc (optional) : number of cores required
 %           o memory (optional) : memory allocated to the job (in mb)
 %           o walltime (optional) :  time required (in hours if walltime is a number) or ('hh:mm' if walltime is a string), and if remote.queue exists, walltime is defined by remote.***.queue.maxtime(remote.**.queue.qdef)) - leave empty if no requirement
