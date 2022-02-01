@@ -35,8 +35,7 @@ if isfield(remote,'bridge') && ~isempty(remote.bridge)
                     remote.bridge.ssh.temppath = bridge(ii).ssh.temppath;
                     remote.bridge.ssh.keyfile = bridge(ii).ssh.keyfile;
                     %
-                    remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts,remote.timeout,rem
-ote.password));% setup bridge specific ssh and scp commands
+                    remote.bridge.ssh = conc_struct_jd(remote.bridge.ssh,sshsetup_jd(remote.bridge.ssh.host,remote.bridge.ssh.username,remote.bridge.ssh.keyfile,remote.sshopts,remote.timeout,remote.password));% setup bridge specific ssh and scp commands
                     %
                     break
                     %
