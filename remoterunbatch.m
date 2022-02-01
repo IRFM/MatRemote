@@ -354,8 +354,12 @@ elseif job.pbssearch,
         comopts = [comopts,' -W block=true'];
     end
     %
-    if isfield(job,'nodes') && ~isempty(job.nodes) && ~isnan(job.nodes),
-        comopts = [comopts,' -l nodes=',num2str(job.nodes)];
+    if isfield(job,'nodes') & ~isempty(job.nodes) & ~isnan(job.nodes),
+        if isnumeric(job.nodes)
+            comopts = [comopts,' -l nodes=',num2str(job.nodes)];
+        elseif ischar(job.nodes)
+            comopts = [comopts,' -l nodes="',job.nodes,'"'];
+        end
         %
         if isfield(job,'ppn') && ~isempty(job.ppn) && ~isnan(job.ppn),
             comopts = [comopts,':ppn=',num2str(job.ppn)];
