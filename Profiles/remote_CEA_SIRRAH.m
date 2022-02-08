@@ -28,9 +28,12 @@ remote.pbs.YP105119.remotedatapath = '/Home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.pleione'};%str_before,str_after
 remote.pbs.YP105119.set_jobid = {'qstat ','.pleione','finished'};%str_before,str_after,str_check
 remote.pbs.YP105119.shclean = 1;
-remote.pbs.YP105119.matver.mat802 = '/Applications/software/matlab/R2013b/bin/matlab';
-remote.pbs.YP105119.matver.mat909 = '/usr/local/matlab/R2020b/bin/matlab';
-remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat909;%default matlab on remote machine
+remote.pbs.YP105119.matver.mat802 = '/Home/YP105119/mat802.sh';%create executable bash script named mat802.sh with module purge;module load matlab/2013b;matlab "$@"
+remote.pbs.YP105119.matver.mat806 = '/Home/YP105119/mat806.sh';%create executable bash script named mat806.sh with module purge;module load matlab/2015b;matlab "$@"
+remote.pbs.YP105119.matver.mat903 = '/Home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
+remote.pbs.YP105119.matver.mat907 = '/Home/YP105119/mat907.sh';%create executable bash script named mat907.sh with module purge;module load matlab/2019b;matlab "$@"
+remote.pbs.YP105119.matver.mat909 = '/Home/YP105119/mat909.sh';%create executable bash script named mat909.sh with module purge;module load matlab/2020b;matlab "$@"
+remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat903;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
 %
 % direct
@@ -46,10 +49,15 @@ remote.direct.YP105119.cmd = {'bash','',' &',' &'};% direct calculation (csh, ba
 remote.direct.YP105119.get_jobid = {};%str_before,str_after
 remote.direct.YP105119.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.YP105119.remotedatapath = '/Home/YP105119/tmp';
-remote.direct.YP105119.matver.mat802 = '/usr/local/matlab/R2013b/bin/matlab';
-remote.direct.YP105119.matver.mat909 = '/usr/local/matlab/R2020b/bin/matlab';
-remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat909;%default matlab on remote machine
+remote.direct.YP105119.matver.mat802 = '/Home/YP105119/mat802.sh';%create executable bash script named mat802.sh with module purge;module load matlab/2013b;matlab "$@"
+remote.direct.YP105119.matver.mat806 = '/Home/YP105119/mat806.sh';%create executable bash script named mat806.sh with module purge;module load matlab/2015b;matlab "$@"
+remote.direct.YP105119.matver.mat903 = '/Home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
+remote.direct.YP105119.matver.mat907 = '/Home/YP105119/mat907.sh';%create executable bash script named mat907.sh with module purge;module load matlab/2019b;matlab "$@"
+remote.direct.YP105119.matver.mat909 = '/Home/YP105119/mat909.sh';%create executable bash script named mat909.sh with module purge;module load matlab/2020b;matlab "$@"
+remote.direct.YP105119.matver.matdef = remote.direct.YP105119.matver.mat903;%default matlab on remote machine
 remote.direct.YP105119.remoteuser = 'YP105119';
+%
+% ------------------------------ OTHER USERS  -----------------------------
 %
 % Jean-François Artaud
 % 
@@ -58,16 +66,10 @@ remote.direct.YP105119.remoteuser = 'YP105119';
 remote.pbs.JA132999 = remote.pbs.YP105119;
 remote.pbs.JA132999.remoteuser = 'JA132999';
 remote.pbs.JA132999.remotedatapath = '/Home/JA132999/tmp/';
-remote.pbs.JA132999.bridge.ssh.host = '';
-remote.pbs.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
-%
-% direct
 %
 remote.direct.JA132999 = remote.direct.YP105119;
 remote.direct.JA132999.remoteuser = 'JA132999';
 remote.direct.JA132999.remotedatapath = '/Home/JA132999/tmp/';
-remote.direct.JA132999.bridge.ssh.host = '';
-remote.direct.JA132999.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Clarisse Bourdelle
 %
@@ -76,16 +78,10 @@ remote.direct.JA132999.bridge.ssh.remotepassword = '';%set password for the remo
 remote.pbs.DM088721 = remote.pbs.YP105119;
 remote.pbs.DM088721.remoteuser = 'DM088721';
 remote.pbs.DM088721.remotedatapath = '/Home/DM088721/tmp/';
-remote.pbs.DM088721.bridge.ssh.host = '';
-remote.pbs.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
-%
-% direct
 %
 remote.direct.DM088721 = remote.direct.YP105119;
 remote.direct.DM088721.remoteuser = 'DM088721';
 remote.direct.DM088721.remotedatapath = '/Home/DM088721/tmp/';
-remote.direct.DM088721.bridge.ssh.host = '';
-remote.direct.DM088721.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Marc Goniche
 %
@@ -93,21 +89,11 @@ remote.direct.DM088721.bridge.ssh.remotepassword = '';%set password for the remo
 %
 remote.pbs.MG100063 = remote.pbs.YP105119;
 remote.pbs.MG100063.remoteuser = 'MG100063';
-remote.pbs.MG100063.host = 'sirrah';
-remote.pbs.MG100063.hostname = 'sirrah';
 remote.pbs.MG100063.remotedatapath = '/Home/MG100063/tmp/';
-remote.pbs.MG100063.bridge.ssh.host = '';
-remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
-%
-% direct
 %
 remote.direct.MG100063 = remote.direct.YP105119;
 remote.direct.MG100063.remoteuser = 'MG100063';
-remote.direct.MG100063.host = 'sirrah';
-remote.direct.MG100063.hostname = 'sirrah';
 remote.direct.MG100063.remotedatapath = '/Home/MG100063/tmp/';
-remote.direct.MG100063.bridge.ssh.host = '';
-remote.direct.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Valeria Ostuni
 %
@@ -116,15 +102,10 @@ remote.direct.MG100063.bridge.ssh.remotepassword = '';%set password for the remo
 remote.pbs.VO259454 = remote.pbs.YP105119;
 remote.pbs.VO259454.remoteuser = 'VO259454';
 remote.pbs.VO259454.remotedatapath = '/Home/VO259454/tmp/';
-remote.pbs.VO259454.bridge.ssh.host = '';
-remote.pbs.VO259454.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
-%
-% direct
 %
 remote.direct.VO259454 = remote.direct.YP105119;
 remote.direct.VO259454.remoteuser = 'VO259454';
 remote.direct.VO259454.remotedatapath = '/Home/VO259454/tmp/';
-remote.direct.VO259454.bridge.ssh.host = '';
 %
 % Jorge Morales
 %
@@ -133,16 +114,10 @@ remote.direct.VO259454.bridge.ssh.host = '';
 remote.pbs.JM240179 = remote.pbs.YP105119;
 remote.pbs.JM240179.remoteuser = 'JM240179';
 remote.pbs.JM240179.remotedatapath = '/Home/JM240179/tmp/';
-remote.pbs.JM240179.bridge.ssh.host = '';
-remote.pbs.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
-%
-% direct
 %
 remote.direct.JM240179 = remote.direct.YP105119;
 remote.direct.JM240179.remoteuser = 'JM240179';
 remote.direct.JM240179.remotedatapath = '/Home/JM240179/tmp/';
-remote.direct.JM240179.bridge.ssh.host = '';
-remote.direct.JM240179.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Tullio Barbui
 %
@@ -151,20 +126,11 @@ remote.direct.JM240179.bridge.ssh.remotepassword = '';%set password for the remo
 remote.pbs.TB263881 = remote.pbs.YP105119;
 remote.pbs.TB263881.remoteuser = 'TB263881';
 remote.pbs.TB263881.remotedatapath = '/Home/TB263881/tmp/';
-remote.pbs.TB263881.bridge.ssh.host = '';
-remote.pbs.TB263881.bridge.ssh.remotepassword = '';
-%remote.pbs.TB263881.shell = 'csh';
-%remote.pbs.TB263881.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)%
-%
-% direct
 %
 remote.direct.TB263881 = remote.direct.YP105119;
 remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/Home/TB263881/tmp/';
-remote.direct.TB263881.bridge.ssh.host = '';
-remote.direct.TB263881.bridge.ssh.remotepassword = '';
-%remote.direct.TB263881.shell = 'csh';
-%remote.direct.TB263881.cmd = {'csh','nohup ',' `</dev/null` >nohup.out &',''};% direct calculation (csh, bash)%
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
