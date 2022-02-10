@@ -165,7 +165,6 @@ if ~isempty(dkecluster.scheduler.remote),
     if ~isempty(remote)
         %
         dkecluster.remote = remote;
-        dkecluster.remote = remote;
         dkecluster.remtimout = remtimout;
         dkecluster.rempause = rempause;
         dkecluster.localdatadir = localdatadir;
