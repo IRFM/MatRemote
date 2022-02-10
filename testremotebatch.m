@@ -57,7 +57,6 @@ function soutputs = testremotebatch(sinputs,remote,debugmode,link_mode,displaymo
 % remote matlab version, remote command (remotetest), variable transfer ('The best code is : ')
 % and environment variable ('luke').
 % 
-
 %
 % Set path to MatRemote & MatTools toolboxes
 %
@@ -70,6 +69,11 @@ addpath(mattools_path);% MatTools toolbox
 %
 sinput.strin = 'The best code is : ';% input to function remotetest
 testvar = 'luke'; % test variable
+%
+globals = who('global');
+if ~isempty(globals)
+    clear(globals{:});
+end
 %
 % Displaymode
 %
