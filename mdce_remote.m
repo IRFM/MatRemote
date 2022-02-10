@@ -95,13 +95,6 @@ elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'nodes'),
     mdce_job.nodes = dkecluster.scheduler.nodes;
 end
 %
-if isfield(dkecluster,'memory'),
-    mdce_job.memory = dkecluster.nmemory;
-elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'memory'),% inherit MDCE memory
-    mdce_job.memory = dkecluster.scheduler.memory;
-end
-
-%
 if isfield(dkecluster,'funcopy'),
     mdce_job.funcopy = dkecluster.funcopy;
 elseif isfield(dkecluster,'scheduler') && isfield(dkecluster.scheduler,'funcopy'),% inherit MDCE funcopy
