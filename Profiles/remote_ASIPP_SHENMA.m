@@ -33,7 +33,7 @@ remote.torque.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
 remote.torque.PEYSSON.get_jobid = {'','.service103'};%str_before,str_after
 remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
 remote.torque.PEYSSON.timeout = 100;
-remote.torque.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_origin';
+remote.torque.PEYSSON.matver.mat903 = '/home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
@@ -52,14 +52,12 @@ remote.direct.PEYSSON.get_jobid = {};%sr_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.timeout = 60;
 remote.direct.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
-remote.direct.PEYSSON.matver.mat903 = '/gpfs-home/pkg/matlab/R2017b/bin/matlab_origin';
+remote.direct.PEYSSON.matver.mat903 = '/home/YP105119/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
 remote.direct.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 remote.direct.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');%set password for the remote machine in startup.m or in session startup script
-%
-
 %
 % BOJIANG DING (SHENMA)
 %
@@ -69,15 +67,6 @@ remote.torque.bjding.remoteuser = 'bjding';
 remote.torque.bjding.remotedatapath = '/scratch/bjding/';
 remote.torque.bjding.bridge.ssh.host = '';
 remote.torque.bjding.bridge.ssh.remotepassword = '';
-%
-% BOJIANG DING (LAPTOP)
-%
-remote.torque.bjdingLinux= remote.torque.PEYSSON;
-remote.torque.bjdingLinux.host = '10.10.10.112';
-remote.torque.bjdingLinux.remoteuser = 'bjding';
-remote.torque.bjdingLinux.remotedatapath = '/scratch/bjding/';
-remote.torque.bjdingLinux.bridge.ssh.host = '';
-remote.torque.bjdingLinux.bridge.ssh.remotepassword = '';
 %
 % MIAOHUI LI  (SHENMA)
 %
