@@ -8,14 +8,23 @@ if exist('private_bridge_parameters.m','file')
     %
     [remote] = bridge_params(remote);
     %
+    if ~isempty(remote.bridge) && isfield(remote.bridge.ssh,'remotepassword') && ~isempty(remote.bridge.ssh.remotepassword) && isfield(remote,'hosts') && ~isempty(remote.hosts) && length(remote.hosts) > 1
+        %
+        remote.ssh.sshcmd = strrep(remote.ssh.sshcmd,[remote.remoteuser,'@',remote.hosts{1}],[remote.remoteuser,'@',remote.hosts{2}]);% choose the external IP since connected from outside
+        remote.host = remote.hosts{2};% choose the external IP since connected from outside
+        % 
+    end
+    %
     if ~isempty(remote.bridge) && isfield(remote.bridge.ssh,'remotepassword') && ~isempty(remote.bridge.ssh.remotepassword)
         remote.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.remotepassword,''' ',remote.ssh.sshcmd];%remote sshpass (must be installed and accessible)
         remote.ssh.sshcmd = strrep(remote.ssh.sshcmd,'yes','no');%BatchMode=no
+        %
     end
     %
     if ~isempty(remote.bridge) && isfield(remote.bridge.ssh,'password') && ~isempty(remote.bridge.ssh.password)
         remote.bridge.ssh.sshcmd = ['sshpass -p ''',remote.bridge.ssh.password,''' ',remote.bridge.ssh.sshcmd];%remote sshpass (must be installed and accessible)
         remote.bridge.ssh.sshcmd = strrep(remote.bridge.ssh.sshcmd,'yes','no');%BatchMode=no
+        %
     end
     %
     if ~isempty(remote.bridge) 
