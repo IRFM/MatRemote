@@ -18,6 +18,10 @@ function [res,txt] = matremotecmd(remote,job,remotecmd,ssh_opts)
     %
     if ~isempty(remote.host),
         %
+        if isempty(job) && isempty(remote.link_mode)
+            remote.link_mode = 1;
+        end
+        %
         if remote.link_mode == 2,
             %
             [txt_url,res_url] = matremoteurl(remote,job,remotecmd,'');
