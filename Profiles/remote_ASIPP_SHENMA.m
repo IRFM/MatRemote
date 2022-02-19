@@ -45,7 +45,7 @@ remote.torque.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');
 remote.direct.PEYSSON = default_remote_profile;
 remote.direct.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.direct.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3}
-remote.direct.PEYSSON.nproc = 100;
+remote.direct.PEYSSON.nproc = 10;
 %remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
 remote.direct.PEYSSON.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
 remote.direct.PEYSSON.get_jobid = {};%sr_before,str_after
