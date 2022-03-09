@@ -43,7 +43,7 @@ remote.torque.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');
 % direct
 %
 remote.direct.PEYSSON = default_remote_profile;
-remote.direct.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.direct.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%{'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.direct.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3}
 remote.direct.PEYSSON.nproc = 10;
 %remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
@@ -64,36 +64,80 @@ remote.direct.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');
 remote.torque.bjding = remote.torque.PEYSSON;
 remote.torque.bjding.host = '10.10.10.112';
 remote.torque.bjding.remoteuser = 'bjding';
-remote.torque.bjding.remotedatapath = '/scratch/bjding/';
+remote.torque.bjding.remotedatapath = '/gpfs/scratch/bjding/';
 remote.torque.bjding.bridge.ssh.host = '';
 remote.torque.bjding.bridge.ssh.remotepassword = '';
+%
+remote.direct.bjding = remote.direct.PEYSSON;
+remote.direct.bjding.host = '10.10.10.112';
+remote.direct.bjding.remoteuser = 'bjding';
+remote.direct.bjding.remotedatapath = '/gpfs/scratch/bjding/';
+remote.direct.bjding.bridge.ssh.host = '';
+remote.direct.bjding.bridge.ssh.remotepassword = '';
 %
 % MIAOHUI LI  (SHENMA)
 %
 remote.torque.limiaohui = remote.torque.PEYSSON;
 remote.torque.limiaohui.host = '10.10.10.112';
 remote.torque.limiaohui.remoteuser = 'limiaohui';
-remote.torque.limiaohui.remotedatapath = '/scratch/limiaohui/';
-remote.torque.limiaohui.bridge = [];
+remote.torque.limiaohui.remotedatapath = '/gpfs/scratch/limiaohui/';
 remote.torque.limiaohui.bridge.ssh.host = '';
 remote.torque.limiaohui.bridge.ssh.remotepassword = '';
 %
 remote.direct.limiaohui = remote.direct.PEYSSON;
 remote.direct.limiaohui.host = '10.10.10.112';
 remote.direct.limiaohui.remoteuser = 'limiaohui';
-remote.direct.limiaohui.remotedatapath = '/scratch/limiaohui/';
-remote.direct.limiaohui.bridge = [];
-remote.torque.limiaohui.bridge.ssh.host = '';
-remote.torque.limiaohui.bridge.ssh.remotepassword = '';
+remote.direct.limiaohui.remotedatapath = '/gpfs/scratch/limiaohui/';
+remote.direct.limiaohui.bridge.ssh.host = '';
+remote.direct.limiaohui.bridge.ssh.remotepassword = '';
 %
 % YONGCHUN LI (SHENMA)
 %
 remote.torque.ycunli = remote.torque.PEYSSON;
 remote.torque.ycunli.host = '10.10.10.112';
 remote.torque.ycunli.remoteuser = 'ycunli';
-remote.torque.ycunli.remotedatapath = '/scratch/ycunli/';
+remote.torque.ycunli.remotedatapath = '/gpfs/scratch/ycunli/';
 remote.torque.ycunli.bridge.ssh.host = '';
 remote.torque.ycunli.bridge.ssh.remotepassword = '';
+%
+remote.direct.ycunli = remote.direct.PEYSSON;
+remote.direct.ycunli.host = '10.10.10.112';
+remote.direct.ycunli.remoteuser = 'ycunli';
+remote.direct.ycunli.remotedatapath = '/gpfs/scratch/ycunli/';
+remote.direct.ycunli.bridge.ssh.host = '';
+remote.direct.ycunli.bridge.ssh.remotepassword = '';
+%
+% CHENBIN WU (SHENMA)
+%
+remote.torque.chbwu = remote.torque.PEYSSON;
+remote.torque.chbwu.host = '10.10.10.112';
+remote.torque.chbwu.remoteuser = 'ycunli';
+remote.torque.chbwu.remotedatapath = '/gpfs/scratch/ycunli/';
+remote.torque.chbwu.bridge.ssh.host = '';
+remote.torque.chbwu.bridge.ssh.remotepassword = '';
+%
+remote.direct.chbwu = remote.direct.PEYSSON;
+remote.direct.chbwu.host = '10.10.10.112';
+remote.direct.chbwu.remoteuser = 'chbwu';
+remote.direct.chbwu.remotedatapath = '/gpfs/scratch/chbwu/';
+remote.direct.chbwu.bridge.ssh.host = '';
+remote.direct.chbwu.bridge.ssh.remotepassword = '';
+%
+% CHENBIN WU (SHENMA)
+%
+remote.torque.ghyan = remote.torque.PEYSSON;
+remote.torque.ghyan.host = '10.10.10.112';
+remote.torque.ghyan.remoteuser = 'ghyan';
+remote.torque.ghyan.remotedatapath = '/gpfs/scratch/ghyan/';
+remote.torque.ghyan.bridge.ssh.host = '';
+remote.torque.ghyan.bridge.ssh.remotepassword = '';
+%
+remote.torque.ghyan = remote.torque.PEYSSON;
+remote.torque.ghyan.host = '10.10.10.112';
+remote.torque.ghyan.remoteuser = 'ghyan';
+remote.torque.ghyan.remotedatapath = '/gpfs/scratch/ghyan/';
+remote.torque.ghyan.bridge.ssh.host = '';
+remote.torque.ghyan.bridge.ssh.remotepassword = '';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
