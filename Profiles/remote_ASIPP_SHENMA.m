@@ -123,7 +123,7 @@ remote.direct.chbwu.remotedatapath = '/gpfs/scratch/chbwu/';
 remote.direct.chbwu.bridge.ssh.host = '';
 remote.direct.chbwu.bridge.ssh.remotepassword = '';
 %
-% CHENBIN WU (SHENMA)
+% ghyan (SHENMA)
 %
 remote.torque.ghyan = remote.torque.PEYSSON;
 remote.torque.ghyan.host = '10.10.10.112';
@@ -138,6 +138,22 @@ remote.torque.ghyan.remoteuser = 'ghyan';
 remote.torque.ghyan.remotedatapath = '/gpfs/scratch/ghyan/';
 remote.torque.ghyan.bridge.ssh.host = '';
 remote.torque.ghyan.bridge.ssh.remotepassword = '';
+%
+% YONGLIANG LI (SHENMA)
+%
+remote.torque.ylli = remote.torque.PEYSSON;
+remote.torque.ylli.host = '10.10.10.112';
+remote.torque.ylli.remoteuser = 'ylli';
+remote.torque.ylli.remotedatapath = '/gpfs/scratch/ylli/';
+remote.torque.ylli.bridge.ssh.host = '';
+remote.torque.ylli.bridge.ssh.remotepassword = '';
+%
+remote.direct.ylli = remote.direct.PEYSSON;
+remote.direct.ylli.host = '10.10.10.112';
+remote.direct.ylli.remoteuser = 'ylli';
+remote.direct.ylli.remotedatapath = '/gpfs/scratch/ylli/';
+remote.direct.ylli.bridge.ssh.host = '';
+remote.direct.ylli.bridge.ssh.remotepassword = '';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
