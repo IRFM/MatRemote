@@ -29,7 +29,7 @@ remote.torque.PEYSSON.nproc = 10;% default number of nodes for job on shenma
 remote.torque.PEYSSON.wait = 0;
 remote.torque.PEYSSON.shclean = 1;
 remote.torque.PEYSSON.cmd = 'qsub -q batch';%'qsub -q batch -o /scratch/PEYSSON';%for debug only (clear mat* files in /scratch/PEYSSON after turned on) 
-remote.torque.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
+remote.torque.PEYSSON.remotedatapath = '/tmp/';
 remote.torque.PEYSSON.get_jobid = {'','.service103'};%str_before,str_after
 remote.torque.PEYSSON.set_jobid = {'qstat ','','Unknown Job Id'};%str_before,str_after,str_check
 remote.torque.PEYSSON.timeout = 10;
@@ -51,7 +51,7 @@ remote.direct.PEYSSON.cmd = {'bash','',' &',' &'};% direct calculation (csh, bas
 remote.direct.PEYSSON.get_jobid = {};%sr_before,str_after
 remote.direct.PEYSSON.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
 remote.direct.PEYSSON.timeout = 10;
-remote.direct.PEYSSON.remotedatapath = '/gpfs/scratch/PEYSSON/';
+remote.direct.PEYSSON.remotedatapath = '/tmp/';
 remote.direct.PEYSSON.matver.mat903 = '/home/users/PEYSSON/mat903.sh';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
@@ -64,14 +64,12 @@ remote.direct.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');
 remote.torque.bjding = remote.torque.PEYSSON;
 remote.torque.bjding.host = '10.10.10.112';
 remote.torque.bjding.remoteuser = 'bjding';
-remote.torque.bjding.remotedatapath = '/gpfs/scratch/bjding/';
 remote.torque.bjding.bridge.ssh.host = '';
 remote.torque.bjding.bridge.ssh.remotepassword = '';
 %
 remote.direct.bjding = remote.direct.PEYSSON;
 remote.direct.bjding.host = '10.10.10.112';
 remote.direct.bjding.remoteuser = 'bjding';
-remote.direct.bjding.remotedatapath = '/gpfs/scratch/bjding/';
 remote.direct.bjding.bridge.ssh.host = '';
 remote.direct.bjding.bridge.ssh.remotepassword = '';
 %
@@ -80,14 +78,12 @@ remote.direct.bjding.bridge.ssh.remotepassword = '';
 remote.torque.limiaohui = remote.torque.PEYSSON;
 remote.torque.limiaohui.host = '10.10.10.112';
 remote.torque.limiaohui.remoteuser = 'limiaohui';
-remote.torque.limiaohui.remotedatapath = '/gpfs/scratch/limiaohui/';
 remote.torque.limiaohui.bridge.ssh.host = '';
 remote.torque.limiaohui.bridge.ssh.remotepassword = '';
 %
 remote.direct.limiaohui = remote.direct.PEYSSON;
 remote.direct.limiaohui.host = '10.10.10.112';
 remote.direct.limiaohui.remoteuser = 'limiaohui';
-remote.direct.limiaohui.remotedatapath = '/gpfs/scratch/limiaohui/';
 remote.direct.limiaohui.bridge.ssh.host = '';
 remote.direct.limiaohui.bridge.ssh.remotepassword = '';
 %
@@ -96,14 +92,12 @@ remote.direct.limiaohui.bridge.ssh.remotepassword = '';
 remote.torque.ycunli = remote.torque.PEYSSON;
 remote.torque.ycunli.host = '10.10.10.112';
 remote.torque.ycunli.remoteuser = 'ycunli';
-remote.torque.ycunli.remotedatapath = '/gpfs/scratch/ycunli/';
 remote.torque.ycunli.bridge.ssh.host = '';
 remote.torque.ycunli.bridge.ssh.remotepassword = '';
 %
 remote.direct.ycunli = remote.direct.PEYSSON;
 remote.direct.ycunli.host = '10.10.10.112';
 remote.direct.ycunli.remoteuser = 'ycunli';
-remote.direct.ycunli.remotedatapath = '/gpfs/scratch/ycunli/';
 remote.direct.ycunli.bridge.ssh.host = '';
 remote.direct.ycunli.bridge.ssh.remotepassword = '';
 %
@@ -112,14 +106,12 @@ remote.direct.ycunli.bridge.ssh.remotepassword = '';
 remote.torque.chbwu = remote.torque.PEYSSON;
 remote.torque.chbwu.host = '10.10.10.112';
 remote.torque.chbwu.remoteuser = 'ycunli';
-remote.torque.chbwu.remotedatapath = '/gpfs/scratch/ycunli/';
 remote.torque.chbwu.bridge.ssh.host = '';
 remote.torque.chbwu.bridge.ssh.remotepassword = '';
 %
 remote.direct.chbwu = remote.direct.PEYSSON;
 remote.direct.chbwu.host = '10.10.10.112';
 remote.direct.chbwu.remoteuser = 'chbwu';
-remote.direct.chbwu.remotedatapath = '/gpfs/scratch/chbwu/';
 remote.direct.chbwu.bridge.ssh.host = '';
 remote.direct.chbwu.bridge.ssh.remotepassword = '';
 %
@@ -128,14 +120,12 @@ remote.direct.chbwu.bridge.ssh.remotepassword = '';
 remote.torque.ghyan = remote.torque.PEYSSON;
 remote.torque.ghyan.host = '10.10.10.112';
 remote.torque.ghyan.remoteuser = 'ghyan';
-remote.torque.ghyan.remotedatapath = '/gpfs/scratch/ghyan/';
 remote.torque.ghyan.bridge.ssh.host = '';
 remote.torque.ghyan.bridge.ssh.remotepassword = '';
 %
 remote.torque.ghyan = remote.torque.PEYSSON;
 remote.torque.ghyan.host = '10.10.10.112';
 remote.torque.ghyan.remoteuser = 'ghyan';
-remote.torque.ghyan.remotedatapath = '/gpfs/scratch/ghyan/';
 remote.torque.ghyan.bridge.ssh.host = '';
 remote.torque.ghyan.bridge.ssh.remotepassword = '';
 %
@@ -144,14 +134,12 @@ remote.torque.ghyan.bridge.ssh.remotepassword = '';
 remote.torque.ylli = remote.torque.PEYSSON;
 remote.torque.ylli.host = '10.10.10.112';
 remote.torque.ylli.remoteuser = 'ylli';
-remote.torque.ylli.remotedatapath = '/gpfs/scratch/ylli/';
 remote.torque.ylli.bridge.ssh.host = '';
 remote.torque.ylli.bridge.ssh.remotepassword = '';
 %
 remote.direct.ylli = remote.direct.PEYSSON;
 remote.direct.ylli.host = '10.10.10.112';
 remote.direct.ylli.remoteuser = 'ylli';
-remote.direct.ylli.remotedatapath = '/gpfs/scratch/ylli/';
 remote.direct.ylli.bridge.ssh.host = '';
 remote.direct.ylli.bridge.ssh.remotepassword = '';
 %
