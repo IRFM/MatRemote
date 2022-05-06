@@ -131,6 +131,18 @@ remote.direct.TB263881 = remote.direct.YP105119;
 remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/Home/TB263881/tmp/';
 %
+% Radwan Kheroua
+%
+% pbs pro
+%
+remote.pbs.RK270585 = remote.pbs.YP105119;
+remote.pbs.RK270585.remoteuser = 'TB263881';
+remote.pbs.RK270585.remotedatapath = '/Home/RK270585/tmp/';
+%
+remote.direct.RK270585 = remote.direct.YP105119;
+remote.direct.RK270585.remoteuser = 'RK270585';
+remote.direct.RK270585.remotedatapath = '/Home/RK270585/tmp/';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
