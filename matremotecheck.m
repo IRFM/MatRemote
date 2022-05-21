@@ -27,11 +27,18 @@ if ~res,
         filename = txt(itxt+(0:min([find(double(txt(itxt:end)) == 32 | double(txt(itxt:end)) == 10)-1,length(txt)+1-itxt])-1));
         %
         remotecommand_path_python2 = 'which python2';
+        %
         [res_remotepath_python2,remotepath_python2] = matremotecmd(remote,job,remotecommand_path_python2);
         %
-        if isempty(remotepath_python2)
+        if res_remotepath_python2 == 1 %check local
             %
-            disp('ERROR : path to python2 is not unkown. Fix this problem first.');
+            [res_remotepath_python2,remotepath_python2] = unix(remotecommand_path_python2);
+            %
+        end
+        %
+        if isempty(remotepath_python2) || res_remotepath_python2 == 1
+            %
+            disp('ERROR : path to python2 is unknown on the remote computer. This problem must be fixed.');
             return;
             %
         else
