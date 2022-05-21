@@ -26,17 +26,18 @@ if ~res,
         %
         filename = txt(itxt+(0:min([find(double(txt(itxt:end)) == 32 | double(txt(itxt:end)) == 10)-1,length(txt)+1-itxt])-1));
         %
-        [~,path_python2] = unix('which python2');
+        remotecommand_path_python2 = 'which python2';
+        [res_remotepath_python2,remotepath_python2] = matremotecmd(remote,job,remotecommand_path_python2);
         %
-        if isempty(path_python2)
+        if isempty(remotepath_python2)
             %
             disp('ERROR : path to python2 is not unkown. Fix this problem first.');
             return;
             %
         else
             %
-            path_python2 = deblank(path_python2);
-            remotecmd = [path_python2,' -c "import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
+            remotepath_python2 = deblank(remotepath_python2);
+            remotecmd = [remotepath_python2,' -c "import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
             [res,txt] = matremotecmd(remote,job,remotecmd);%Command not compatible with python3
             %
         end
