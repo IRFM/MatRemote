@@ -174,6 +174,22 @@ remote.direct.TB263881.remotedatapath = '/home/TB263881/tmp/';
 remote.direct.TB263881.bridge.ssh.host = '';
 remote.direct.TB263881.bridge.ssh.remotepassword = '';
 %
+% Krzysiek Krol
+%
+% pbs pro
+%
+remote.pbs.KK019865 = remote.pbs.YP105119;
+remote.pbs.KK019865.remoteuser = 'KK019865';
+remote.pbs.KK019865.remotedatapath = '/home/KK019865/tmp/';
+remote.pbs.KK019865.bridge.ssh.host = '';
+remote.pbs.KK019865.bridge.ssh.remotepassword = '';
+%
+remote.direct.KK019865 = remote.direct.YP105119;
+remote.direct.KK019865.remoteuser = 'KK019865';
+remote.direct.KK019865.remotedatapath = '/home/KK019865/tmp/';
+remote.direct.KK019865.bridge.ssh.host = '';
+remote.direct.KK019865.bridge.ssh.remotepassword = '';
+%
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------

@@ -79,6 +79,21 @@ remote.condor.peysson.remoteuser = 'peysson';
 %
 % --------------------------------------------------
 %
+% Lars Eriksson
+%
+% direct
+%
+remote.direct.eriksson = direct;
+remote.direct.eriksson.remoteuser = 'eriksson';
+%
+% condor
+%
+remote.condor.eriksson = condor;
+remote.condor.eriksson.remotedatapath = '/home/eriksson/condor/';
+remote.condor.eriksson.remoteuser = 'eriksson';
+%
+% --------------------------------------------------
+%
 % Krzysztof Krol
 %
 % direct
