@@ -1,5 +1,3 @@
-
-
 function remote_profile = remote_CEA_CEPHEE(varargin)
 %
 % This function regroups the remote profiles run on the CEPHEE cluster

@@ -1,4 +1,4 @@
-function remote_profile = remote_CEA_SIRRAH(varargin)
+function remote_profile = remote_CEA_PLEIONE(varargin)
 %
 % This function regroups the remote profiles run on the SIRRAH cluster
 % in the CEA INTRA network
@@ -130,6 +130,16 @@ remote.pbs.TB263881.remotedatapath = '/Home/TB263881/tmp/';
 remote.direct.TB263881 = remote.direct.YP105119;
 remote.direct.TB263881.remoteuser = 'TB263881';
 remote.direct.TB263881.remotedatapath = '/Home/TB263881/tmp/';
+%
+% Riccardo Saura
+%
+remote.pbs.RS272879 = remote.pbs.YP105119;
+remote.pbs.RS272879.remoteuser = 'RS272879';
+remote.pbs.RS272879.remotedatapath = '/Home/RS272879/tmp/';
+%
+remote.direct.RS272879= remote.direct.YP105119;
+remote.direct.RS272879.remoteuser = 'RS272879';
+remote.direct.RS272879.remotedatapath = '/Home/RS272879/tmp/';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
