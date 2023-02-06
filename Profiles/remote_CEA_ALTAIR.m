@@ -111,17 +111,17 @@ remote.direct.DM088721.bridge.ssh.remotepassword = '';%set password for the remo
 %
 % pbs pro
 %
-remote.pbs.MG100063 = remote.pbs.YP105119;
-remote.pbs.MG100063.remoteuser = 'MG100063';
-remote.pbs.MG100063.remotedatapath = '/home/MG100063/tmp/';
-remote.pbs.MG100063.bridge.ssh.host = '';
-remote.pbs.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+remote.pbs.MG270985 = remote.pbs.YP105119;
+remote.pbs.MG270985.remoteuser = 'MG270985';
+remote.pbs.MG270985.remotedatapath = '/home/MG270985/tmp/';
+remote.pbs.MG270985.bridge.ssh.host = '';
+remote.pbs.MG270985.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
-remote.direct.MG100063 = remote.direct.YP105119;
-remote.direct.MG100063.remoteuser = 'MG100063';
-remote.direct.MG100063.remotedatapath = '/home/MG100063/tmp/';
-remote.direct.MG100063.bridge.ssh.host = '';
-remote.direct.MG100063.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+remote.direct.MG270985 = remote.direct.YP105119;
+remote.direct.MG270985.remoteuser = 'MG270985';
+remote.direct.MG270985.remotedatapath = '/home/MG270985/tmp/';
+remote.direct.MG270985.bridge.ssh.host = '';
+remote.direct.MG270985.bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
 %
 % Valeria Ostuni
 %
