@@ -18,7 +18,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 % YVES PEYSSON
 %
 remote.pbs.YP105119 = default_remote_profile;
-remote.pbs.YP105119.host = 'andromede1.partenaires.cea.fr';
+remote.pbs.YP105119.host = 'andromede2.partenaires.cea.fr';
 remote.pbs.YP105119.hostname = 'andromede';
 remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 24;
@@ -48,7 +48,7 @@ remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD')
 % note : mode direct bridge disabled because nohup does not work
 %
 remote.direct.YP105119 = default_remote_profile;
-remote.direct.YP105119.host = 'andromede1.partenaires.cea.fr';
+remote.direct.YP105119.host = 'andromede2.partenaires.cea.fr';
 remote.direct.YP105119.hostname = 'andromede';
 remote.direct.YP105119.shell = 'bash';
 remote.direct.YP105119.nproc = 24;
