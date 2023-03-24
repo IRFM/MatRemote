@@ -22,6 +22,7 @@ remote.pbs.YP105119.host = 'andromede1.partenaires.cea.fr';
 remote.pbs.YP105119.hostname = 'andromede';
 remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 24;
+remote.pbs.YP105119.walltime = 24;% in hours
 remote.pbs.YP105119.cmd = 'qsub';
 remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
 remote.pbs.YP105119.get_jobid = {'','.altair'};%str_before,str_after

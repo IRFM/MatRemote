@@ -24,6 +24,7 @@ remote.pbs.YP105119.host = {'rana','rana.partenaires.cea.fr'};
 remote.pbs.YP105119.hostname = 'rana';
 remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 56;
+remote.pbs.YP105119.walltime = 24;% in hours
 remote.pbs.YP105119.cmd = 'qsub';
 remote.pbs.YP105119.remotedatapath = '/home/YP105119/tmp';
 %remote.pbs.YP105119.get_jobid = {'','.altair'};%str_before,str_after
