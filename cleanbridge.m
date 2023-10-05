@@ -1,5 +1,5 @@
 function [res,txt] = cleanbridge(remote,job)
-%
+% 
 res = 0;
 txt = '';
 %
