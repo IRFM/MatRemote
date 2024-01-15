@@ -41,10 +41,10 @@ function [remoteprofiles,profilestr] = load_remoteprofiles_jd(remote,test,inter,
     %           >> remote = load_remoteprofiles_jd('SPCSRV18',0,1,'condor','peysson');
     %
     %       - to find all profiles and schedulers with valid connection test, duplicate local profile, and choose among them, for profile 'joan' :
-    %           >> remote = load_remoteprofiles_jd('','','joan',true,true,true);
+    %TODO           >> remote = load_remoteprofiles_jd('','','joan',true,true,true);
     %
     %       - to load and return all profiles and scheduler with default profilename and without connection test or duplicate local profile, and also load user-friendly description :
-    %           >> [remoteprofiles,profilestr] = load_remoteprofiles_jd;
+    %TODO           >> [remoteprofiles,profilestr] = load_remoteprofiles_jd;
     %
     if nargin < 8,
         link_mode = NaN;% use value from remote.link_mode
