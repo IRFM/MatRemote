@@ -94,33 +94,18 @@ remote.condor.eriksson.remoteuser = 'eriksson';
 %
 % --------------------------------------------------
 %
-% Krzysztof Krol
+% Jean Cazabonne
 %
 % direct
 %
-remote.direct.kkrol = direct;
-remote.direct.kkrol.remoteuser = 'kkrol';
+remote.direct.cazabonn = direct;
+remote.direct.cazabonn.remoteuser = 'cazabonn';
 %
 % condor
 %
-remote.condor.kkrol = condor;
-remote.condor.kkrol.remotedatapath = '/home/kkrol/condor/';
-remote.condor.kkrol.remoteuser = 'kkrol';
-%
-% --------------------------------------------------
-%
-% Mario Gervais
-%
-% direct
-%
-remote.direct.gervais = direct;
-remote.direct.gervais.remoteuser = 'gervais';
-%
-% condor
-%
-remote.condor.gervais = condor;
-remote.condor.gervais.remotedatapath = '/home/gervais/condor/';
-remote.condor.gervais.remoteuser = 'gervais';
+remote.condor.cazabonn = condor;
+remote.condor.cazabonn.remotedatapath = '/home/cazabonn/condor/';
+remote.condor.cazabonn.remoteuser = 'cazabonn';
 %
 % -------------------------------------------------
 % this part should be common to all remote profiles
