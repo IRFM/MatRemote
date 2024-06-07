@@ -194,9 +194,11 @@ elseif isnumeric(dkecluster.scheduler.mode) && dkecluster.scheduler.mode == 1,% 
     %
 	dkecluster.scheduler.configuration = selectconfiguration_jd(dkecluster.scheduler.type,dkecluster.scheduler.configurations);
 	%
+    [matlab_version,matlab_release,flag_toolbox] = matversion_yp;
+    %
     try %test the availability of the MatLab MDCE toolbox and set clustersize
         %
-        if str2double(matversion_yp) < 801,%old matlab syntax
+        if str2double(matlab_version) < 801 && str2double(matlab_release(2:end-1)) < 2023 %old matlab syntax
         	scheduler = findResource('scheduler','configuration',dkecluster.scheduler.configuration);
             dkecluster.scheduler.info = ['Matlab Distributed Computing Environment operational for the configuration <',dkecluster.scheduler.configuration,'>'];
             dkecluster.scheduler.clustersize = min([dkecluster.scheduler.clustersize,scheduler.clustersize]);

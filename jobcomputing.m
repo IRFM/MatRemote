@@ -20,8 +20,6 @@ function [flag,varargout] = jobcomputing(fun,args_in,arg_index,arg_range,schedul
 %
 %   by J. Decker (CEA/DSM/IRFM) (joan.decker@cea.fr) and Y. Peysson (CEA/DSM/IRFM) (yves.peysson@cea.fr) 
 %
-%%%% TODO: YP -> update the distributed computing syntax for matlab version > 810 (R2013a)
-%
 nargout_in = nargout - 1;
 nrange = length(arg_range);
 varargout_array = cell(1,nrange);
@@ -34,8 +32,10 @@ for j_argout = 1:nargout_in,
     varargout{j_argout} = cell(nrange,1);
 end
 %
+[matlab_version,matlab_release,flag_toolbox] = matversion_yp;
+%
 try
-    if str2double(matversion_yp) <= 801,%old matlab syntax
+    if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
         jm = findResource('scheduler','configuration',scheduler.configuration);%Initiate the job server for Matlab Distributed Computing Environment  
     else%new matlab syntax
         jm = parcluster(scheduler.configuration);
@@ -50,7 +50,7 @@ catch err
 end
 %
 if isfield(scheduler,'temppath'),
-    if str2double(matversion_yp) <= 801,%old matlab syntax
+    if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
         set(jm,'datalocation',scheduler.temppath);
         jminit.datalocation = jmfields.DataLocation;
     else
@@ -60,7 +60,7 @@ if isfield(scheduler,'temppath'),
 end
 %
 if isfield(scheduler,'clustersize'),    
-    if str2double(matversion_yp) <= 801,%old matlab syntax
+    if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
         set(jm,'clustersize',min([scheduler.clustersize,jmfields.ClusterSize]));
         jminit.clustersize = jmfields.ClusterSize;
     else
@@ -75,7 +75,7 @@ end
 %if isfield(scheduler,'ParallelSubmitFcn'),set(jm,'ParallelSubmitFcn',scheduler.ParallelSubmitFcn);end
 %
 job = createJob(jm);
-if str2double(matversion_yp) <= 801,%old matlab syntax
+if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
     set(job,'PathDependencies',strread(path,'%s','delimiter',':'));
 else
     set(job,'AdditionalPaths',strread(path,'%s','delimiter',':'));
@@ -114,7 +114,7 @@ for j_range = 1:nrange,
 end
 %
 submit(job);
-if str2double(matversion_yp) <= 801,%old matlab syntax
+if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
     waitForState(job)
 else
     wait(job)
@@ -148,7 +148,7 @@ end
 %   
 destroy(job);
 %
-if str2double(matversion_yp) <= 801,%old matlab syntax
+if str2double(matlab_version) <= 801 && str2double(matlab_release(2:end-1)) < 2023,%old matlab syntax
     set(jm,jminit)%restore original scheduler properties
 else
     fnames = fieldnames(jminit);
