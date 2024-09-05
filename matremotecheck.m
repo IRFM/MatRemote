@@ -38,7 +38,7 @@ if ~res,
         %
         if isempty(remotepath_python2) || res_remotepath_python2 == 1
             %
-            disp('ERROR : path to python2 is unknown on the remote computer. This problem must be fixed.');
+            disp('ERROR : path to python2 is unknown on the remote computer. This problem must be fixed. Download Python2.7.18 and install it.');
             return;
             %
         else
