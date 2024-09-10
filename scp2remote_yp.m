@@ -25,6 +25,8 @@ if ~strcmp(remote_path(end),filesep),
     remote_path = [remote_path,filesep];
 end
 %
+filename = strip(filename,'right','/');
+%
 [res,err] = unix([scpcmd{1},' ',local_path,filename,' ',scpcmd{2},':',remote_path,filename]);
 %
 % Check that the file transfer is fully achieved even when network is slow 
