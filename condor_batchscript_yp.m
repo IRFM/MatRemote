@@ -41,6 +41,12 @@ fprintf(fileid,['#','\n']);
 fprintf(fileid,['Executable = ',job.remotedatapath,job.batch_dir,job.script,'\n']);%matlab shell script
 fprintf(fileid,[' ','\n']);
 %
+%fprintf(fileid,['#','\n']);
+%fprintf(fileid,['Request_memory = 5GB','\n']);%matlab shell script
+%fprintf(fileid,['request_disk = 100GB','\n']);
+%fprintf(fileid,['request_cpus = 1','\n']);
+%fprintf(fileid,[' ','\n']);
+%
 fprintf(fileid,['#','\n']);
 fprintf(fileid,['InitialDir = $(InputDir)','\n']);
 fprintf(fileid,[' ','\n']);
