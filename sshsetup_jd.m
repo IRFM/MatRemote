@@ -69,7 +69,8 @@ else
     batchmodestr = [batchmodestr,' -o BatchMode=yes'];
 end
 %
-ssh.sshcmd = ['ssh',proxyopt,sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+ssh.sshcmd = ['timeout 10 ssh',proxyopt,sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+%
 if rsync
     ssh.scpcmd = {['rsync -a -e "ssh',proxyopt,sshopts,scpportstr,keyfilestr,batchmodestr,'"'],[username,'@',host]};
 else
@@ -79,5 +80,5 @@ end
 if res == 0 && contains(txt,'sshpass') && ~isempty(password)
     sshpassopts = [' -p ''',password,''' '];
     ssh.sshcmd = ['sshpass ',sshpassopts,ssh.sshcmd];
-    ssh.scpcmd{1} = ['sshpass ',sshpassopts,ssh.scpcmd{1}];
+    ssh.scpcmd{1} = ['sshpass ',sshpassopts,ssh.scpcmd{1}]; 
 end
