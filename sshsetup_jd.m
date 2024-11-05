@@ -69,7 +69,7 @@ else
     batchmodestr = [batchmodestr,' -o BatchMode=yes'];
 end
 %
-ssh.sshcmd = ['timeout 10 ssh',proxyopt,sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
+ssh.sshcmd = ['ssh',proxyopt,sshopts,sshportstr,keyfilestr,batchmodestr,' ',username,'@',host];
 %
 if rsync
     ssh.scpcmd = {['rsync -a -e "ssh',proxyopt,sshopts,scpportstr,keyfilestr,batchmodestr,'"'],[username,'@',host]};
