@@ -246,7 +246,7 @@ else
     job.save_id = sinput;% file/folder prepared externally, location given
 end
 %
-if job.condorsearch || job.directsearch,
+if job.condorsearch || job.slurmsearch || job.directsearch,
     remotecmd_chmod = ['chmod -R 777 ',job.remotedatapath,job.save_id];
 end  
 %
