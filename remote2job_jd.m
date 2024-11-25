@@ -90,7 +90,7 @@ end
 if isfield(remote,'walltime') && ~isempty(remote.walltime),% time required (integers - in hours) - leave empty if no requirement
     job.walltime = remote.walltime;
 elseif ~isfield(job,'walltime'),
-    job.walltime = 1;
+    job.walltime = 10;
 end
 %
 if ~isfield(job,'memory'),
