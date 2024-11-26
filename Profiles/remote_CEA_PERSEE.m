@@ -52,7 +52,7 @@ remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD')
 % note : mode direct bridge disabled because nohup does not work
 %
 remote.direct.YP105119 = default_remote_profile;
-remote.direct.YP105119.host = {'persee','persee.partenaires.cea.fr'};
+remote.direct.YP105119.host = 'persee.partenaires.cea.fr';
 remote.direct.YP105119.hostname = 'persee';
 remote.direct.YP105119.shell = 'bash';
 remote.direct.YP105119.nproc = 160;
