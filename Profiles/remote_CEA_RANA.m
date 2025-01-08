@@ -20,7 +20,7 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 % YVES PEYSSON
 %
 remote.pbs.YP105119 = default_remote_profile;
-remote.pbs.YP105119.host = {'rana','rana.partenaires.cea.fr'};
+remote.pbs.YP105119.host = 'rana.partenaires.cea.fr';
 remote.pbs.YP105119.hostname = 'rana';
 remote.pbs.YP105119.shell = 'bash';%
 remote.pbs.YP105119.nproc = 56;
@@ -41,8 +41,6 @@ remote.pbs.YP105119.matver.mat911 = '/home/YP105119/mat911.sh';%create executabl
 remote.pbs.YP105119.matver.mat913 = '/home/YP105119/mat913.sh';%create executable bash script named mat913.sh with module purge;module load matlab/2022b;matlab "$@"
 remote.pbs.YP105119.matver.matdef = remote.pbs.YP105119.matver.mat903;%default matlab on remote machine
 remote.pbs.YP105119.remoteuser = 'YP105119';
-%remote.pbs.YP105119.bridge.url.host = 'https://tolbachik.hd.free.fr';%Shuttle aix
-%remote.pbs.YP105119.bridge.ftp.host = 'tolbachik.hd.free.fr:2121';%Shuttle aix
 remote.pbs.YP105119.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD');%set password for the remote machine in startup.m or in session startup script
 %remote.pbs.YP105119.bridge.ssh.host = 'hpc-login.iter.org';%ITER
@@ -54,7 +52,7 @@ remote.pbs.YP105119.bridge.ssh.remotepassword = getenv('CEA_PARTENAIRES_PASSWD')
 % note : mode direct bridge disabled because nohup does not work
 %
 remote.direct.YP105119 = default_remote_profile;
-remote.direct.YP105119.host = {'rana','rana.partenaires.cea.fr'};
+remote.direct.YP105119.host = 'rana.partenaires.cea.fr';
 remote.direct.YP105119.hostname = 'rana';
 remote.direct.YP105119.shell = 'bash';
 remote.direct.YP105119.nproc = 56;
