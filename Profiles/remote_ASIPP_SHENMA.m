@@ -22,9 +22,8 @@ default.filename = mfilename;%remote_xxx_yyy.m file name
 %
 % torque
 %
-remote.torque.PEYSSON = default_remote_profile;%202.127.204.22
-%remote.torque.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
-remote.torque.PEYSSON.host = 'shenma.ipp.ac.cn';%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.torque.PEYSSON = default_remote_profile;%
+remote.torque.PEYSSON.host = '10.10.10.112';%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.torque.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3} 
 remote.torque.PEYSSON.nproc = 10;% default number of nodes for job on shenma
 remote.torque.PEYSSON.wait = 0;
@@ -38,14 +37,13 @@ remote.torque.PEYSSON.matver.mat903 = '/home/users/PEYSSON/mat903.sh';%create ex
 remote.torque.PEYSSON.matver.matdef = remote.torque.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.torque.PEYSSON.remoteuser = 'PEYSSON';
 remote.torque.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.torque.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+%remote.torque.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 %remote.torque.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');%set password for the remote machine in startup.m or in session startup script
 %
 % direct
 %
 remote.direct.PEYSSON = default_remote_profile;
-%remote.direct.PEYSSON.host = {'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
-remote.direct.PEYSSON.host = 'shenma.ipp.ac.cn';%{'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.direct.PEYSSON.host = '10.10.10.112';%{'10.10.10.112','shenma.ipp.ac.cn'};%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
 remote.direct.PEYSSON.hostname = 'login11';%login11* -> (10.10.10.11*) with * = {0,1,2,3}
 remote.direct.PEYSSON.nproc = 10;
 %remote.direct.PEYSSON.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
@@ -58,7 +56,7 @@ remote.direct.PEYSSON.matver.mat903 = '/home/users/PEYSSON/mat903.sh';%create ex
 remote.direct.PEYSSON.matver.matdef = remote.direct.PEYSSON.matver.mat903;%default matlab on remote machine
 remote.direct.PEYSSON.remoteuser = 'PEYSSON';
 remote.direct.PEYSSON.rempause = 0.1;% pause between job checks (in minutes) (because of ssh access limitation)
-remote.direct.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
+%remote.direct.PEYSSON.bridge.ssh.host = 'spcsrv18.epfl.ch';%spcsrv18 EPFL, Switzerland
 %remote.direct.PEYSSON.bridge.ssh.remotepassword = getenv('ASIPP_SHENMA_PASSWD');%set password for the remote machine in startup.m or in session startup script
 %
 % BOJIANG DING (SHENMA)
