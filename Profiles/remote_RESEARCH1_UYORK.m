@@ -1,6 +1,6 @@
-function remote_profile = remote_UYORK(varargin)
+function remote_profile = remote_RESEARCH1_UYORK(varargin)
 %
-% UYORK server  pll543@research1
+% This function regroups the remote profiles run on the RESEARCH1 cluster (York University, UK)
 %
 %   INPUTS : 
 %       - schedulername (optinal) : name of selected scheduler
@@ -10,89 +10,42 @@ function remote_profile = remote_UYORK(varargin)
 %       - remote_profile : name of selected remote profile(s)
 %
 default.scheduler = 'direct';% default scheduler profile if 'schedulername' is not an existing scheduler profile
-default.profile = 'pll543';% default user profile if 'remoteuser' is not an existing user profile (Yves Savoye-Peysson)
+default.profile = 'pll543';% default user profile if 'remoteuser' is not an existing user profile
 %
 default.filename = mfilename;%remote_xxx_yyy.m file name
+%
 % --------------------------------------------------
 %
-% general parameters
-%
-host = 'research1';% IP address on EPFL network
-hostname = 'research1';
-matver.mat242 = '/usr/bin/matlab';
-matver.mat242.enforce = true;
-matver.mat242.cmd = '/usr/bin/matlab -c /etc/matlab.lic';
-matver.matdef = matver.mat242.cmd;%default matlab on remote machine
-%
-% direct profile
-%
-direct = default_remote_profile;
-direct.host = host;
-direct.hostname = hostname;
-direct.nproc = 16;
-direct.cmd = {'bash','',' &'};% direct calculation (csh, bash)
-direct.get_jobid = {};%str_before,str_after
-direct.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
-direct.remotedatapath = '/tmp/';
-direct.matver = matver;
-%
-% scheduler
-%{
-%condor = default_remote_profile;
-%condor.host = host;
-%condor.hostname = hostname;
-condor.nproc = 12;
-condor.cmd = 'condor_submit';
-condor.get_jobid = {'** Proc ',':'};
-condor.set_jobid = {'condor_q ',' -nobatch'};
-condor.condor.CONDOR_CONFIG = '/etc/condor/condor_config';
-condor.condor.PATH = '$PATH';
-condor.matver = matver;
-%}
-% YVES SAVOYE-PEYSSON
+% YVES PEYSSON
 %
 % direct
 %
-remote.direct.pll543 = direct;
-remote.direct.pll543.remoteuser = 'pll543';
+remote.direct.pll543 = default_remote_profile;
+remote.direct.pll543.host = 'research1';%put external IP last in a list of IP addresses (shenma.ipp.ac.cn not accessible when login shenma)
+remote.direct.pll543.hostname = 'research1';%
+remote.direct.pll543.nproc = 16;
+%remote.direct.pll543.cmd = {'bash','nohup ',' `</dev/null` >nohup.out 2>&1 &',''};% direct calculation (csh, bash)
+remote.direct.pll543.cmd = {'bash','',' &',' &'};% direct calculation (csh, bash)
+remote.direct.pll543.get_jobid = {};%sr_before,str_after
+remote.direct.pll543.set_jobid = {'ps -p ',' -o comm=','MATLAB'};%str_before,str_after,str_check
+remote.direct.pll543.timeout = 10;
+remote.direct.pll543.remotedatapath = '/tmp/';
+remote.direct.pll543.matver.mat242 = '/usr/bin/matlab';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
+remote.direct.pll543.matver.matdef = remote.direct.pll543.matver.mat242;%default matlab on remote machine
 %
-% condor
-%{
-remote.condor.decker = condor;
-remote.condor.decker.remotedatapath = '/home/decker/condor/';
-remote.condor.decker.remoteuser = 'decker';
-%}
-% --------------------------------------------------
+% JONATHAN CARROTTE 
 %
-% JONATHAN CARROTTE
-%
-% direct
-%
-remote.direct.rnf508 = direct;
+remote.direct.rnf508 = remote.direct.pll543;
+remote.direct.rnf508.host = 'research1';
 remote.direct.rnf508.remoteuser = 'rnf508';
-%
-% condor
-%{
-remote.condor.peysson = condor;
-remote.condor.peysson.remotedatapath = '/home/peysson/condor/';
-remote.condor.peysson.remoteuser = 'peysson';
-%}
-% --------------------------------------------------
+remote.direct.rnf508.remotedatapath = '/tmp';
 %
 % TOM WILSON
 %
-% direct
-%
-remote.direct.tw1723 = direct;
-remote.direct.tw1723.remoteuser = 'tw1723';
-%
-% condor
-%{
-remote.condor.eriksson = condor;
-remote.condor.eriksson.remotedatapath = '/home/eriksson/condor/';
-remote.condor.eriksson.remoteuser = 'eriksson';
-%}
-%
+remote.direct.tw1723 = remote.direct.pll543;
+remote.direct.tw1723.host = 'research1';
+remote.direct.tw1723.remoteuser = '';
+remote.direct.tw1723.remotedatapath = '/tmp/';
 % -------------------------------------------------
 % this part should be common to all remote profiles
 % -------------------------------------------------
