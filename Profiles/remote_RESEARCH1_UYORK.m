@@ -32,6 +32,7 @@ remote.direct.pll543.timeout = 10;
 remote.direct.pll543.remotedatapath = '/tmp/';
 remote.direct.pll543.matver.mat242 = '/usr/bin/matlab';%create executable bash script named mat903.sh with module purge;module load matlab/2017b;matlab "$@"
 remote.direct.pll543.matver.matdef = remote.direct.pll543.matver.mat242;%default matlab on remote machine
+remote.direct.pll543.remoteuser = 'pll543';
 %
 % JONATHAN CARROTTE 
 %
@@ -44,7 +45,7 @@ remote.direct.rnf508.remotedatapath = '/tmp';
 %
 remote.direct.tw1723 = remote.direct.pll543;
 remote.direct.tw1723.host = 'research1';
-remote.direct.tw1723.remoteuser = '';
+remote.direct.tw1723.remoteuser = 'tw1723';
 remote.direct.tw1723.remotedatapath = '/tmp/';
 % -------------------------------------------------
 % this part should be common to all remote profiles
