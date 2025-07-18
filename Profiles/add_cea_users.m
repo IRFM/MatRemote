@@ -27,16 +27,16 @@ users = ['JA132999';'MG270985';'JM240179';'TB032118';'KK019865';'RS272879';'PM15
 %
 for ii = 1:length(users)
     %
-    % pbs pro
+    % slurm
     %
-    remote.pbs.(users(ii,:)) = remote.pbs.YP105119;
-    remote.pbs.(users(ii,:)).remoteuser = users(ii,:);
-    remote.pbs.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+    remote.slurm.(users(ii,:)) = remote.slurm.YP105119;
+    remote.slurm.(users(ii,:)).remoteuser = users(ii,:);
+    remote.slurm.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
     %
     if strcmp(zone,'PARTENAIRES')
         %
-        remote.pbs.(users(ii,:)).bridge.ssh.host = '';
-        remote.pbs.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+        remote.slurm.(users(ii,:)).bridge.ssh.host = '';
+        remote.slurm.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
         %
     end
     %
