@@ -30,6 +30,22 @@ if ~res,
         %
         [res_remotepath_python2,remotepath_python2] = matremotecmd(remote,job,remotecommand_path_python2);
         %
+        if strfind(remotepath_python2,'no python2')
+            %
+            [res_remotepath_python2,remote_ls_paths] = matremotecmd(remote,job,'ls');
+            %
+            if strfind(remote_ls_paths,'Python-2.7')
+                %
+                remotepath_python2 = ['/home/',remote.remoteuser,'/',remote_ls_paths([strfind(remote_ls_paths,'Python-2.7'):strfind(remote_ls_paths,'Python-2.7')+12]),'/python2'];
+                %
+            else
+                %
+                disp(['WARNING : Python2 must be installed locally on your remote home session /home/',remote.remoteuser,'/, or should be installed for all users (admin rights).'])
+                %
+            end
+            %
+        end
+        %
         if res_remotepath_python2 == 1 %check local
             %
             [res_remotepath_python2,remotepath_python2] = unix(remotecommand_path_python2);
