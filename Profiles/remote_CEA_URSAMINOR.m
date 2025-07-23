@@ -1,6 +1,6 @@
-function remote_profile = remote_CEA_RANA(varargin)
+function remote_profile = remote_CEA_URSAMINOR(varargin)
 %
-% This function regroups the remote profiles run on the RANA cluster
+% This function regroups the remote profiles run on the URSAMINOR cluster
 % in the CEA PARTENAIRES network
 %
 %   INPUTS : 

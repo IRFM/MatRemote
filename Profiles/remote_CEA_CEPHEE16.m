@@ -1,6 +1,6 @@
-function remote_profile = remote_CEA_RANA(varargin)
+function remote_profile = remote_CEA_CEPHEE16(varargin)
 %
-% This function regroups the remote profiles run on the RANA cluster
+% This function regroups the remote profiles run on the CEPHEE16 cluster
 % in the CEA PARTENAIRES network
 %
 %   INPUTS : 
