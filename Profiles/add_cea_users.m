@@ -29,12 +29,34 @@ for ii = 1:length(users)
     %
     % slurm
     %
+<<<<<<< HEAD
     remote.slurm.(users(ii,:)) = remote.slurm.YP105119;
     remote.slurm.(users(ii,:)).remoteuser = users(ii,:);
     remote.slurm.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
     %
     if strcmp(zone,'PARTENAIRES')
         %
+=======
+    %remote.pbs.(users(ii,:)) = remote.pbs.YP105119;
+    %remote.pbs.(users(ii,:)).remoteuser = users(ii,:);
+    %remote.pbs.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+    %
+    if strcmp(zone,'PARTENAIRES')
+        %
+        %remote.pbs.(users(ii,:)).bridge.ssh.host = '';
+        %remote.pbs.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+        %
+    end
+    %
+    % slurm
+    %
+    remote.slurm.(users(ii,:)) = remote.slurm.YP105119;
+    remote.slurm.(users(ii,:)).remoteuser = users(ii,:);
+    remote.slurm.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+    %
+    if strcmp(zone,'PARTENAIRES')
+        %
+>>>>>>> 9bba289 (slurm)
         remote.slurm.(users(ii,:)).bridge.ssh.host = '';
         remote.slurm.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
         %
