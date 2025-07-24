@@ -6,7 +6,7 @@ function remote = add_cea_users(remote,zone)
 %
 if strcmp(zone,'INTRA')
     %
-    root_folder = '/Home/';
+    root_folder = '/Home/'; 
     %
 elseif strcmp(zone,'PARTENAIRES')
     %
@@ -27,29 +27,54 @@ users = ['JA132999';'MG270985';'JM240179';'TB032118';'KK019865';'RS272879';'PM15
 %
 for ii = 1:length(users)
     %
+    % pbs pro
+    %
+    if isfield(remote,'pbs')
+        %
+        remote.pbs.(users(ii,:)) = remote.pbs.YP105119;
+        remote.pbs.(users(ii,:)).remoteuser = users(ii,:);
+        remote.pbs.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+        %
+        if strcmp(zone,'PARTENAIRES')
+            %
+            remote.pbs.(users(ii,:)).bridge.ssh.host = '';
+            remote.pbs.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+            %
+        end
+        %
+    end
+    %
     % slurm
     %
-    remote.slurm.(users(ii,:)) = remote.slurm.YP105119;
-    remote.slurm.(users(ii,:)).remoteuser = users(ii,:);
-    remote.slurm.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
-    %
-    if strcmp(zone,'PARTENAIRES')
+    if isfield(remote,'slurm')
         %
-        remote.slurm.(users(ii,:)).bridge.ssh.host = '';
-        remote.slurm.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+        remote.slurm.(users(ii,:)) = remote.slurm.YP105119;
+        remote.slurm.(users(ii,:)).remoteuser = users(ii,:);
+        remote.slurm.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+        %
+        if strcmp(zone,'PARTENAIRES')
+            %
+            remote.slurm.(users(ii,:)).bridge.ssh.host = '';
+            remote.slurm.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+            %
+        end
         %
     end
     %
     % direct
     %
-    remote.direct.(users(ii,:)) = remote.direct.YP105119;
-    remote.direct.(users(ii,:)).remoteuser = users(ii,:);
-    remote.direct.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
-    %
-    if strcmp(zone,'PARTENAIRES')
+    if isfield(remote,'direct')
         %
-        remote.direct.(users(ii,:)).bridge.ssh.host = '';
-        remote.direct.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+        remote.direct.(users(ii,:)) = remote.direct.YP105119;
+        remote.direct.(users(ii,:)).remoteuser = users(ii,:);
+        remote.direct.(users(ii,:)).remotedatapath = [root_folder,users(ii,:),'/tmp/'];
+        %
+        if strcmp(zone,'PARTENAIRES')
+            %
+            remote.direct.(users(ii,:)).bridge.ssh.host = '';
+            remote.direct.(users(ii,:)).bridge.ssh.remotepassword = '';%set password for the remote machine in startup.m or in session startup script
+            %
+        end
         %
     end
     %
