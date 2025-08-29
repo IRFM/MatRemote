@@ -27,43 +27,54 @@ if ~res,
         filename = txt(itxt+(0:min([find(double(txt(itxt:end)) == 32 | double(txt(itxt:end)) == 10)-1,length(txt)+1-itxt])-1));
         %
         remotecommand_path_python2 = 'which python2';
+        remotecommand_path_python3 = 'which python3';
         %
         [res_remotepath_python2,remotepath_python2] = matremotecmd(remote,job,remotecommand_path_python2);
+        [res_remotepath_python3,remotepath_python3] = matremotecmd(remote,job,remotecommand_path_python3);
         %
-        if strfind(remotepath_python2,'no python2')
+        if strfind(remotepath_python3,'no python3')
             %
-            [res_remotepath_python2,remote_ls_paths] = matremotecmd(remote,job,'ls');
-            %
-            if strfind(remote_ls_paths,'Python-2.7')
+            if strfind(remotepath_python2,'no python2')
                 %
-                remotepath_python2 = ['/home/',remote.remoteuser,'/',remote_ls_paths([strfind(remote_ls_paths,'Python-2.7'):strfind(remote_ls_paths,'Python-2.7')+12]),'/python2'];
+                [res_remotepath_python2,remote_ls_paths] = matremotecmd(remote,job,'ls');
                 %
-            else
-                %
-                disp(['WARNING : Python2 must be installed locally on your remote home session /home/',remote.remoteuser,'/, or should be installed for all users (admin rights).'])
+                if strfind(remote_ls_paths,'Python-2.7')
+                    %
+                    remotepath_python2 = ['/home/',remote.remoteuser,'/',remote_ls_paths([strfind(remote_ls_paths,'Python-2.7'):strfind(remote_ls_paths,'Python-2.7')+12]),'/python2'];
+                    %
+                else
+                    %
+                    disp(['WARNING : Python2.7.x must be installed locally on your remote home session /home/',remote.remoteuser,'/, or should be installed for all users (admin rights).'])
+                    %
+                end
                 %
             end
             %
-        end
-        %
-        if res_remotepath_python2 == 1 %check local
+            if res_remotepath_python2 == 1 %check local
+                %
+                [res_remotepath_python2,remotepath_python2] = unix(remotecommand_path_python2);
+                %
+            end
             %
-            [res_remotepath_python2,remotepath_python2] = unix(remotecommand_path_python2);
-            %
-        end
-        %
-        if isempty(remotepath_python2) || res_remotepath_python2 == 1
-            %
-            disp('ERROR : path to python2 is unknown on the remote computer. This problem must be fixed. Download Python2.7.18 and install it.');
-            return;
+            if isempty(remotepath_python2) || res_remotepath_python2 == 1
+                %
+                disp('ERROR : path to python2 is unknown on the remote computer. This problem must be fixed. Download Python2.7.x and install it.');
+                return;
+                %
+            else
+                %
+                remotepath_python2 = deblank(remotepath_python2);
+                remotecmd = [remotepath_python2,' -c "import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
+                [res,txt] = matremotecmd(remote,job,remotecmd);%Command not compatible with python3
+                %
+            end
             %
         else
             %
-            remotepath_python2 = deblank(remotepath_python2);
-            remotecmd = [remotepath_python2,' -c "import os,time,sys; print time.strftime(sys.argv[1],time.gmtime(os.path.getmtime(sys.argv[2])))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
+            remotepath_python3 = deblank(remotepath_python3);
+            remotecmd = [remotepath_python3,' -c "import os, time, sys; print(time.strftime(sys.argv[1], time.gmtime(os.path.getmtime(sys.argv[2]))))" %Y%m%d%H%M%S ',job.remotedatapath,job.batch_dir,filename];
             [res,txt] = matremotecmd(remote,job,remotecmd);%Command not compatible with python3
             %
         end
-        %
     end
 end
